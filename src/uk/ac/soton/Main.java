@@ -1,5 +1,7 @@
-import Controller.AppController;
-import View.AppView;
+package uk.ac.soton;
+
+import uk.ac.soton.controller.AppController;
+import uk.ac.soton.view.AppView;
 
 public class Main {
 
