@@ -6,6 +6,7 @@ public class Obstacle extends PositionalObject {
     private Integer height;
     private Integer length;
     private Integer width;
+    private Integer distance; // distance from start of the runway
 
     Obstacle(String id, Integer xPos, Integer yPos, Integer length, Integer width, Integer height){
         super(xPos, yPos, id);
@@ -44,4 +45,8 @@ public class Obstacle extends PositionalObject {
     public void setWidth(Integer width) {
         this.width = width;
     }
+
+    public Integer getDistance() { return distance; }
+
+    public void setDistance(Integer distance) { this.distance = distance; }
 }
