@@ -87,7 +87,7 @@ public class TopView2D extends JPanel {
             g2d.drawRect(pos.x, pos.y, dim.width, dim.height);
 
             //Drawing the runway
-            g2d.setColor(new Color(164, 164, 164));
+            g2d.setColor(new Color(137, 137, 137));
             g2d.fillRect(pos.x, pos.y, dim.width, dim.height);
 
             //Drawing the centerline
