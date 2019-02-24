@@ -3,38 +3,60 @@ package uk.ac.soton.view;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.util.Map;
+import java.awt.image.BufferedImage;
 
 //Represents a JPanel designed to view a top-down view of the runways.
 public class TopView2D extends JPanel {
 
-    //Backend-independent storage of the current model.
-    private Map<String,Point> runwayPos;
-    private Map<String,Dimension> runwayDims;
+
+    //Instance of the front end model which contains the information.
+    private AppView frontEndModel;
+    //Instance of the menu panel which controls a lot of the display settings.
+    private MenuPanel menuPanel;
+
     //Constant which controls the distance between the centerline and the edge of the runway.
     private final Integer runwayBorder = 20;
+    //The size of the highlight which is displayed around the selected runway.
+    private final Integer selectedBorderSize = 3;
 
-    TopView2D(Map<String,Point> runwayPos, Map<String,Dimension> runwayDims){
-        this.runwayDims = runwayDims;
-        this.runwayPos = runwayPos;
+    TopView2D(AppView frontEndModel,MenuPanel menuPanel){
+        this.frontEndModel = frontEndModel;
+        this.menuPanel = menuPanel;
         this.setPreferredSize(new Dimension(1000,1000));
     }
+
 
     //Overwritten method which is
     protected void paintComponent(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
-        paintRunways(g2d);
-        paintCenterLines(g2d);
-        super.paint(g);
+
+        /*Generate a Buffered Image to draw on instead of using the g2d object.
+          This will make it easier to implement panning, zooming, saving, and printing*/
+        BufferedImage img = new BufferedImage(1000,1000, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = img.createGraphics();
+
+        //Set the background colour.
+        g2.setColor(Color.DARK_GRAY);
+        g2.fillRect(0,0,1000,1000);
+
+        //If Isolate Mode isn't on then draw all runways, otherwise just draw the selected one.
+        if(!menuPanel.isIsolateMode()){
+            paintRunways(g2);
+            paintCenterLines(g2);
+        }
+        paintSelectedRunway(g2);
+
+        //Use the g2d object to paint the buffered image.
+        g2d.drawImage(img,0,0,getWidth(),getHeight(),null);
     }
 
     //Draws the runway for all runways in the current model.
     private void paintRunways(Graphics2D g2d){
         g2d.setColor(Color.GRAY);
 
-        for(String id : runwayPos.keySet()){
-            Point pos = runwayPos.get(id);
-            Dimension dim = runwayDims.get(id);
+        for(String id : frontEndModel.getRunways()){
+            Point pos = frontEndModel.getRunwayPos(id);
+            Dimension dim = frontEndModel.getRunwayDim(id);
 
             AffineTransform old = g2d.getTransform();
             AffineTransform tx = createRunwayTransform(pos,dim,id);
@@ -46,14 +68,43 @@ public class TopView2D extends JPanel {
         }
     }
 
+    private void paintSelectedRunway(Graphics2D g2d){
+        //Check if the selected runway is the empty string, if so don't render a selected runway.
+        if(!(frontEndModel.getSelectedRunway() == "")){
+
+            String selectedRunway = frontEndModel.getSelectedRunway();
+            Point pos = frontEndModel.getRunwayPos(selectedRunway);
+            Dimension dim = frontEndModel.getRunwayDim(selectedRunway);
+
+            AffineTransform old = g2d.getTransform();
+            AffineTransform tx = createRunwayTransform(pos,dim, selectedRunway);
+            g2d.setTransform(tx);
+
+            //Drawing the green highlight box.
+            g2d.setColor(new Color(126, 255, 140));
+            g2d.setStroke(new BasicStroke(selectedBorderSize));
+            g2d.drawRect(pos.x, pos.y, dim.width, dim.height);
+
+            //Drawing the
+            g2d.setColor(new Color(164, 164, 164));
+            g2d.fillRect(pos.x, pos.y, dim.width, dim.height);
+
+            g2d.setColor(Color.WHITE);
+            g2d.setStroke(new BasicStroke(2,BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 10,new float[] {10,5} , 1));
+            g2d.drawLine(pos.x + runwayBorder, pos.y + dim.height/2, pos.x + dim.width - runwayBorder, pos.y + dim.height/2);
+
+            g2d.setTransform(old);
+        }
+    }
+
     //Draws the centerlines for all runways in the current model.
     private void paintCenterLines(Graphics2D g2d){
         g2d.setColor(Color.WHITE);
         g2d.setStroke(new BasicStroke(2,BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 10,new float[] {10,5} , 1));
 
-        for (String id : runwayPos.keySet()){
-            Point pos = runwayPos.get(id);
-            Dimension dim = runwayDims.get(id);
+        for(String id : frontEndModel.getRunways()){
+            Point pos = frontEndModel.getRunwayPos(id);
+            Dimension dim = frontEndModel.getRunwayDim(id);
 
             AffineTransform old = g2d.getTransform();
             AffineTransform tx = createRunwayTransform(pos,dim,id);
