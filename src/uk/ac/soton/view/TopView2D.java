@@ -17,7 +17,7 @@ public class TopView2D extends JPanel {
     //Constant which controls the distance between the centerline and the edge of the runway.
     private final Integer runwayBorder = 20;
     //The size of the highlight which is displayed around the selected runway.
-    private final Integer selectedBorderSize = 3;
+    private final Integer selectedBorderSize = 5;
 
     TopView2D(AppView frontEndModel,MenuPanel menuPanel){
         this.frontEndModel = frontEndModel;
@@ -40,6 +40,7 @@ public class TopView2D extends JPanel {
         g2.fillRect(0,0,1000,1000);
 
         //If Isolate Mode isn't on then draw all runways, otherwise just draw the selected one.
+        paintClearAndGraded(g2);
         if(!menuPanel.isIsolateMode()){
             paintRunways(g2);
             paintCenterLines(g2);
@@ -81,14 +82,15 @@ public class TopView2D extends JPanel {
             g2d.setTransform(tx);
 
             //Drawing the green highlight box.
-            g2d.setColor(new Color(126, 255, 140));
+            g2d.setColor(new Color(255, 165, 83));
             g2d.setStroke(new BasicStroke(selectedBorderSize));
             g2d.drawRect(pos.x, pos.y, dim.width, dim.height);
 
-            //Drawing the
+            //Drawing the runway
             g2d.setColor(new Color(164, 164, 164));
             g2d.fillRect(pos.x, pos.y, dim.width, dim.height);
 
+            //Drawing the centerline
             g2d.setColor(Color.WHITE);
             g2d.setStroke(new BasicStroke(2,BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 10,new float[] {10,5} , 1));
             g2d.drawLine(pos.x + runwayBorder, pos.y + dim.height/2, pos.x + dim.width - runwayBorder, pos.y + dim.height/2);
@@ -114,6 +116,43 @@ public class TopView2D extends JPanel {
             g2d.drawLine(pos.x + runwayBorder, pos.y + dim.height/2, pos.x + dim.width - runwayBorder, pos.y + dim.height/2);
             g2d.setTransform(old);
         }
+    }
+
+    //Draws the clear and graded area for all runways.
+    private void paintClearAndGraded(Graphics2D g2d){
+        g2d.setColor(new Color(80, 160, 79));
+
+        for(String id : frontEndModel.getRunways()){
+            Point pos = frontEndModel.getRunwayPos(id);
+            Dimension dim = frontEndModel.getRunwayDim(id);
+
+            AffineTransform old = g2d.getTransform();
+            AffineTransform tx = createRunwayTransform(pos,dim,id);
+            g2d.setTransform(tx);
+
+            //Generate a polygon in the shape of the clear and graded area for the current runway.
+            Polygon poly = genClearAndGradedPoly(pos, dim);
+            g2d.fillPolygon(poly);
+            g2d.setTransform(old);
+        }
+    }
+
+    //Generates a custom polygon in the shape of the clear and graded area for some runway.
+    private Polygon genClearAndGradedPoly(Point pos, Dimension dim){
+        //x-positions for all points defining the shape in terms of the location and size of the runway.
+        int[] xCoords = {pos.x -60,pos.x + 150,pos.x + 300,
+                pos.x + dim.width - 300, pos.x + dim.width - 150,pos.x + dim.width + 60,
+                pos.x + dim.width + 60,pos.x + dim.width - 150,pos.x + dim.width - 300,
+                pos.x + 300,pos.x + 150,pos.x -60};
+        //y-positions for all points defining the shape in terms of the location and size of the runway.
+        int[] yCoords = {pos.y - (150-dim.height)/2,pos.y - (150-dim.height)/2,pos.y - (210-dim.height)/2
+                ,pos.y - (210-dim.height)/2,pos.y - (150-dim.height)/2,pos.y - (150-dim.height)/2
+                ,pos.y + (150+dim.height)/2,pos.y + (150+dim.height)/2,pos.y + (210+dim.height)/2
+                ,pos.y + (210+dim.height)/2,pos.y + (150+dim.height)/2,pos.y + (150+dim.height)/2};
+        //The number of points in the shape.
+        int n = xCoords.length;
+        Polygon poly = new Polygon(xCoords, yCoords, n);
+        return poly;
     }
 
     /* Generates an Affine transformation which rotates the runway to match its bearing and moves the centre of translation to
