@@ -2,6 +2,8 @@ package uk.ac.soton.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -20,7 +22,6 @@ public class AppView extends JFrame{
         runwayDimensions = new HashMap<>();
         selectedRunway = "";
         populateModel();
-
     }
 
     //Properly initializes and displays the window.
@@ -41,13 +42,13 @@ public class AppView extends JFrame{
 
     //Debug function used to generate some data.
     private void populateModel(){
-        String runway1 = "06L";
-        runwayPositions.put(runway1, new Point(100,500));
-        runwayDimensions.put(runway1, new Dimension(600,60));
+        String runway1 = "09L";
+        runwayPositions.put(runway1, new Point(100,200));
+        runwayDimensions.put(runway1, new Dimension(700,60));
 
-        String runway2 = "12L";
+        /*String runway2 = "12L";
         runwayPositions.put(runway2, new Point(100,300));
-        runwayDimensions.put(runway2, new Dimension(800,80));
+        runwayDimensions.put(runway2, new Dimension(800,80));*/
     }
 
     public Set<String> getRunways(){

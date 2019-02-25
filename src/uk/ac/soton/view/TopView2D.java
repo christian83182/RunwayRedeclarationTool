@@ -2,8 +2,9 @@ package uk.ac.soton.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
@@ -21,25 +22,30 @@ public class TopView2D extends JPanel {
     private final Integer CENTERLINE_PADDING = 20;
     private final Integer SELECTED_RUNWAY_HIGHLIGHT_WIDTH = 3;
     private final Double MAX_ZOOM_FACTOR = 5.0;
-    private final Double MIN_ZOOM_FACTOR = 0.1;
+    private final Double MIN_ZOOM_FACTOR = 0.05;
+    private final Double DEFAULT_ZOOM_FACTOR = 1.0;
+    private final Point DEFAULT_PAN_AMOUNT = new Point(100,100);
 
 
     TopView2D(AppView frontEndModel,MenuPanel menuPanel){
         this.frontEndModel = frontEndModel;
         this.menuPanel = menuPanel;
-        this.setPreferredSize(new Dimension(1000,1000));
-        this.addMouseWheelListener(new scaleListener());
-        globalPan = new Point(0,0);
-        globalZoom = 1.0;
+        this.setPreferredSize(new Dimension(900,900));
+
+        PanAndZoomListener panListener = new PanAndZoomListener();
+        this.addMouseWheelListener(panListener);
+        this.addMouseListener(panListener);
+        this.addMouseMotionListener(panListener);
+
+        globalPan = new Point(DEFAULT_PAN_AMOUNT.x, DEFAULT_PAN_AMOUNT.y);
+        globalZoom = new Double(DEFAULT_ZOOM_FACTOR);
     }
 
 
     protected void paintComponent(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
 
-        /*Generate a Buffered Image to draw on instead of using the g2d object.
-          This will make it easier to implement panning, zooming, saving, and printing
-          The buffered image is generated based on the size of the window so that the image never appears pixelated. */
+        //Generate a Buffered Image to draw on instead of using the g2d object.
         BufferedImage img = new BufferedImage(getWidth(),getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = img.createGraphics();
 
@@ -49,8 +55,12 @@ public class TopView2D extends JPanel {
 
         //Create a global affine transformation which pans and zooms the view accordingly.
         AffineTransform globalTransform = new AffineTransform();
+        //Centers the view on the specified default;
+        globalTransform.translate(DEFAULT_PAN_AMOUNT.x,DEFAULT_PAN_AMOUNT.y);
+        //Translate and scale the view to match the pan and zoom settings.
         globalTransform.translate(globalPan.x, globalPan.y);
         globalTransform.scale(globalZoom,globalZoom);
+        //Set the create transformation to the one used by the image.
         g2.setTransform(globalTransform);
 
         //Draw runways, centerlines, clear and graded areas and more to the screen.
@@ -59,7 +69,14 @@ public class TopView2D extends JPanel {
             paintRunways(g2);
             paintCenterLines(g2);
         }
+        //Draw the selected runway on top of everything else.
         paintSelectedRunway(g2);
+
+        //Set of x & y axis for debug(?)
+        g2.setColor(new Color(101, 101, 101));
+        g2.setStroke(new BasicStroke(1));
+        g2.drawLine(-10000,0,10000,0);
+        g2.drawLine(0,-10000,0,10000);
 
         //Use the g2d object to paint the buffered image.
         g2d.drawImage(img,0,0,getWidth(),getHeight(),null);
@@ -121,7 +138,6 @@ public class TopView2D extends JPanel {
     private void paintCenterLines(Graphics2D g2d){
         g2d.setColor(Color.WHITE);
         g2d.setStroke(new BasicStroke(2,BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 10,new float[] {10,5} , 1));
-
         for(String id : frontEndModel.getRunways()){
             Point pos = frontEndModel.getRunwayPos(id);
             Dimension dim = frontEndModel.getRunwayDim(id);
@@ -186,8 +202,30 @@ public class TopView2D extends JPanel {
         return rx;
     }
 
-    //Inner class devoted to giving the view zoom functionality.
-    private class scaleListener implements MouseWheelListener {
+    //Inner class devoted to giving the view zoom and pan functionality.
+    private class PanAndZoomListener extends MouseAdapter{
+
+        Point startPoint;
+        Point originalGlobalPan;
+
+        PanAndZoomListener(){
+            startPoint = new Point(0,0);
+            originalGlobalPan = new Point(0,0);
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            originalGlobalPan = (Point)globalPan.clone();
+            startPoint = e.getPoint();
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            globalPan.x = originalGlobalPan.x + (e.getX() - startPoint.x);
+            globalPan.y = originalGlobalPan.y + (e.getY() - startPoint.y);
+            TopView2D.this.repaint();
+        }
+
         @Override
         public void mouseWheelMoved(MouseWheelEvent e) {
             Integer scaleFactor = e.getWheelRotation();
@@ -198,9 +236,6 @@ public class TopView2D extends JPanel {
             } else {
                 return;
             }
-            //Translating the view gives the impression that the zoom is on the center of the screen.
-            globalPan.x = (int)((getWidth() - globalZoom * getWidth())/2);
-            globalPan.y = (int)((getHeight() - globalZoom * getHeight())/2);
             TopView2D.this.repaint();
         }
     }

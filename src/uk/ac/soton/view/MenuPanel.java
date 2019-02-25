@@ -13,6 +13,7 @@ public class MenuPanel extends JPanel {
     MenuPanel(AppView frontEndModel){
         this.setPreferredSize(new Dimension(230,1000));
         this.frontEndModel = frontEndModel;
+        this.setLayout(new GridBagLayout());
 
         //Create a new ArrayList, in order to add "None" at the start.
         List<String> menuItems = new ArrayList<>();
