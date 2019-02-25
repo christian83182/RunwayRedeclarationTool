@@ -2,44 +2,58 @@ package uk.ac.soton.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 //Represents a JPanel designed to view a top-down view of the runways.
 public class TopView2D extends JPanel {
 
-
     //Instance of the front end model which contains the information.
     private AppView frontEndModel;
     //Instance of the menu panel which controls a lot of the display settings.
     private MenuPanel menuPanel;
+    //Variables used to keep track of the current level of zoom, and pan location.
+    private Point globalPan;
+    private Double globalZoom;
 
-    //Constant which controls the distance between the centerline and the edge of the runway.
-    private final Integer runwayBorder = 20;
-    //The size of the highlight which is displayed around the selected runway.
-    private final Integer selectedBorderSize = 5;
+    private final Integer CENTERLINE_PADDING = 20;
+    private final Integer SELECTED_RUNWAY_HIGHLIGHT_WIDTH = 3;
+    private final Double MAX_ZOOM_FACTOR = 5.0;
+    private final Double MIN_ZOOM_FACTOR = 0.1;
+
 
     TopView2D(AppView frontEndModel,MenuPanel menuPanel){
         this.frontEndModel = frontEndModel;
         this.menuPanel = menuPanel;
         this.setPreferredSize(new Dimension(1000,1000));
+        this.addMouseWheelListener(new scaleListener());
+        globalPan = new Point(0,0);
+        globalZoom = 1.0;
     }
 
 
-    //Overwritten method which is
     protected void paintComponent(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
 
         /*Generate a Buffered Image to draw on instead of using the g2d object.
-          This will make it easier to implement panning, zooming, saving, and printing*/
-        BufferedImage img = new BufferedImage(1000,1000, BufferedImage.TYPE_INT_RGB);
+          This will make it easier to implement panning, zooming, saving, and printing
+          The buffered image is generated based on the size of the window so that the image never appears pixelated. */
+        BufferedImage img = new BufferedImage(getWidth(),getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = img.createGraphics();
 
         //Set the background colour.
         g2.setColor(Color.DARK_GRAY);
-        g2.fillRect(0,0,1000,1000);
+        g2.fillRect(0,0,getWidth(),getHeight());
 
-        //If Isolate Mode isn't on then draw all runways, otherwise just draw the selected one.
+        //Create a global affine transformation which pans and zooms the view accordingly.
+        AffineTransform globalTransform = new AffineTransform();
+        globalTransform.translate(globalPan.x, globalPan.y);
+        globalTransform.scale(globalZoom,globalZoom);
+        g2.setTransform(globalTransform);
+
+        //Draw runways, centerlines, clear and graded areas and more to the screen.
         paintClearAndGraded(g2);
         if(!menuPanel.isIsolateMode()){
             paintRunways(g2);
@@ -49,6 +63,7 @@ public class TopView2D extends JPanel {
 
         //Use the g2d object to paint the buffered image.
         g2d.drawImage(img,0,0,getWidth(),getHeight(),null);
+
     }
 
     //Draws the runway for all runways in the current model.
@@ -60,7 +75,8 @@ public class TopView2D extends JPanel {
             Dimension dim = frontEndModel.getRunwayDim(id);
 
             AffineTransform old = g2d.getTransform();
-            AffineTransform tx = createRunwayTransform(pos,dim,id);
+            AffineTransform tx = (AffineTransform) old.clone();
+            tx.concatenate(createRunwayTransform(pos,dim,id));
             g2d.setTransform(tx);
 
             //Draw the runway itself.
@@ -69,6 +85,7 @@ public class TopView2D extends JPanel {
         }
     }
 
+    //Draws only the selected runway, such that it appears above all others and appears selected.
     private void paintSelectedRunway(Graphics2D g2d){
         //Check if the selected runway is the empty string, if so don't render a selected runway.
         if(!(frontEndModel.getSelectedRunway() == "")){
@@ -78,13 +95,9 @@ public class TopView2D extends JPanel {
             Dimension dim = frontEndModel.getRunwayDim(selectedRunway);
 
             AffineTransform old = g2d.getTransform();
-            AffineTransform tx = createRunwayTransform(pos,dim, selectedRunway);
+            AffineTransform tx = (AffineTransform) old.clone();
+            tx.concatenate(createRunwayTransform(pos,dim,selectedRunway));
             g2d.setTransform(tx);
-
-            //Drawing the green highlight box.
-            g2d.setColor(new Color(255, 165, 83));
-            g2d.setStroke(new BasicStroke(selectedBorderSize));
-            g2d.drawRect(pos.x, pos.y, dim.width, dim.height);
 
             //Drawing the runway
             g2d.setColor(new Color(137, 137, 137));
@@ -93,7 +106,12 @@ public class TopView2D extends JPanel {
             //Drawing the centerline
             g2d.setColor(Color.WHITE);
             g2d.setStroke(new BasicStroke(2,BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 10,new float[] {10,5} , 1));
-            g2d.drawLine(pos.x + runwayBorder, pos.y + dim.height/2, pos.x + dim.width - runwayBorder, pos.y + dim.height/2);
+            g2d.drawLine(pos.x + CENTERLINE_PADDING, pos.y + dim.height/2, pos.x + dim.width - CENTERLINE_PADDING, pos.y + dim.height/2);
+
+            //Drawing the highlight box.
+            g2d.setColor(new Color(255, 165, 83));
+            g2d.setStroke(new BasicStroke(SELECTED_RUNWAY_HIGHLIGHT_WIDTH));
+            g2d.drawRect(pos.x, pos.y, dim.width, dim.height);
 
             g2d.setTransform(old);
         }
@@ -109,11 +127,12 @@ public class TopView2D extends JPanel {
             Dimension dim = frontEndModel.getRunwayDim(id);
 
             AffineTransform old = g2d.getTransform();
-            AffineTransform tx = createRunwayTransform(pos,dim,id);
+            AffineTransform tx = (AffineTransform) old.clone();
+            tx.concatenate(createRunwayTransform(pos,dim,id));
             g2d.setTransform(tx);
 
             //Paint he centerline for the respective runway.
-            g2d.drawLine(pos.x + runwayBorder, pos.y + dim.height/2, pos.x + dim.width - runwayBorder, pos.y + dim.height/2);
+            g2d.drawLine(pos.x + CENTERLINE_PADDING, pos.y + dim.height/2, pos.x + dim.width - CENTERLINE_PADDING, pos.y + dim.height/2);
             g2d.setTransform(old);
         }
     }
@@ -127,7 +146,8 @@ public class TopView2D extends JPanel {
             Dimension dim = frontEndModel.getRunwayDim(id);
 
             AffineTransform old = g2d.getTransform();
-            AffineTransform tx = createRunwayTransform(pos,dim,id);
+            AffineTransform tx = (AffineTransform) old.clone();
+            tx.concatenate(createRunwayTransform(pos,dim,id));
             g2d.setTransform(tx);
 
             //Generate a polygon in the shape of the clear and graded area for the current runway.
@@ -164,5 +184,24 @@ public class TopView2D extends JPanel {
         AffineTransform rx = new AffineTransform(tx);
         rx.rotate(bearing,pos.x, pos.y+(dim.height/2));
         return rx;
+    }
+
+    //Inner class devoted to giving the view zoom functionality.
+    private class scaleListener implements MouseWheelListener {
+        @Override
+        public void mouseWheelMoved(MouseWheelEvent e) {
+            Integer scaleFactor = e.getWheelRotation();
+            if(scaleFactor < 0 & globalZoom * 1/0.95 < MAX_ZOOM_FACTOR ){
+                globalZoom = globalZoom * 1/0.95;
+            } else  if (scaleFactor > 0 & globalZoom * 0.95 > MIN_ZOOM_FACTOR){
+                globalZoom =  globalZoom * 0.95;
+            } else {
+                return;
+            }
+            //Translating the view gives the impression that the zoom is on the center of the screen.
+            globalPan.x = (int)((getWidth() - globalZoom * getWidth())/2);
+            globalPan.y = (int)((getHeight() - globalZoom * getHeight())/2);
+            TopView2D.this.repaint();
+        }
     }
 }
