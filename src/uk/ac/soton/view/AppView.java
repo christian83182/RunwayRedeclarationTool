@@ -42,13 +42,13 @@ public class AppView extends JFrame{
 
     //Debug function used to generate some data.
     private void populateModel(){
-        String runway1 = "09L";
-        runwayPositions.put(runway1, new Point(100,200));
-        runwayDimensions.put(runway1, new Dimension(700,60));
+        String runway1 = "05L";
+        runwayPositions.put(runway1, new Point(-400,0));
+        runwayDimensions.put(runway1, new Dimension(1000,60));
 
-        /*String runway2 = "12L";
-        runwayPositions.put(runway2, new Point(100,300));
-        runwayDimensions.put(runway2, new Dimension(800,80));*/
+        String runway2 = "12L";
+        runwayPositions.put(runway2, new Point(-800,-500));
+        runwayDimensions.put(runway2, new Dimension(2000,100));
     }
 
     public Set<String> getRunways(){

@@ -23,8 +23,8 @@ public class TopView2D extends JPanel {
     private final Integer SELECTED_RUNWAY_HIGHLIGHT_WIDTH = 3;
     private final Double MAX_ZOOM_FACTOR = 5.0;
     private final Double MIN_ZOOM_FACTOR = 0.05;
-    private final Double DEFAULT_ZOOM_FACTOR = 1.0;
-    private final Point DEFAULT_PAN_AMOUNT = new Point(100,100);
+    private final Double DEFAULT_ZOOM_FACTOR = 0.44;
+    private final Point DEFAULT_PAN_AMOUNT = new Point(210,243);
 
 
     TopView2D(AppView frontEndModel,MenuPanel menuPanel){
@@ -65,7 +65,8 @@ public class TopView2D extends JPanel {
 
         //Draw runways, centerlines, clear and graded areas and more to the screen.
         paintClearAndGraded(g2);
-        if(!menuPanel.isIsolateMode()){
+        //Only draw non-selected runways if not in isolated mode, or if in isolated mode but no runway is selected.
+        if(!menuPanel.isIsolateMode() || (menuPanel.isIsolateMode() && frontEndModel.getSelectedRunway() == "")){
             paintRunways(g2);
             paintCenterLines(g2);
         }
