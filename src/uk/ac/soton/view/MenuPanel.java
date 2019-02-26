@@ -11,7 +11,7 @@ public class MenuPanel extends JPanel {
     private JCheckBox isolateModeBox;
 
     MenuPanel(AppView frontEndModel){
-        this.setPreferredSize(new Dimension(230,1000));
+        this.setPreferredSize(new Dimension(230,100));
         this.frontEndModel = frontEndModel;
         this.setLayout(new GridBagLayout());
 

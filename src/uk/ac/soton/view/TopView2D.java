@@ -19,28 +19,27 @@ public class TopView2D extends JPanel {
     private Point globalPan;
     private Double globalZoom;
 
+    //Default values used throughout the class.
     private final Integer CENTERLINE_PADDING = 20;
     private final Integer SELECTED_RUNWAY_HIGHLIGHT_WIDTH = 3;
     private final Double MAX_ZOOM_FACTOR = 5.0;
     private final Double MIN_ZOOM_FACTOR = 0.05;
-    private final Double DEFAULT_ZOOM_FACTOR = 0.44;
-    private final Point DEFAULT_PAN_AMOUNT = new Point(210,243);
+    private final Dimension DEAFULT_VIEW_SIZE = new Dimension(800,800);
+    private final Point DEAULT_PAN = new Point(DEAFULT_VIEW_SIZE.width/2, DEAFULT_VIEW_SIZE.height/2);
+    private final Double DEFAULT_ZOOM = 0.5;
 
 
     TopView2D(AppView frontEndModel,MenuPanel menuPanel){
         this.frontEndModel = frontEndModel;
         this.menuPanel = menuPanel;
-        this.setPreferredSize(new Dimension(900,900));
-
+        this.setPreferredSize(DEAFULT_VIEW_SIZE);
         PanAndZoomListener panListener = new PanAndZoomListener();
         this.addMouseWheelListener(panListener);
         this.addMouseListener(panListener);
         this.addMouseMotionListener(panListener);
-
-        globalPan = new Point(DEFAULT_PAN_AMOUNT.x, DEFAULT_PAN_AMOUNT.y);
-        globalZoom = new Double(DEFAULT_ZOOM_FACTOR);
+        globalPan = new Point(DEAULT_PAN);
+        globalZoom = new Double(DEFAULT_ZOOM);
     }
-
 
     protected void paintComponent(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
@@ -48,6 +47,7 @@ public class TopView2D extends JPanel {
         //Generate a Buffered Image to draw on instead of using the g2d object.
         BufferedImage img = new BufferedImage(getWidth(),getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = img.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 
         //Set the background colour.
         g2.setColor(Color.DARK_GRAY);
@@ -55,8 +55,6 @@ public class TopView2D extends JPanel {
 
         //Create a global affine transformation which pans and zooms the view accordingly.
         AffineTransform globalTransform = new AffineTransform();
-        //Centers the view on the specified default;
-        globalTransform.translate(DEFAULT_PAN_AMOUNT.x,DEFAULT_PAN_AMOUNT.y);
         //Translate and scale the view to match the pan and zoom settings.
         globalTransform.translate(globalPan.x, globalPan.y);
         globalTransform.scale(globalZoom,globalZoom);
@@ -73,7 +71,7 @@ public class TopView2D extends JPanel {
         //Draw the selected runway on top of everything else.
         paintSelectedRunway(g2);
 
-        //Set of x & y axis for debug(?)
+        //Draw a set of x & y axis for debug(?)
         g2.setColor(new Color(101, 101, 101));
         g2.setStroke(new BasicStroke(1));
         g2.drawLine(-10000,0,10000,0);
@@ -87,7 +85,6 @@ public class TopView2D extends JPanel {
     //Draws the runway for all runways in the current model.
     private void paintRunways(Graphics2D g2d){
         g2d.setColor(Color.GRAY);
-
         for(String id : frontEndModel.getRunways()){
             Point pos = frontEndModel.getRunwayPos(id);
             Dimension dim = frontEndModel.getRunwayDim(id);
@@ -123,7 +120,7 @@ public class TopView2D extends JPanel {
 
             //Drawing the centerline
             g2d.setColor(Color.WHITE);
-            g2d.setStroke(new BasicStroke(2,BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 10,new float[] {10,5} , 1));
+            g2d.setStroke(new BasicStroke(3,BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 10,new float[] {15,10} , 1));
             g2d.drawLine(pos.x + CENTERLINE_PADDING, pos.y + dim.height/2, pos.x + dim.width - CENTERLINE_PADDING, pos.y + dim.height/2);
 
             //Drawing the highlight box.
@@ -138,7 +135,7 @@ public class TopView2D extends JPanel {
     //Draws the centerlines for all runways in the current model.
     private void paintCenterLines(Graphics2D g2d){
         g2d.setColor(Color.WHITE);
-        g2d.setStroke(new BasicStroke(2,BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 10,new float[] {10,5} , 1));
+        g2d.setStroke(new BasicStroke(3,BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 10,new float[] {15,10} , 1));
         for(String id : frontEndModel.getRunways()){
             Point pos = frontEndModel.getRunwayPos(id);
             Dimension dim = frontEndModel.getRunwayDim(id);
@@ -195,7 +192,7 @@ public class TopView2D extends JPanel {
     /* Generates an Affine transformation which rotates the runway to match its bearing and moves the centre of translation to
        the center of the left side. */
     private AffineTransform createRunwayTransform(Point pos, Dimension dim, String id){
-        Double bearing = Math.toRadians(Integer.parseInt(id.substring(0,2))*10-90);
+        Double bearing = Math.toRadians(frontEndModel.getBearing(id)-90);
         AffineTransform tx = new AffineTransform();
         tx.translate(0,-dim.height/2);
         AffineTransform rx = new AffineTransform(tx);
