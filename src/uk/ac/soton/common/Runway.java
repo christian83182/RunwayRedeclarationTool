@@ -6,6 +6,8 @@ public class Runway extends PositionalObject{
     private Integer length;
     private Integer width;
     private String name;
+    private String status;
+    private Boolean active = true;
 
     private Integer clearway;
     private Integer stopway;
@@ -14,6 +16,9 @@ public class Runway extends PositionalObject{
     private Integer toda; // take-off distance available
     private Integer asda; // accelerate-stop distance available
     private Integer lda;  // landing distance available
+    private Integer resa; // runway end safety area
+    private Integer tocs; // take-off climb surface
+    private Integer als;  // approach landing surface
     private Integer threshold = 0;
 
     private Obstacle obstacle = null; // no obstacle present initially
@@ -57,6 +62,14 @@ public class Runway extends PositionalObject{
         this.name = name;
     }
 
+    public Boolean getActive() { return active; }
+
+    public void setActive(Boolean state) { this.active = state; }
+
+    public String getStatus() { return status; }
+
+    public void setStatus(String status) { this.status = status; }
+
     public Integer getClearway() { return clearway; }
 
     public void setClearway(Integer clearway) {
@@ -80,5 +93,35 @@ public class Runway extends PositionalObject{
 
     public void setObstacle(Obstacle obstacle){ this.obstacle = obstacle; }
 
+    public void clearObstacle() { this.obstacle = null; }
+
     public Obstacle getObstacle() { return obstacle; }
+
+    public Integer getTora() { return tora; }
+
+    public void setTora(Integer tora) { this.tora = tora; }
+
+    public Integer getToda() { return toda; }
+
+    public void  setToda(Integer toda) { this.toda = toda; }
+
+    public Integer getAsda() { return asda; }
+
+    public void setAsda(Integer asda) { this.asda = asda; }
+
+    public Integer getLda() { return lda; }
+
+    public void setLda(Integer lda) { this.lda = lda; }
+
+    public Integer getResa() { return resa; }
+
+    public void setResa(Integer resa) { this.resa = resa; }
+
+    public Integer getTocs() { return tocs; }
+
+    public void setTocs(Integer tocs) { this.tocs = tocs; }
+
+    public Integer getAls() { return als; }
+
+    public void setAls(Integer als) { this.als = als; }
 }
