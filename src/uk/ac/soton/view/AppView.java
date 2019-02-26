@@ -2,8 +2,6 @@ package uk.ac.soton.view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -40,33 +38,38 @@ public class AppView extends JFrame{
         this.setVisible(true);
     }
 
-    //Debug function used to generate some data.
+    //Debug function used to generate some test data.
     private void populateModel(){
-        String runway1 = "05L";
+        String runway1 = "07L";
         runwayPositions.put(runway1, new Point(-400,0));
-        runwayDimensions.put(runway1, new Dimension(1000,60));
+        runwayDimensions.put(runway1, new Dimension(1200,80));
 
-        String runway2 = "12L";
+        String runway2 = "11L";
         runwayPositions.put(runway2, new Point(-800,-500));
         runwayDimensions.put(runway2, new Dimension(2000,100));
     }
 
+    //Returns a set of strings representing runways.
     public Set<String> getRunways(){
         return runwayPositions.keySet();
     }
 
+    //Returns the position of a runway as a Point given the name.
     public Point getRunwayPos(String runwayId) {
         return runwayPositions.get(runwayId);
     }
 
+    //Returns the size of the runway as a Dimension given the name.
     public Dimension getRunwayDim(String runwayId) {
         return runwayDimensions.get(runwayId);
     }
 
+    //Returns the name of the currently selected runway.
     public String getSelectedRunway() {
         return selectedRunway;
     }
 
+    //Sets the currently selected runway to some other runway specified by name.
     public void setSelectedRunway(String selectedRunway) {
         if(selectedRunway == "None"){
             this.selectedRunway = "";
@@ -76,6 +79,13 @@ public class AppView extends JFrame{
         repaint();
     }
 
+    //Returns the bearing of the runway in degrees given the runway's name.
+    public Integer getBearing(String runwayId){
+        Integer bearing = Integer.parseInt(runwayId.substring(0,2))*10;
+        return bearing;
+    }
+
+    //Set's the Look and Feel of the application to a custom theme.
     private void setLookAndFeel(){
         try{
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
