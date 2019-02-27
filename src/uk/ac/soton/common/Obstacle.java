@@ -6,19 +6,38 @@ public class Obstacle extends PositionalObject {
     private Double height;
     private Double length;
     private Double width;
-    private Integer distFromThreshold;
-    private Integer distFromCentreline;
-    private Integer distFromRunway;
+    private Integer thresholdDistance;
+    private Integer centrelineDistance;
+    private Integer runwayDistance;
 
-    Obstacle(String id, Integer xPos, Integer yPos, Airfield.Dimensions dimensions){
+    /*public Obstacle(String id, Integer xPos, Integer yPos, Airfield.Dimensions dimensions){
         super(xPos, yPos, id);
+        this.length = dimensions.getLength();
+        this.width = dimensions.getWidth();
+        this.height = dimensions.getHeight();
+    }*/
+
+    public Obstacle(String id, Integer xPos, Integer yPos, Integer thresholdDistance, Integer centrelineDistance,
+                    Integer runwayDistance, Airfield.Dimensions dimensions){
+
+        super(xPos, yPos, id);
+
+        this.thresholdDistance = thresholdDistance;
+        this.centrelineDistance = centrelineDistance;
+        this.runwayDistance = runwayDistance;
+
         this.length = dimensions.getLength();
         this.width = dimensions.getWidth();
         this.height = dimensions.getHeight();
     }
 
-    Obstacle(){
+    public Obstacle(){
         super(0,0,"DefaultID");
+
+        this.thresholdDistance = 0;
+        this.centrelineDistance = 0;
+        this.runwayDistance = 0;
+
         this.height = 0.0;
         this.width = 0.0;
         this.length = 0.0;
@@ -48,28 +67,28 @@ public class Obstacle extends PositionalObject {
         this.width = width;
     }
 
-    public Integer getDistFromThreshold() {
-        return distFromThreshold;
+    public Integer getThresholdDistance() {
+        return thresholdDistance;
     }
 
-    public void setDistFromThreshold(Integer distFromThreshold) {
-        this.distFromThreshold = distFromThreshold;
+    public void setThresholdDistance(Integer thresholdDistance) {
+        this.thresholdDistance = thresholdDistance;
     }
 
-    public Integer getDistFromCentreline() {
-        return distFromCentreline;
+    public Integer getCentrelineDistance() {
+        return centrelineDistance;
     }
 
-    public void setDistFromCentreline(Integer distFromCentreline) {
-        this.distFromCentreline = distFromCentreline;
+    public void setCentrelineDistance(Integer centrelineDistance) {
+        this.centrelineDistance = centrelineDistance;
     }
 
-    public Integer getDistFromRunway() {
-        return distFromRunway;
+    public Integer getRunwayDistance() {
+        return runwayDistance;
     }
 
-    public void setDistFromRunway(Integer distFromRunway) {
-        this.distFromRunway = distFromRunway;
+    public void setRunwayDistance(Integer runwayDistance) {
+        this.runwayDistance = runwayDistance;
     }
 
     // Turns obstacle sideways (length of the object perpendicular to the length of the runway)
@@ -77,5 +96,7 @@ public class Obstacle extends PositionalObject {
         Double temp = length;
         length = width;
         width = temp;
+
+        // changes to xPos and yPos as well
     }
 }

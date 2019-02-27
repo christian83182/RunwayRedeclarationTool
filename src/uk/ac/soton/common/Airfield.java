@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class Airfield {
 
     private ArrayList<Runway> runways = new ArrayList<Runway>();
-    private Map<String,Dimensions> predefObstacles = new HashMap<String,Dimensions>(){
+    private Map<String,Dimensions> predefinedObstacles = new HashMap<String,Dimensions>(){
         {
             // Airbus 320 series
             put("Airbus A318", new Dimensions(31.44,34.1,12.51));
@@ -50,7 +50,6 @@ public class Airfield {
             // Ground support equipment
             put("Dolly without cargo", new Dimensions(3.18,2.44,0.5));
             put("Dolly with cargo", new Dimensions(3.18,2.44,2.5));
-            //put("GSE fuel truck");
             //put("Hydrant pit cleaner");
             //put("Hydrant dispenser");
             //put("45,000 litre refueller");
@@ -66,6 +65,7 @@ public class Airfield {
 
     public Boolean addRunway(Runway newRunway){
 
+        // Can't add a runway with an already existing name
         for(Runway r : runways){
             if(r.getName().equals(newRunway.getName())){
                 return false;
@@ -76,28 +76,40 @@ public class Airfield {
         return true;
     }
 
+    public Runway getRunway(String name){
+
+        for(Runway runway : runways){
+
+            if(runway.getName().equals(name)){
+                return runway;
+            }
+        }
+
+        return null;
+    }
+
     public void removeRunway(Runway oldRunway){
         runways.remove(oldRunway);
     }
 
-    public Map<String, Dimensions> getPredefObstacles() { return predefObstacles; }
+    public Map<String, Dimensions> getPredefinedObstacles() { return predefinedObstacles; }
 
-    public void setPredefObstacles(Map<String, Dimensions> predefObstacles) { this.predefObstacles = predefObstacles; }
+    public void setPredefinedObstacles(Map<String, Dimensions> predefinedObstacles) { this.predefinedObstacles = predefinedObstacles; }
 
     public void defineNewObstacle(String type, Double length, Double width, Double height){
-        predefObstacles.put(type, new Dimensions(length, width, height));
+        predefinedObstacles.put(type, new Dimensions(length, width, height));
     }
 
-    public void removePredefObstacle(String type){ predefObstacles.remove(type); }
+    public void removePredefinedObstacle(String type){ predefinedObstacles.remove(type); }
 
     public void redefineObstacle(String type, Double length, Double width, Double height){
-        Dimensions dimensions = predefObstacles.get(type);
+        Dimensions dimensions = predefinedObstacles.get(type);
         dimensions.setLength(length);
         dimensions.setWidth(width);
         dimensions.setHeight(height);
     }
 
-    class Dimensions {
+    public class Dimensions {
 
         private Double length = 0.0;
         private Double width = 0.0;

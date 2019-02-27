@@ -5,8 +5,7 @@ import uk.ac.soton.common.*;
 import uk.ac.soton.view.AppView;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 public class AppController {
 
@@ -25,31 +24,38 @@ public class AppController {
         appView.init();
     }
 
-    private List<Obstacle> predefinedObstacles = new ArrayList<>();
-
-    public void addAllPredefinedObstacles(List<Obstacle> obstacles) { predefinedObstacles.addAll(obstacles); }
-
-    public List<Obstacle> getPredifinedObstacles() { return predefinedObstacles; }
-
-    public void addPredefinedObstacle(Obstacle obstacle) { predefinedObstacles.add(obstacle); }
-
-    public void removePredefinedObstacle(Obstacle obstacle) { predefinedObstacles.remove(obstacle); }
-
     //public void update(){  }
+
+    public Map<String,Airfield.Dimensions> getPredifinedObstacles() { return airfield.getPredefinedObstacles(); }
+
+    public void addPredefinedObstacle(String type, Double length, Double width, Double height) {
+        airfield.defineNewObstacle(type, length, width, height);
+    }
+
+    public void removePredefinedObstacle(String type) { airfield.removePredefinedObstacle(type); }
+
+    public void editPredefinedObstacle(String type, Double newLength, Double newWidth, Double newHeight){
+        airfield.redefineObstacle(type, newLength, newWidth, newHeight);
+    }
 
     public ArrayList<Runway> getRunways(){ return airfield.getRunways(); }
 
-    //public Runway getRunway(){ }
+    public Runway getRunway(String name){ return airfield.getRunway(name); }
 
-    public void addRunway(Runway runway){ airfield.addRunway(runway); }
+    public void addRunway(String id, Integer xPos, Integer yPos, Integer length, Integer width) {
+        airfield.addRunway(new Runway(id, xPos, yPos, length, width));
+    }
 
     public void removeRunway(Runway runway){ airfield.removeRunway(runway); }
 
     public Obstacle getObstacle(Runway runway){ return runway.getObstacle(); }
 
-    public void setObstacle(Runway runway, Obstacle obstacle) { runway.setObstacle(obstacle); }
+    public void placeObstacle(Runway runway, String type, Integer thresholdDistance, Integer centrelineDistance, Integer runwayDistance) {
 
-    public void removeObstacle(Runway runway){ runway.clearObstacle(); }
+        runway.placeObstacle(type, thresholdDistance, centrelineDistance, runwayDistance, getPredifinedObstacles().get(type));
+    }
+
+    public void clearObstacle(Runway runway){ runway.clearObstacle(); }
 
     //public void redeclareRunway(Runway runway){}
 
@@ -127,17 +133,25 @@ public class AppController {
 
     public void setObstacleWidth(Runway runway, Double width) { runway.getObstacle().setWidth(width); }
 
-    public Integer getObstacleDistFromThreshold(Runway runway) { return runway.getObstacle().getDistFromThreshold(); }
+    public Integer getObstacleDistFromThreshold(Runway runway) { return runway.getObstacle().getThresholdDistance(); }
 
-    public void setObstacleDistFromThreshold(Runway runway, Integer distance){ runway.getObstacle().setDistFromThreshold(distance);}
+    public void setObstacleDistFromThreshold(Runway runway, Integer distance){ runway.getObstacle().setThresholdDistance(distance);}
+
+    public Integer getObjectDistFromCentreline(Runway runway) { return runway.getObstacle().getCentrelineDistance(); }
+
+    public void setObstacleDistFromCentreline(Runway runway, Integer distance) { runway.getObstacle().setCentrelineDistance(distance); }
+
+    public Integer getObstacleDistFromRunway(Runway runway) { return runway.getObstacle().getRunwayDistance(); }
+
+    public void setObstacleDistFromRunway(Runway runway, Integer distance) { runway.getObstacle().setRunwayDistance(distance);}
 
     public void changeObjectPosition(Obstacle obstacle, Integer xPos, Integer yPos,
                                      Integer distThreshold, Integer distCentreline, Integer distRunway){
         obstacle.setxPos(xPos);
         obstacle.setyPos(yPos);
-        obstacle.setDistFromThreshold(distThreshold);
-        obstacle.setDistFromCentreline(distCentreline);
-        obstacle.setDistFromRunway(distRunway);
+        obstacle.setThresholdDistance(distThreshold);
+        obstacle.setCentrelineDistance(distCentreline);
+        obstacle.setRunwayDistance(distRunway);
     }
 
 

@@ -23,7 +23,7 @@ public class Runway extends PositionalObject{
 
     private Obstacle obstacle = null; // no obstacle present initially
 
-    Runway(String id, Integer xPos, Integer yPos, Integer length, Integer width){
+    public Runway(String id, Integer xPos, Integer yPos, Integer length, Integer width){
         super(xPos, yPos, id);
         this.length = length;
         this.width = width;
@@ -32,7 +32,7 @@ public class Runway extends PositionalObject{
         this.lda = length;
     }
 
-    Runway(){
+    public Runway(){
         super(0,0,"00A");
         this.length = 0;
         this.width = 0;
@@ -91,7 +91,14 @@ public class Runway extends PositionalObject{
         this.lda = tora - threshold;
     }
 
-    public void setObstacle(Obstacle obstacle){ this.obstacle = obstacle; }
+    public void placeObstacle(String id, Integer thresholdDistance, Integer centrelineDistance, Integer runwayDistance,
+                              Airfield.Dimensions dimensions){
+
+        Integer xPos = this.getxPos() + thresholdDistance;
+        Integer yPos = this.getyPos(); //TODO
+
+        this.obstacle = new Obstacle(id, xPos, yPos, thresholdDistance, centrelineDistance, runwayDistance, dimensions);
+    }
 
     public void clearObstacle() { this.obstacle = null; }
 
