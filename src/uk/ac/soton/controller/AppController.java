@@ -37,7 +37,7 @@ public class AppController {
 
     //public void update(){  }
 
-    public Set<Runway> getRunways(){ return airfield.getRunwaySet(); }
+    public ArrayList<Runway> getRunways(){ return airfield.getRunways(); }
 
     //public Runway getRunway(){ }
 
@@ -115,26 +115,29 @@ public class AppController {
 
     public void setThreshold(Runway runway, Integer threshold) { runway.setThreshold(threshold); }
 
-    public Integer getObstacleHeight(Runway runway) { return runway.getObstacle().getHeight(); }
+    public Double getObstacleHeight(Runway runway) { return runway.getObstacle().getHeight(); }
 
-    public void setObstacleHeight(Runway runway, Integer height) { runway.getObstacle().setHeight(height); }
+    public void setObstacleHeight(Runway runway, Double height) { runway.getObstacle().setHeight(height); }
 
-    public Integer getObstacleLength(Runway runway) { return runway.getObstacle().getLength(); }
+    public Double getObstacleLength(Runway runway) { return runway.getObstacle().getLength(); }
 
-    public void setObstaleLength(Runway runway, Integer length) { runway.getObstacle().setLength(length); }
+    public void setObstaleLength(Runway runway, Double length) { runway.getObstacle().setLength(length); }
 
-    public Integer getObstacleWidth(Runway runway) { return runway.getObstacle().getWidth(); }
+    public Double getObstacleWidth(Runway runway) { return runway.getObstacle().getWidth(); }
 
-    public void setObstacleWidth(Runway runway, Integer width) { runway.getObstacle().setWidth(width); }
+    public void setObstacleWidth(Runway runway, Double width) { runway.getObstacle().setWidth(width); }
 
-    public Integer getObstacleDistance(Runway runway) { return runway.getObstacle().getDistance(); }
+    public Integer getObstacleDistFromThreshold(Runway runway) { return runway.getObstacle().getDistFromThreshold(); }
 
-    public void setobstacleDistance(Runway runway, Integer distance){ runway.getObstacle().setDistance(distance);}
+    public void setObstacleDistFromThreshold(Runway runway, Integer distance){ runway.getObstacle().setDistFromThreshold(distance);}
 
-    public void changeObjectPosition(Obstacle obstacle, Integer xPos, Integer yPos, Integer distance){
+    public void changeObjectPosition(Obstacle obstacle, Integer xPos, Integer yPos,
+                                     Integer distThreshold, Integer distCentreline, Integer distRunway){
         obstacle.setxPos(xPos);
         obstacle.setyPos(yPos);
-        obstacle.setDistance(distance);
+        obstacle.setDistFromThreshold(distThreshold);
+        obstacle.setDistFromCentreline(distCentreline);
+        obstacle.setDistFromRunway(distRunway);
     }
 
 
