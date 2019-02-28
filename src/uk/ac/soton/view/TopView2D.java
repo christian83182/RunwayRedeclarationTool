@@ -57,55 +57,122 @@ public class TopView2D extends JPanel {
         g2.setColor(Color.DARK_GRAY);
         g2.fillRect(0,0,getWidth(),getHeight());
 
-        //Create a global affine transformation which pans and zooms the view accordingly.
-        AffineTransform globalTransform = new AffineTransform();
-        //Translate and scale the view to match the pan and zoom settings.
-        globalTransform.translate(globalPan.x, globalPan.y);
-        globalTransform.scale(globalZoom,globalZoom);
-        //Set the create transformation to the one used by the image.
-        g2.setTransform(globalTransform);
-
-        //Draw runways, centerlines, clear and graded areas and more to the screen.
-        paintClearAndGraded(g2);
-        //Only draw non-selected runways if not in isolated mode, or if in isolated mode but no runway is selected.
-        if(!menuPanel.isIsolateMode() || (menuPanel.isIsolateMode() && appView.getSelectedRunway() == "")){
-            paintRunways(g2);
-            paintCenterLines(g2);
-        }
-        //Draw the selected runway on top of everything else.
-        paintSelectedRunway(g2);
-
-        //Draw a set of x & y axis for debug(?)
-        g2.setColor(new Color(101, 101, 101));
-        g2.setStroke(new BasicStroke(1));
-        g2.drawLine(-10000,0,10000,0);
-        g2.drawLine(0,-10000,0,10000);
-
+        //Configure the graphic's transformation to account for pan and zoom.
+        configureGlobalTransform(g2);
+        //Draw main view components.
+        paintView(g2);
+        //Draw a set of axis for debug purposes.
+        paintAxis(g2);
         //Use the g2d object to paint the buffered image.
         g2d.drawImage(img,0,0,getWidth(),getHeight(),null);
 
     }
 
-    //Draws the runway for all runways in the current model.
-    private void paintRunways(Graphics2D g2d){
-        g2d.setColor(Color.GRAY);
+    private void paintView(Graphics2D g2){
+        boolean isIsolated = menuPanel.isIsolateMode();
+        boolean isRunwaySelected = !(appView.getSelectedRunway() == "");
+
+        //Only draw all runways if isolate mode isn't on, or if it is on but no runway is selected
+        if(!isIsolated  || (isIsolated && !isRunwaySelected)){
+            paintAllClearAndGraded(g2);
+            paintRunways(g2);
+        } else {
+            paintClearAndGraded(appView.getSelectedRunway(),g2);
+        }
+
+        //Draw the selected runway on top of everything else.
+        paintSelectedRunway(g2);
+    }
+
+    //Configures the specified graphics object such that pan and zoom are taken into account.
+    private void configureGlobalTransform(Graphics2D g2){
+        //Create a global affine transformation which pans and zooms the view accordingly.
+        AffineTransform globalTransform = new AffineTransform();
+
+        //Translate and scale the view to match the pan and zoom settings.
+        globalTransform.translate(globalPan.x, globalPan.y);
+        globalTransform.scale(globalZoom,globalZoom);
+
+        //Set the create transformation to the one used by the image.
+        g2.setTransform(globalTransform);
+    }
+
+    //Draws a set of axis which intersect at (0,0).
+    private void paintAxis(Graphics2D g2){
+        g2.setColor(new Color(101, 101, 101));
+        g2.setStroke(new BasicStroke(1));
+        g2.drawLine(-10000,0,10000,0);
+        g2.drawLine(0,-10000,0,10000);
+    }
+
+    //Draws a runway given the name.
+    private void paintRunway(String id, Graphics2D g2){
+        g2.setColor(Color.GRAY);
+        Point pos = model.getRunwayPos(id);
+        Dimension dim = model.getRunwayDim(id);
+
+        AffineTransform old = g2.getTransform();
+        AffineTransform tx = (AffineTransform) old.clone();
+        tx.concatenate(createRunwayTransform(pos,dim,id));
+        g2.setTransform(tx);
+
+        g2.fillRect(pos.x, pos.y, dim.width, dim.height);
+        g2.setTransform(old);
+    }
+
+    //Draws the centerline for a runway given the name.
+    private void paintCenterline(String id, Graphics2D g2){
+        g2.setColor(Color.WHITE);
+        g2.setStroke(new BasicStroke(3,BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 10,new float[] {15,10} , 1));
+        Point pos = model.getRunwayPos(id);
+        Dimension dim = model.getRunwayDim(id);
+
+        AffineTransform old = g2.getTransform();
+        AffineTransform tx = (AffineTransform) old.clone();
+        tx.concatenate(createRunwayTransform(pos,dim,id));
+        g2.setTransform(tx);
+
+        //Paint he centerline for the respective runway.
+        g2.drawLine(pos.x + CENTERLINE_PADDING, pos.y + dim.height/2, pos.x + dim.width - CENTERLINE_PADDING, pos.y + dim.height/2);
+        g2.setTransform(old);
+    }
+
+    //Draws the runway & centerline for all runways in the current model.
+    private void paintRunways(Graphics2D g2){
         for(String id : model.getRunways()){
-            Point pos = model.getRunwayPos(id);
-            Dimension dim = model.getRunwayDim(id);
+            paintRunway(id, g2);
+        }
 
-            AffineTransform old = g2d.getTransform();
-            AffineTransform tx = (AffineTransform) old.clone();
-            tx.concatenate(createRunwayTransform(pos,dim,id));
-            g2d.setTransform(tx);
+        for(String id : model.getRunways()){
+            paintCenterline(id, g2);
+        }
+    }
 
-            //Draw the runway itself.
-            g2d.fillRect(pos.x, pos.y, dim.width, dim.height);
-            g2d.setTransform(old);
+    //Draws the clear and graded area for a given runway
+    private void paintClearAndGraded(String id, Graphics2D g2){
+        g2.setColor(new Color(80, 160, 79));
+        Point pos = model.getRunwayPos(id);
+        Dimension dim = model.getRunwayDim(id);
+
+        AffineTransform old = g2.getTransform();
+        AffineTransform tx = (AffineTransform) old.clone();
+        tx.concatenate(createRunwayTransform(pos,dim,id));
+        g2.setTransform(tx);
+
+        //Generate a polygon in the shape of the clear and graded area for the current runway.
+        g2.fillPolygon(genClearAndGradedPoly(pos, dim));
+        g2.setTransform(old);
+    }
+
+    //Draws the clear and graded area for all runways.
+    private void paintAllClearAndGraded(Graphics2D g2){
+        for(String id : model.getRunways()){
+            paintClearAndGraded(id, g2);
         }
     }
 
     //Draws only the selected runway, such that it appears above all others and appears selected.
-    private void paintSelectedRunway(Graphics2D g2d){
+    private void paintSelectedRunway(Graphics2D g2){
         //Check if the selected runway is the empty string, if so don't render a selected runway.
         if(!(appView.getSelectedRunway() == "")){
 
@@ -113,65 +180,19 @@ public class TopView2D extends JPanel {
             Point pos = model.getRunwayPos(selectedRunway);
             Dimension dim = model.getRunwayDim(selectedRunway);
 
-            AffineTransform old = g2d.getTransform();
+            paintRunway(selectedRunway, g2);
+            paintCenterline(selectedRunway, g2);
+
+            AffineTransform old = g2.getTransform();
             AffineTransform tx = (AffineTransform) old.clone();
             tx.concatenate(createRunwayTransform(pos,dim,selectedRunway));
-            g2d.setTransform(tx);
-
-            //Drawing the runway
-            g2d.setColor(new Color(137, 137, 137));
-            g2d.fillRect(pos.x, pos.y, dim.width, dim.height);
-
-            //Drawing the centerline
-            g2d.setColor(Color.WHITE);
-            g2d.setStroke(new BasicStroke(3,BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 10,new float[] {15,10} , 1));
-            g2d.drawLine(pos.x + CENTERLINE_PADDING, pos.y + dim.height/2, pos.x + dim.width - CENTERLINE_PADDING, pos.y + dim.height/2);
+            g2.setTransform(tx);
 
             //Drawing the highlight box.
-            g2d.setColor(new Color(255, 165, 83));
-            g2d.setStroke(new BasicStroke(SELECTED_RUNWAY_HIGHLIGHT_WIDTH));
-            g2d.drawRect(pos.x, pos.y, dim.width, dim.height);
-
-            g2d.setTransform(old);
-        }
-    }
-
-    //Draws the centerlines for all runways in the current model.
-    private void paintCenterLines(Graphics2D g2d){
-        g2d.setColor(Color.WHITE);
-        g2d.setStroke(new BasicStroke(3,BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 10,new float[] {15,10} , 1));
-        for(String id : model.getRunways()){
-            Point pos = model.getRunwayPos(id);
-            Dimension dim = model.getRunwayDim(id);
-
-            AffineTransform old = g2d.getTransform();
-            AffineTransform tx = (AffineTransform) old.clone();
-            tx.concatenate(createRunwayTransform(pos,dim,id));
-            g2d.setTransform(tx);
-
-            //Paint he centerline for the respective runway.
-            g2d.drawLine(pos.x + CENTERLINE_PADDING, pos.y + dim.height/2, pos.x + dim.width - CENTERLINE_PADDING, pos.y + dim.height/2);
-            g2d.setTransform(old);
-        }
-    }
-
-    //Draws the clear and graded area for all runways.
-    private void paintClearAndGraded(Graphics2D g2d){
-        g2d.setColor(new Color(80, 160, 79));
-
-        for(String id : model.getRunways()){
-            Point pos = model.getRunwayPos(id);
-            Dimension dim = model.getRunwayDim(id);
-
-            AffineTransform old = g2d.getTransform();
-            AffineTransform tx = (AffineTransform) old.clone();
-            tx.concatenate(createRunwayTransform(pos,dim,id));
-            g2d.setTransform(tx);
-
-            //Generate a polygon in the shape of the clear and graded area for the current runway.
-            Polygon poly = genClearAndGradedPoly(pos, dim);
-            g2d.fillPolygon(poly);
-            g2d.setTransform(old);
+            g2.setColor(new Color(255, 165, 83));
+            g2.setStroke(new BasicStroke(SELECTED_RUNWAY_HIGHLIGHT_WIDTH));
+            g2.drawRect(pos.x, pos.y, dim.width, dim.height);
+            g2.setTransform(old);
         }
     }
 
