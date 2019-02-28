@@ -3,50 +3,100 @@ package uk.ac.soton.common;
 //A child of the PositionalObject class which describes a 3D Box representing an obstacle on the runway.
 public class Obstacle extends PositionalObject {
 
-    private Integer height;
-    private Integer length;
-    private Integer width;
-    private Integer distFromThreshold; // distance from threshold
+    private Double height;
+    private Double length;
+    private Double width;
+    private Integer thresholdDistance;
+    private Integer centrelineDistance;
+    private Integer runwayDistance;
 
-    Obstacle(String id, Integer xPos, Integer yPos, Integer length, Integer width, Integer height){
+    /*public Obstacle(String id, Integer xPos, Integer yPos, Airfield.Dimensions dimensions){
         super(xPos, yPos, id);
-        this.height = height;
-        this.length = length;
-        this.width = width;
+        this.length = dimensions.getLength();
+        this.width = dimensions.getWidth();
+        this.height = dimensions.getHeight();
+    }*/
+
+    public Obstacle(String id, Integer xPos, Integer yPos, Integer thresholdDistance, Integer centrelineDistance,
+                    Integer runwayDistance, Airfield.Dimensions dimensions){
+
+        super(xPos, yPos, id);
+
+        this.thresholdDistance = thresholdDistance;
+        this.centrelineDistance = centrelineDistance;
+        this.runwayDistance = runwayDistance;
+
+        this.length = dimensions.getLength();
+        this.width = dimensions.getWidth();
+        this.height = dimensions.getHeight();
     }
 
-    Obstacle(){
+    public Obstacle(){
         super(0,0,"DefaultID");
-        this.height = 0;
-        this.width = 0;
-        this.length = 0;
+
+        this.thresholdDistance = 0;
+        this.centrelineDistance = 0;
+        this.runwayDistance = 0;
+
+        this.height = 0.0;
+        this.width = 0.0;
+        this.length = 0.0;
     }
 
-    public Integer getHeight() {
+    public Double getHeight() {
         return height;
     }
 
-    public void setHeight(Integer height) {
+    public void setHeight(Double height) {
         this.height = height;
     }
 
-    public Integer getLength() {
+    public Double getLength() {
         return length;
     }
 
-    public void setLength(Integer length) {
+    public void setLength(Double length) {
         this.length = length;
     }
 
-    public Integer getWidth() {
+    public Double getWidth() {
         return width;
     }
 
-    public void setWidth(Integer width) {
+    public void setWidth(Double width) {
         this.width = width;
     }
 
-    public Integer getDistance() { return distFromThreshold; }
+    public Integer getThresholdDistance() {
+        return thresholdDistance;
+    }
 
-    public void setDistance(Integer distance) { this.distFromThreshold = distance; }
+    public void setThresholdDistance(Integer thresholdDistance) {
+        this.thresholdDistance = thresholdDistance;
+    }
+
+    public Integer getCentrelineDistance() {
+        return centrelineDistance;
+    }
+
+    public void setCentrelineDistance(Integer centrelineDistance) {
+        this.centrelineDistance = centrelineDistance;
+    }
+
+    public Integer getRunwayDistance() {
+        return runwayDistance;
+    }
+
+    public void setRunwayDistance(Integer runwayDistance) {
+        this.runwayDistance = runwayDistance;
+    }
+
+    // Turns obstacle sideways (length of the object perpendicular to the length of the runway)
+    public void sideways(){
+        Double temp = length;
+        length = width;
+        width = temp;
+
+        // changes to xPos and yPos as well
+    }
 }
