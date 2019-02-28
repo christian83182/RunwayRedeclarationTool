@@ -12,7 +12,9 @@ import java.awt.image.BufferedImage;
 public class TopView2D extends JPanel {
 
     //Instance of the front end model which contains the information.
-    private AppView frontEndModel;
+    private FrontEndModel model;
+    //Instance of the AppView class used to access the selected runway.
+    private AppView appView;
     //Instance of the menu panel which controls a lot of the display settings.
     private MenuPanel menuPanel;
     //Variables used to keep track of the current level of zoom, and pan location.
@@ -24,21 +26,23 @@ public class TopView2D extends JPanel {
     private final Integer SELECTED_RUNWAY_HIGHLIGHT_WIDTH = 3;
     private final Double MAX_ZOOM_FACTOR = 5.0;
     private final Double MIN_ZOOM_FACTOR = 0.05;
-    private final Dimension DEAFULT_VIEW_SIZE = new Dimension(800,800);
-    private final Point DEAULT_PAN = new Point(DEAFULT_VIEW_SIZE.width/2, DEAFULT_VIEW_SIZE.height/2);
+    private final Dimension DEFAULT_VIEW_SIZE = new Dimension(800,800);
+    private final Point DEFAULT_PAN = new Point(DEFAULT_VIEW_SIZE.width/2, DEFAULT_VIEW_SIZE.height/2);
     private final Double DEFAULT_ZOOM = 0.5;
 
 
-    TopView2D(AppView frontEndModel,MenuPanel menuPanel){
-        this.frontEndModel = frontEndModel;
+    TopView2D(AppView appView, FrontEndModel model, MenuPanel menuPanel){
+        this.appView = appView;
+        this.model = model;
         this.menuPanel = menuPanel;
-        this.setPreferredSize(DEAFULT_VIEW_SIZE);
+        this.globalPan = new Point(DEFAULT_PAN);
+        this.globalZoom = new Double(DEFAULT_ZOOM);
+
+        this.setPreferredSize(DEFAULT_VIEW_SIZE);
         PanAndZoomListener panListener = new PanAndZoomListener();
         this.addMouseWheelListener(panListener);
         this.addMouseListener(panListener);
         this.addMouseMotionListener(panListener);
-        globalPan = new Point(DEAULT_PAN);
-        globalZoom = new Double(DEFAULT_ZOOM);
     }
 
     protected void paintComponent(Graphics g){
@@ -64,7 +68,7 @@ public class TopView2D extends JPanel {
         //Draw runways, centerlines, clear and graded areas and more to the screen.
         paintClearAndGraded(g2);
         //Only draw non-selected runways if not in isolated mode, or if in isolated mode but no runway is selected.
-        if(!menuPanel.isIsolateMode() || (menuPanel.isIsolateMode() && frontEndModel.getSelectedRunway() == "")){
+        if(!menuPanel.isIsolateMode() || (menuPanel.isIsolateMode() && appView.getSelectedRunway() == "")){
             paintRunways(g2);
             paintCenterLines(g2);
         }
@@ -85,9 +89,9 @@ public class TopView2D extends JPanel {
     //Draws the runway for all runways in the current model.
     private void paintRunways(Graphics2D g2d){
         g2d.setColor(Color.GRAY);
-        for(String id : frontEndModel.getRunways()){
-            Point pos = frontEndModel.getRunwayPos(id);
-            Dimension dim = frontEndModel.getRunwayDim(id);
+        for(String id : model.getRunways()){
+            Point pos = model.getRunwayPos(id);
+            Dimension dim = model.getRunwayDim(id);
 
             AffineTransform old = g2d.getTransform();
             AffineTransform tx = (AffineTransform) old.clone();
@@ -103,11 +107,11 @@ public class TopView2D extends JPanel {
     //Draws only the selected runway, such that it appears above all others and appears selected.
     private void paintSelectedRunway(Graphics2D g2d){
         //Check if the selected runway is the empty string, if so don't render a selected runway.
-        if(!(frontEndModel.getSelectedRunway() == "")){
+        if(!(appView.getSelectedRunway() == "")){
 
-            String selectedRunway = frontEndModel.getSelectedRunway();
-            Point pos = frontEndModel.getRunwayPos(selectedRunway);
-            Dimension dim = frontEndModel.getRunwayDim(selectedRunway);
+            String selectedRunway = appView.getSelectedRunway();
+            Point pos = model.getRunwayPos(selectedRunway);
+            Dimension dim = model.getRunwayDim(selectedRunway);
 
             AffineTransform old = g2d.getTransform();
             AffineTransform tx = (AffineTransform) old.clone();
@@ -136,9 +140,9 @@ public class TopView2D extends JPanel {
     private void paintCenterLines(Graphics2D g2d){
         g2d.setColor(Color.WHITE);
         g2d.setStroke(new BasicStroke(3,BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 10,new float[] {15,10} , 1));
-        for(String id : frontEndModel.getRunways()){
-            Point pos = frontEndModel.getRunwayPos(id);
-            Dimension dim = frontEndModel.getRunwayDim(id);
+        for(String id : model.getRunways()){
+            Point pos = model.getRunwayPos(id);
+            Dimension dim = model.getRunwayDim(id);
 
             AffineTransform old = g2d.getTransform();
             AffineTransform tx = (AffineTransform) old.clone();
@@ -155,9 +159,9 @@ public class TopView2D extends JPanel {
     private void paintClearAndGraded(Graphics2D g2d){
         g2d.setColor(new Color(80, 160, 79));
 
-        for(String id : frontEndModel.getRunways()){
-            Point pos = frontEndModel.getRunwayPos(id);
-            Dimension dim = frontEndModel.getRunwayDim(id);
+        for(String id : model.getRunways()){
+            Point pos = model.getRunwayPos(id);
+            Dimension dim = model.getRunwayDim(id);
 
             AffineTransform old = g2d.getTransform();
             AffineTransform tx = (AffineTransform) old.clone();
@@ -192,7 +196,7 @@ public class TopView2D extends JPanel {
     /* Generates an Affine transformation which rotates the runway to match its bearing and moves the centre of translation to
        the center of the left side. */
     private AffineTransform createRunwayTransform(Point pos, Dimension dim, String id){
-        Double bearing = Math.toRadians(frontEndModel.getBearing(id)-90);
+        Double bearing = Math.toRadians(model.getBearing(id)-90);
         AffineTransform tx = new AffineTransform();
         tx.translate(0,-dim.height/2);
         AffineTransform rx = new AffineTransform(tx);
