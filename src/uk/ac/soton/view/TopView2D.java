@@ -7,7 +7,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.util.Set;
 
 //Represents a JPanel designed to view a top-down view of the runways.
 public class TopView2D extends JPanel {
@@ -67,9 +66,11 @@ public class TopView2D extends JPanel {
 
         //Only draw all runways if isolate mode isn't on, or if it is on but no runway is selected
         if(!isIsolated  || (isIsolated && !isRunwaySelected)){
+            paintStrips(g2);
             paintAllClearAndGraded(g2);
             paintRunways(g2);
         } else {
+            paintStrip(appView.getSelectedRunway(), g2);
             paintClearAndGraded(appView.getSelectedRunway(),g2);
         }
 
@@ -88,11 +89,39 @@ public class TopView2D extends JPanel {
         tx.concatenate(createRunwayTransform(pos,runwayDim,id));
         g2.setTransform(tx);
 
-        g2.setColor(Settings.CLEARWAY_COLOUR);
+        g2.setColor(Settings.CLEARWAY_FILL_COLOUR);
+        g2.fillRect(pos.x+runwayDim.width, pos.y-(clearwayDim.height-runwayDim.height)/2,
+                clearwayDim.width, clearwayDim.height);
+        g2.setColor(Settings.CLEARWAY_STROKE_COLOUR);
         g2.setStroke(Settings.CLEARWAY_STROKE);
         g2.drawRect(pos.x+runwayDim.width, pos.y-(clearwayDim.height-runwayDim.height)/2,
                 clearwayDim.width, clearwayDim.height);
         g2.setTransform(old);
+    }
+
+    //Draws the runway strip for the specified runway.
+    private void paintStrip(String id, Graphics2D g2){
+        Point pos = model.getRunwayPos(id);
+        Dimension runwayDim = model.getRunwayDim(id);
+        Integer stripWidthFromCenterline = model.getStripWidthFromCenterline(id);
+        Integer stripEndSize = model.getStripEndSize(id);
+
+        AffineTransform old = g2.getTransform();
+        AffineTransform tx = (AffineTransform) old.clone();
+        tx.concatenate(createRunwayTransform(pos,runwayDim,id));
+        g2.setTransform(tx);
+
+        g2.setColor(Settings.RUNWAY_STRIP_COLOUR);
+        g2.fillRect(pos.x - stripEndSize, pos.y - (stripWidthFromCenterline - (runwayDim.height/2)),
+                stripEndSize*2 + runwayDim.width, stripWidthFromCenterline*2);
+        g2.setTransform(old);
+    }
+
+    //Draws the runway strip for all runways in the model.
+    private void paintStrips(Graphics2D g2){
+        for(String id : model.getRunways()){
+            paintStrip(id,g2);
+        }
     }
 
     //Paints an outline of the stopway for a specified runway.
@@ -106,7 +135,10 @@ public class TopView2D extends JPanel {
         tx.concatenate(createRunwayTransform(pos,runwayDim,id));
         g2.setTransform(tx);
 
-        g2.setColor(Settings.STOPWAY_COLOUR);
+        g2.setColor(Settings.STOPWAY_FILL_COLOUR);
+        g2.fillRect(pos.x+runwayDim.width, pos.y-(stopwayDim.height-runwayDim.height)/2,
+                stopwayDim.width, stopwayDim.height);
+        g2.setColor(Settings.STOPWAY_STROKE_COLOUR);
         g2.setStroke(Settings.STOPWAY_STROKE);
         g2.drawRect(pos.x+runwayDim.width, pos.y-(stopwayDim.height-runwayDim.height)/2,
                 stopwayDim.width, stopwayDim.height);
@@ -136,8 +168,8 @@ public class TopView2D extends JPanel {
             g2.drawRect(pos.x, pos.y, dim.width, dim.height);
 
             g2.setTransform(old);
-            paintStopway(selectedRunway, g2);
             paintClearway(selectedRunway, g2);
+            paintStopway(selectedRunway, g2);
         }
     }
 

@@ -11,12 +11,15 @@ public class FrontEndModel {
     private Map<String, Dimension> runwayDimensions;
     private Map<String, Dimension> runwayStopway;
     private Map<String, Dimension> runwayClearway;
+    private Map<String, Dimension> runwayStrip;
+    // ^Width refers to distance from stat/end of the runway, height refers to distance from the centerline.
 
     FrontEndModel(){
         runwayDimensions = new HashMap<>();
         runwayPositions = new HashMap<>();
         runwayStopway = new HashMap<>();
         runwayClearway = new HashMap<>();
+        runwayStrip = new HashMap<>();
         populateModel();
     }
 
@@ -25,14 +28,16 @@ public class FrontEndModel {
         String runway1 = "07L";
         runwayPositions.put(runway1, new Point(-400,100));
         runwayDimensions.put(runway1, new Dimension(1200,80));
-        runwayStopway.put(runway1, new Dimension(200,80));
-        runwayClearway.put(runway1, new Dimension( 400,120));
+        runwayClearway.put(runway1, new Dimension( 400,190));
+        runwayStopway.put(runway1, new Dimension(60,80));
+        runwayStrip.put(runway1, new Dimension(60,200));
 
         String runway2 = "11L";
         runwayPositions.put(runway2, new Point(-800,-500));
         runwayDimensions.put(runway2, new Dimension(2000,100));
-        runwayStopway.put(runway2, new Dimension(300,100));
-        runwayClearway.put(runway2, new Dimension( 500,150));
+        runwayClearway.put(runway2, new Dimension( 350,220));
+        runwayStopway.put(runway2, new Dimension(60,100));
+        runwayStrip.put(runway2, new Dimension(60,200));
     }
 
     //Returns a set of strings representing runways.
@@ -64,5 +69,15 @@ public class FrontEndModel {
     //Returns the Dimensions of a given runway's clearway.
     public Dimension getClearwayDim(String runwayId){
         return runwayClearway.get(runwayId);
+    }
+
+    //Returns the distance from the centerline to the edge of the runway strip given a runway.
+    public Integer getStripWidthFromCenterline(String runwayId){
+        return runwayStrip.get(runwayId).height;
+    }
+
+    //Returns the distance from the start/end of the runway to the edge of the runway strip given a runway.
+    public Integer getStripEndSize(String runwayId){
+        return runwayStrip.get(runwayId).width;
     }
 }
