@@ -148,8 +148,9 @@ public class TopView2D extends JPanel {
     //Draws only the selected runway, such that it appears above all others and appears selected.
     private void paintSelectedRunway(Graphics2D g2){
         //Check if the selected runway is the empty string, if so don't render a selected runway.
-        if(!(appView.getSelectedRunway() == "")){
-
+        if(appView.getSelectedRunway() == ""){
+            return;
+        } else {
             String selectedRunway = appView.getSelectedRunway();
             Point pos = model.getRunwayPos(selectedRunway);
             Dimension dim = model.getRunwayDim(selectedRunway);
@@ -166,8 +167,8 @@ public class TopView2D extends JPanel {
             g2.setColor(Settings.SELECTED_RUNWAY_HIGHLIGHT);
             g2.setStroke(Settings.SELECTED_RUNWAY_STROKE);
             g2.drawRect(pos.x, pos.y, dim.width, dim.height);
-
             g2.setTransform(old);
+
             paintClearway(selectedRunway, g2);
             paintStopway(selectedRunway, g2);
         }
@@ -327,6 +328,71 @@ public class TopView2D extends JPanel {
                 return;
             }
             TopView2D.this.repaint();
+        }
+    }
+
+    private class InfoArrow {
+        private Integer xOffset;
+        private Integer yOffset;
+        private Integer length;
+        private String label;
+
+        InfoArrow(Integer xOffset, Integer yOffset, Integer length, String label){
+            this.xOffset = xOffset;
+            this.yOffset = yOffset;
+            this.length = length;
+            this.label = label;
+        }
+
+        /* Generates an Affine Transformation to local runway coordinates, so that 0,0 refers to the center of the start of
+           the runway. */
+        public AffineTransform genInfoArrowTransform(String runwayId){
+            Point pos = model.getRunwayPos(runwayId);
+            Dimension dim = model.getRunwayDim(runwayId);
+            AffineTransform tx = createRunwayTransform(pos,dim,runwayId);
+            tx.translate(pos.x,pos.y);
+            tx.translate(0,dim.height/2);
+            return tx;
+        }
+
+        public void drawInfoArrow(String runwayId, Graphics2D g2){
+            AffineTransform old = g2.getTransform();
+            AffineTransform tx = (AffineTransform) old.clone();
+            tx.concatenate(genInfoArrowTransform(runwayId));
+            g2.setTransform(tx);
+
+            //Draw helper lines.
+            g2.setColor(Settings.INFO_ARROW_COLOUR);
+            g2.setStroke(Settings.INFO_ARROW_HELPER_STROKE);
+            g2.drawLine(xOffset,0,xOffset,yOffset);
+            g2.drawLine(xOffset+length, 0,xOffset+length, yOffset);
+
+            //Draw arrow line.
+            Point lineStart = new Point(xOffset + Settings.TOP_DOWN_INFO_ARROW_PADDING, yOffset);
+            Point lineEnd = new Point(xOffset+length - Settings.TOP_DOWN_INFO_ARROW_PADDING, yOffset);
+            g2.setStroke(Settings.INFO_ARROW_STROKE);
+            g2.drawLine(lineStart.x + Settings.TOP_DOWN_INFO_ARROW_LENGTH, lineStart.y,
+                    lineEnd.x - Settings.TOP_DOWN_INFO_ARROW_LENGTH, lineEnd.y);
+
+            //Draw arrows at each end.
+            Integer arrowHeight = Settings.TOP_DOWN_INFO_ARROW_HEIGHT;
+            Integer arrowLength = Settings.TOP_DOWN_INFO_ARROW_LENGTH;
+            Polygon startArrow = new Polygon(new int[] {lineStart.x, lineStart.x+arrowLength, lineStart.x+arrowLength},
+                    new int[] {lineStart.y, lineStart.y-arrowHeight, lineStart.y+arrowHeight},3);
+            Polygon endArrow = new Polygon(new int[] {lineEnd.x, lineEnd.x-arrowLength, lineEnd.x-arrowLength},
+                    new int[] {lineEnd.y, lineEnd.y-arrowHeight, lineEnd.y+arrowHeight},3);
+            g2.fillPolygon(startArrow);
+            g2.fillPolygon(endArrow);
+
+            //Draw the label;
+            g2.setColor(Settings.INFO_TEXT_COLOUR);
+            g2.setFont(Settings.INFO_TEXT_FONT);
+            Integer stringLength = g2.getFontMetrics().stringWidth(label);
+            Integer stringHeight = Settings.INFO_TEXT_FONT.getSize();
+            g2.drawString(label,(lineStart.x + lineEnd.x - stringLength)/2,
+                    yOffset+stringHeight+ Settings.TOP_DOWN_INFO_TEXT_PADDING);
+
+            g2.setTransform(old);
         }
     }
 }
