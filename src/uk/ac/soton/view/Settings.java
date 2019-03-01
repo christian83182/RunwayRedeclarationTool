@@ -10,6 +10,10 @@ public final class Settings{
     final static Integer CENTERLINE_PADDING = 20;
     final static Double TOP_DOWN_MAX_ZOOM = 5.0;
     final static Double TOP_DOWN_MIN_ZOOM = 0.05;
+    final static Integer TOP_DOWN_INFO_ARROW_PADDING =10;
+    final static Integer TOP_DOWN_INFO_ARROW_HEIGHT = 15;
+    final static Integer TOP_DOWN_INFO_ARROW_LENGTH = 20;
+    final static Integer TOP_DOWN_INFO_TEXT_PADDING = 10;
 
     final static Color AIRFIELD_COLOUR = new Color(66, 66, 66);
     final static Color RUNWAY_STRIP_COLOUR = new Color(61, 122, 61);
@@ -32,4 +36,10 @@ public final class Settings{
 
     final static Color AXIS_COLOUR = new Color(226, 226, 226);
     final static Stroke AXIS_STROKE = new BasicStroke(1);
+
+    final static Color INFO_ARROW_COLOUR = new Color(255,255,255);
+    final static Stroke INFO_ARROW_STROKE = new BasicStroke(4);
+    final static Stroke INFO_ARROW_HELPER_STROKE = new BasicStroke(2, 1, 0, 10, new float[] {1,10}, 1);
+    final static Color INFO_TEXT_COLOUR = new Color(255,255,255);
+    final static Font INFO_TEXT_FONT = new Font("TimesRoman", Font.PLAIN, 32);
 }
