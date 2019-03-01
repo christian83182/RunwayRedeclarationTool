@@ -2,28 +2,28 @@ package uk.ac.soton.common;
 
 public class LogicalRunway{
 
-    private class Parameter{
+    public class Parameter{
 
-        private Integer original;
-        private Integer redeclared;
+        private Number original;
+        private Number redeclared;
 
-        private Parameter(Integer original){
+        private Parameter(Number original){
             this.original = original;
         }
 
-        public Integer getOriginalValue() {
+        public Number getOriginalValue() {
             return original;
         }
 
-        public void setOriginalValue(Integer aDefault) {
+        public void setOriginalValue(Number aDefault) {
             this.original = aDefault;
         }
 
-        public Integer getRedeclaredValue() {
+        public Number getRedeclaredValue() {
             return redeclared;
         }
 
-        public void setRedeclaredValue(Integer redeclared) {
+        public void setRedeclaredValue(Number redeclared) {
             this.redeclared = redeclared;
         }
     }
@@ -35,8 +35,10 @@ public class LogicalRunway{
 
     private Integer displacedThreshold;
 
+    private Obstacle obstacle = null; // no obstacle present initially
 
-    public LogicalRunway(String name, Integer tora, Integer toda, Integer asda, Integer lda, Integer displacedThreshold) {
+
+    public LogicalRunway(String name, Number tora, Number toda, Number asda, Number lda, Integer displacedThreshold) {
         this.name = name;
         this.tora = new Parameter(tora);
         this.toda = new Parameter(toda);
@@ -53,10 +55,25 @@ public class LogicalRunway{
         return name;
     }
 
+    public void redeclareTora(Number tora) {
+        this.tora.setRedeclaredValue(tora);
+    }
+
+    public void redeclareToda(Number toda) {
+        this.toda.setRedeclaredValue(toda);
+    }
+
+    public void redeclareAsda(Number asda) {
+        this.asda.setRedeclaredValue(asda);
+    }
+
+    public void redeclareLda(Number lda) {
+        this.lda.setRedeclaredValue(lda);
+    }
+
     public Parameter getTora() {
         return tora;
     }
-
 
     public Parameter getToda() {
         return toda;
@@ -70,13 +87,20 @@ public class LogicalRunway{
         return lda;
     }
 
-
     public Integer getDisplacedThreshold() {
         return displacedThreshold;
     }
 
     public void setDisplacedThreshold(Integer displacedThreshold) {
         this.displacedThreshold = displacedThreshold;
+    }
+
+    public Obstacle getObstacle() {
+        return obstacle;
+    }
+
+    public void setObstacle(Obstacle obstacle) {
+        this.obstacle = obstacle;
     }
 
 }
