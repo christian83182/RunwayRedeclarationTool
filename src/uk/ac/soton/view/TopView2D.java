@@ -171,7 +171,21 @@ public class TopView2D extends JPanel {
 
             paintClearway(selectedRunway, g2);
             paintStopway(selectedRunway, g2);
+            paintLengths(selectedRunway, g2);
         }
+    }
+
+    //Draws the length of various runway components for some specified runway.
+    private void paintLengths(String id, Graphics2D g2){
+        //Draw the runway length;
+        Dimension runwayDim = model.getRunwayDim(id);
+        InfoArrow runwayLengthInfo = new InfoArrow(0,300,runwayDim.width,runwayDim.width + "m");
+        runwayLengthInfo.drawInfoArrow(id, g2);
+
+        //Draw the clearway length;
+        Dimension clearwayDim = model.getClearwayDim(id);
+        InfoArrow clearwayLengthInfo = new InfoArrow(runwayDim.width, 300, clearwayDim.width, clearwayDim.width +"m");
+        clearwayLengthInfo.drawInfoArrow(id, g2);
     }
 
     //Configures the specified graphics object such that pan and zoom are taken into account.
