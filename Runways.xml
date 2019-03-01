@@ -13,6 +13,9 @@
   <void property="length">
    <int>5</int>
   </void>
+  <void property="name">
+   <string>Runwaylol</string>
+  </void>
   <void property="toda">
    <int>5</int>
   </void>
@@ -21,6 +24,35 @@
   </void>
   <void property="xPos">
    <int>12</int>
+  </void>
+  <void property="yPos">
+   <int>13</int>
+  </void>
+ </object>
+ <object class="uk.ac.soton.common.Obstacle">
+  <void property="centrelineDistance">
+   <int>10</int>
+  </void>
+  <void property="height">
+   <double>10.0</double>
+  </void>
+  <void property="id">
+   <string>Boeing 717</string>
+  </void>
+  <void property="length">
+   <double>30.0</double>
+  </void>
+  <void property="runwayDistance">
+   <int>20</int>
+  </void>
+  <void property="thresholdDistance">
+   <int>20</int>
+  </void>
+  <void property="width">
+   <double>20.0</double>
+  </void>
+  <void property="xPos">
+   <int>32</int>
   </void>
   <void property="yPos">
    <int>13</int>

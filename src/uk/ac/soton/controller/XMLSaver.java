@@ -23,12 +23,18 @@ public class XMLSaver {
         this.airfield = airfield;
     }
 
-    public void saveToXMLFileAirfield(){
+    public void saveToXMLFileObjectList(){
         try{
-            FileOutputStream fosa = new FileOutputStream(new File("./Airfiled.xml"));
+            FileOutputStream fosa = new FileOutputStream(new File("./Objects.xml"));
             XMLEncoder encoder = new XMLEncoder(fosa);
             for(Map.Entry<String, Airfield.Dimensions> pair : airfield.getPredefinedObstacles().entrySet()){
-                encoder.writeObject("Object: " + pair.getValue() + "\n Height: " + pair.getValue().getHeight() + "\n Length: " + pair.getValue().getLength() + "\n Width: " +pair.getValue().getWidth());
+                encoder.writeObject(pair.getKey());
+                //length
+                encoder.writeObject(pair.getValue().getLength());
+                //height
+                encoder.writeObject(pair.getValue().getHeight());
+                //width
+                encoder.writeObject(pair.getValue().getWidth());
             }
             encoder.close();
             fosa.close();
@@ -44,9 +50,9 @@ public class XMLSaver {
             XMLEncoder encoder = new XMLEncoder(fos);
             for(int i = 0; i<airfield.getRunways().size();i++){
                 encoder.writeObject(airfield.getRunways().get(i));
-              //  if(airfield.getRunways().get(i).obstaclePresent()){
-               //     encoder.writeObject(airfield.getRunways().get(i).getObstacle());
-            //    }
+                if(airfield.getRunways().get(i).obstaclePresent()){
+                   encoder.writeObject(airfield.getRunways().get(i).getObstacle());
+               }
             }
             encoder.close();
             fos.close();
