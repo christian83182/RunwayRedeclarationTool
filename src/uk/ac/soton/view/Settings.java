@@ -26,6 +26,8 @@ public final class Settings{
     final static Color SELECTED_RUNWAY_HIGHLIGHT = new Color(255, 165, 83);
     final static Stroke SELECTED_RUNWAY_STROKE = new BasicStroke(3);
 
+    final static Color THRESHOLD_INDICATOR_COLOUR = new Color(255, 165, 83,100);
+
     final static Color STOPWAY_STROKE_COLOUR = new Color(255, 0, 25);
     final static Stroke STOPWAY_STROKE = new BasicStroke(3);
     final static Color STOPWAY_FILL_COLOUR = new Color(STOPWAY_STROKE_COLOUR.getRed(), STOPWAY_STROKE_COLOUR.getGreen(), STOPWAY_STROKE_COLOUR.getBlue(),40);
