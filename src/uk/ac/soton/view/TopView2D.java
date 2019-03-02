@@ -17,8 +17,9 @@ public class TopView2D extends JPanel {
     private AppView appView;
     //Instance of the menu panel which controls a lot of the display settings.
     private MenuPanel menuPanel;
-    //Variables used to keep track of the current level of zoom, and pan location.
+    //Variable used to keep track of the current pan location.
     private Point globalPan;
+    //Variable used to keep track of the current level of zoom,
     private Double globalZoom;
 
     TopView2D(AppView appView, FrontEndModel model, MenuPanel menuPanel){
@@ -207,10 +208,16 @@ public class TopView2D extends JPanel {
             }
             g2.setTransform(old);
 
-            //Draw extra information which should
+            //Draw other information based on selected checked boxes in the menu panel.
             paintClearway(selectedRunway, g2);
             paintStopway(selectedRunway, g2);
-            paintLengths(selectedRunway, g2);
+            if(menuPanel.isShowOtherEnabled()){
+                paintOtherLengths(selectedRunway, g2);
+            }
+            if(menuPanel.isShowRunwayParametersEnabled()){
+                paintRunwayParameters(selectedRunway, g2);
+                if(menuPanel.isShowBreakDownEnabled()) paintBreakdownLengths(selectedRunway, g2);
+            }
         }
     }
 
@@ -233,44 +240,54 @@ public class TopView2D extends JPanel {
         paintSelectedRunway(g2);
     }
 
-    //Draws the length of various runway components for some specified runway.
-    private void paintLengths(String id, Graphics2D g2){
-        Dimension clearwayDim = model.getClearwayDim(id);
-        Dimension runwayDim = model.getRunwayDim(id);
-        Dimension stopwayDim = model.getStopwayDim(id);
-        Integer stipHeight = model.getStripWidthFromCenterline(id);
+    //Prints the TODA, TORA, ASDA, and LDA for a given runway.
+    private void paintRunwayParameters(String id, Graphics2D g2){
+        Integer stripHeight = model.getStripWidthFromCenterline(id);
 
         //Draw the TORA length.
         Integer toraLength = model.getRunwayTORA(id);
-        InfoArrow toraLengthInfo = new InfoArrow(0,stipHeight+150,toraLength,"TORA: " + toraLength + "m");
+        InfoArrow toraLengthInfo = new InfoArrow(0,stripHeight+150,toraLength,"TORA: " + toraLength + "m");
         toraLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the TODA length.
         Integer todaLength = model.getRunwayTODA(id);
-        InfoArrow todaLengthInfo = new InfoArrow(0,stipHeight+350,todaLength,"TODA: " + todaLength + "m");
+        InfoArrow todaLengthInfo = new InfoArrow(0,stripHeight+350,todaLength,"TODA: " + todaLength + "m");
         todaLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the ASDA length.
         Integer asdaLength = model.getRunwayASDA(id);
-        InfoArrow asdaLengthInfo = new InfoArrow(0,stipHeight+250,asdaLength,"ASDA: " + asdaLength + "m");
+        InfoArrow asdaLengthInfo = new InfoArrow(0,stripHeight+250,asdaLength,"ASDA: " + asdaLength + "m");
         asdaLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the LDA length.
         Integer ldaLength = model.getRunwayLDA(id);
-        InfoArrow ldaLengthInfo = new InfoArrow(model.getRunwayThreshold(id), stipHeight+50, ldaLength,"LDA: " + ldaLength + "m");
+        InfoArrow ldaLengthInfo = new InfoArrow(model.getRunwayThreshold(id), stripHeight+50, ldaLength,"LDA: " + ldaLength + "m");
         ldaLengthInfo.drawInfoArrow(id, g2);
+    }
+
+    //Prints the breakdown for the runway parameters given some runway.
+    private void paintBreakdownLengths(String id, Graphics2D g2){
+        //soon to come.
+    }
+
+    //Draws the length of various runway components for some specified runway.
+    private void paintOtherLengths(String id, Graphics2D g2){
+        Dimension clearwayDim = model.getClearwayDim(id);
+        Dimension runwayDim = model.getRunwayDim(id);
+        Dimension stopwayDim = model.getStopwayDim(id);
+        Integer stripHeight = model.getStripWidthFromCenterline(id);
 
         //Draw the clearway length.
-        InfoArrow clearwayLengthInfo = new InfoArrow(runwayDim.width, -stipHeight-130, clearwayDim.width, clearwayDim.width +"m");
+        InfoArrow clearwayLengthInfo = new InfoArrow(runwayDim.width, -stripHeight-130, clearwayDim.width, clearwayDim.width +"m");
         clearwayLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the stopway length.
-        InfoArrow stopwayLengthInfo = new InfoArrow(runwayDim.width, -stipHeight-50, stopwayDim.width, stopwayDim.width +"m");
+        InfoArrow stopwayLengthInfo = new InfoArrow(runwayDim.width, -stripHeight-50, stopwayDim.width, stopwayDim.width +"m");
         stopwayLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the displaced threshold length if it exists.
         if(model.getRunwayThreshold(id) > 0){
-            InfoArrow thresholdLength = new InfoArrow(0, -stipHeight-50, model.getRunwayThreshold(id), model.getRunwayThreshold(id) + "m");
+            InfoArrow thresholdLength = new InfoArrow(0, -stripHeight-50, model.getRunwayThreshold(id), model.getRunwayThreshold(id) + "m");
             thresholdLength.drawInfoArrow(id, g2);
         }
     }
@@ -342,6 +359,7 @@ public class TopView2D extends JPanel {
         g2.drawLine(-10000,0,10000,0);
         g2.drawLine(0,-10000,0,10000);
     }
+
 
 
     //Inner class devoted to giving the view zoom and pan functionality.
