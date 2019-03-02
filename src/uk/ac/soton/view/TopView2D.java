@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.util.Set;
 
 //Represents a JPanel designed to view a top-down view of the runways.
 public class TopView2D extends JPanel {
@@ -54,8 +55,6 @@ public class TopView2D extends JPanel {
         configureGlobalTransform(g2);
         //Draw main view components.
         paintView(g2);
-        //Draw a set of axis for debug purposes.
-        paintAxis(g2);
         //Use the g2d object to paint the buffered image.
         g2d.drawImage(img,0,0,getWidth(),getHeight(),null);
 
@@ -118,14 +117,72 @@ public class TopView2D extends JPanel {
         g2.setTransform(old);
     }
 
+    //Draws the runway's name at the start of the runway.
+    private void paintRunwayName(String id, Graphics2D g2){
+        Point pos = model.getRunwayPos(id);
+        Dimension dim = model.getRunwayDim(id);
+
+        AffineTransform old = g2.getTransform();
+        AffineTransform tx = (AffineTransform) old.clone();
+        tx.concatenate(createRunwayTransform(pos,dim,id));
+        g2.setTransform(tx);
+
+        if(id.length() == 2){
+            g2.setColor(Settings.RUNWAY_COLOUR);
+            g2.setFont(new Font("TimesRoman", 0, (int)(dim.height*0.8)));
+            g2.fillRect(pos.x, pos.y, g2.getFontMetrics().stringWidth(id) + Settings.CENTERLINE_PADDING*2, dim.height);
+
+            g2.setColor(Settings.RUNWAY_NAME_COLOUR);
+            g2.drawString(id, pos.x+Settings.CENTERLINE_PADDING, pos.y + (int)(dim.height*0.8));
+        } else if (id.length() > 2) {
+            g2.setColor(Settings.RUNWAY_COLOUR);
+            g2.setFont(new Font("TimesRoman", 0, (int)(dim.height*0.4)));
+            g2.fillRect(pos.x, pos.y, g2.getFontMetrics().stringWidth(id.substring(0,2)) + Settings.CENTERLINE_PADDING*2, dim.height);
+
+            Integer upperStringLength = g2.getFontMetrics().stringWidth(id.substring(0,2));
+            Integer lowerStringLength = g2.getFontMetrics().stringWidth(id.substring(2));
+            Integer lowerStringXOffset =  Settings.CENTERLINE_PADDING + (upperStringLength-lowerStringLength)/2;
+            g2.setColor(Settings.RUNWAY_NAME_COLOUR);
+            g2.drawString(id.substring(0,2), pos.x+Settings.CENTERLINE_PADDING, pos.y + (int)(dim.height*0.5));
+            g2.drawString(id.substring(2), pos.x+lowerStringXOffset , pos.y + (int)(dim.height*0.85));
+        }
+        g2.setTransform(old);
+    }
+
+    //Draws an arrow in the landing direction of the runway.
+    private void paintLandingDirection(String id, Graphics2D g2){
+        Point pos = model.getRunwayPos(id);
+        Dimension dim = model.getRunwayDim(id);
+
+        AffineTransform old = g2.getTransform();
+        AffineTransform tx = (AffineTransform) old.clone();
+        tx.concatenate(createRunwayTransform(pos,dim,id));
+        g2.setTransform(tx);
+
+        Point arrowStart = new Point(pos.x + Settings.CENTERLINE_PADDING + (int)(dim.width*0.15), pos.y + dim.height/2);
+
+        Integer arrowHeight = (int)(dim.height*0.2), arrowLength = arrowHeight*2;
+        Polygon poly = new Polygon(new int[] {arrowStart.x, arrowStart.x, arrowStart.x + arrowLength,},
+                new int[] {arrowStart.y - arrowHeight, arrowStart.y + arrowHeight, arrowStart.y}, 3);
+        g2.setColor(Settings.CENTERLINE_COLOUR);
+        g2.fillPolygon(poly);
+
+        g2.setTransform(old);
+    }
+
     //Draws the runway & centerline for all runways in the current model.
     private void paintRunways(Graphics2D g2){
         for(String id : model.getRunways()){
             paintRunway(id, g2);
         }
-
         for(String id : model.getRunways()){
             paintCenterline(id, g2);
+        }
+        for(String id : model.getRunways()){
+            //paintLandingDirection(id, g2);
+        }
+        for(String id : model.getRunways()){
+            paintRunwayName(id, g2);
         }
     }
 
@@ -189,6 +246,8 @@ public class TopView2D extends JPanel {
 
             paintRunway(selectedRunway, g2);
             paintCenterline(selectedRunway, g2);
+            paintRunwayName(selectedRunway, g2);
+            paintLandingDirection(selectedRunway, g2);
 
             //Create an Affine Transformation for the current runway.
             AffineTransform old = g2.getTransform();
@@ -238,6 +297,9 @@ public class TopView2D extends JPanel {
 
         //Draw the selected runway on top of everything else.
         paintSelectedRunway(g2);
+
+        //Draw a set of axis if the option is selected in the menu panel.
+        if(menuPanel.isShowAxis()) paintAxis(g2);
     }
 
     //Prints the TODA, TORA, ASDA, and LDA for a given runway.
@@ -278,11 +340,11 @@ public class TopView2D extends JPanel {
         Integer stripHeight = model.getStripWidthFromCenterline(id);
 
         //Draw the clearway length.
-        InfoArrow clearwayLengthInfo = new InfoArrow(runwayDim.width, -stripHeight-130, clearwayDim.width, clearwayDim.width +"m");
+        InfoArrow clearwayLengthInfo = new InfoArrow(runwayDim.width, -stripHeight-50, clearwayDim.width, clearwayDim.width +"m");
         clearwayLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the stopway length.
-        InfoArrow stopwayLengthInfo = new InfoArrow(runwayDim.width, -stripHeight-50, stopwayDim.width, stopwayDim.width +"m");
+        InfoArrow stopwayLengthInfo = new InfoArrow(runwayDim.width, -stripHeight-130, stopwayDim.width, stopwayDim.width +"m");
         stopwayLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the displaced threshold length if it exists.
