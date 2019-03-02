@@ -178,14 +178,32 @@ public class TopView2D extends JPanel {
 
     //Draws the length of various runway components for some specified runway.
     private void paintLengths(String id, Graphics2D g2){
-        //Draw the runway length;
+        Dimension clearwayDim = model.getClearwayDim(id);
         Dimension runwayDim = model.getRunwayDim(id);
-        InfoArrow runwayLengthInfo = new InfoArrow(0,300,runwayDim.width,runwayDim.width + "m");
-        runwayLengthInfo.drawInfoArrow(id, g2);
+        Dimension stopwayDim = model.getStopwayDim(id);
+
+        //Draw the TORA length;
+        Integer toraLength = model.getRunwayTORA(id);
+        InfoArrow toraLengthInfo = new InfoArrow(0,400,toraLength,"TORA: " + toraLength + "m");
+        toraLengthInfo.drawInfoArrow(id, g2);
+
+        //Draw the TODA length;
+        Integer todaLength = model.getRunwayTODA(id);
+        InfoArrow todaLengthInfo = new InfoArrow(0,600,todaLength,"TODA: " + todaLength + "m");
+        todaLengthInfo.drawInfoArrow(id, g2);
+
+        //Draw the ASDA length;
+        Integer asdaLength = model.getRunwayASDA(id);
+        InfoArrow asdaLengthInfo = new InfoArrow(0,500,asdaLength,"ASDA: " + asdaLength + "m");
+        asdaLengthInfo.drawInfoArrow(id, g2);
+
+        //Draw the LDA length;
+        Integer ldaLength = model.getRunwayLDA(id);
+        InfoArrow ldaLengthInfo = new InfoArrow(model.getRunwayThreshold(id),300,ldaLength,"LDA: " + ldaLength + "m");
+        ldaLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the clearway length;
-        Dimension clearwayDim = model.getClearwayDim(id);
-        InfoArrow clearwayLengthInfo = new InfoArrow(runwayDim.width, 300, clearwayDim.width, clearwayDim.width +"m");
+        InfoArrow clearwayLengthInfo = new InfoArrow(runwayDim.width, -300, clearwayDim.width, clearwayDim.width +"m");
         clearwayLengthInfo.drawInfoArrow(id, g2);
     }
 
