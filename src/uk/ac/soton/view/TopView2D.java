@@ -55,29 +55,34 @@ public class TopView2D extends JPanel {
         configureGlobalTransform(g2);
         //Draw main view components.
         paintView(g2);
+        //Reset the transformation used by the graphics object so the overlay doesn't pan or zoom.
+        g2.setTransform(new AffineTransform());
+        //Draw the compass.
+        drawCompass(g2);
         //Use the g2d object to paint the buffered image.
         g2d.drawImage(img,0,0,getWidth(),getHeight(),null);
-        drawCompass(g2d);
 
     }
 
-    private void drawCompass(Graphics2D g2d){
+    //Draws a compass in the top left corner of the screen
+    private void drawCompass(Graphics2D g2){
         Point center = new Point(getWidth()-70, 70);
+
+        g2.setColor(new Color(0, 0, 0,100));
+        g2.fillOval(center.x-50, center.y-50, 100,100);
 
         Polygon northArrow = new Polygon(new int[] {center.x-10, center.x, center.x + 10}, new int[] {center.y, center.y-40, center.y}, 3);
         Polygon southArrow = new Polygon(new int[] {center.x-10, center.x, center.x + 10}, new int[] {center.y, center.y+40, center.y}, 3);
-        g2d.setColor(new Color(255,0, 16));
-        g2d.fillPolygon(northArrow);
 
-        g2d.setColor(new Color(223, 223, 223));
-        g2d.fillPolygon(southArrow);
+        g2.setColor(new Color(255,0, 16));
+        g2.fillPolygon(northArrow);
 
-        g2d.setColor(new Color(0, 0, 0,50));
-        g2d.fillOval(center.x-50, center.y-50, 100,100);
+        g2.setColor(new Color(223, 223, 223));
+        g2.fillPolygon(southArrow);
 
-        g2d.setColor(new Color(219, 219, 219));
-        g2d.setFont(new Font("Times New Roman", Font.BOLD, 14));
-        g2d.drawString("N", center.x-5, center.y-5);
+        g2.setColor(new Color(219, 219, 219));
+        g2.setFont(new Font("Times New Roman", Font.BOLD, 14));
+        g2.drawString("N", center.x-5, center.y-5);
 
     }
 
