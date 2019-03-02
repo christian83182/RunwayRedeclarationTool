@@ -7,7 +7,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.util.Set;
 
 //Represents a JPanel designed to view a top-down view of the runways.
 public class TopView2D extends JPanel {
@@ -40,6 +39,7 @@ public class TopView2D extends JPanel {
     @Override
     protected void paintComponent(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 
         //Generate a Buffered Image to draw on instead of using the g2d object.
         BufferedImage img = new BufferedImage(getWidth(),getHeight(), BufferedImage.TYPE_INT_RGB);
@@ -57,6 +57,27 @@ public class TopView2D extends JPanel {
         paintView(g2);
         //Use the g2d object to paint the buffered image.
         g2d.drawImage(img,0,0,getWidth(),getHeight(),null);
+        drawCompass(g2d);
+
+    }
+
+    private void drawCompass(Graphics2D g2d){
+        Point center = new Point(getWidth()-70, 70);
+
+        Polygon northArrow = new Polygon(new int[] {center.x-10, center.x, center.x + 10}, new int[] {center.y, center.y-40, center.y}, 3);
+        Polygon southArrow = new Polygon(new int[] {center.x-10, center.x, center.x + 10}, new int[] {center.y, center.y+40, center.y}, 3);
+        g2d.setColor(new Color(255,0, 16));
+        g2d.fillPolygon(northArrow);
+
+        g2d.setColor(new Color(223, 223, 223));
+        g2d.fillPolygon(southArrow);
+
+        g2d.setColor(new Color(0, 0, 0,50));
+        g2d.fillOval(center.x-50, center.y-50, 100,100);
+
+        g2d.setColor(new Color(219, 219, 219));
+        g2d.setFont(new Font("Times New Roman", Font.BOLD, 14));
+        g2d.drawString("N", center.x-5, center.y-5);
 
     }
 
@@ -534,4 +555,5 @@ public class TopView2D extends JPanel {
             g2.setTransform(old);
         }
     }
+
 }
