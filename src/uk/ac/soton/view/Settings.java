@@ -13,7 +13,7 @@ public final class Settings{
     final static Integer TOP_DOWN_INFO_ARROW_PADDING =10;
     final static Integer TOP_DOWN_INFO_ARROW_HEIGHT = 10;
     final static Integer TOP_DOWN_INFO_ARROW_LENGTH = 15;
-    final static Integer TOP_DOWN_INFO_TEXT_PADDING = 10;
+    final static Integer TOP_DOWN_INFO_TEXT_PADDING = 15;
 
     final static Color AIRFIELD_COLOUR = new Color(66, 66, 66);
     final static Color RUNWAY_STRIP_COLOUR = new Color(61, 122, 61);
@@ -21,12 +21,12 @@ public final class Settings{
     final static Color RUNWAY_COLOUR = new Color(147, 147, 147);
 
     final static Color CENTERLINE_COLOUR = new Color(237, 237, 237);
-    final static Stroke CENTERLINE_STROKE = new BasicStroke(3, 1, 0, 10, new float[] {15,10}, 1);
+    final static Stroke CENTERLINE_STROKE = new BasicStroke(2, 1, 0, 10, new float[] {15,10}, 1);
 
-    final static Color SELECTED_RUNWAY_HIGHLIGHT = new Color(255, 165, 83);
+    final static Color SELECTED_RUNWAY_HIGHLIGHT = new Color(255, 151, 71);
     final static Stroke SELECTED_RUNWAY_STROKE = new BasicStroke(3);
 
-    final static Color THRESHOLD_INDICATOR_COLOUR = new Color(255, 165, 83,100);
+    final static Color THRESHOLD_INDICATOR_COLOUR = new Color(255, 138, 42, 100);
 
     final static Color STOPWAY_STROKE_COLOUR = new Color(255, 0, 25);
     final static Stroke STOPWAY_STROKE = new BasicStroke(3);
@@ -44,4 +44,6 @@ public final class Settings{
     final static Stroke INFO_ARROW_HELPER_STROKE = new BasicStroke(2, 1, 0, 10, new float[] {1,10}, 1);
     final static Color INFO_TEXT_COLOUR = new Color(255,255,255);
     final static Font INFO_TEXT_FONT = new Font("TimesRoman", Font.PLAIN, 32);
+
+    final static Color RUNWAY_NAME_COLOUR = new Color(255,255,255);
 }

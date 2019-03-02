@@ -35,12 +35,12 @@ public class FrontEndModel {
 
     //Debug function used to generate some test data.
     private void populateModel(){
-        String runway1 = "07L";
+        String runway1 = "07";
         addToModel(runway1, -400, 100, 1200, 80,200);
         setDimData(runway1, 60, 80, 400, 190, 60, 200);
         setVariableLengths(runway1, 1200, 1200+400, 1200 + 60, 1200 - 200);
 
-        String runway2 = "11L";
+        String runway2 = "11R";
         addToModel(runway2, -800, -500, 2000, 100,250);
         setDimData(runway2, 60, 100, 350, 220, 60, 200);
         setVariableLengths(runway2, 2000, 2000+350, 2000 + 60, 2000 - 250);

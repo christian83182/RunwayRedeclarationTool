@@ -15,6 +15,8 @@ public class MenuPanel extends JPanel {
     private JCheckBox showRunwayParametersBox;
     private JCheckBox showBreakdownBox;
     private JCheckBox showOtherBox;
+    private JCheckBox showLegendBox;
+    private JCheckBox showAxisBox;
 
     MenuPanel(AppView appView, FrontEndModel model){
         this.appView = appView;
@@ -92,6 +94,24 @@ public class MenuPanel extends JPanel {
         c.gridx = 0; c.gridy = 6;
         c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
         this.add(showOtherBox, c);
+
+        //Add the "show legend" option
+        showLegendBox = new JCheckBox("Show Legend");
+        showLegendBox.setSelected(true);
+        showLegendBox.addActionListener(e -> appView.repaint());
+        c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 7;
+        c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
+        this.add(showLegendBox, c);
+
+        //Add the "show axis" option
+        showAxisBox = new JCheckBox("Show Axis");
+        showAxisBox.setSelected(true);
+        showAxisBox.addActionListener(e -> appView.repaint());
+        c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 8;
+        c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
+        this.add(showAxisBox, c);
     }
 
     public boolean isIsolateMode(){
@@ -108,5 +128,13 @@ public class MenuPanel extends JPanel {
 
     public boolean isShowOtherEnabled(){
         return showOtherBox.isSelected();
+    }
+
+    public boolean isShowLegend(){
+        return showLegendBox.isSelected();
+    }
+
+    public boolean isShowAxis(){
+        return showAxisBox.isSelected();
     }
 }
