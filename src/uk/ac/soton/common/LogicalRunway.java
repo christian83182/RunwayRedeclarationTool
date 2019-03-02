@@ -26,25 +26,37 @@ public class LogicalRunway{
         public void setRedeclaredValue(Number redeclared) {
             this.redeclared = redeclared;
         }
-    }
 
+        public Number getCurrentValue() {
+
+            if(redeclared != null){
+                return getRedeclaredValue();
+            }
+            else{
+                return getOriginalValue();
+            }
+        }
+    }
 
     private String name;
 
     private Parameter tora, toda, asda, lda;
 
-    private Integer displacedThreshold;
+    private Integer threshold = 0;
+    private Number stopway;
+    private Number clearway;
 
     private Obstacle obstacle = null; // no obstacle present initially
 
-
-    public LogicalRunway(String name, Number tora, Number toda, Number asda, Number lda, Integer displacedThreshold) {
+    public LogicalRunway(String name, Number length, Integer threshold, Number clearway, Number stopway) {
         this.name = name;
-        this.tora = new Parameter(tora);
-        this.toda = new Parameter(toda);
-        this.asda = new Parameter(asda);
-        this.lda = new Parameter(lda);
-        this.displacedThreshold = displacedThreshold;
+        this.threshold = threshold;
+        this.clearway = clearway;
+        this.stopway = stopway;
+        this.tora = new Parameter(length);
+        this.toda = new Parameter(length.intValue() + clearway.intValue());
+        this.asda = new Parameter(length.intValue() + stopway.intValue());
+        this.lda = new Parameter(length.intValue() - threshold.intValue());
     }
 
     public void setName(String name){
@@ -53,6 +65,14 @@ public class LogicalRunway{
 
     public String getName(){
         return name;
+    }
+
+    public Number getStopway() {
+        return stopway;
+    }
+
+    public Number getClearway() {
+        return clearway;
     }
 
     public void redeclareTora(Number tora) {
@@ -71,6 +91,13 @@ public class LogicalRunway{
         this.lda.setRedeclaredValue(lda);
     }
 
+    public void revertParameters() {
+        this.tora.setRedeclaredValue(null);
+        this.toda.setRedeclaredValue(null);
+        this.asda.setRedeclaredValue(null);
+        this.lda.setRedeclaredValue(null);
+    }
+
     public Parameter getTora() {
         return tora;
     }
@@ -87,13 +114,11 @@ public class LogicalRunway{
         return lda;
     }
 
-    public Integer getDisplacedThreshold() {
-        return displacedThreshold;
+    public Integer getThreshold() {
+        return threshold;
     }
 
-    public void setDisplacedThreshold(Integer displacedThreshold) {
-        this.displacedThreshold = displacedThreshold;
-    }
+    public void setThreshold(Integer displacedThreshold) { this.threshold = displacedThreshold; }
 
     public Obstacle getObstacle() {
         return obstacle;
@@ -101,6 +126,11 @@ public class LogicalRunway{
 
     public void setObstacle(Obstacle obstacle) {
         this.obstacle = obstacle;
+    }
+
+    public void clearObstacle(){
+        this.obstacle = null;
+        this.revertParameters();
     }
 
 }

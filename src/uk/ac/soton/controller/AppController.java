@@ -48,40 +48,41 @@ public class AppController {
 
     public void removeRunway(Runway runway){ airfield.removeRunway(runway); }
 
-    public Obstacle getObstacle(Runway runway){ return runway.getObstacle(); }
+    public Obstacle getObstacle(LogicalRunway logicalRunway){ return logicalRunway.getObstacle(); }
 
-    public void placeObstacle(Runway runway, String type, Integer thresholdDistance, Integer centrelineDistance, Integer runwayDistance) {
+    //TODO
+    /*public void placeObstacle(Runway runway, String type, Integer thresholdDistance, Integer centrelineDistance, Integer runwayDistance) {
 
         runway.placeObstacle(type, thresholdDistance, centrelineDistance, runwayDistance, getPredifinedObstacles().get(type));
-    }
+    }*/
 
-    public void clearObstacle(Runway runway){ runway.clearObstacle(); }
+    public void clearObstacle(LogicalRunway logicalRunway){ logicalRunway.clearObstacle(); }
 
     //public void redeclareRunway(Runway runway){}
 
-    public Integer getTora(Runway runway) { return runway.getTora(); }
+    public Number getTora(LogicalRunway logicalRunway) { return logicalRunway.getTora().getCurrentValue(); }
 
-    public void setTora(Runway runway, Integer tora) { runway.setTora(tora); }
+    //public void setTora(Runway runway, Integer tora) { runway.setTora(tora); }
 
-    public Integer getToda(Runway runway) { return runway.getToda(); }
+    public Number getToda(LogicalRunway logicalRunway) { return logicalRunway.getToda().getCurrentValue(); }
 
-    public void  setToda(Runway runway, Integer toda) { runway.setToda(toda); }
+    //public void  setToda(Runway runway, Integer toda) { runway.setToda(toda); }
 
-    public Integer getAsda(Runway runway) { return runway.getAsda(); }
+    public Number getAsda(LogicalRunway logicalRunway) { return logicalRunway.getAsda().getCurrentValue(); }
 
-    public void setAsda(Runway runway, Integer asda) { runway.setAsda(asda); }
+    //public void setAsda(Runway runway, Integer asda) { runway.setAsda(asda); }
 
-    public Integer getLda(Runway runway) { return runway.getLda(); }
+    public Number getLda(LogicalRunway logicalRunway) { return logicalRunway.getLda().getCurrentValue(); }
 
-    public void setLda(Runway runway, Integer lda) { runway.setLda(lda); }
+    //public void setLda(Runway runway, Integer lda) { runway.setLda(lda); }
 
     public Integer getResa(Runway runway) { return runway.getResa(); }
 
-    public void setResa(Runway runway, Integer resa) { runway.setResa(resa); }
+    //public void setResa(Runway runway, Integer resa) { runway.setResa(resa); }
 
-    public Integer getTocs(Runway runway) { return runway.getTocs(); }
+    //public Integer getTocs(Runway runway) { return runway.getTocs(); }
 
-    public void setTocs(Runway runway, Integer tocs) { runway.setTocs(tocs); }
+    //public void setTocs(Runway runway, Integer tocs) { runway.setTocs(tocs); }
 
     public Integer getAls(Runway runway) { return runway.getAls(); }
 
@@ -95,23 +96,23 @@ public class AppController {
 
     public void setRunwayWidth(Runway runway, Integer width) { runway.setWidth(width); }
 
-    public String getRunwayName(Runway runway) { return runway.getName(); }
+    public String getRunwayId(Runway runway) { return runway.getId(); }
 
-    public void setRunwayName(Runway runway, String name) { runway.setName(name); }
+    public void setRunwayId(Runway runway, String id) { runway.setId(id); }
 
-    public Boolean getActive(Runway runway) { return runway.getActive(); }
+    public Boolean isActive(Runway runway) { return runway.isActive(); }
 
     public void setActive(Runway runway, Boolean state) { runway.setActive(state); }
 
-    public void toggleActive(Runway runway) { runway.setActive(!runway.getActive()); }
+    public void toggleActive(Runway runway) { runway.setActive(!runway.isActive()); }
 
     public String getRunwayStatus(Runway runway) { return runway.getStatus(); }
 
     public void setRunwayStatus(Runway runway, String status) { runway.setStatus(status);  }
 
-    public Integer getClearway(Runway runway) { return runway.getClearway(); }
+    public Number getClearway(LogicalRunway logicalRunway) { return logicalRunway.getClearway(); }
 
-    public void setClearway(Runway runway, Integer clearway) { runway.setClearway(clearway);}
+    /*public void setClearway(LogicalRunway logicalRunway, Integer clearway) { logicalRunway.setClearway(clearway); }
 
     public Integer getStopway(Runway runway) { return runway.getStopway(); }
 
@@ -152,7 +153,7 @@ public class AppController {
         obstacle.setThresholdDistance(distThreshold);
         obstacle.setCentrelineDistance(distCentreline);
         obstacle.setRunwayDistance(distRunway);
-    }
+    }*/
 
 
 }
