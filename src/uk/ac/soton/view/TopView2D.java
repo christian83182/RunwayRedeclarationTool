@@ -43,6 +43,7 @@ public class TopView2D extends JPanel {
         BufferedImage img = new BufferedImage(getWidth(),getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = img.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 
         //Set the background colour.
         g2.setColor(Settings.AIRFIELD_COLOUR);
@@ -59,120 +60,6 @@ public class TopView2D extends JPanel {
 
     }
 
-    //Paints all main components of the UI.
-    private void paintView(Graphics2D g2){
-        boolean isIsolated = menuPanel.isIsolateMode();
-        boolean isRunwaySelected = !(appView.getSelectedRunway() == "");
-
-        //Only draw all runways if isolate mode isn't on, or if it is on but no runway is selected
-        if(!isIsolated  || (isIsolated && !isRunwaySelected)){
-            paintStrips(g2);
-            paintAllClearAndGraded(g2);
-            paintRunways(g2);
-        } else {
-            paintStrip(appView.getSelectedRunway(), g2);
-            paintClearAndGraded(appView.getSelectedRunway(),g2);
-        }
-
-        //Draw the selected runway on top of everything else.
-        paintSelectedRunway(g2);
-    }
-
-    //Paints an outline of the clearway for a specified runway.
-    private void paintClearway(String id,Graphics2D g2){
-        Point pos = model.getRunwayPos(id);
-        Dimension runwayDim = model.getRunwayDim(id);
-        Dimension clearwayDim = model.getClearwayDim(id);
-
-        AffineTransform old = g2.getTransform();
-        AffineTransform tx = (AffineTransform) old.clone();
-        tx.concatenate(createRunwayTransform(pos,runwayDim,id));
-        g2.setTransform(tx);
-
-        g2.setColor(Settings.CLEARWAY_FILL_COLOUR);
-        g2.fillRect(pos.x+runwayDim.width, pos.y-(clearwayDim.height-runwayDim.height)/2,
-                clearwayDim.width, clearwayDim.height);
-        g2.setColor(Settings.CLEARWAY_STROKE_COLOUR);
-        g2.setStroke(Settings.CLEARWAY_STROKE);
-        g2.drawRect(pos.x+runwayDim.width, pos.y-(clearwayDim.height-runwayDim.height)/2,
-                clearwayDim.width, clearwayDim.height);
-        g2.setTransform(old);
-    }
-
-    //Draws the runway strip for the specified runway.
-    private void paintStrip(String id, Graphics2D g2){
-        Point pos = model.getRunwayPos(id);
-        Dimension runwayDim = model.getRunwayDim(id);
-        Integer stripWidthFromCenterline = model.getStripWidthFromCenterline(id);
-        Integer stripEndSize = model.getStripEndSize(id);
-
-        AffineTransform old = g2.getTransform();
-        AffineTransform tx = (AffineTransform) old.clone();
-        tx.concatenate(createRunwayTransform(pos,runwayDim,id));
-        g2.setTransform(tx);
-
-        g2.setColor(Settings.RUNWAY_STRIP_COLOUR);
-        g2.fillRect(pos.x - stripEndSize, pos.y - (stripWidthFromCenterline - (runwayDim.height/2)),
-                stripEndSize*2 + runwayDim.width, stripWidthFromCenterline*2);
-        g2.setTransform(old);
-    }
-
-    //Draws the runway strip for all runways in the model.
-    private void paintStrips(Graphics2D g2){
-        for(String id : model.getRunways()){
-            paintStrip(id,g2);
-        }
-    }
-
-    //Paints an outline of the stopway for a specified runway.
-    private void paintStopway(String id,Graphics2D g2){
-        Point pos = model.getRunwayPos(id);
-        Dimension runwayDim = model.getRunwayDim(id);
-        Dimension stopwayDim = model.getStopwayDim(id);
-
-        AffineTransform old = g2.getTransform();
-        AffineTransform tx = (AffineTransform) old.clone();
-        tx.concatenate(createRunwayTransform(pos,runwayDim,id));
-        g2.setTransform(tx);
-
-        g2.setColor(Settings.STOPWAY_FILL_COLOUR);
-        g2.fillRect(pos.x+runwayDim.width, pos.y-(stopwayDim.height-runwayDim.height)/2,
-                stopwayDim.width, stopwayDim.height);
-        g2.setColor(Settings.STOPWAY_STROKE_COLOUR);
-        g2.setStroke(Settings.STOPWAY_STROKE);
-        g2.drawRect(pos.x+runwayDim.width, pos.y-(stopwayDim.height-runwayDim.height)/2,
-                stopwayDim.width, stopwayDim.height);
-        g2.setTransform(old);
-    }
-
-    //Draws only the selected runway, such that it appears above all others and appears selected.
-    private void paintSelectedRunway(Graphics2D g2){
-        //Check if the selected runway is the empty string, if so don't render a selected runway.
-        if(!(appView.getSelectedRunway() == "")){
-
-            String selectedRunway = appView.getSelectedRunway();
-            Point pos = model.getRunwayPos(selectedRunway);
-            Dimension dim = model.getRunwayDim(selectedRunway);
-
-            paintRunway(selectedRunway, g2);
-            paintCenterline(selectedRunway, g2);
-
-            AffineTransform old = g2.getTransform();
-            AffineTransform tx = (AffineTransform) old.clone();
-            tx.concatenate(createRunwayTransform(pos,dim,selectedRunway));
-            g2.setTransform(tx);
-
-            //Drawing the highlight box.
-            g2.setColor(Settings.SELECTED_RUNWAY_HIGHLIGHT);
-            g2.setStroke(Settings.SELECTED_RUNWAY_STROKE);
-            g2.drawRect(pos.x, pos.y, dim.width, dim.height);
-
-            g2.setTransform(old);
-            paintClearway(selectedRunway, g2);
-            paintStopway(selectedRunway, g2);
-        }
-    }
-
     //Configures the specified graphics object such that pan and zoom are taken into account.
     private void configureGlobalTransform(Graphics2D g2){
         //Create a global affine transformation which pans and zooms the view accordingly.
@@ -186,12 +73,15 @@ public class TopView2D extends JPanel {
         g2.setTransform(globalTransform);
     }
 
-    //Draws a set of axis which intersect at (0,0).
-    private void paintAxis(Graphics2D g2){
-        g2.setColor(Settings.AXIS_COLOUR);
-        g2.setStroke(Settings.AXIS_STROKE);
-        g2.drawLine(-10000,0,10000,0);
-        g2.drawLine(0,-10000,0,10000);
+    /* Generates an Affine transformation which rotates the runway to match its bearing and moves the centre of translation to
+   the center of the left side. */
+    private AffineTransform createRunwayTransform(Point pos, Dimension dim, String id){
+        Double bearing = Math.toRadians(model.getBearing(id)-90);
+        AffineTransform tx = new AffineTransform();
+        tx.translate(0,-dim.height/2);
+        AffineTransform rx = new AffineTransform(tx);
+        rx.rotate(bearing,pos.x, pos.y+(dim.height/2));
+        return rx;
     }
 
     //Draws a runway given the name.
@@ -279,16 +169,180 @@ public class TopView2D extends JPanel {
         return poly;
     }
 
-    /* Generates an Affine transformation which rotates the runway to match its bearing and moves the centre of translation to
-       the center of the left side. */
-    private AffineTransform createRunwayTransform(Point pos, Dimension dim, String id){
-        Double bearing = Math.toRadians(model.getBearing(id)-90);
-        AffineTransform tx = new AffineTransform();
-        tx.translate(0,-dim.height/2);
-        AffineTransform rx = new AffineTransform(tx);
-        rx.rotate(bearing,pos.x, pos.y+(dim.height/2));
-        return rx;
+    //Draws the runway strip for all runways in the model.
+    private void paintStrips(Graphics2D g2){
+        for(String id : model.getRunways()){
+            paintStrip(id,g2);
+        }
     }
+
+    //Draws only the selected runway, such that it appears above all others and appears selected.
+    private void paintSelectedRunway(Graphics2D g2){
+        //Check if the selected runway is the empty string, if so don't render a selected runway.
+        if(appView.getSelectedRunway() == ""){
+            return;
+        } else {
+            String selectedRunway = appView.getSelectedRunway();
+            Point pos = model.getRunwayPos(selectedRunway);
+            Dimension dim = model.getRunwayDim(selectedRunway);
+
+            paintRunway(selectedRunway, g2);
+            paintCenterline(selectedRunway, g2);
+
+            //Create an Affine Transformation for the current runway.
+            AffineTransform old = g2.getTransform();
+            AffineTransform tx = (AffineTransform) old.clone();
+            tx.concatenate(createRunwayTransform(pos,dim,selectedRunway));
+            g2.setTransform(tx);
+
+            //Drawing the highlight box.
+            g2.setColor(Settings.SELECTED_RUNWAY_HIGHLIGHT);
+            g2.setStroke(Settings.SELECTED_RUNWAY_STROKE);
+            g2.drawRect(pos.x, pos.y, dim.width, dim.height);
+
+            //Draw the displaced threshold indicator.
+            if(model.getRunwayThreshold(selectedRunway) > 0){
+                g2.setColor(Settings.THRESHOLD_INDICATOR_COLOUR);
+                g2.fillRect(pos.x, pos.y, model.getRunwayThreshold(selectedRunway), dim.height);
+            }
+            g2.setTransform(old);
+
+            //Draw extra information which should
+            paintClearway(selectedRunway, g2);
+            paintStopway(selectedRunway, g2);
+            paintLengths(selectedRunway, g2);
+        }
+    }
+
+    //Paints all main components of the UI.
+    private void paintView(Graphics2D g2){
+        boolean isIsolated = menuPanel.isIsolateMode();
+        boolean isRunwaySelected = !(appView.getSelectedRunway() == "");
+
+        //Only draw all runways if isolate mode isn't on, or if it is on but no runway is selected
+        if(!isIsolated  || (isIsolated && !isRunwaySelected)){
+            paintStrips(g2);
+            paintAllClearAndGraded(g2);
+            paintRunways(g2);
+        } else {
+            paintStrip(appView.getSelectedRunway(), g2);
+            paintClearAndGraded(appView.getSelectedRunway(),g2);
+        }
+
+        //Draw the selected runway on top of everything else.
+        paintSelectedRunway(g2);
+    }
+
+    //Draws the length of various runway components for some specified runway.
+    private void paintLengths(String id, Graphics2D g2){
+        Dimension clearwayDim = model.getClearwayDim(id);
+        Dimension runwayDim = model.getRunwayDim(id);
+        Dimension stopwayDim = model.getStopwayDim(id);
+        Integer stipHeight = model.getStripWidthFromCenterline(id);
+
+        //Draw the TORA length.
+        Integer toraLength = model.getRunwayTORA(id);
+        InfoArrow toraLengthInfo = new InfoArrow(0,stipHeight+150,toraLength,"TORA: " + toraLength + "m");
+        toraLengthInfo.drawInfoArrow(id, g2);
+
+        //Draw the TODA length.
+        Integer todaLength = model.getRunwayTODA(id);
+        InfoArrow todaLengthInfo = new InfoArrow(0,stipHeight+350,todaLength,"TODA: " + todaLength + "m");
+        todaLengthInfo.drawInfoArrow(id, g2);
+
+        //Draw the ASDA length.
+        Integer asdaLength = model.getRunwayASDA(id);
+        InfoArrow asdaLengthInfo = new InfoArrow(0,stipHeight+250,asdaLength,"ASDA: " + asdaLength + "m");
+        asdaLengthInfo.drawInfoArrow(id, g2);
+
+        //Draw the LDA length.
+        Integer ldaLength = model.getRunwayLDA(id);
+        InfoArrow ldaLengthInfo = new InfoArrow(model.getRunwayThreshold(id), stipHeight+50, ldaLength,"LDA: " + ldaLength + "m");
+        ldaLengthInfo.drawInfoArrow(id, g2);
+
+        //Draw the clearway length.
+        InfoArrow clearwayLengthInfo = new InfoArrow(runwayDim.width, -stipHeight-130, clearwayDim.width, clearwayDim.width +"m");
+        clearwayLengthInfo.drawInfoArrow(id, g2);
+
+        //Draw the stopway length.
+        InfoArrow stopwayLengthInfo = new InfoArrow(runwayDim.width, -stipHeight-50, stopwayDim.width, stopwayDim.width +"m");
+        stopwayLengthInfo.drawInfoArrow(id, g2);
+
+        //Draw the displaced threshold length if it exists.
+        if(model.getRunwayThreshold(id) > 0){
+            InfoArrow thresholdLength = new InfoArrow(0, -stipHeight-50, model.getRunwayThreshold(id), model.getRunwayThreshold(id) + "m");
+            thresholdLength.drawInfoArrow(id, g2);
+        }
+    }
+
+    //Paints an outline of the clearway for a specified runway.
+    private void paintClearway(String id,Graphics2D g2){
+        Point pos = model.getRunwayPos(id);
+        Dimension runwayDim = model.getRunwayDim(id);
+        Dimension clearwayDim = model.getClearwayDim(id);
+
+        AffineTransform old = g2.getTransform();
+        AffineTransform tx = (AffineTransform) old.clone();
+        tx.concatenate(createRunwayTransform(pos,runwayDim,id));
+        g2.setTransform(tx);
+
+        g2.setColor(Settings.CLEARWAY_FILL_COLOUR);
+        g2.fillRect(pos.x+runwayDim.width, pos.y-(clearwayDim.height-runwayDim.height)/2,
+                clearwayDim.width, clearwayDim.height);
+        g2.setColor(Settings.CLEARWAY_STROKE_COLOUR);
+        g2.setStroke(Settings.CLEARWAY_STROKE);
+        g2.drawRect(pos.x+runwayDim.width, pos.y-(clearwayDim.height-runwayDim.height)/2,
+                clearwayDim.width, clearwayDim.height);
+        g2.setTransform(old);
+    }
+
+    //Draws the runway strip for the specified runway.
+    private void paintStrip(String id, Graphics2D g2){
+        Point pos = model.getRunwayPos(id);
+        Dimension runwayDim = model.getRunwayDim(id);
+        Integer stripWidthFromCenterline = model.getStripWidthFromCenterline(id);
+        Integer stripEndSize = model.getStripEndSize(id);
+
+        AffineTransform old = g2.getTransform();
+        AffineTransform tx = (AffineTransform) old.clone();
+        tx.concatenate(createRunwayTransform(pos,runwayDim,id));
+        g2.setTransform(tx);
+
+        g2.setColor(Settings.RUNWAY_STRIP_COLOUR);
+        g2.fillRect(pos.x - stripEndSize, pos.y - (stripWidthFromCenterline - (runwayDim.height/2)),
+                stripEndSize*2 + runwayDim.width, stripWidthFromCenterline*2);
+        g2.setTransform(old);
+    }
+
+    //Paints an outline of the stopway for a specified runway.
+    private void paintStopway(String id,Graphics2D g2){
+        Point pos = model.getRunwayPos(id);
+        Dimension runwayDim = model.getRunwayDim(id);
+        Dimension stopwayDim = model.getStopwayDim(id);
+
+        AffineTransform old = g2.getTransform();
+        AffineTransform tx = (AffineTransform) old.clone();
+        tx.concatenate(createRunwayTransform(pos,runwayDim,id));
+        g2.setTransform(tx);
+
+        g2.setColor(Settings.STOPWAY_FILL_COLOUR);
+        g2.fillRect(pos.x+runwayDim.width, pos.y-(stopwayDim.height-runwayDim.height)/2,
+                stopwayDim.width, stopwayDim.height);
+        g2.setColor(Settings.STOPWAY_STROKE_COLOUR);
+        g2.setStroke(Settings.STOPWAY_STROKE);
+        g2.drawRect(pos.x+runwayDim.width, pos.y-(stopwayDim.height-runwayDim.height)/2,
+                stopwayDim.width, stopwayDim.height);
+        g2.setTransform(old);
+    }
+
+    //Draws a set of axis which intersect at (0,0).
+    private void paintAxis(Graphics2D g2){
+        g2.setColor(Settings.AXIS_COLOUR);
+        g2.setStroke(Settings.AXIS_STROKE);
+        g2.drawLine(-10000,0,10000,0);
+        g2.drawLine(0,-10000,0,10000);
+    }
+
 
     //Inner class devoted to giving the view zoom and pan functionality.
     private class PanAndZoomListener extends MouseAdapter{
@@ -327,6 +381,77 @@ public class TopView2D extends JPanel {
                 return;
             }
             TopView2D.this.repaint();
+        }
+    }
+
+    //Inner class representing an instance of an arrow displaying some information.
+    private class InfoArrow {
+        private Integer xOffset;
+        private Integer yOffset;
+        private Integer length;
+        private String label;
+
+        InfoArrow(Integer xOffset, Integer yOffset, Integer length, String label){
+            this.xOffset = xOffset;
+            this.yOffset = yOffset;
+            this.length = length;
+            this.label = label;
+        }
+
+        /* Generates an Affine Transformation to local runway coordinates, so that 0,0 refers to the center of the start of
+           the runway. */
+        public AffineTransform genInfoArrowTransform(String runwayId){
+            Point pos = model.getRunwayPos(runwayId);
+            Dimension dim = model.getRunwayDim(runwayId);
+            AffineTransform tx = createRunwayTransform(pos,dim,runwayId);
+            tx.translate(pos.x,pos.y);
+            tx.translate(0,dim.height/2);
+            return tx;
+        }
+
+        public void drawInfoArrow(String runwayId, Graphics2D g2){
+            AffineTransform old = g2.getTransform();
+            AffineTransform tx = (AffineTransform) old.clone();
+            tx.concatenate(genInfoArrowTransform(runwayId));
+            g2.setTransform(tx);
+
+            //Draw helper lines.
+            g2.setColor(Settings.INFO_ARROW_COLOUR);
+            g2.setStroke(Settings.INFO_ARROW_HELPER_STROKE);
+            g2.drawLine(xOffset,0,xOffset,yOffset);
+            g2.drawLine(xOffset+length, 0,xOffset+length, yOffset);
+
+            //Draw arrow line.
+            Point lineStart = new Point(xOffset + Settings.TOP_DOWN_INFO_ARROW_PADDING, yOffset);
+            Point lineEnd = new Point(xOffset+length - Settings.TOP_DOWN_INFO_ARROW_PADDING, yOffset);
+            g2.setStroke(Settings.INFO_ARROW_STROKE);
+            g2.drawLine(lineStart.x + Settings.TOP_DOWN_INFO_ARROW_LENGTH, lineStart.y,
+                    lineEnd.x - Settings.TOP_DOWN_INFO_ARROW_LENGTH, lineEnd.y);
+
+            //Draw arrows at each end.
+            Integer arrowHeight = Settings.TOP_DOWN_INFO_ARROW_HEIGHT;
+            Integer arrowLength = Settings.TOP_DOWN_INFO_ARROW_LENGTH;
+            Polygon startArrow = new Polygon(new int[] {lineStart.x, lineStart.x+arrowLength, lineStart.x+arrowLength},
+                    new int[] {lineStart.y, lineStart.y-arrowHeight, lineStart.y+arrowHeight},3);
+            Polygon endArrow = new Polygon(new int[] {lineEnd.x, lineEnd.x-arrowLength, lineEnd.x-arrowLength},
+                    new int[] {lineEnd.y, lineEnd.y-arrowHeight, lineEnd.y+arrowHeight},3);
+            g2.fillPolygon(startArrow);
+            g2.fillPolygon(endArrow);
+
+            //Draw the label;
+            g2.setColor(Settings.INFO_TEXT_COLOUR);
+            g2.setFont(Settings.INFO_TEXT_FONT);
+            Integer stringLength = g2.getFontMetrics().stringWidth(label);
+            Integer stringHeight = Settings.INFO_TEXT_FONT.getSize();
+            if(yOffset > 0){
+                g2.drawString(label,(lineStart.x + lineEnd.x - stringLength)/2, yOffset+stringHeight+ Settings.TOP_DOWN_INFO_TEXT_PADDING);
+            } else {
+                g2.drawString(label,(lineStart.x + lineEnd.x - stringLength)/2, yOffset-Settings.TOP_DOWN_INFO_TEXT_PADDING);
+            }
+
+
+
+            g2.setTransform(old);
         }
     }
 }
