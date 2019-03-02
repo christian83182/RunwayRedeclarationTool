@@ -261,8 +261,12 @@ public class TopView2D extends JPanel {
         ldaLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the clearway length.
-        InfoArrow clearwayLengthInfo = new InfoArrow(runwayDim.width, -stipHeight-50, clearwayDim.width, clearwayDim.width +"m");
+        InfoArrow clearwayLengthInfo = new InfoArrow(runwayDim.width, -stipHeight-130, clearwayDim.width, clearwayDim.width +"m");
         clearwayLengthInfo.drawInfoArrow(id, g2);
+
+        //Draw the stopway length.
+        InfoArrow stopwayLengthInfo = new InfoArrow(runwayDim.width, -stipHeight-50, stopwayDim.width, stopwayDim.width +"m");
+        stopwayLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the displaced threshold length if it exists.
         if(model.getRunwayThreshold(id) > 0){
@@ -439,8 +443,13 @@ public class TopView2D extends JPanel {
             g2.setFont(Settings.INFO_TEXT_FONT);
             Integer stringLength = g2.getFontMetrics().stringWidth(label);
             Integer stringHeight = Settings.INFO_TEXT_FONT.getSize();
-            g2.drawString(label,(lineStart.x + lineEnd.x - stringLength)/2,
-                    yOffset+stringHeight+ Settings.TOP_DOWN_INFO_TEXT_PADDING);
+            if(yOffset > 0){
+                g2.drawString(label,(lineStart.x + lineEnd.x - stringLength)/2, yOffset+stringHeight+ Settings.TOP_DOWN_INFO_TEXT_PADDING);
+            } else {
+                g2.drawString(label,(lineStart.x + lineEnd.x - stringLength)/2, yOffset-Settings.TOP_DOWN_INFO_TEXT_PADDING);
+            }
+
+
 
             g2.setTransform(old);
         }
