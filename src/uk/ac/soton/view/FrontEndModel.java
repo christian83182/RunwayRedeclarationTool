@@ -1,11 +1,13 @@
 package uk.ac.soton.view;
 
+import uk.ac.soton.controller.ViewController;
+
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class FrontEndModel {
+public class FrontEndModel implements ViewController {
 
     private Map<String, Point> runwayPositions;
     private Map<String, Dimension> runwayDimensions;
