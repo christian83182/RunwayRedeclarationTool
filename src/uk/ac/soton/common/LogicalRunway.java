@@ -42,7 +42,7 @@ public class LogicalRunway{
 
     private Parameter tora, toda, asda, lda;
 
-    private Integer threshold = 0;
+    private Number threshold = 0;
     private Number stopway;
     private Number clearway;
 
@@ -114,11 +114,11 @@ public class LogicalRunway{
         return lda;
     }
 
-    public Integer getThreshold() {
+    public Number getThreshold() {
         return threshold;
     }
 
-    public void setThreshold(Integer displacedThreshold) { this.threshold = displacedThreshold; }
+    public void setThreshold(Number displacedThreshold) { this.threshold = displacedThreshold; }
 
     public Obstacle getObstacle() {
         return obstacle;

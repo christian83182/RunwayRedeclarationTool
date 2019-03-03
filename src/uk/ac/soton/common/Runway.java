@@ -8,10 +8,10 @@ public class Runway extends PositionalObject{
     private String status;
     private Boolean active = true;
     // runway end safety area
-    private Integer resa;
+    private Integer resa = 240;
     // approach landing surface
     private Integer als;
-    private Integer blastDistance;
+    private Integer blastDistance = 300;
     private Integer stripEnd = 60;
 
     private LogicalRunway[] runways = new LogicalRunway[2];
@@ -99,20 +99,67 @@ public class Runway extends PositionalObject{
 
     public void recalculateParameters(){
         if(runways[0].getObstacle().getThresholdDistance() < runways[1].getObstacle().getThresholdDistance()){
-            recalculateToraTowardsObstacle(runways[1]);
+            /*recalculateToraTowardsObstacle(runways[1]);
             recalculateTodaTowardsObstacle(runways[1]);
             recalculateAsdaTowardsObstacle(runways[1]);
-            recalculateLdaTowardsObstacle(runways[1]);
+            recalculateLdaTowardsObstacle(runways[1]);*/
+            recalculateTowardsObstacle(runways[1]);
+            recalculateAwayFromObstacle(runways[0]);
         }else{
-            recalculateToraTowardsObstacle(runways[0]);
+            /*recalculateToraTowardsObstacle(runways[0]);
             recalculateTodaTowardsObstacle(runways[0]);
             recalculateAsdaTowardsObstacle(runways[0]);
-            recalculateLdaTowardsObstacle(runways[0]);
+            recalculateLdaTowardsObstacle(runways[0]);*/
+            recalculateTowardsObstacle(runways[0]);
+            recalculateAwayFromObstacle(runways[1]);
         }
     }
 
+    private void recalculateTowardsObstacle(LogicalRunway runway){
+        Obstacle obstacle = runway.getObstacle();
 
-    public void recalculateToraTowardsObstacle(LogicalRunway runway){
+        // TORA = Distance from Threshold + Displaced Threshold - Slope Calculation - Strip End
+        runway.redeclareTora(obstacle.getThresholdDistance() + runway.getThreshold().intValue()
+                - obstacle.getHeight() * getAls() - getStripEnd());
+
+        // TODA = Redeclared TORA
+        runway.redeclareToda(runway.getTora().getRedeclaredValue());
+
+        // ASDA = Redeclared TORA
+        runway.redeclareAsda(runway.getTora().getRedeclaredValue());
+
+        // LDA = Distance from Threshold - RESA - Strip End
+        runway.redeclareLda(obstacle.getThresholdDistance() - getResa() - getStripEnd());
+    }
+
+    private void recalculateAwayFromObstacle(LogicalRunway runway){
+        Obstacle obstacle = runway.getObstacle();
+
+        // If theshold is displaced
+        if(runway.getThreshold().intValue() != 0){
+
+            // TORA = Original TORA - Blast Protection - Distance from Threshold - Displaced Threshold
+            runway.redeclareTora(runway.getTora().getOriginalValue().intValue() - blastDistance
+                    - obstacle.getThresholdDistance() - runway.getThreshold().intValue());
+        } else{
+
+            // TORA = Original TORA - Strip End - RESA - Distance from Threshold
+            runway.redeclareTora(runway.getTora().getOriginalValue().intValue() - getStripEnd()
+                    - getResa() - obstacle.getThresholdDistance());
+        }
+
+        // TODA = Redeclared TORA + Clearway
+        runway.redeclareToda(runway.getTora().getRedeclaredValue().intValue() + runway.getClearway().intValue());
+
+        // ASDA = Redeclared TORA + Stopway
+        runway.redeclareAsda(runway.getTora().getRedeclaredValue().intValue() + runway.getStopway().intValue());
+
+        // LDA = Original LDA - Slope Calculation - Distance from Threshold - Strip End
+        runway.redeclareLda(runway.getLda().getOriginalValue().intValue() - obstacle.getHeight() * getAls()
+                - obstacle.getThresholdDistance() - getStripEnd());
+    }
+
+    /*public void recalculateToraTowardsObstacle(LogicalRunway runway){
         Obstacle obstacle = runway.getObstacle();
 
         runway.redeclareTora(obstacle.getThresholdDistance() + runway.getThreshold() - obstacle.getHeight() * getAls() - getStripEnd());
@@ -132,6 +179,6 @@ public class Runway extends PositionalObject{
         Obstacle obstacle = runway.getObstacle();
 
         runway.redeclareLda(obstacle.getThresholdDistance() - getResa() - getStripEnd());
-    }
+    }*/
 
 }
