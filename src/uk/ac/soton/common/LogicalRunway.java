@@ -1,11 +1,13 @@
 package uk.ac.soton.common;
 
+import java.awt.*;
+
 public class LogicalRunway{
 
     public class Parameter{
 
-        private Number original;
-        private Number redeclared;
+        private Number original = null;
+        private Number redeclared = null;
 
         private Parameter(Number original){
             this.original = original;
@@ -43,19 +45,28 @@ public class LogicalRunway{
     private Parameter tora, toda, asda, lda;
 
     private Number threshold = 0;
-    private Number stopway;
-    private Number clearway;
+    private Dimension stopway;
+    private Dimension clearway;
 
     private Obstacle obstacle = null; // no obstacle present initially
 
-    public LogicalRunway(String name, Number length, Integer threshold, Number clearway, Number stopway) {
+    /**
+     * Constructor for the logical runway associated with a physical one.
+     * @param name Identifier of the logical runway, for example "09" or "09R".
+     * @param length Length of the runway.
+     * @param threshold Threshold of the logical runway.
+     * @param clearway The width parameter of the dimension if the length of the clearway and the height is the width.
+     * @param stopway The width parameter of the dimension if the length of the clearway and the height is the width
+     *                (the width of the stopway can be assumed to be the same as the width of the runway).
+     */
+    public LogicalRunway(String name, Number length, Integer threshold, Dimension clearway, Dimension stopway) {
         this.name = name;
         this.threshold = threshold;
         this.clearway = clearway;
         this.stopway = stopway;
         this.tora = new Parameter(length);
-        this.toda = new Parameter(length.intValue() + clearway.intValue());
-        this.asda = new Parameter(length.intValue() + stopway.intValue());
+        this.toda = new Parameter(length.intValue() + clearway.width);
+        this.asda = new Parameter(length.intValue() + stopway.width);
         this.lda = new Parameter(length.intValue() - threshold.intValue());
     }
 
@@ -67,11 +78,11 @@ public class LogicalRunway{
         return name;
     }
 
-    public Number getStopway() {
+    public Dimension getStopway() {
         return stopway;
     }
 
-    public Number getClearway() {
+    public Dimension getClearway() {
         return clearway;
     }
 
