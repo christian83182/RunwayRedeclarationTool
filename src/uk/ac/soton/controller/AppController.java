@@ -4,6 +4,8 @@ package uk.ac.soton.controller;
 import uk.ac.soton.common.*;
 import uk.ac.soton.view.AppView;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -21,7 +23,45 @@ public class AppController {
         this.appConfigurer = new Configurer();
         this.airfield = new Airfield();
 
+        initListeners();
+        //appView.setPredefinedObstacles(airfield.getPredefinedObstacles().keySet());
         appView.init();
+    }
+
+    public void initListeners(){
+        //appView.addImportListener(new ImportListener());
+        //appView.addExportListener(new ExportListener());
+    }
+
+    private class ImportListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            // XML import call
+        }
+    }
+
+    private class ExportListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            // XML export call
+        }
+    }
+
+    // Next increment
+    private class ObstacleButtonListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            String selectedRunway = appView.getSelectedRunway();
+            Runway selected = airfield.getRunway(selectedRunway);
+
+            // Place obstacle
+        }
     }
 
     //public void update(){  }

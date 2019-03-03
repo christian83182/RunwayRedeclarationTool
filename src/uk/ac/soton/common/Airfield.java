@@ -119,12 +119,21 @@ public class Airfield {
         return true;
     }
 
-    public Runway getRunway(String id){
+    // Returns the physical runway that contains the specified logical runway
+    public Runway getRunway(String name){
 
-        for(Runway runway : runways){
+        for(int i = 0; i < runways.size(); i++){
 
-            if(runway.getId().equals(id)){
-                return runway;
+            if(runways.get(i).getId().contains(name)){
+
+                LogicalRunway[] logicalRunways = runways.get(i).getLogicalRunways();
+
+                for(int j = 0; j < 2; j++){
+
+                    if(logicalRunways[j].getName().equals(name)){
+                        return runways.get(i);
+                    }
+                }
             }
         }
 
