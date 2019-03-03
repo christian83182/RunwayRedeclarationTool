@@ -24,8 +24,6 @@ public class AppController implements ViewController {
         this.appView = appView;
         this.appConfigurer = new Configurer();
         this.airfield = new Airfield();
-
-        appView.init();
     }
 
     @Override
