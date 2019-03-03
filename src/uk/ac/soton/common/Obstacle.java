@@ -6,17 +6,20 @@ public class Obstacle extends PositionalObject {
     private Double height;
     private Double length;
     private Double width;
-    private Integer thresholdDistance;
+    private Integer thresholdDistance; // TODO needs 2 threshold distances - one for each logical runway
     private Integer centrelineDistance;
     private Integer runwayDistance;
 
-    /*public Obstacle(String id, Integer xPos, Integer yPos, Airfield.Dimensions dimensions){
-        super(xPos, yPos, id);
-        this.length = dimensions.getLength();
-        this.width = dimensions.getWidth();
-        this.height = dimensions.getHeight();
-    }*/
-
+    /**
+     * Constructor for a physical obstacle to be placed on a runway.
+     * @param id Identifier of the obstacle.
+     * @param xPos X position of the top left corner of the obstacle.
+     * @param yPos Y position of the top left corner of the obstacle.
+     * @param thresholdDistance Will be changed...
+     * @param centrelineDistance Distance from the centreline of the runway.
+     * @param runwayDistance Distance from the end of the runway (0 if on the runway / next to the runway)
+     * @param dimensions Predefined dimensions (length, width, height) of the obstacle.
+     */
     public Obstacle(String id, Integer xPos, Integer yPos, Integer thresholdDistance, Integer centrelineDistance,
                     Integer runwayDistance, Airfield.Dimensions dimensions){
 

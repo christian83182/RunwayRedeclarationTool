@@ -1,39 +1,42 @@
 package uk.ac.soton.common;
 
-//A child of the PositionalObject class which represents an instance of a Runway with a certain length, width, and name.
+// A child of the PositionalObject class which represents an instance of a Runway with a certain length, width, and id.
 public class Runway extends PositionalObject{
 
     private Integer length;
     private Integer width;
-    private String name;
     private String status;
     private Boolean active = true;
+    // runway end safety area
+    private Integer resa = 240;
+    // approach landing surface
+    private Integer als;
+    private Integer blastDistance = 300;
+    private final Integer stripEnd = 60;
+    private Integer stripWidth;
 
-    private Integer clearway;
-    private Integer stopway;
+    // The 2 logical runways associated with the physical one.
+    private LogicalRunway[] runways = new LogicalRunway[2];
 
-    private Integer tora; // take-off run available
-    private Integer toda; // take-off distance available
-    private Integer asda; // accelerate-stop distance available
-    private Integer lda;  // landing distance available
-    private Integer resa; // runway end safety area
-    private Integer tocs; // take-off climb surface
-    private Integer als;  // approach landing surface
-    private Integer threshold = 0;
-
-    private Obstacle obstacle = null; // no obstacle present initially
-
-    public Runway(String id, Integer xPos, Integer yPos, Integer length, Integer width){
+    /**
+     * Constructor for the physical/visible runway.
+     * @param id Identifier of the physical runway, for example "09/27" or "09R/27L".
+     * @param xPos X position of the top left corner of the runway.
+     * @param yPos Y position of the top left corner of the runway.
+     * @param length Length of the runway in metres.
+     * @param width Width of the runway in metres.
+     * @param stripWidth Runway strip width in metres.
+     */
+    public Runway(String id, Integer xPos, Integer yPos, Integer length, Integer width, Integer stripWidth){
         super(xPos, yPos, id);
         this.length = length;
         this.width = width;
-        this.toda = length;
-        this.asda = length;
-        this.lda = length;
+        this.stripWidth = stripWidth;
+        setAls(50);
     }
 
     public Runway(){
-        super(0,0,"00A");
+        super(0,0,"00L/00R");
         this.length = 0;
         this.width = 0;
     }
@@ -54,15 +57,7 @@ public class Runway extends PositionalObject{
         this.width = width;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Boolean getActive() { return active; }
+    public Boolean isActive() { return active; }
 
     public void setActive(Boolean state) { this.active = state; }
 
@@ -70,65 +65,116 @@ public class Runway extends PositionalObject{
 
     public void setStatus(String status) { this.status = status; }
 
-    public Integer getClearway() { return clearway; }
-
-    public void setClearway(Integer clearway) {
-        this.clearway = clearway;
-        this.toda = tora + clearway;
-    }
-
-    public Integer getStopway() { return stopway; }
-
-    public void setStopway(Integer stopway) {
-        this.stopway = stopway;
-        this.asda = tora + stopway;
-    }
-
-    public Integer getThreshold() { return threshold; }
-
-    public void setThreshold(Integer threshold) {
-        this.threshold = threshold;
-        this.lda = tora - threshold;
-    }
-
-    public void placeObstacle(String id, Integer thresholdDistance, Integer centrelineDistance, Integer runwayDistance,
-                              Airfield.Dimensions dimensions){
-
-        Integer xPos = this.getxPos() + thresholdDistance;
-        Integer yPos = this.getyPos(); //TODO
-
-        this.obstacle = new Obstacle(id, xPos, yPos, thresholdDistance, centrelineDistance, runwayDistance, dimensions);
-    }
-
-    public void clearObstacle() { this.obstacle = null; }
-
-    public Obstacle getObstacle() { return obstacle; }
-
-    public Integer getTora() { return tora; }
-
-    public void setTora(Integer tora) { this.tora = tora; }
-
-    public Integer getToda() { return toda; }
-
-    public void  setToda(Integer toda) { this.toda = toda; }
-
-    public Integer getAsda() { return asda; }
-
-    public void setAsda(Integer asda) { this.asda = asda; }
-
-    public Integer getLda() { return lda; }
-
-    public void setLda(Integer lda) { this.lda = lda; }
-
-    public Integer getResa() { return resa; }
-
-    public void setResa(Integer resa) { this.resa = resa; }
-
-    public Integer getTocs() { return tocs; }
-
-    public void setTocs(Integer tocs) { this.tocs = tocs; }
-
     public Integer getAls() { return als; }
 
     public void setAls(Integer als) { this.als = als; }
+
+    public Integer getResa() {
+        return resa;
+    }
+
+    public void setResa(Integer resa) {
+        this.resa = resa;
+    }
+
+    public Integer getBlastDistance() {
+        return blastDistance;
+    }
+
+    public void setBlastDistance(Integer blastDistance) {
+        this.blastDistance = blastDistance;
+    }
+
+    public Integer getStripEnd() {
+        return stripEnd;
+    }
+
+    public Integer getStripWidth() {
+        return stripWidth;
+    }
+
+    public LogicalRunway[] getLogicalRunways() {
+        return runways;
+    }
+
+    public LogicalRunway getLogicalRunway(String name){
+
+        if(runways[0].getName().equals(name)){
+            return runways[0];
+        }
+        else if(runways[1].getName().equals(name)){
+            return runways[1];
+        }
+        else{
+            return null;
+        }
+    }
+
+    public void setLogicalRunways(LogicalRunway directionL, LogicalRunway directionR) {
+        runways[0] = directionL;
+        runways[1] = directionR;
+    }
+
+    public void clearObstacle(){
+        runways[0].clearObstacle();
+        runways[1].clearObstacle();
+    }
+
+    //taking off and landing towards the obstacle must occur in the direction of the runway where the distance of the object
+    //from threshold is greater and the opposite applies for taking off away and landing over
+
+    public void recalculateParameters(){
+        if(runways[0].getObstacle().getThresholdDistance() < runways[1].getObstacle().getThresholdDistance()){
+            recalculateTowardsObstacle(runways[1]);
+            recalculateAwayFromObstacle(runways[0]);
+        }else{
+            recalculateTowardsObstacle(runways[0]);
+            recalculateAwayFromObstacle(runways[1]);
+        }
+    }
+
+    private void recalculateTowardsObstacle(LogicalRunway runway){
+        Obstacle obstacle = runway.getObstacle();
+
+        // TORA = Distance from Threshold + Displaced Threshold - Slope Calculation - Strip End
+        runway.redeclareTora(obstacle.getThresholdDistance() + runway.getThreshold().intValue()
+                - obstacle.getHeight() * getAls() - getStripEnd());
+
+        // TODA = Redeclared TORA
+        runway.redeclareToda(runway.getTora().getRedeclaredValue());
+
+        // ASDA = Redeclared TORA
+        runway.redeclareAsda(runway.getTora().getRedeclaredValue());
+
+        // LDA = Distance from Threshold - RESA - Strip End
+        runway.redeclareLda(obstacle.getThresholdDistance() - getResa() - getStripEnd());
+    }
+
+    private void recalculateAwayFromObstacle(LogicalRunway runway){
+        Obstacle obstacle = runway.getObstacle();
+
+        // If theshold is displaced
+        if(runway.getThreshold().intValue() != 0){
+
+            // TORA = Original TORA - Blast Protection - Distance from Threshold - Displaced Threshold
+            runway.redeclareTora(runway.getTora().getOriginalValue().intValue() - blastDistance
+                    - obstacle.getThresholdDistance() - runway.getThreshold().intValue());
+        } else{
+
+            // TORA = Original TORA - Strip End - RESA - Distance from Threshold
+            runway.redeclareTora(runway.getTora().getOriginalValue().intValue() - getStripEnd()
+                    - getResa() - obstacle.getThresholdDistance());
+        }
+
+        // TODA = Redeclared TORA + Clearway Length
+        runway.redeclareToda(runway.getTora().getRedeclaredValue().intValue() + runway.getClearway().width);
+
+        // ASDA = Redeclared TORA + Stopway Length
+        runway.redeclareAsda(runway.getTora().getRedeclaredValue().intValue() + runway.getStopway().width);
+
+        // LDA = Original LDA - Slope Calculation - Distance from Threshold - Strip End
+        runway.redeclareLda(runway.getLda().getOriginalValue().intValue() - obstacle.getHeight() * getAls()
+                - obstacle.getThresholdDistance() - getStripEnd());
+    }
+
 }
