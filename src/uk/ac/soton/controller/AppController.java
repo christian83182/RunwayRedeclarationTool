@@ -52,7 +52,6 @@ public class AppController implements ViewController {
     @Override
     public Integer getBearing(String runwayId) {
 
-        // Discuss this... LogicalRunway vs Runway
         Runway r = airfield.getRunway(runwayId);
         return Integer.parseInt(r.getId().substring(0,2))*10;
     }
@@ -75,7 +74,6 @@ public class AppController implements ViewController {
     public Integer getStripWidthFromCenterline(String runwayId) {
 
         Runway r = airfield.getRunway(runwayId);
-
         return r.getStripWidth() / 2;
     }
 
@@ -83,7 +81,6 @@ public class AppController implements ViewController {
     public Integer getStripEndSize(String runwayId) {
 
         Runway r = airfield.getRunway(runwayId);
-
         return r.getStripEnd();
     }
 
@@ -91,7 +88,6 @@ public class AppController implements ViewController {
     public Integer getRunwayTORA(String runwayId) {
 
         LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
-
         return lr.getTora().getCurrentValue().intValue();
     }
 
@@ -99,7 +95,6 @@ public class AppController implements ViewController {
     public Integer getRunwayTODA(String runwayId) {
 
         LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
-
         return lr.getToda().getCurrentValue().intValue();
     }
 
@@ -107,7 +102,6 @@ public class AppController implements ViewController {
     public Integer getRunwayASDA(String runwayId) {
 
         LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
-
         return lr.getAsda().getCurrentValue().intValue();
     }
 
@@ -115,7 +109,6 @@ public class AppController implements ViewController {
     public Integer getRunwayLDA(String runwayId) {
 
         LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
-
         return lr.getLda().getCurrentValue().intValue();
     }
 
@@ -123,9 +116,12 @@ public class AppController implements ViewController {
     public Integer getRunwayThreshold(String runwayId) {
 
         LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
-
         return lr.getThreshold().intValue();
     }
+
+
+
+
 
     public Map<String,Airfield.Dimensions> getPredifinedObstacles() { return airfield.getPredefinedObstacles(); }
 
