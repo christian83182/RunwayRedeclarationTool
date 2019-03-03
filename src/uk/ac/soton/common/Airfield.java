@@ -45,7 +45,49 @@ public class Airfield {
             put("Boeing 727-100", new Dimensions(40.59,32.92,10.52));
             put("Boeing 727-200", new Dimensions(46.69,32.92,10.52));
 
-            //TODO put other aircraft models
+            // Boeing 737
+            put("Boeing 737-100", new Dimensions(28.65,28.35,11.23));
+            put("Boeing 737-200", new Dimensions(30.53,28.35,11.23));
+            put("Boeing 737-300", new Dimensions(33.40,28.88,11.13));
+            put("Boeing 737-400", new Dimensions(36.45,28.88,11.13));
+            put("Boeing 737-500", new Dimensions(31.01,28.88,11.13));
+            put("Boeing 737-600", new Dimensions(31.20,34.32,12.6));
+            put("Boeing 737-700", new Dimensions(33.6,34.32,12.6));
+            put("Boeing 737-800", new Dimensions(39.5,34.32,12.6));
+            put("Boeing 737-900", new Dimensions(42.1,34.32,12.6));
+
+            // Boeing 747
+            put("Boeing 747-100", new Dimensions(70.6,59.6,19.3));
+            put("Boeing 747SP", new Dimensions(56.31,59.6,20.06));
+            put("Boeing 747-200", new Dimensions(70.6,59.6,19.3));
+            put("Boeing 747-300", new Dimensions(70.6,59.6,19.3));
+            put("Boeing 747-400", new Dimensions(70.6,64.4,19.4));
+
+            // Boeing 757
+            put("Boeing 757-200", new Dimensions(47.3,38.05,13.56));
+            put("Boeing 757-300", new Dimensions(54.47,38.05,13.56));
+
+            // Boeing 767
+
+            // Boeing 777
+            put("Boeing 777-200", new Dimensions(63.7,60.9,18.5));
+            put("Boeing 777-200LR", new Dimensions(63.7,64.8,18.6));
+            put("Boeing 777F", new Dimensions(63.7,64.8,18.6));
+            put("Boeing 777-300", new Dimensions(73.9,60.9,18.5));
+            put("Boeing 777-300ER", new Dimensions(73.9,64.8,18.5));
+            put("Boeing 777X-8", new Dimensions(69.8,71.8,19.5));
+            put("Boeing 777X-9", new Dimensions(76.7,71.8,19.7));
+
+            // Boeing 787
+            put("Boeing 787-8", new Dimensions(56.7,60.1,16.9));
+            put("Boeing 787-9", new Dimensions(62.8,60.1,17.02));
+            put("Boeing 787-10", new Dimensions(68.3,60.1,17.02));
+
+            // Bombardier
+            put("Bombardier Dash 8-100", new Dimensions(22.25,25.89,7.49));
+            put("Bombardier Dash 8-200", new Dimensions(22.25,25.89,7.49));
+            put("Bombardier Dash 8-300", new Dimensions(25.68,27.43,7.49));
+            put("Bombardier Dash 8-400", new Dimensions(32.81,28.4,8.3));
 
             // Ground support equipment
             put("Dolly without cargo", new Dimensions(3.18,2.44,0.5));
@@ -65,9 +107,10 @@ public class Airfield {
 
     public Boolean addRunway(Runway newRunway){
 
-        // Can't add a runway with an already existing name
-        for(Runway r : runways){
-            if(r.getName().equals(newRunway.getName())){
+        // Can't add a runway with an already existing ID
+        // The ID represents both directions, for example "09/27"
+        for(int i = 0; i < runways.size(); i++){
+            if(runways.get(i).getId().equals(newRunway.getId())){
                 return false;
             }
         }
@@ -76,12 +119,21 @@ public class Airfield {
         return true;
     }
 
+    // Returns the physical runway that contains the specified logical runway
     public Runway getRunway(String name){
 
-        for(Runway runway : runways){
+        for(int i = 0; i < runways.size(); i++){
 
-            if(runway.getName().equals(name)){
-                return runway;
+            if(runways.get(i).getId().contains(name)){
+
+                LogicalRunway[] logicalRunways = runways.get(i).getLogicalRunways();
+
+                for(int j = 0; j < 2; j++){
+
+                    if(logicalRunways[j].getName().equals(name)){
+                        return runways.get(i);
+                    }
+                }
             }
         }
 
@@ -91,6 +143,21 @@ public class Airfield {
     public void removeRunway(Runway oldRunway){
         runways.remove(oldRunway);
     }
+
+    public ArrayList<LogicalRunway> getAllLogicalRunways(){
+
+        ArrayList<LogicalRunway> logRunways = new ArrayList<LogicalRunway>();
+
+        for(int i = 0; i < runways.size(); i++){
+            LogicalRunway[] temp = runways.get(i).getLogicalRunways();
+            logRunways.add(temp[0]);
+            logRunways.add(temp[1]);
+        }
+
+        return logRunways;
+    }
+
+    public LogicalRunway[] getLogicalRunwaysOf(Runway runway){ return runway.getLogicalRunways(); }
 
     public Map<String, Dimensions> getPredefinedObstacles() { return predefinedObstacles; }
 

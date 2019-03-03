@@ -13,6 +13,11 @@ public class FrontEndModel {
     private Map<String, Dimension> runwayClearway;
     private Map<String, Dimension> runwayStrip;
     // ^Width refers to distance from stat/end of the runway, height refers to distance from the centerline.
+    private Map<String, Integer> runwayTORA;
+    private Map<String, Integer> runwayTODA;
+    private Map<String, Integer> runwayASDA;
+    private Map<String, Integer> runwayLDA;
+    private Map<String, Integer> runwayThreshold;
 
     FrontEndModel(){
         runwayDimensions = new HashMap<>();
@@ -20,24 +25,44 @@ public class FrontEndModel {
         runwayStopway = new HashMap<>();
         runwayClearway = new HashMap<>();
         runwayStrip = new HashMap<>();
+        runwayTORA = new HashMap<>();
+        runwayTODA = new HashMap<>();
+        runwayASDA = new HashMap<>();
+        runwayLDA = new HashMap<>();
+        runwayThreshold = new HashMap<>();
         populateModel();
     }
 
     //Debug function used to generate some test data.
     private void populateModel(){
-        String runway1 = "07L";
-        runwayPositions.put(runway1, new Point(-400,100));
-        runwayDimensions.put(runway1, new Dimension(1200,80));
-        runwayClearway.put(runway1, new Dimension( 400,190));
-        runwayStopway.put(runway1, new Dimension(60,80));
-        runwayStrip.put(runway1, new Dimension(60,200));
+        String runway1 = "07";
+        addToModel(runway1, -400, 100, 1200, 80,150);
+        setDimData(runway1, 60, 80, 400, 190, 60, 200);
+        setVariableLengths(runway1, 1200, 1200+400, 1200 + 60, 1200 - 150);
 
-        String runway2 = "11L";
-        runwayPositions.put(runway2, new Point(-800,-500));
-        runwayDimensions.put(runway2, new Dimension(2000,100));
-        runwayClearway.put(runway2, new Dimension( 350,220));
-        runwayStopway.put(runway2, new Dimension(60,100));
-        runwayStrip.put(runway2, new Dimension(60,200));
+        String runway2 = "11R";
+        addToModel(runway2, -800, -500, 2000, 100,250);
+        setDimData(runway2, 60, 100, 350, 220, 60, 200);
+        setVariableLengths(runway2, 2000, 2000+350, 2000 + 60, 2000 - 250);
+    }
+
+    private void addToModel(String name, Integer xPos, Integer yPos, Integer xDim, Integer yDim, Integer threshold){
+        runwayPositions.put(name, new Point(xPos,yPos));
+        runwayDimensions.put(name, new Dimension(xDim, yDim));
+        runwayThreshold.put(name, threshold);
+    }
+
+    private void setDimData(String name, Integer stopwayX, Integer stopwayY, Integer clearwayX, Integer clearwayY, Integer stripEnd, Integer stripWidth){
+        runwayClearway.put(name, new Dimension( clearwayX,clearwayY));
+        runwayStopway.put(name, new Dimension(stopwayX,stopwayY));
+        runwayStrip.put(name, new Dimension(stripEnd,stripWidth));
+    }
+
+    private void setVariableLengths(String name, Integer tora, Integer toda, Integer asda, Integer lda){
+        runwayTORA.put(name, tora);
+        runwayTODA.put(name, toda);
+        runwayASDA.put(name, asda);
+        runwayLDA.put(name, lda);
     }
 
     //Returns a set of strings representing runways.
@@ -79,5 +104,30 @@ public class FrontEndModel {
     //Returns the distance from the start/end of the runway to the edge of the runway strip given a runway.
     public Integer getStripEndSize(String runwayId){
         return runwayStrip.get(runwayId).width;
+    }
+
+    //Returns the Take Off Run Available for a given runway.
+    public Integer getRunwayTORA(String runwayId){
+        return runwayTORA.get(runwayId);
+    }
+
+    //Returns the Take Off Distance Available for a given runway.
+    public Integer getRunwayTODA(String runwayId){
+        return runwayTODA.get(runwayId);
+    }
+
+    //Returns the Accelerate Stop Distance Available for a given runway.
+    public Integer getRunwayASDA(String runwayId){
+        return runwayASDA.get(runwayId);
+    }
+
+    //Returns the Landing Distance Available for a given runway.
+    public Integer getRunwayLDA(String runwayId){
+        return runwayLDA.get(runwayId);
+    }
+
+    //Returns the threshold for a given runway.
+    public Integer getRunwayThreshold(String runwayId){
+        return runwayThreshold.get(runwayId);
     }
 }
