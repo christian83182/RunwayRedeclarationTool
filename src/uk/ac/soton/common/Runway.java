@@ -13,14 +13,26 @@ public class Runway extends PositionalObject{
     private Integer als;
     private Integer blastDistance = 300;
     private final Integer stripEnd = 60;
+    private Integer stripWidth;
 
+    // The 2 logical runways associated with the physical one.
     private LogicalRunway[] runways = new LogicalRunway[2];
 
-    public Runway(String id, Integer xPos, Integer yPos, Integer length, Integer width){
+    /**
+     * Constructor for the physical/visible runway.
+     * @param id Identifier of the physical runway, for example "09/27" or "09R/27L".
+     * @param xPos X position of the top left corner of the runway.
+     * @param yPos Y position of the top left corner of the runway.
+     * @param length Length of the runway in metres.
+     * @param width Width of the runway in metres.
+     * @param stripWidth Runway strip width in metres.
+     */
+    public Runway(String id, Integer xPos, Integer yPos, Integer length, Integer width, Integer stripWidth){
         super(xPos, yPos, id);
         this.length = length;
         this.width = width;
-        setAls(50); //TODO ???
+        this.stripWidth = stripWidth;
+        setAls(50);
     }
 
     public Runway(){
@@ -77,8 +89,25 @@ public class Runway extends PositionalObject{
         return stripEnd;
     }
 
+    public Integer getStripWidth() {
+        return stripWidth;
+    }
+
     public LogicalRunway[] getLogicalRunways() {
         return runways;
+    }
+
+    public LogicalRunway getLogicalRunway(String name){
+
+        if(runways[0].getName().equals(name)){
+            return runways[0];
+        }
+        else if(runways[1].getName().equals(name)){
+            return runways[1];
+        }
+        else{
+            return null;
+        }
     }
 
     public void setLogicalRunways(LogicalRunway directionL, LogicalRunway directionR) {
@@ -137,11 +166,11 @@ public class Runway extends PositionalObject{
                     - getResa() - obstacle.getThresholdDistance());
         }
 
-        // TODA = Redeclared TORA + Clearway
-        runway.redeclareToda(runway.getTora().getRedeclaredValue().intValue() + runway.getClearway().intValue());
+        // TODA = Redeclared TORA + Clearway Length
+        runway.redeclareToda(runway.getTora().getRedeclaredValue().intValue() + runway.getClearway().width);
 
-        // ASDA = Redeclared TORA + Stopway
-        runway.redeclareAsda(runway.getTora().getRedeclaredValue().intValue() + runway.getStopway().intValue());
+        // ASDA = Redeclared TORA + Stopway Length
+        runway.redeclareAsda(runway.getTora().getRedeclaredValue().intValue() + runway.getStopway().width);
 
         // LDA = Original LDA - Slope Calculation - Distance from Threshold - Strip End
         runway.redeclareLda(runway.getLda().getOriginalValue().intValue() - obstacle.getHeight() * getAls()

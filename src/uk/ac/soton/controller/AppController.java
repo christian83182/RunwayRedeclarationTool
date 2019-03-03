@@ -4,12 +4,14 @@ package uk.ac.soton.controller;
 import uk.ac.soton.common.*;
 import uk.ac.soton.view.AppView;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-public class AppController {
+public class AppController implements ViewController {
 
     //The controller's instance of the application's view.
     private AppView appView;
@@ -23,48 +25,107 @@ public class AppController {
         this.appConfigurer = new Configurer();
         this.airfield = new Airfield();
 
-        initListeners();
-        //appView.setPredefinedObstacles(airfield.getPredefinedObstacles().keySet());
         appView.init();
     }
 
-    public void initListeners(){
-        //appView.addImportListener(new ImportListener());
-        //appView.addExportListener(new ExportListener());
+    @Override
+    public Set<String> getRunways() {
+
+        return new HashSet<String>(airfield.getAllLogicalRunways().stream().map(r
+                -> r.getName()).collect(Collectors.toList()));
     }
 
-    private class ImportListener implements ActionListener{
+    @Override
+    public Point getRunwayPos(String runwayId) {
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
-            // XML import call
-        }
+        Runway r = airfield.getRunway(runwayId);
+        return new Point(r.getxPos(), r.getyPos());
     }
 
-    private class ExportListener implements ActionListener{
+    @Override
+    public Dimension getRunwayDim(String runwayId) {
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
-            // XML export call
-        }
+        Runway r = airfield.getRunway(runwayId);
+        return new Dimension(r.getLength(), r.getWidth());
     }
 
-    // Next increment
-    private class ObstacleButtonListener implements ActionListener{
+    @Override
+    public Integer getBearing(String runwayId) {
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
-            String selectedRunway = appView.getSelectedRunway();
-            Runway selected = airfield.getRunway(selectedRunway);
-
-            // Place obstacle
-        }
+        // Discuss this... LogicalRunway vs Runway
+        Runway r = airfield.getRunway(runwayId);
+        return Integer.parseInt(r.getId().substring(0,2))*10;
     }
 
-    //public void update(){  }
+    @Override
+    public Dimension getStopwayDim(String runwayId) {
+
+        LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
+        return lr.getStopway();
+    }
+
+    @Override
+    public Dimension getClearwayDim(String runwayId) {
+
+        LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
+        return lr.getClearway();
+    }
+
+    @Override
+    public Integer getStripWidthFromCenterline(String runwayId) {
+
+        Runway r = airfield.getRunway(runwayId);
+
+        return r.getStripWidth() / 2;
+    }
+
+    @Override
+    public Integer getStripEndSize(String runwayId) {
+
+        Runway r = airfield.getRunway(runwayId);
+
+        return r.getStripEnd();
+    }
+
+    @Override
+    public Integer getRunwayTORA(String runwayId) {
+
+        LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
+
+        return lr.getTora().getCurrentValue().intValue();
+    }
+
+    @Override
+    public Integer getRunwayTODA(String runwayId) {
+
+        LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
+
+        return lr.getToda().getCurrentValue().intValue();
+    }
+
+    @Override
+    public Integer getRunwayASDA(String runwayId) {
+
+        LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
+
+        return lr.getAsda().getCurrentValue().intValue();
+    }
+
+    @Override
+    public Integer getRunwayLDA(String runwayId) {
+
+        LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
+
+        return lr.getLda().getCurrentValue().intValue();
+    }
+
+    @Override
+    public Integer getRunwayThreshold(String runwayId) {
+
+        LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
+
+        return lr.getThreshold().intValue();
+    }
 
     public Map<String,Airfield.Dimensions> getPredifinedObstacles() { return airfield.getPredefinedObstacles(); }
 
@@ -78,12 +139,12 @@ public class AppController {
         airfield.redefineObstacle(type, newLength, newWidth, newHeight);
     }
 
-    public ArrayList<Runway> getRunways(){ return airfield.getRunways(); }
+    public ArrayList<Runway> getRunwayObjects(){ return airfield.getRunways(); }
 
     public Runway getRunway(String name){ return airfield.getRunway(name); }
 
-    public void addRunway(String id, Integer xPos, Integer yPos, Integer length, Integer width) {
-        airfield.addRunway(new Runway(id, xPos, yPos, length, width));
+    public void addRunway(String id, Integer xPos, Integer yPos, Integer length, Integer width, Integer stripWidth) {
+        airfield.addRunway(new Runway(id, xPos, yPos, length, width, stripWidth));
     }
 
     public void removeRunway(Runway runway){ airfield.removeRunway(runway); }
@@ -150,7 +211,7 @@ public class AppController {
 
     public void setRunwayStatus(Runway runway, String status) { runway.setStatus(status);  }
 
-    public Number getClearway(LogicalRunway logicalRunway) { return logicalRunway.getClearway(); }
+    public Dimension getClearway(LogicalRunway logicalRunway) { return logicalRunway.getClearway(); }
 
     /*public void setClearway(LogicalRunway logicalRunway, Integer clearway) { logicalRunway.setClearway(clearway); }
 
