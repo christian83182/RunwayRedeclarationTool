@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<runways>
+    <runway>
+        <id>Test</id>
+        <xPos>12</xPos>
+        <yPos>13</yPos>
+        <length>14</length>
+        <width>15</width>
+        <isActive>true</isActive>
+        <status/>
+        <als>50</als>
+        <resa>240</resa>
+        <stripEnd>60</stripEnd>
+    </runway>
+</runways>
