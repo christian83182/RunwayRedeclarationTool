@@ -1,5 +1,7 @@
 package uk.ac.soton.view;
 
+import uk.ac.soton.controller.ViewController;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -12,7 +14,7 @@ import java.awt.image.BufferedImage;
 public class TopView2D extends JPanel {
 
     //Instance of the front end model which contains the information.
-    private FrontEndModel model;
+    private ViewController model;
     //Instance of the AppView class used to access the selected runway.
     private AppView appView;
     //Instance of the menu panel which controls a lot of the display settings.
