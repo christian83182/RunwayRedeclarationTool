@@ -40,13 +40,13 @@ public class LogicalRunway{
         }
     }
 
-    private String name;
+    private String name = "";
 
     private Parameter tora, toda, asda, lda;
 
     private Number threshold = 0;
-    private Dimension stopway;
-    private Dimension clearway;
+    private Dimension stopway = new Dimension(0,0);
+    private Dimension clearway = new Dimension(0,0);
 
     private Obstacle obstacle = null; // no obstacle present initially
 

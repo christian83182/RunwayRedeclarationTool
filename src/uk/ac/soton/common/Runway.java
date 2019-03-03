@@ -3,17 +3,17 @@ package uk.ac.soton.common;
 // A child of the PositionalObject class which represents an instance of a Runway with a certain length, width, and id.
 public class Runway extends PositionalObject{
 
-    private Integer length;
-    private Integer width;
-    private String status;
+    private Integer length = 0;
+    private Integer width = 0;
+    private String status = "";
     private Boolean active = true;
     // runway end safety area
     private Integer resa = 240;
     // approach landing surface
-    private Integer als;
+    private Integer als = 0;
     private Integer blastDistance = 300;
     private final Integer stripEnd = 60;
-    private Integer stripWidth;
+    private Integer stripWidth = 0;
 
     // The 2 logical runways associated with the physical one.
     private LogicalRunway[] runways = new LogicalRunway[2];
