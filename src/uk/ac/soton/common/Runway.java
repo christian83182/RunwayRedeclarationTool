@@ -12,7 +12,7 @@ public class Runway extends PositionalObject{
     // approach landing surface
     private Integer als;
     private Integer blastDistance = 300;
-    private Integer stripEnd = 60;
+    private final Integer stripEnd = 60;
 
     private LogicalRunway[] runways = new LogicalRunway[2];
 
@@ -77,9 +77,6 @@ public class Runway extends PositionalObject{
         return stripEnd;
     }
 
-    //not needed? bc strip end is always 60
-    //public void setStripEnd(Integer stripEnd) { this.stripEnd = stripEnd; }
-
     public LogicalRunway[] getLogicalRunways() {
         return runways;
     }
@@ -99,17 +96,9 @@ public class Runway extends PositionalObject{
 
     public void recalculateParameters(){
         if(runways[0].getObstacle().getThresholdDistance() < runways[1].getObstacle().getThresholdDistance()){
-            /*recalculateToraTowardsObstacle(runways[1]);
-            recalculateTodaTowardsObstacle(runways[1]);
-            recalculateAsdaTowardsObstacle(runways[1]);
-            recalculateLdaTowardsObstacle(runways[1]);*/
             recalculateTowardsObstacle(runways[1]);
             recalculateAwayFromObstacle(runways[0]);
         }else{
-            /*recalculateToraTowardsObstacle(runways[0]);
-            recalculateTodaTowardsObstacle(runways[0]);
-            recalculateAsdaTowardsObstacle(runways[0]);
-            recalculateLdaTowardsObstacle(runways[0]);*/
             recalculateTowardsObstacle(runways[0]);
             recalculateAwayFromObstacle(runways[1]);
         }
@@ -158,27 +147,5 @@ public class Runway extends PositionalObject{
         runway.redeclareLda(runway.getLda().getOriginalValue().intValue() - obstacle.getHeight() * getAls()
                 - obstacle.getThresholdDistance() - getStripEnd());
     }
-
-    /*public void recalculateToraTowardsObstacle(LogicalRunway runway){
-        Obstacle obstacle = runway.getObstacle();
-
-        runway.redeclareTora(obstacle.getThresholdDistance() + runway.getThreshold() - obstacle.getHeight() * getAls() - getStripEnd());
-    }
-
-
-    public void recalculateTodaTowardsObstacle(LogicalRunway runway){
-        runway.redeclareToda(runway.getToda().getRedeclaredValue());
-    }
-
-
-    public void recalculateAsdaTowardsObstacle(LogicalRunway runway){
-        runway.redeclareToda(runway.getAsda().getRedeclaredValue());
-    }
-
-    public void recalculateLdaTowardsObstacle(LogicalRunway runway){
-        Obstacle obstacle = runway.getObstacle();
-
-        runway.redeclareLda(obstacle.getThresholdDistance() - getResa() - getStripEnd());
-    }*/
 
 }
