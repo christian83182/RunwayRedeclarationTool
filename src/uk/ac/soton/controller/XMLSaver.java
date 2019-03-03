@@ -45,7 +45,7 @@ public class XMLSaver {
     }
 
     public void saveToXMLFileRunways(){
-        try{
+     /*   try{
             FileOutputStream fos = new FileOutputStream(new File("./Runways.xml"));
             XMLEncoder encoder = new XMLEncoder(fos);
             for(int i = 0; i<airfield.getRunways().size();i++){
@@ -59,7 +59,7 @@ public class XMLSaver {
         }
         catch (IOException ex){
             ex.printStackTrace();
-        }
+        } */
     }
     }
 
