@@ -26,13 +26,26 @@ public class AppController implements ViewController {
         this.appConfigurer = new Configurer();
         this.airfield = new Airfield();
 
-        // Test
-        airfield.addRunway(new Runway("09/27",-400,100,1200,80,300));
-        Runway r = airfield.getRunway("09");
-        LogicalRunway lr1 = new LogicalRunway("09",1200,250,
-                new Dimension(350,220),new Dimension(60,80));
-        r.getLogicalRunways()[0] = lr1;
+        // Uncomment to view test
+        /*
+        airfield.addRunway(new Runway("09L/27R",-800,-300,1800,80,400));
+        Runway r1 = airfield.getRunway("09L");
+        LogicalRunway lr1 = new LogicalRunway("09L",r1.getLength(),100,
+                new Dimension(350,220),new Dimension(60,r1.getWidth()));
+        r1.getLogicalRunways()[0] = lr1;
 
+        airfield.addRunway(new Runway("09R/27L",-400,350,1800,80,400));
+        Runway r2 = airfield.getRunway("09R");
+        LogicalRunway lr2 = new LogicalRunway("09R",r2.getLength(),250,
+                new Dimension(350,220),new Dimension(60,r2.getWidth()));
+        r2.getLogicalRunways()[0] = lr2;
+
+        airfield.addRunway(new Runway("13/23",-600,-750,2400,80,400));
+        Runway r3 = airfield.getRunway("13");
+        LogicalRunway lr3 = new LogicalRunway("13",r3.getLength(),0,
+                new Dimension(350,220),new Dimension(60,r3.getWidth()));
+        r3.getLogicalRunways()[0] = lr3;
+        */
     }
 
     @Override

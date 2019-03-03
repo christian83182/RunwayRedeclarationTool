@@ -110,9 +110,9 @@ public class Runway extends PositionalObject{
         }
     }
 
-    public void setLogicalRunways(LogicalRunway directionL, LogicalRunway directionR) {
-        runways[0] = directionL;
-        runways[1] = directionR;
+    public void setLogicalRunways(LogicalRunway direction1, LogicalRunway direction2) {
+        runways[0] = direction1;
+        runways[1] = direction2;
     }
 
     public void clearObstacle(){

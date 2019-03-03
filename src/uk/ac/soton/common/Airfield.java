@@ -144,7 +144,11 @@ public class Airfield {
         for(int i = 0; i < runways.size(); i++){
             LogicalRunway[] temp = runways.get(i).getLogicalRunways();
             logRunways.add(temp[0]);
-            //TODO logRunways.add(temp[1]);
+
+            // The if statement is for testing only, will be removed later when all runways have 2 log ones
+            if(temp[1] != null){
+                logRunways.add(temp[1]);
+            }
         }
 
         return logRunways;
