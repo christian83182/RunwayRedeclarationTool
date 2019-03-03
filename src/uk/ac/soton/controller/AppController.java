@@ -1,6 +1,7 @@
 package uk.ac.soton.controller;
 
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import uk.ac.soton.common.*;
 import uk.ac.soton.view.AppView;
 
@@ -24,6 +25,14 @@ public class AppController implements ViewController {
         this.appView = appView;
         this.appConfigurer = new Configurer();
         this.airfield = new Airfield();
+
+        // Test
+        airfield.addRunway(new Runway("09/27",-400,100,1200,80,300));
+        Runway r = airfield.getRunway("09");
+        LogicalRunway lr1 = new LogicalRunway("09",1200,250,
+                new Dimension(350,220),new Dimension(60,80));
+        r.getLogicalRunways()[0] = lr1;
+
     }
 
     @Override

@@ -125,16 +125,11 @@ public class Airfield {
 
         for(int i = 0; i < runways.size(); i++){
 
-            if(runways.get(i).getId().contains(name)){
+            String[] ids = runways.get(i).getId().split("/");
 
-                LogicalRunway[] logicalRunways = runways.get(i).getLogicalRunways();
+            if(ids[0].equals(name) || ids[1].equals(name)){
 
-                for(int j = 0; j < 2; j++){
-
-                    if(logicalRunways[j].getName().equals(name)){
-                        return runways.get(i);
-                    }
-                }
+                return runways.get(i);
             }
         }
 
@@ -152,7 +147,7 @@ public class Airfield {
         for(int i = 0; i < runways.size(); i++){
             LogicalRunway[] temp = runways.get(i).getLogicalRunways();
             logRunways.add(temp[0]);
-            logRunways.add(temp[1]);
+            //TODO logRunways.add(temp[1]);
         }
 
         return logRunways;
