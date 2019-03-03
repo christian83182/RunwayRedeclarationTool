@@ -2,24 +2,20 @@ package uk.ac.soton.view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import javax.swing.UIManager.*;
 
 public class AppView extends JFrame{
 
+    //An instance of the front end model used to store the data displayed.
+    private FrontEndModel model;
     //Note that for the runwayDimensions, the length is the x value and the width is the y value.
-    private Map<String,Point> runwayPositions;
-    private Map<String,Dimension> runwayDimensions;
     private String selectedRunway;
 
     //Constructor calls parent's constructor and initializes member variables
     public AppView(String title){
         super(title);
-        runwayPositions = new HashMap<>();
-        runwayDimensions = new HashMap<>();
+        model = new FrontEndModel();
         selectedRunway = "";
-        populateModel();
     }
 
     //Properly initializes and displays the window.
@@ -28,40 +24,22 @@ public class AppView extends JFrame{
         this.setLayout(new BorderLayout());
         setLookAndFeel();
 
-        MenuPanel menuPanel = new MenuPanel(this);
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("File"); menuBar.add(fileMenu);
+        JMenu settingsMenu = new JMenu("Settings"); menuBar.add(settingsMenu);
+        JMenuItem importConfiguration = new JMenuItem("Import Configuration"); fileMenu.add(importConfiguration);
+        JMenuItem exportConfiguration = new JMenuItem("Export Configuration"); fileMenu.add(exportConfiguration);
+        JMenuItem openSettings = new JMenuItem("Settings"); settingsMenu.add(openSettings);
+        this.setJMenuBar(menuBar);
+
+        MenuPanel menuPanel = new MenuPanel(this, model);
         this.add(menuPanel, BorderLayout.WEST);
 
-        TopView2D topView = new TopView2D(this,menuPanel);
+        TopView2D topView = new TopView2D(this, model, menuPanel);
         this.add(topView,BorderLayout.CENTER);
 
         this.pack();
         this.setVisible(true);
-    }
-
-    //Debug function used to generate some test data.
-    private void populateModel(){
-        String runway1 = "07L";
-        runwayPositions.put(runway1, new Point(-400,0));
-        runwayDimensions.put(runway1, new Dimension(1200,80));
-
-        String runway2 = "11L";
-        runwayPositions.put(runway2, new Point(-800,-500));
-        runwayDimensions.put(runway2, new Dimension(2000,100));
-    }
-
-    //Returns a set of strings representing runways.
-    public Set<String> getRunways(){
-        return runwayPositions.keySet();
-    }
-
-    //Returns the position of a runway as a Point given the name.
-    public Point getRunwayPos(String runwayId) {
-        return runwayPositions.get(runwayId);
-    }
-
-    //Returns the size of the runway as a Dimension given the name.
-    public Dimension getRunwayDim(String runwayId) {
-        return runwayDimensions.get(runwayId);
     }
 
     //Returns the name of the currently selected runway.
@@ -79,29 +57,28 @@ public class AppView extends JFrame{
         repaint();
     }
 
-    //Returns the bearing of the runway in degrees given the runway's name.
-    public Integer getBearing(String runwayId){
-        Integer bearing = Integer.parseInt(runwayId.substring(0,2))*10;
-        return bearing;
-    }
-
     //Set's the Look and Feel of the application to a custom theme.
     private void setLookAndFeel(){
-        try{
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
 
-            UIManager.put("control", new Color(80,80,80)); // Primary
-            UIManager.put("nimbusBase", new Color(70,70,70)); // The colour of selectors
-            UIManager.put("nimbusBlueGrey", Color.DARK_GRAY); // The colour of buttons
-            UIManager.put("ComboBox:\"ComboBox.listRenderer\".background", Color.darkGray); //Backgroud for the drop-down menu
-            UIManager.put("ScrollPane.background", Color.DARK_GRAY); //Background for the ScrollPane (affects JFileChooser)
-            UIManager.put("List.background", Color.DARK_GRAY); //Background for the ScrollPane (affects JFileChooser)
-            UIManager.put("TextField.background", Color.DARK_GRAY); //Background for the TextField (affects JFileChooser)
+        UIManager.put("control", new Color(80,80,80)); // Primary
+        UIManager.put("nimbusBase", new Color(70,70,70)); // The colour of selectors
+        UIManager.put("nimbusBlueGrey", Color.DARK_GRAY); // The colour of buttons
+        UIManager.put("ScrollPane.background", Color.DARK_GRAY); //Background for the ScrollPane (affects JFileChooser)
+        UIManager.put("List.background", Color.DARK_GRAY); //Background for the ScrollPane (affects JFileChooser)
+        UIManager.put("TextField.background", Color.DARK_GRAY); //Background for the TextField (affects JFileChooser)
+        UIManager.put("text",Color.white); //Sets Default text colour to white
+        UIManager.put("Menu[Enabled].textForeground",new Color(255, 255, 255));
+        UIManager.put("ComboBox.background",new Color(34, 34, 34));
 
-            UIManager.put("text",Color.white); //Sets Default text colour to white
-
-        } catch(Exception e){
-            System.err.println("'Nimbus' Look and Feel not found, using default 'Metal'");
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Nimbus not available, using default 'Metal'");
         }
     }
 }
