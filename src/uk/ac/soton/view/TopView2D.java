@@ -13,8 +13,8 @@ import java.awt.image.BufferedImage;
 //Represents a JPanel designed to view a top-down view of the runways.
 public class TopView2D extends JPanel {
 
-    //Instance of the front end model which contains the information.
-    private ViewController model;
+    //Instance of the front end controller which contains the information.
+    private ViewController controller;
     //Instance of the AppView class used to access the selected runway.
     private AppView appView;
     //Instance of the menu panel which controls a lot of the display settings.
@@ -24,9 +24,9 @@ public class TopView2D extends JPanel {
     //Variable used to keep track of the current level of zoom,
     private Double globalZoom;
 
-    TopView2D(AppView appView, FrontEndModel model, MenuPanel menuPanel){
+    TopView2D(AppView appView, ViewController controller, MenuPanel menuPanel){
         this.appView = appView;
-        this.model = model;
+        this.controller = controller;
         this.menuPanel = menuPanel;
         this.globalPan = Settings.TOP_DOWN_DEFAULT_PAN;
         this.globalZoom = Settings.TOP_DOWN_DEFAULT_ZOOM;
@@ -165,7 +165,7 @@ public class TopView2D extends JPanel {
     /* Generates an Affine transformation which rotates the runway to match its bearing and moves the centre of translation to
    the center of the left side. */
     private AffineTransform createRunwayTransform(Point pos, Dimension dim, String id){
-        Double bearing = Math.toRadians(model.getBearing(id)-90);
+        Double bearing = Math.toRadians(controller.getBearing(id)-90);
         AffineTransform tx = new AffineTransform();
         tx.translate(0,-dim.height/2);
         AffineTransform rx = new AffineTransform(tx);
@@ -175,8 +175,8 @@ public class TopView2D extends JPanel {
 
     //Draws a runway given the name.
     private void paintRunway(String id, Graphics2D g2){
-        Point pos = model.getRunwayPos(id);
-        Dimension dim = model.getRunwayDim(id);
+        Point pos = controller.getRunwayPos(id);
+        Dimension dim = controller.getRunwayDim(id);
 
         AffineTransform old = g2.getTransform();
         AffineTransform tx = (AffineTransform) old.clone();
@@ -190,8 +190,8 @@ public class TopView2D extends JPanel {
 
     //Draws the centerline for a runway given the name.
     private void paintCenterline(String id, Graphics2D g2){
-        Point pos = model.getRunwayPos(id);
-        Dimension dim = model.getRunwayDim(id);
+        Point pos = controller.getRunwayPos(id);
+        Dimension dim = controller.getRunwayDim(id);
 
         AffineTransform old = g2.getTransform();
         AffineTransform tx = (AffineTransform) old.clone();
@@ -208,8 +208,8 @@ public class TopView2D extends JPanel {
 
     //Draws the runway's name at the start of the runway.
     private void paintRunwayName(String id, Graphics2D g2){
-        Point pos = model.getRunwayPos(id);
-        Dimension dim = model.getRunwayDim(id);
+        Point pos = controller.getRunwayPos(id);
+        Dimension dim = controller.getRunwayDim(id);
 
         AffineTransform old = g2.getTransform();
         AffineTransform tx = (AffineTransform) old.clone();
@@ -240,8 +240,8 @@ public class TopView2D extends JPanel {
 
     //Draws an arrow in the landing direction of the runway.
     private void paintLandingDirection(String id, Graphics2D g2){
-        Point pos = model.getRunwayPos(id);
-        Dimension dim = model.getRunwayDim(id);
+        Point pos = controller.getRunwayPos(id);
+        Dimension dim = controller.getRunwayDim(id);
 
         AffineTransform old = g2.getTransform();
         AffineTransform tx = (AffineTransform) old.clone();
@@ -259,26 +259,26 @@ public class TopView2D extends JPanel {
         g2.setTransform(old);
     }
 
-    //Draws the runway & centerline for all runways in the current model.
+    //Draws the runway & centerline for all runways in the current controller.
     private void paintRunways(Graphics2D g2){
-        for(String id : model.getRunways()){
+        for(String id : controller.getRunways()){
             paintRunway(id, g2);
         }
-        for(String id : model.getRunways()){
+        for(String id : controller.getRunways()){
             paintCenterline(id, g2);
         }
-        for(String id : model.getRunways()){
+        for(String id : controller.getRunways()){
             //paintLandingDirection(id, g2);
         }
-        for(String id : model.getRunways()){
+        for(String id : controller.getRunways()){
             paintRunwayName(id, g2);
         }
     }
 
     //Draws the clear and graded area for a given runway
     private void paintClearAndGraded(String id, Graphics2D g2){
-        Point pos = model.getRunwayPos(id);
-        Dimension dim = model.getRunwayDim(id);
+        Point pos = controller.getRunwayPos(id);
+        Dimension dim = controller.getRunwayDim(id);
 
         AffineTransform old = g2.getTransform();
         AffineTransform tx = (AffineTransform) old.clone();
@@ -293,7 +293,7 @@ public class TopView2D extends JPanel {
 
     //Draws the clear and graded area for all runways.
     private void paintAllClearAndGraded(Graphics2D g2){
-        for(String id : model.getRunways()){
+        for(String id : controller.getRunways()){
             paintClearAndGraded(id, g2);
         }
     }
@@ -316,9 +316,9 @@ public class TopView2D extends JPanel {
         return poly;
     }
 
-    //Draws the runway strip for all runways in the model.
+    //Draws the runway strip for all runways in the controller.
     private void paintStrips(Graphics2D g2){
-        for(String id : model.getRunways()){
+        for(String id : controller.getRunways()){
             paintStrip(id,g2);
         }
     }
@@ -330,8 +330,8 @@ public class TopView2D extends JPanel {
             return;
         } else {
             String selectedRunway = appView.getSelectedRunway();
-            Point pos = model.getRunwayPos(selectedRunway);
-            Dimension dim = model.getRunwayDim(selectedRunway);
+            Point pos = controller.getRunwayPos(selectedRunway);
+            Dimension dim = controller.getRunwayDim(selectedRunway);
 
             paintRunway(selectedRunway, g2);
             paintCenterline(selectedRunway, g2);
@@ -350,9 +350,9 @@ public class TopView2D extends JPanel {
             g2.drawRect(pos.x, pos.y, dim.width, dim.height);
 
             //Draw the displaced threshold indicator.
-            if(model.getRunwayThreshold(selectedRunway) > 0){
+            if(controller.getRunwayThreshold(selectedRunway) > 0){
                 g2.setColor(Settings.THRESHOLD_INDICATOR_COLOUR);
-                g2.fillRect(pos.x, pos.y, model.getRunwayThreshold(selectedRunway), dim.height);
+                g2.fillRect(pos.x, pos.y, controller.getRunwayThreshold(selectedRunway), dim.height);
             }
             g2.setTransform(old);
 
@@ -393,26 +393,26 @@ public class TopView2D extends JPanel {
 
     //Prints the TODA, TORA, ASDA, and LDA for a given runway.
     private void paintRunwayParameters(String id, Graphics2D g2){
-        Integer stripHeight = model.getStripWidthFromCenterline(id);
+        Integer stripHeight = controller.getStripWidthFromCenterline(id);
 
         //Draw the TORA length.
-        Integer toraLength = model.getRunwayTORA(id);
+        Integer toraLength = controller.getRunwayTORA(id);
         InfoArrow toraLengthInfo = new InfoArrow(0,stripHeight+150,toraLength,"TORA: " + toraLength + "m");
         toraLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the TODA length.
-        Integer todaLength = model.getRunwayTODA(id);
+        Integer todaLength = controller.getRunwayTODA(id);
         InfoArrow todaLengthInfo = new InfoArrow(0,stripHeight+350,todaLength,"TODA: " + todaLength + "m");
         todaLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the ASDA length.
-        Integer asdaLength = model.getRunwayASDA(id);
+        Integer asdaLength = controller.getRunwayASDA(id);
         InfoArrow asdaLengthInfo = new InfoArrow(0,stripHeight+250,asdaLength,"ASDA: " + asdaLength + "m");
         asdaLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the LDA length.
-        Integer ldaLength = model.getRunwayLDA(id);
-        InfoArrow ldaLengthInfo = new InfoArrow(model.getRunwayThreshold(id), stripHeight+50, ldaLength,"LDA: " + ldaLength + "m");
+        Integer ldaLength = controller.getRunwayLDA(id);
+        InfoArrow ldaLengthInfo = new InfoArrow(controller.getRunwayThreshold(id), stripHeight+50, ldaLength,"LDA: " + ldaLength + "m");
         ldaLengthInfo.drawInfoArrow(id, g2);
     }
 
@@ -423,10 +423,10 @@ public class TopView2D extends JPanel {
 
     //Draws the length of various runway components for some specified runway.
     private void paintOtherLengths(String id, Graphics2D g2){
-        Dimension clearwayDim = model.getClearwayDim(id);
-        Dimension runwayDim = model.getRunwayDim(id);
-        Dimension stopwayDim = model.getStopwayDim(id);
-        Integer stripHeight = model.getStripWidthFromCenterline(id);
+        Dimension clearwayDim = controller.getClearwayDim(id);
+        Dimension runwayDim = controller.getRunwayDim(id);
+        Dimension stopwayDim = controller.getStopwayDim(id);
+        Integer stripHeight = controller.getStripWidthFromCenterline(id);
 
         //Draw the clearway length.
         InfoArrow clearwayLengthInfo = new InfoArrow(runwayDim.width, -stripHeight-50, clearwayDim.width, clearwayDim.width +"m");
@@ -437,17 +437,17 @@ public class TopView2D extends JPanel {
         stopwayLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the displaced threshold length if it exists.
-        if(model.getRunwayThreshold(id) > 0){
-            InfoArrow thresholdLength = new InfoArrow(0, -stripHeight-50, model.getRunwayThreshold(id), model.getRunwayThreshold(id) + "m");
+        if(controller.getRunwayThreshold(id) > 0){
+            InfoArrow thresholdLength = new InfoArrow(0, -stripHeight-50, controller.getRunwayThreshold(id), controller.getRunwayThreshold(id) + "m");
             thresholdLength.drawInfoArrow(id, g2);
         }
     }
 
     //Paints an outline of the clearway for a specified runway.
     private void paintClearway(String id,Graphics2D g2){
-        Point pos = model.getRunwayPos(id);
-        Dimension runwayDim = model.getRunwayDim(id);
-        Dimension clearwayDim = model.getClearwayDim(id);
+        Point pos = controller.getRunwayPos(id);
+        Dimension runwayDim = controller.getRunwayDim(id);
+        Dimension clearwayDim = controller.getClearwayDim(id);
 
         AffineTransform old = g2.getTransform();
         AffineTransform tx = (AffineTransform) old.clone();
@@ -466,10 +466,10 @@ public class TopView2D extends JPanel {
 
     //Draws the runway strip for the specified runway.
     private void paintStrip(String id, Graphics2D g2){
-        Point pos = model.getRunwayPos(id);
-        Dimension runwayDim = model.getRunwayDim(id);
-        Integer stripWidthFromCenterline = model.getStripWidthFromCenterline(id);
-        Integer stripEndSize = model.getStripEndSize(id);
+        Point pos = controller.getRunwayPos(id);
+        Dimension runwayDim = controller.getRunwayDim(id);
+        Integer stripWidthFromCenterline = controller.getStripWidthFromCenterline(id);
+        Integer stripEndSize = controller.getStripEndSize(id);
 
         AffineTransform old = g2.getTransform();
         AffineTransform tx = (AffineTransform) old.clone();
@@ -484,9 +484,9 @@ public class TopView2D extends JPanel {
 
     //Paints an outline of the stopway for a specified runway.
     private void paintStopway(String id,Graphics2D g2){
-        Point pos = model.getRunwayPos(id);
-        Dimension runwayDim = model.getRunwayDim(id);
-        Dimension stopwayDim = model.getStopwayDim(id);
+        Point pos = controller.getRunwayPos(id);
+        Dimension runwayDim = controller.getRunwayDim(id);
+        Dimension stopwayDim = controller.getStopwayDim(id);
 
         AffineTransform old = g2.getTransform();
         AffineTransform tx = (AffineTransform) old.clone();
@@ -570,8 +570,8 @@ public class TopView2D extends JPanel {
         /* Generates an Affine Transformation to local runway coordinates, so that 0,0 refers to the center of the start of
            the runway. */
         public AffineTransform genInfoArrowTransform(String runwayId){
-            Point pos = model.getRunwayPos(runwayId);
-            Dimension dim = model.getRunwayDim(runwayId);
+            Point pos = controller.getRunwayPos(runwayId);
+            Dimension dim = controller.getRunwayDim(runwayId);
             AffineTransform tx = createRunwayTransform(pos,dim,runwayId);
             tx.translate(pos.x,pos.y);
             tx.translate(0,dim.height/2);

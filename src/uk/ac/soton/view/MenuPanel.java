@@ -1,6 +1,9 @@
 package uk.ac.soton.view;
 
+import uk.ac.soton.controller.ViewController;
+
 import javax.swing.*;
+import javax.swing.text.View;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +11,7 @@ import java.util.List;
 public class MenuPanel extends JPanel {
 
     private AppView appView;
-    private FrontEndModel model;
+    private ViewController controller;
     private JCheckBox isolateModeBox;
     private JCheckBox showRunwayParametersBox;
     private JCheckBox showBreakdownBox;
@@ -16,9 +19,9 @@ public class MenuPanel extends JPanel {
     private JCheckBox showOverlayBox;
     private JCheckBox showAxisBox;
 
-    MenuPanel(AppView appView, FrontEndModel model){
+    MenuPanel(AppView appView, ViewController controller){
         this.appView = appView;
-        this.model = model;
+        this.controller = controller;
         this.setPreferredSize(new Dimension(230,100));
         this.setLayout(new GridBagLayout());
 
@@ -41,7 +44,7 @@ public class MenuPanel extends JPanel {
         //Create a DropDown menu using the items in menuItems.
         List<String> menuItems = new ArrayList<>();
         menuItems.add("None");
-        menuItems.addAll(model.getRunways());
+        menuItems.addAll(controller.getRunways());
         JComboBox runwayMenu = new JComboBox(menuItems.toArray());
         runwayMenu.addActionListener(e -> appView.setSelectedRunway(runwayMenu.getSelectedItem().toString()));
         c = new GridBagConstraints();

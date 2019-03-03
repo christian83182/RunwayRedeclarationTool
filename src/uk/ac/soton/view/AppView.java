@@ -1,20 +1,21 @@
 package uk.ac.soton.view;
 
+import uk.ac.soton.controller.ViewController;
+
 import javax.swing.*;
 import java.awt.*;
-import javax.swing.UIManager.*;
 
 public class AppView extends JFrame{
 
-    //An instance of the front end model used to store the data displayed.
-    private FrontEndModel model;
+    //An instance of the front end controller used to store the data displayed.
+    private ViewController controller;
     //Note that for the runwayDimensions, the length is the x value and the width is the y value.
     private String selectedRunway;
 
     //Constructor calls parent's constructor and initializes member variables
     public AppView(String title){
         super(title);
-        model = new FrontEndModel();
+        this.controller = new DebugModel();
         selectedRunway = "";
     }
 
@@ -32,10 +33,10 @@ public class AppView extends JFrame{
         JMenuItem openSettings = new JMenuItem("Settings"); settingsMenu.add(openSettings);
         this.setJMenuBar(menuBar);
 
-        MenuPanel menuPanel = new MenuPanel(this, model);
+        MenuPanel menuPanel = new MenuPanel(this, controller);
         this.add(menuPanel, BorderLayout.WEST);
 
-        TopView2D topView = new TopView2D(this, model, menuPanel);
+        TopView2D topView = new TopView2D(this, controller, menuPanel);
         this.add(topView,BorderLayout.CENTER);
 
         this.pack();
@@ -80,5 +81,13 @@ public class AppView extends JFrame{
         } catch (Exception e) {
             System.out.println("Nimbus not available, using default 'Metal'");
         }
+    }
+
+    public void setController(ViewController newController){
+        this.controller = newController;
+    }
+
+    public ViewController getController(){
+        return controller;
     }
 }

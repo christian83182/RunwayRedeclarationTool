@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class FrontEndModel implements ViewController {
+public class DebugModel implements ViewController {
 
     private Map<String, Point> runwayPositions;
     private Map<String, Dimension> runwayDimensions;
@@ -21,7 +21,7 @@ public class FrontEndModel implements ViewController {
     private Map<String, Integer> runwayLDA;
     private Map<String, Integer> runwayThreshold;
 
-    FrontEndModel(){
+    public DebugModel(){
         runwayDimensions = new HashMap<>();
         runwayPositions = new HashMap<>();
         runwayStopway = new HashMap<>();
@@ -32,11 +32,10 @@ public class FrontEndModel implements ViewController {
         runwayASDA = new HashMap<>();
         runwayLDA = new HashMap<>();
         runwayThreshold = new HashMap<>();
-        populateModel();
     }
 
     //Debug function used to generate some test data.
-    private void populateModel(){
+    public void populateModel(){
         String runway1 = "07";
         addToModel(runway1, -400, 100, 1200, 80,150);
         setDimData(runway1, 60, 80, 400, 190, 60, 200);
