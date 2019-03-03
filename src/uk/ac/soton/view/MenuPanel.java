@@ -2,8 +2,6 @@ package uk.ac.soton.view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +13,7 @@ public class MenuPanel extends JPanel {
     private JCheckBox showRunwayParametersBox;
     private JCheckBox showBreakdownBox;
     private JCheckBox showOtherBox;
-    private JCheckBox showLegendBox;
+    private JCheckBox showOverlayBox;
     private JCheckBox showAxisBox;
 
     MenuPanel(AppView appView, FrontEndModel model){
@@ -79,7 +77,7 @@ public class MenuPanel extends JPanel {
 
         //Add the "show breakdown" option
         showBreakdownBox = new JCheckBox("Show Parameter Breakdown");
-        showBreakdownBox.setSelected(true);
+        showBreakdownBox.setEnabled(false);
         showBreakdownBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 5;
@@ -95,14 +93,14 @@ public class MenuPanel extends JPanel {
         c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
         this.add(showOtherBox, c);
 
-        //Add the "show legend" option
-        showLegendBox = new JCheckBox("Show Legend");
-        showLegendBox.setSelected(true);
-        showLegendBox.addActionListener(e -> appView.repaint());
+        //Add the "show overlay" option
+        showOverlayBox = new JCheckBox("Show Overlays");
+        showOverlayBox.setSelected(true);
+        showOverlayBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 7;
         c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
-        this.add(showLegendBox, c);
+        this.add(showOverlayBox, c);
 
         //Add the "show axis" option
         showAxisBox = new JCheckBox("Show Axis");
@@ -130,8 +128,8 @@ public class MenuPanel extends JPanel {
         return showOtherBox.isSelected();
     }
 
-    public boolean isShowLegend(){
-        return showLegendBox.isSelected();
+    public boolean isShowOverlay(){
+        return showOverlayBox.isSelected();
     }
 
     public boolean isShowAxis(){

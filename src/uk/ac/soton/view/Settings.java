@@ -43,7 +43,7 @@ public final class Settings{
     final static Stroke INFO_ARROW_STROKE = new BasicStroke(4);
     final static Stroke INFO_ARROW_HELPER_STROKE = new BasicStroke(2, 1, 0, 10, new float[] {1,10}, 1);
     final static Color INFO_TEXT_COLOUR = new Color(255,255,255);
-    final static Font INFO_TEXT_FONT = new Font("TimesRoman", Font.PLAIN, 32);
+    final static Font INFO_TEXT_FONT = new Font("SansSerif", Font.PLAIN, 32);
 
     final static Color RUNWAY_NAME_COLOUR = new Color(255,255,255);
 }

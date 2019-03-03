@@ -57,32 +57,93 @@ public class TopView2D extends JPanel {
         paintView(g2);
         //Reset the transformation used by the graphics object so the overlay doesn't pan or zoom.
         g2.setTransform(new AffineTransform());
-        //Draw the compass.
-        drawCompass(g2);
+        //Paint the compass and legend if the option is selected.
+        if(menuPanel.isShowOverlay()) {
+            paintCompass(0, g2);
+            paintLegend(g2);
+        }
         //Use the g2d object to paint the buffered image.
         g2d.drawImage(img,0,0,getWidth(),getHeight(),null);
 
     }
 
+    //Draws the legend on the bottom right corner of the screen.
+    private void paintLegend(Graphics2D g2){
+        Integer width = 210;
+        Integer height = 190;
+        Integer fontSize = 14;
+        Integer verticalPadding = 9;
+        Point pos = new Point(getWidth()-width-10, getHeight()-height-10);
+
+        g2.setColor(new Color(45, 45, 45, 150));
+        g2.fillRect(pos.x, pos.y, width, height);
+        g2.setColor(new Color(39, 39, 39));
+        g2.setStroke(new BasicStroke(5));
+        g2.drawRect(pos.x, pos.y, width, height);
+
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("SansSerif", Font.BOLD, (int)(fontSize*1.5)));
+        g2.drawString("KEY", pos.x+85, pos.y + fontSize*1 + verticalPadding*2);
+
+        g2.setFont(new Font("SansSerif", Font.PLAIN, fontSize));
+        g2.drawString("Clear and Graded Area", pos.x+40, pos.y + fontSize * 1 +verticalPadding*5);
+        g2.drawString("Runway Strip", pos.x+40, pos.y + fontSize * 2 +verticalPadding*6);
+        g2.drawString("Displaced Threshold", pos.x+40, pos.y + fontSize * 3 +verticalPadding*7);
+        g2.drawString("Clearway", pos.x+40, pos.y + fontSize * 4 +verticalPadding*8);
+        g2.drawString("Stopway", pos.x+40, pos.y + fontSize * 5 +verticalPadding*9);
+        g2.drawString("Landing Direction", pos.x+40, pos.y + fontSize * 6 +verticalPadding*10);
+
+        Integer iconSize = 16;
+        g2.setColor(Settings.CLEAR_AND_GRADED_COLOUR);
+        g2.fillRect(pos.x +18, pos.y + fontSize*1 + verticalPadding*5 - iconSize+2, iconSize, iconSize);
+        g2.setColor(Settings.RUNWAY_STRIP_COLOUR);
+        g2.fillRect(pos.x +18, pos.y + fontSize*2 + verticalPadding*6 - iconSize+2, iconSize, iconSize);
+        g2.setColor(Settings.SELECTED_RUNWAY_HIGHLIGHT);
+        g2.fillRect(pos.x +18, pos.y + fontSize*3 + verticalPadding*7 - iconSize+2, iconSize, iconSize);
+        g2.setColor(Settings.CLEARWAY_STROKE_COLOUR);
+        g2.fillRect(pos.x +18, pos.y + fontSize*4 + verticalPadding*8 - iconSize+2, iconSize, iconSize);
+        g2.setColor(Settings.STOPWAY_STROKE_COLOUR);
+        g2.fillRect(pos.x +18, pos.y + fontSize*5 + verticalPadding*9 - iconSize+2, iconSize, iconSize);
+
+        Point polyLocation = new Point(pos.x + 18, pos.y + fontSize*6 + verticalPadding*10 - iconSize/2+2);
+        Polygon poly = new Polygon(new int[] {polyLocation.x, polyLocation.x +16, polyLocation.x},
+                new int[] {polyLocation.y+8, polyLocation.y, polyLocation.y-8}, 3);
+        g2.setColor(Settings.CENTERLINE_COLOUR);
+        g2.fillPolygon(poly);
+    }
+
     //Draws a compass in the top left corner of the screen
-    private void drawCompass(Graphics2D g2){
-        Point center = new Point(getWidth()-70, 70);
+    private void paintCompass(Integer rotation, Graphics2D g2){
+        Point center = new Point(getWidth()-50, 50);
+        //Use a transform to rotate the compass the relevant amount.
+        AffineTransform old = (AffineTransform) g2.getTransform().clone();
+        AffineTransform rx = g2.getTransform();
+        rx.setToRotation(Math.toRadians(rotation),center.x, center.y);
+        g2.setTransform(rx);
 
-        g2.setColor(new Color(0, 0, 0,100));
-        g2.fillOval(center.x-50, center.y-50, 100,100);
+        //Draw transparent ovals for the compass to lie on.
+        g2.setColor(new Color(17, 17, 17,100));
+        g2.fillOval(center.x-35, center.y-35, 70,70);
+        g2.setColor(new Color(17, 17, 17));
+        g2.setStroke(new BasicStroke(2));
+        g2.drawOval(center.x-35, center.y-35, 70,70);
 
-        Polygon northArrow = new Polygon(new int[] {center.x-10, center.x, center.x + 10}, new int[] {center.y, center.y-40, center.y}, 3);
-        Polygon southArrow = new Polygon(new int[] {center.x-10, center.x, center.x + 10}, new int[] {center.y, center.y+40, center.y}, 3);
+        //Define polygons for the north and south needles.
+        Polygon northArrow = new Polygon(new int[] {center.x-8, center.x, center.x + 8}, new int[] {center.y, center.y-30, center.y}, 3);
+        Polygon southArrow = new Polygon(new int[] {center.x-8, center.x, center.x + 8}, new int[] {center.y, center.y+30, center.y}, 3);
 
+        //Draw the needles
         g2.setColor(new Color(255,0, 16));
         g2.fillPolygon(northArrow);
-
         g2.setColor(new Color(223, 223, 223));
         g2.fillPolygon(southArrow);
 
+        //Draw an "N" on the north needle.
         g2.setColor(new Color(219, 219, 219));
-        g2.setFont(new Font("Times New Roman", Font.BOLD, 14));
-        g2.drawString("N", center.x-5, center.y-5);
+        g2.setFont(new Font("SansSerif", Font.BOLD, 12));
+        g2.drawString("N", center.x-4, center.y-5);
+
+        g2.setTransform(old);
 
     }
 
@@ -155,14 +216,14 @@ public class TopView2D extends JPanel {
 
         if(id.length() == 2){
             g2.setColor(Settings.RUNWAY_COLOUR);
-            g2.setFont(new Font("TimesRoman", 0, (int)(dim.height*0.8)));
+            g2.setFont(new Font("SansSerif", 0, (int)(dim.height*0.8)));
             g2.fillRect(pos.x, pos.y, g2.getFontMetrics().stringWidth(id) + Settings.CENTERLINE_PADDING*2, dim.height);
 
             g2.setColor(Settings.RUNWAY_NAME_COLOUR);
             g2.drawString(id, pos.x+Settings.CENTERLINE_PADDING, pos.y + (int)(dim.height*0.8));
         } else if (id.length() > 2) {
             g2.setColor(Settings.RUNWAY_COLOUR);
-            g2.setFont(new Font("TimesRoman", 0, (int)(dim.height*0.4)));
+            g2.setFont(new Font("SansSerif", 0, (int)(dim.height*0.4)));
             g2.fillRect(pos.x, pos.y, g2.getFontMetrics().stringWidth(id.substring(0,2)) + Settings.CENTERLINE_PADDING*2, dim.height);
 
             Integer upperStringLength = g2.getFontMetrics().stringWidth(id.substring(0,2));
