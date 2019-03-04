@@ -6,10 +6,7 @@ import uk.ac.soton.common.*;
 import uk.ac.soton.view.AppView;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AppController implements ViewController {
@@ -27,7 +24,7 @@ public class AppController implements ViewController {
         this.airfield = new Airfield();
 
         // Test runways
-        
+
         Runway r1 = new Runway("09L/27R",-1000,-200,1800,80,400,60);
         LogicalRunway lr11 = new LogicalRunway("09L",r1.getLength(),100,
                 new Dimension(350,220), new Dimension(60,r1.getWidth()));
@@ -73,8 +70,7 @@ public class AppController implements ViewController {
 
     @Override
     public Set<String> getRunways() {
-
-        return new HashSet<String>(airfield.getAllLogicalRunways().stream().map(r
+        return new TreeSet<String>(airfield.getAllLogicalRunways().stream().map(r
                 -> r.getName()).collect(Collectors.toList()));
     }
 
@@ -89,11 +85,8 @@ public class AppController implements ViewController {
         if(angle > 180 && angle != 0 && angle != 270){
 
             double trigoAngle = Math.toRadians(360.0 - angle);
-            System.out.println(trigoAngle);
             int xOffset = (int) (Math.abs(Math.sin(trigoAngle)*r.getLength()));
-            System.out.println(xOffset);
             int yOffset = (int) (Math.sqrt(r.getLength().doubleValue()*r.getLength().doubleValue() - xOffset*xOffset));
-            System.out.println(yOffset);
 
             if(angle < 270){
                 pos = new Point(r.getxPos() + xOffset, r.getyPos() - yOffset);
@@ -123,9 +116,7 @@ public class AppController implements ViewController {
     public Integer getBearing(String runwayId) {
 
         LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
-        Integer angle = Integer.parseInt(lr.getName().substring(0,2))*10;
-
-        return angle;
+        return Integer.parseInt(lr.getName().substring(0,2))*10;
     }
 
     @Override
