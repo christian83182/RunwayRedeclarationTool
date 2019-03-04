@@ -6,7 +6,7 @@ public class Obstacle extends PositionalObject {
     private Double height;
     private Double length;
     private Double width;
-    private Integer thresholdDistance; // TODO needs 2 threshold distances - one for each logical runway
+    private Integer startDistance;
     private Integer centrelineDistance;
     private Integer runwayDistance;
 
@@ -15,20 +15,27 @@ public class Obstacle extends PositionalObject {
      * @param id Identifier of the obstacle.
      * @param xPos X position of the top left corner of the obstacle.
      * @param yPos Y position of the top left corner of the obstacle.
-     * @param thresholdDistance Will be changed...
+     * @param startDistance distance from start of the physical runway
      * @param centrelineDistance Distance from the centreline of the runway.
-     * @param runwayDistance Distance from the end of the runway (0 if on the runway / next to the runway)
      * @param dimensions Predefined dimensions (length, width, height) of the obstacle.
      */
-    public Obstacle(String id, Integer xPos, Integer yPos, Integer thresholdDistance, Integer centrelineDistance,
-                    Integer runwayDistance, Airfield.Dimensions dimensions){
+    public Obstacle(String id, Integer xPos, Integer yPos, Integer startDistance, Integer centrelineDistance,
+                    Airfield.Dimensions dimensions){
 
         super(xPos, yPos, id);
 
-        this.thresholdDistance = thresholdDistance;
         this.centrelineDistance = centrelineDistance;
-        this.runwayDistance = runwayDistance;
+        this.startDistance = startDistance;
+        this.length = dimensions.getLength();
+        this.width = dimensions.getWidth();
+        this.height = dimensions.getHeight();
+    }
 
+
+    public Obstacle(Integer startDistance, Integer centrelineDistance, Airfield.Dimensions dimensions){
+        super(0,0, "defaultId");
+        this.startDistance = startDistance;
+        this.centrelineDistance = centrelineDistance;
         this.length = dimensions.getLength();
         this.width = dimensions.getWidth();
         this.height = dimensions.getHeight();
@@ -37,9 +44,7 @@ public class Obstacle extends PositionalObject {
     public Obstacle(){
         super(0,0,"DefaultID");
 
-        this.thresholdDistance = 0;
         this.centrelineDistance = 0;
-        this.runwayDistance = 0;
 
         this.height = 0.0;
         this.width = 0.0;
@@ -70,14 +75,6 @@ public class Obstacle extends PositionalObject {
         this.width = width;
     }
 
-    public Integer getThresholdDistance() {
-        return thresholdDistance;
-    }
-
-    public void setThresholdDistance(Integer thresholdDistance) {
-        this.thresholdDistance = thresholdDistance;
-    }
-
     public Integer getCentrelineDistance() {
         return centrelineDistance;
     }
@@ -86,13 +83,9 @@ public class Obstacle extends PositionalObject {
         this.centrelineDistance = centrelineDistance;
     }
 
-    public Integer getRunwayDistance() {
-        return runwayDistance;
-    }
+    public void setRunwayStartDistance(Integer startDistance) { this.startDistance = startDistance; }
 
-    public void setRunwayDistance(Integer runwayDistance) {
-        this.runwayDistance = runwayDistance;
-    }
+    public Integer getStartDistance() {return  startDistance; }
 
     // Turns obstacle sideways (length of the object perpendicular to the length of the runway)
     public void sideways(){

@@ -55,7 +55,7 @@ public class LogicalRunway{
     private Dimension stopway = new Dimension(0,0);
     private Dimension clearway = new Dimension(0,0);
 
-    private Obstacle obstacle = null; // no obstacle present initially
+    private Number objectThresholdDistance;
 
     /**
      * Constructor for the logical runway associated with a physical one.
@@ -138,18 +138,9 @@ public class LogicalRunway{
 
     public void setThreshold(Number displacedThreshold) { this.threshold = displacedThreshold; }
 
-    public Obstacle getObstacle() {
-        return obstacle;
-    }
+    public void setObjectThresholdDistance(Number objectThresholdDistance) { this.objectThresholdDistance = objectThresholdDistance; }
 
-    public void setObstacle(Obstacle obstacle) {
-        this.obstacle = obstacle;
-    }
-
-    public void clearObstacle(){
-        this.obstacle = null;
-        this.revertParameters();
-    }
+    public Number getObjectThresholdDistance() { return objectThresholdDistance; }
 
 }
 
