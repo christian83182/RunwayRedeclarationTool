@@ -22,8 +22,9 @@ public class AppController implements ViewController {
         this.appView = appView;
         this.appConfigurer = new Configurer();
         this.airfield = new Airfield();
+    }
 
-        // Test runways
+    public void testRunways(){
 
         Runway r1 = new Runway("09L/27R",-1000,-200,1800,80,400,60);
         LogicalRunway lr11 = new LogicalRunway("09L",r1.getLength(),100,
@@ -65,7 +66,6 @@ public class AppController implements ViewController {
         airfield.addRunway(r3);
         airfield.addRunway(r4);
         airfield.addRunway(r5);
-
     }
 
     @Override

@@ -10,6 +10,9 @@ public class Main {
         AppView appView = new AppView("Runway Re-declaration Tool");
         AppController appController = new AppController(appView);
 
+        // Runway test, remove later.
+        appController.testRunways();
+
         DebugModel debugModel = new DebugModel();
         debugModel.populateModel();
 
