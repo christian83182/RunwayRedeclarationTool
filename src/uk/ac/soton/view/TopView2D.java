@@ -595,6 +595,8 @@ public class TopView2D extends JPanel {
         }
 
         public void drawInfoArrow(String runwayId, Graphics2D g2){
+            if(length <1) return;
+
             AffineTransform old = g2.getTransform();
             AffineTransform tx = (AffineTransform) old.clone();
             tx.concatenate(genInfoArrowTransform(runwayId));
