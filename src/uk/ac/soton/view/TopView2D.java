@@ -8,8 +8,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.NoninvertibleTransformException;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 //Represents a JPanel designed to view a top-down view of the runways.
@@ -25,8 +23,6 @@ public class TopView2D extends JPanel {
     private Point globalPan;
     //Variable used to keep track of the current level of zoom,
     private Double globalZoom;
-    //Variable to keep track of the current rotation;
-    private Double globalRotation;
 
     TopView2D(AppView appView, ViewController controller, MenuPanel menuPanel){
         this.appView = appView;
@@ -34,7 +30,6 @@ public class TopView2D extends JPanel {
         this.menuPanel = menuPanel;
         this.globalPan = Settings.TOP_DOWN_DEFAULT_PAN;
         this.globalZoom = Settings.TOP_DOWN_DEFAULT_ZOOM;
-        this.globalRotation = Settings.DEFAULT_ROTATION;
 
         this.setPreferredSize(Settings.TOP_DOWN_DEFAULT_SIZE);
         PanAndZoomListener panListener = new PanAndZoomListener();
@@ -67,7 +62,7 @@ public class TopView2D extends JPanel {
         g2.setTransform(new AffineTransform());
         //Paint the compass and legend if the option is selected.
         if(menuPanel.isShowOverlay()) {
-            paintCompass(0, g2);
+            paintCompass(getRotationOfSelectedRunway(), g2);
             paintLegend(g2);
         }
         //Use the g2d object to paint the buffered image.
@@ -126,7 +121,7 @@ public class TopView2D extends JPanel {
         //Use a transform to rotate the compass the relevant amount.
         AffineTransform old = (AffineTransform) g2.getTransform().clone();
         AffineTransform rx = g2.getTransform();
-        rx.setToRotation(Math.toRadians(rotation),center.x, center.y);
+        rx.setToRotation(Math.toRadians(-rotation+90),center.x, center.y);
         g2.setTransform(rx);
 
         //Draw transparent ovals for the compass to lie on.
@@ -166,10 +161,12 @@ public class TopView2D extends JPanel {
         //Scale the view to account for the user's zoom level. Translate such that it zoom to the center of the screen.
         globalTransform.translate(getWidth()/2, getHeight()/2);
         globalTransform.scale(globalZoom, globalZoom);
-        globalTransform.translate(-getWidth(), -getHeight()/2);
+        globalTransform.translate(-getWidth()/2, -getHeight()/2);
+        globalTransform.rotate(Math.toRadians(-getRotationOfSelectedRunway()+90));
 
+        //Set the transform to the one used by the graphics object.
         g2.setTransform(globalTransform);
-        //Set the create transformation to the one used by the image.
+
     }
 
     /* Generates an Affine transformation which rotates the runway to match its bearing and moves the centre of translation to
@@ -521,6 +518,15 @@ public class TopView2D extends JPanel {
         g2.drawLine(0,-10000,0,10000);
     }
 
+    private Integer getRotationOfSelectedRunway(){
+        String selectedRunway = appView.getSelectedRunway();
+        if(selectedRunway == ""){
+            return Settings.DEFAULT_ROTATION;
+        } else {
+            return controller.getBearing(selectedRunway);
+        }
+    }
+
 
 
     //Inner class devoted to giving the view zoom and pan functionality.
@@ -627,8 +633,6 @@ public class TopView2D extends JPanel {
             } else {
                 g2.drawString(label,(lineStart.x + lineEnd.x - stringLength)/2, yOffset-Settings.TOP_DOWN_INFO_TEXT_PADDING);
             }
-
-
 
             g2.setTransform(old);
         }
