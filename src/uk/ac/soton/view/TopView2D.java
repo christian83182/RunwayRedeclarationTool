@@ -8,6 +8,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 //Represents a JPanel designed to view a top-down view of the runways.
@@ -23,6 +25,8 @@ public class TopView2D extends JPanel {
     private Point globalPan;
     //Variable used to keep track of the current level of zoom,
     private Double globalZoom;
+    //Variable to keep track of the current rotation;
+    private Double globalRotation;
 
     TopView2D(AppView appView, ViewController controller, MenuPanel menuPanel){
         this.appView = appView;
@@ -30,6 +34,7 @@ public class TopView2D extends JPanel {
         this.menuPanel = menuPanel;
         this.globalPan = Settings.TOP_DOWN_DEFAULT_PAN;
         this.globalZoom = Settings.TOP_DOWN_DEFAULT_ZOOM;
+        this.globalRotation = Settings.DEFAULT_ROTATION;
 
         this.setPreferredSize(Settings.TOP_DOWN_DEFAULT_SIZE);
         PanAndZoomListener panListener = new PanAndZoomListener();
@@ -57,6 +62,7 @@ public class TopView2D extends JPanel {
         configureGlobalTransform(g2);
         //Draw main view components.
         paintView(g2);
+
         //Reset the transformation used by the graphics object so the overlay doesn't pan or zoom.
         g2.setTransform(new AffineTransform());
         //Paint the compass and legend if the option is selected.
@@ -154,12 +160,16 @@ public class TopView2D extends JPanel {
         //Create a global affine transformation which pans and zooms the view accordingly.
         AffineTransform globalTransform = new AffineTransform();
 
-        //Translate and scale the view to match the pan and zoom settings.
-        globalTransform.translate(globalPan.x, globalPan.y);
-        globalTransform.scale(globalZoom,globalZoom);
+        //Translate the view to account for the user's pan.
+        globalTransform.translate(globalPan.x*globalZoom, globalPan.y*globalZoom);
 
-        //Set the create transformation to the one used by the image.
+        //Scale the view to account for the user's zoom level. Translate such that it zoom to the center of the screen.
+        globalTransform.translate(getWidth()/2, getHeight()/2);
+        globalTransform.scale(globalZoom, globalZoom);
+        globalTransform.translate(-getWidth(), -getHeight()/2);
+
         g2.setTransform(globalTransform);
+        //Set the create transformation to the one used by the image.
     }
 
     /* Generates an Affine transformation which rotates the runway to match its bearing and moves the centre of translation to
@@ -532,8 +542,8 @@ public class TopView2D extends JPanel {
 
         @Override
         public void mouseDragged(MouseEvent e) {
-            globalPan.x = originalGlobalPan.x + (e.getX() - startPoint.x);
-            globalPan.y = originalGlobalPan.y + (e.getY() - startPoint.y);
+            globalPan.x = (int)(originalGlobalPan.x + (e.getX() - startPoint.x)/globalZoom);
+            globalPan.y = (int)(originalGlobalPan.y + (e.getY() - startPoint.y)/globalZoom);
             TopView2D.this.repaint();
         }
 
