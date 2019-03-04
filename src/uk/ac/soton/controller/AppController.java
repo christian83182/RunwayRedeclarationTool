@@ -26,26 +26,49 @@ public class AppController implements ViewController {
         this.appConfigurer = new Configurer();
         this.airfield = new Airfield();
 
-        // Uncomment to view test
-        /*
-        airfield.addRunway(new Runway("09L/27R",-800,-300,1800,80,400));
-        Runway r1 = airfield.getRunway("09L");
-        LogicalRunway lr1 = new LogicalRunway("09L",r1.getLength(),100,
-                new Dimension(350,220),new Dimension(60,r1.getWidth()));
-        r1.getLogicalRunways()[0] = lr1;
+        // Test runways
+        
+        Runway r1 = new Runway("09L/27R",-1000,-200,1800,80,400,60);
+        LogicalRunway lr11 = new LogicalRunway("09L",r1.getLength(),100,
+                new Dimension(350,220), new Dimension(60,r1.getWidth()));
+        LogicalRunway lr12 = new LogicalRunway("27R",r1.getLength(),100,
+                new Dimension(350,220), new Dimension(60,r1.getWidth()));
+        r1.setLogicalRunways(lr11,lr12);
 
-        airfield.addRunway(new Runway("09R/27L",-400,350,1800,80,400));
-        Runway r2 = airfield.getRunway("09R");
-        LogicalRunway lr2 = new LogicalRunway("09R",r2.getLength(),250,
-                new Dimension(350,220),new Dimension(60,r2.getWidth()));
-        r2.getLogicalRunways()[0] = lr2;
+        Runway r2 = new Runway("09R/27L",-600,450,1800,80,400,60);
+        LogicalRunway lr21 = new LogicalRunway("09R",r2.getLength(),250,
+                new Dimension(0,0), new Dimension(60,r2.getWidth()));
+        LogicalRunway lr22 = new LogicalRunway("27L",r2.getLength(),250,
+                new Dimension(0,0), new Dimension(60,r2.getWidth()));
+        r2.setLogicalRunways(lr21,lr22);
 
-        airfield.addRunway(new Runway("13/23",-600,-750,2400,80,400));
-        Runway r3 = airfield.getRunway("13");
-        LogicalRunway lr3 = new LogicalRunway("13",r3.getLength(),0,
-                new Dimension(350,220),new Dimension(60,r3.getWidth()));
-        r3.getLogicalRunways()[0] = lr3;
-        */
+        Runway r3 = new Runway("13/31",-800,-650,2400,80,400,60);
+        LogicalRunway lr31 = new LogicalRunway("13",r3.getLength(),0,
+                new Dimension(350,220), new Dimension(60,r3.getWidth()));
+        LogicalRunway lr32 = new LogicalRunway("31",r3.getLength(),50,
+                new Dimension(350,220), new Dimension(60,r3.getWidth()));
+        r3.setLogicalRunways(lr31, lr32);
+
+        Runway r4 = new Runway("00/18",-1200,-900,1800,80,400,60);
+        LogicalRunway lr41 = new LogicalRunway("00",r4.getLength(),0,
+                new Dimension(350,220), new Dimension(60,r4.getWidth()));
+        LogicalRunway lr42 = new LogicalRunway("18",r4.getLength(),50,
+                new Dimension(350,220), new Dimension(60,r4.getWidth()));
+        r4.setLogicalRunways(lr41, lr42);
+
+        Runway r5 = new Runway("04/22",-550,-730,1400,80,400,60);
+        LogicalRunway lr51 = new LogicalRunway("04",r5.getLength(),0,
+                new Dimension(350,220), new Dimension(60,r5.getWidth()));
+        LogicalRunway lr52 = new LogicalRunway("22",r5.getLength(),50,
+                new Dimension(350,220), new Dimension(60,r5.getWidth()));
+        r5.setLogicalRunways(lr51, lr52);
+
+        airfield.addRunway(r1);
+        airfield.addRunway(r2);
+        airfield.addRunway(r3);
+        airfield.addRunway(r4);
+        airfield.addRunway(r5);
+
     }
 
     @Override
@@ -59,7 +82,34 @@ public class AppController implements ViewController {
     public Point getRunwayPos(String runwayId) {
 
         Runway r = airfield.getRunway(runwayId);
-        return new Point(r.getxPos(), r.getyPos());
+        Point pos = new Point(r.getxPos(), r.getyPos());
+
+        double angle = Integer.parseInt(runwayId.substring(0,2))*10;
+
+        if(angle > 180 && angle != 0 && angle != 270){
+
+            double trigoAngle = Math.toRadians(360.0 - angle);
+            System.out.println(trigoAngle);
+            int xOffset = (int) (Math.abs(Math.sin(trigoAngle)*r.getLength()));
+            System.out.println(xOffset);
+            int yOffset = (int) (Math.sqrt(r.getLength().doubleValue()*r.getLength().doubleValue() - xOffset*xOffset));
+            System.out.println(yOffset);
+
+            if(angle < 270){
+                pos = new Point(r.getxPos() + xOffset, r.getyPos() - yOffset);
+            }
+            else{
+                pos = new Point(r.getxPos() + xOffset, r.getyPos() + yOffset);
+            }
+        }
+        if(angle == 0){
+            pos = new Point(r.getxPos(), r.getyPos() + r.getLength());
+        }
+        if(angle == 270){
+            pos = new Point(r.getxPos() + r.getLength(), r.getyPos());
+        }
+
+        return pos;
     }
 
     @Override
@@ -72,8 +122,10 @@ public class AppController implements ViewController {
     @Override
     public Integer getBearing(String runwayId) {
 
-        Runway r = airfield.getRunway(runwayId);
-        return Integer.parseInt(r.getId().substring(0,2))*10;
+        LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
+        Integer angle = Integer.parseInt(lr.getName().substring(0,2))*10;
+
+        return angle;
     }
 
     @Override
@@ -159,8 +211,8 @@ public class AppController implements ViewController {
 
     public Runway getRunway(String name){ return airfield.getRunway(name); }
 
-    public void addRunway(String id, Integer xPos, Integer yPos, Integer length, Integer width, Integer stripWidth) {
-        airfield.addRunway(new Runway(id, xPos, yPos, length, width, stripWidth));
+    public void addRunway(String id, Integer xPos, Integer yPos, Integer length, Integer width, Integer stripWidth, Integer stripEnd) {
+        airfield.addRunway(new Runway(id, xPos, yPos, length, width, stripWidth, stripEnd));
     }
 
     public void removeRunway(Runway runway){ airfield.removeRunway(runway); }

@@ -7,12 +7,14 @@ public class Runway extends PositionalObject{
     private Integer width = 0;
     private String status = "";
     private Boolean active = true;
-    // runway end safety area
+
+    // Runway end safety area
     private Integer resa = 240;
-    // approach landing surface
+    // Approach landing surface
     private Integer als = 0;
+
     private Integer blastDistance = 300;
-    private final Integer stripEnd = 60;
+    private  Integer stripEnd = 60;
     private Integer stripWidth = 0;
 
     // The 2 logical runways associated with the physical one.
@@ -27,11 +29,12 @@ public class Runway extends PositionalObject{
      * @param width Width of the runway in metres.
      * @param stripWidth Runway strip width in metres.
      */
-    public Runway(String id, Integer xPos, Integer yPos, Integer length, Integer width, Integer stripWidth){
+    public Runway(String id, Integer xPos, Integer yPos, Integer length, Integer width, Integer stripWidth, Integer stripEnd){
         super(xPos, yPos, id);
         this.length = length;
         this.width = width;
         this.stripWidth = stripWidth;
+        this.stripEnd = stripEnd;
         setAls(50);
     }
 
@@ -93,10 +96,19 @@ public class Runway extends PositionalObject{
         return stripWidth;
     }
 
+    /**
+     * Gets both logical runways of a physical runway.
+     * @return An array of length 2 that contains the 2 logical runways.
+     */
     public LogicalRunway[] getLogicalRunways() {
         return runways;
     }
 
+    /**
+     * Gets the specified logical runway from the physical runway object.
+     * @param name Identifier of the logical runway, for example "09".
+     * @return The logical runway object.
+     */
     public LogicalRunway getLogicalRunway(String name){
 
         if(runways[0].getName().equals(name)){
@@ -110,6 +122,11 @@ public class Runway extends PositionalObject{
         }
     }
 
+    /**
+     * Assigns the two logical runways of a physical one.
+     * @param direction1 The logical runway with a smaller angle, for example "09".
+     * @param direction2 The logical runway with a bigger angle, for example "27".
+     */
     public void setLogicalRunways(LogicalRunway direction1, LogicalRunway direction2) {
         runways[0] = direction1;
         runways[1] = direction2;
@@ -120,10 +137,14 @@ public class Runway extends PositionalObject{
         runways[1].clearObstacle();
     }
 
-    //taking off and landing towards the obstacle must occur in the direction of the runway where the distance of the object
-    //from threshold is greater and the opposite applies for taking off away and landing over
+    /**
+     * Re-declares the runway by performing recalculations of all the affected parameters for both logical
+     * runways either towards or away from the obstacle, which is dependent on the position of the obstacle.
+     */
+    public void redeclareRunway(){
 
-    public void recalculateParameters(){
+        // Taking off and landing towards the obstacle must occur in the direction of the runway where the distance
+        // of the object from threshold is greater and the opposite applies for taking off away and landing over.
         if(runways[0].getObstacle().getThresholdDistance() < runways[1].getObstacle().getThresholdDistance()){
             recalculateTowardsObstacle(runways[1]);
             recalculateAwayFromObstacle(runways[0]);
@@ -133,6 +154,10 @@ public class Runway extends PositionalObject{
         }
     }
 
+    /**
+     * Recalculates all the affected runway parameters for take-off/landing towards the obstacle.
+     * @param runway The logical runway to perform the calculations for.
+     */
     private void recalculateTowardsObstacle(LogicalRunway runway){
         Obstacle obstacle = runway.getObstacle();
 
@@ -150,6 +175,10 @@ public class Runway extends PositionalObject{
         runway.redeclareLda(obstacle.getThresholdDistance() - getResa() - getStripEnd());
     }
 
+    /**
+     * Recalculates all the affected runway parameters for take-off/landing away from the obstacle.
+     * @param runway The logical runway to perform the calculations for.
+     */
     private void recalculateAwayFromObstacle(LogicalRunway runway){
         Obstacle obstacle = runway.getObstacle();
 

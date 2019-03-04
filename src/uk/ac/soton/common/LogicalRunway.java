@@ -42,7 +42,14 @@ public class LogicalRunway{
 
     private String name = "";
 
-    private Parameter tora, toda, asda, lda;
+    // Take-Off Run Available
+    private Parameter tora = null;
+    // Take-Off Distance Available
+    private Parameter toda = null;
+    // Accelerate-Stop Distance Available
+    private Parameter asda = null;
+    // Landing Distance Available
+    private Parameter lda = null;
 
     private Number threshold = 0;
     private Dimension stopway = new Dimension(0,0);
