@@ -108,12 +108,14 @@ public interface ViewController {
      */
     Integer getRunwayLDA(String runwayId);
 
+
     /**
      * Returns the Threshold for a given runway. The threshold should be 0 unless it is displaced.
      * @param runwayId The runway's name.
      * @return the runway's threshold.
      */
     Integer getRunwayThreshold(String runwayId);
+
 
     /**
      * Returns the distance from the start of the the runway to the start of the TORA.
@@ -122,12 +124,14 @@ public interface ViewController {
      */
     Integer getTORAOffset(String runwayId);
 
+
     /**
      * Returns the distance from the start of the the runway to the start of the TODA.
      * @param runwayId the runway's name.
      * @return the TODA offset.
      */
     Integer getTODAOffset(String runwayId);
+
 
     /**
      * Returns the distance from the start of the the runway to the start of the ASDA.
@@ -136,6 +140,7 @@ public interface ViewController {
      */
     Integer getASDAOffset(String runwayId);
 
+
     /**
      * Returns the distance from the start of the the runway to the start of the LDA.
      * @param runwayId the runway's name.
@@ -143,4 +148,34 @@ public interface ViewController {
      */
     Integer getLDAOffset(String runwayId);
 
+
+    /**
+     * Returns a set of strings where each string is the unique ID of a predefined obstacle in the application.
+     * @return The set of Obstacle IDs
+     */
+    Set<String> getPredefinedObstacleIds();
+
+
+    /**
+     * Returns the width of a predefined obstacle given its ID.
+     * @param obstacleId the ID of the obstacle.
+     * @return the width of the obstacle.
+     */
+    Double getPredefinedObstacleWidth(String obstacleId);
+
+
+    /**
+     * Returns the height of a predefined obstacle given its ID.
+     * @param obstacleId the ID of the obstacle.
+     * @return the height of the obstacle.
+     */
+    Double getPredefinedObstacleHeight(String obstacleId);
+
+
+    /**
+     * Returns the width of a predefined obstacle given its ID.
+     * @param obstacleId the ID of the obstacle.
+     * @return the height of the obstacle.
+     */
+    Double getPredefinedObstacleLength(String obstacleId);
 }

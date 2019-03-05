@@ -40,6 +40,7 @@ public class AppView extends JFrame{
         this.add(topView,BorderLayout.CENTER);
 
         this.pack();
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
 
@@ -70,6 +71,7 @@ public class AppView extends JFrame{
         UIManager.put("text",Color.white); //Sets Default text colour to white
         UIManager.put("Menu[Enabled].textForeground",new Color(255, 255, 255));
         UIManager.put("ComboBox.background",new Color(34, 34, 34));
+        UIManager.put("nimbusLightBackground",new Color(66, 66, 66));
 
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {

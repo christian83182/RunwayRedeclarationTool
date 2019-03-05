@@ -4,6 +4,7 @@ import uk.ac.soton.controller.ViewController;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -150,5 +151,25 @@ public class DebugModel implements ViewController {
     @Override
     public Integer getLDAOffset(String runwayId) {
         return getRunwayThreshold(runwayId);
+    }
+
+    @Override
+    public Set<String> getPredefinedObstacleIds() {
+        return new HashSet<>();
+    }
+
+    @Override
+    public Double getPredefinedObstacleWidth(String obstacleId) {
+        return 0.0;
+    }
+
+    @Override
+    public Double getPredefinedObstacleHeight(String obstacleId) {
+        return 0.0;
+    }
+
+    @Override
+    public Double getPredefinedObstacleLength(String obstacleId) {
+        return 0.0;
     }
 }

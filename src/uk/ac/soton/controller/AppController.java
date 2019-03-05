@@ -202,6 +202,26 @@ public class AppController implements ViewController {
         return getRunwayThreshold(runwayId);
     }
 
+    @Override
+    public Set<String> getPredefinedObstacleIds() {
+        return airfield.getPredefinedObstacles().keySet();
+    }
+
+    @Override
+    public Double getPredefinedObstacleWidth(String obstacleId) {
+        return airfield.getPredefinedObstacles().get(obstacleId).getWidth();
+    }
+
+    @Override
+    public Double getPredefinedObstacleHeight(String obstacleId) {
+        return airfield.getPredefinedObstacles().get(obstacleId).getHeight();
+    }
+
+    @Override
+    public Double getPredefinedObstacleLength(String obstacleId) {
+        return airfield.getPredefinedObstacles().get(obstacleId).getLength();
+    }
+
 
     public Runway getRunway(String name){ return airfield.getRunway(name); }
 
