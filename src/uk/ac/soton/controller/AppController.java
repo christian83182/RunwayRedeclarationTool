@@ -204,7 +204,7 @@ public class AppController implements ViewController {
 
     @Override
     public Set<String> getPredefinedObstacleIds() {
-        return airfield.getPredefinedObstacles().keySet();
+        return new TreeSet<String>(airfield.getPredefinedObstacles().keySet());
     }
 
     @Override
