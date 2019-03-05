@@ -114,4 +114,33 @@ public interface ViewController {
      * @return the runway's threshold.
      */
     Integer getRunwayThreshold(String runwayId);
+
+    /**
+     * Returns the distance from the start of the the runway to the start of the TORA.
+     * @param runwayId the runway's name.
+     * @return the TORA offset.
+     */
+    Integer getTORAOffset(String runwayId);
+
+    /**
+     * Returns the distance from the start of the the runway to the start of the TODA.
+     * @param runwayId the runway's name.
+     * @return the TODA offset.
+     */
+    Integer getTODAOffset(String runwayId);
+
+    /**
+     * Returns the distance from the start of the the runway to the start of the ASDA.
+     * @param runwayId the runway's name.
+     * @return the ASDA offset.
+     */
+    Integer getASDAOffset(String runwayId);
+
+    /**
+     * Returns the distance from the start of the the runway to the start of the LDA.
+     * @param runwayId the runway's name.
+     * @return the LDA offset.
+     */
+    Integer getLDAOffset(String runwayId);
+
 }

@@ -170,7 +170,7 @@ public class TopView2D extends JPanel {
     }
 
     /* Generates an Affine transformation which rotates the runway to match its bearing and moves the centre of translation to
-   the center of the left side. */
+       the center of the left side. */
     private AffineTransform createRunwayTransform(Point pos, Dimension dim, String id){
         Double bearing = Math.toRadians(controller.getBearing(id)-90);
         AffineTransform tx = new AffineTransform();
@@ -526,7 +526,6 @@ public class TopView2D extends JPanel {
             return controller.getBearing(selectedRunway);
         }
     }
-
 
 
     //Inner class devoted to giving the view zoom and pan functionality.

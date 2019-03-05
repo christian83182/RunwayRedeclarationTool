@@ -11,7 +11,7 @@ public final class Settings{
     final static Integer CENTERLINE_PADDING = 20;
     final static Double TOP_DOWN_MAX_ZOOM = 5.0;
     final static Double TOP_DOWN_MIN_ZOOM = 0.05;
-    final static Integer TOP_DOWN_INFO_ARROW_PADDING =10;
+    final static Integer TOP_DOWN_INFO_ARROW_PADDING =5;
     final static Integer TOP_DOWN_INFO_ARROW_HEIGHT = 10;
     final static Integer TOP_DOWN_INFO_ARROW_LENGTH = 15;
     final static Integer TOP_DOWN_INFO_TEXT_PADDING = 15;

@@ -182,6 +182,25 @@ public class AppController implements ViewController {
         return lr.getThreshold().intValue();
     }
 
+    @Override
+    public Integer getTORAOffset(String runwayId) {
+        return 0;
+    }
+
+    @Override
+    public Integer getTODAOffset(String runwayId) {
+        return 0;
+    }
+
+    @Override
+    public Integer getASDAOffset(String runwayId) {
+        return 0;
+    }
+
+    @Override
+    public Integer getLDAOffset(String runwayId) {
+        return getRunwayThreshold(runwayId);
+    }
 
 
     public Runway getRunway(String name){ return airfield.getRunway(name); }
