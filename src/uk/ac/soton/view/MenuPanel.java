@@ -18,6 +18,7 @@ public class MenuPanel extends JPanel {
     private JCheckBox showOtherBox;
     private JCheckBox showOverlayBox;
     private JCheckBox showAxisBox;
+    private JCheckBox autoRotateViewBox;
 
     MenuPanel(AppView appView, ViewController controller){
         this.appView = appView;
@@ -113,6 +114,15 @@ public class MenuPanel extends JPanel {
         c.gridx = 0; c.gridy = 8;
         c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
         this.add(showAxisBox, c);
+
+        //Add the "auto rotate runway" option
+        autoRotateViewBox = new JCheckBox("Match Bearing on Selection");
+        autoRotateViewBox.setSelected(true);
+        autoRotateViewBox.addActionListener(e -> appView.repaint());
+        c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 9;
+        c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
+        this.add(autoRotateViewBox, c);
     }
 
     public boolean isIsolateMode(){
@@ -137,5 +147,9 @@ public class MenuPanel extends JPanel {
 
     public boolean isShowAxis(){
         return showAxisBox.isSelected();
+    }
+
+    public boolean isAutoRotateOnSelection(){
+        return autoRotateViewBox.isSelected();
     }
 }

@@ -16,7 +16,7 @@ public class Main {
         DebugModel debugModel = new DebugModel();
         debugModel.populateModel();
 
-        appView.setController(debugModel);
+        appView.setController(appController);
         appView.init();
     }
 }
