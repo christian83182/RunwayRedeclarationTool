@@ -34,7 +34,9 @@ public class TopView2D extends InteractiveView {
         paintBackground(g2,Settings.AIRFIELD_COLOUR);
 
         //Rotate the view to match the rotation of the selected runway.
-        g2.rotate(Math.toRadians(-getRotationOfSelectedRunway()+90));
+        if(menuPanel.isAutoRotateOnSelection()){
+            g2.rotate(Math.toRadians(-getRotationOfSelectedRunway()+90));
+        }
 
         //Only draw all runways if isolate mode isn't on, or if it is on but no runway is selected
         if(!isIsolated  || (isIsolated && !isRunwaySelected)){
@@ -124,11 +126,14 @@ public class TopView2D extends InteractiveView {
     //Draws a compass in the top left corner of the screen
     private void paintCompass(Integer rotation, Graphics2D g2){
         Point center = new Point(getWidth()-50, 50);
-        //Use a transform to rotate the compass the relevant amount.
         AffineTransform old = (AffineTransform) g2.getTransform().clone();
-        AffineTransform rx = g2.getTransform();
-        rx.setToRotation(Math.toRadians(-rotation+90),center.x, center.y);
-        g2.setTransform(rx);
+
+        //Use a transform to rotate the compass the relevant amount.
+        if(menuPanel.isAutoRotateOnSelection()){
+            AffineTransform rx = g2.getTransform();
+            rx.setToRotation(Math.toRadians(-rotation+90),center.x, center.y);
+            g2.setTransform(rx);
+        }
 
         //Draw transparent ovals for the compass to lie on.
         g2.setColor(new Color(17, 17, 17,100));
