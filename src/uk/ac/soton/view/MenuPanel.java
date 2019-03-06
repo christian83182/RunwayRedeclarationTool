@@ -1,13 +1,9 @@
 package uk.ac.soton.view;
 
-import uk.ac.soton.common.Airfield;
 import uk.ac.soton.controller.ViewController;
 
 import javax.swing.*;
-import javax.swing.text.View;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 

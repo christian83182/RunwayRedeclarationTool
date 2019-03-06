@@ -172,4 +172,14 @@ public class DebugModel implements ViewController {
     public Double getPredefinedObstacleLength(String obstacleId) {
         return 0.0;
     }
+
+    @Override
+    public void exportAirfieldConfiguration(String absolutePath) {
+
+    }
+
+    @Override
+    public void importAirfieldConfiguration(String path) {
+
+    }
 }

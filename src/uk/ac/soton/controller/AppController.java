@@ -222,6 +222,17 @@ public class AppController implements ViewController {
         return airfield.getPredefinedObstacles().get(obstacleId).getLength();
     }
 
+    @Override
+    public void exportAirfieldConfiguration(String absolutePath) {
+        XMLExporter exporter = new XMLExporter();
+        exporter.saveAirfieldInfo(airfield, absolutePath);
+    }
+
+    @Override
+    public void importAirfieldConfiguration(String path) {
+
+    }
+
 
     public Runway getRunway(String name){ return airfield.getRunway(name); }
 

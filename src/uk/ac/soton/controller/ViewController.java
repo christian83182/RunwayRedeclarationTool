@@ -178,4 +178,17 @@ public interface ViewController {
      * @return the height of the obstacle.
      */
     Double getPredefinedObstacleLength(String obstacleId);
+
+    /**
+     * Exports the current model as an XML file to the location specified.
+     * @param absolutePath The full path of the file being exported, including the name of the file.
+     */
+    void exportAirfieldConfiguration(String absolutePath);
+
+    /**
+     * Imports an XML file describing a configuration of the airfield and sets it as the current model.
+     * @param path The location of the XML file specified by the user.
+     */
+    void importAirfieldConfiguration(String path);
 }
+

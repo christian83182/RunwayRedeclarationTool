@@ -25,12 +25,7 @@ public class AppView extends JFrame{
         this.setLayout(new BorderLayout());
         setLookAndFeel();
 
-        JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu = new JMenu("File"); menuBar.add(fileMenu);
-        JMenu settingsMenu = new JMenu("Settings"); menuBar.add(settingsMenu);
-        JMenuItem importConfiguration = new JMenuItem("Import Configuration"); fileMenu.add(importConfiguration);
-        JMenuItem exportConfiguration = new JMenuItem("Export Configuration"); fileMenu.add(exportConfiguration);
-        JMenuItem openSettings = new JMenuItem("Settings"); settingsMenu.add(openSettings);
+        AppMenuBar menuBar = new AppMenuBar(controller);
         this.setJMenuBar(menuBar);
 
         MenuPanel menuPanel = new MenuPanel(this, controller);
