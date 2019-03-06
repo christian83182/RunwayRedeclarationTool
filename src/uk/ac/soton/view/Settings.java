@@ -5,12 +5,13 @@ import java.awt.*;
 public final class Settings{
 
     final static Dimension TOP_DOWN_DEFAULT_SIZE = new Dimension(1600,900);
-    final static Point TOP_DOWN_DEFAULT_PAN = new Point(TOP_DOWN_DEFAULT_SIZE.width/2, TOP_DOWN_DEFAULT_SIZE.height/2);
-    final static Double TOP_DOWN_DEFAULT_ZOOM = 0.4;
+    final static Point TOP_DOWN_DEFAULT_PAN = new Point(400, 400);
+    final static Double TOP_DOWN_DEFAULT_ZOOM = 1.0;
+    final static Integer DEFAULT_ROTATION = 90;
     final static Integer CENTERLINE_PADDING = 20;
     final static Double TOP_DOWN_MAX_ZOOM = 5.0;
     final static Double TOP_DOWN_MIN_ZOOM = 0.05;
-    final static Integer TOP_DOWN_INFO_ARROW_PADDING =10;
+    final static Integer TOP_DOWN_INFO_ARROW_PADDING =5;
     final static Integer TOP_DOWN_INFO_ARROW_HEIGHT = 10;
     final static Integer TOP_DOWN_INFO_ARROW_LENGTH = 15;
     final static Integer TOP_DOWN_INFO_TEXT_PADDING = 15;

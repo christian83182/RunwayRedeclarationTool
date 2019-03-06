@@ -4,6 +4,7 @@ import uk.ac.soton.controller.ViewController;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,9 +38,9 @@ public class DebugModel implements ViewController {
     //Debug function used to generate some test data.
     public void populateModel(){
         String runway1 = "07";
-        addToModel(runway1, -400, 100, 1200, 80,150);
+        addToModel(runway1, -400, 100, 1200, 80,0);
         setDimData(runway1, 60, 80, 400, 190, 60, 200);
-        setVariableLengths(runway1, 1200, 1200+400, 1200 + 60, 1200 - 150);
+        setVariableLengths(runway1, 1200, 1200+400, 1200 + 60, 1200 - 0);
 
         String runway2 = "11R";
         addToModel(runway2, -800, -500, 2000, 100,250);
@@ -130,5 +131,55 @@ public class DebugModel implements ViewController {
     //Returns the threshold for a given runway.
     public Integer getRunwayThreshold(String runwayId){
         return runwayThreshold.get(runwayId);
+    }
+
+    @Override
+    public Integer getTORAOffset(String runwayId) {
+        return 0;
+    }
+
+    @Override
+    public Integer getTODAOffset(String runwayId) {
+        return 0;
+    }
+
+    @Override
+    public Integer getASDAOffset(String runwayId) {
+        return 0;
+    }
+
+    @Override
+    public Integer getLDAOffset(String runwayId) {
+        return getRunwayThreshold(runwayId);
+    }
+
+    @Override
+    public Set<String> getPredefinedObstacleIds() {
+        return new HashSet<>();
+    }
+
+    @Override
+    public Double getPredefinedObstacleWidth(String obstacleId) {
+        return 0.0;
+    }
+
+    @Override
+    public Double getPredefinedObstacleHeight(String obstacleId) {
+        return 0.0;
+    }
+
+    @Override
+    public Double getPredefinedObstacleLength(String obstacleId) {
+        return 0.0;
+    }
+
+    @Override
+    public void exportAirfieldConfiguration(String absolutePath) {
+
+    }
+
+    @Override
+    public void importAirfieldConfiguration(String path) {
+
     }
 }
