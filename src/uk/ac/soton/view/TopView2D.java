@@ -373,22 +373,22 @@ public class TopView2D extends InteractiveView {
 
         //Draw the TORA length.
         Integer toraLength = controller.getRunwayTORA(id);
-        InfoArrow toraLengthInfo = new InfoArrow(0,stripHeight+150,toraLength,"TORA: " + toraLength + "m");
+        InfoArrow toraLengthInfo = new InfoArrow(0,stripHeight+150,toraLength,"TORA: " + toraLength + "m", true);
         toraLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the TODA length.
         Integer todaLength = controller.getRunwayTODA(id);
-        InfoArrow todaLengthInfo = new InfoArrow(0,stripHeight+350,todaLength,"TODA: " + todaLength + "m");
+        InfoArrow todaLengthInfo = new InfoArrow(0,stripHeight+350,todaLength,"TODA: " + todaLength + "m", true);
         todaLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the ASDA length.
         Integer asdaLength = controller.getRunwayASDA(id);
-        InfoArrow asdaLengthInfo = new InfoArrow(0,stripHeight+250,asdaLength,"ASDA: " + asdaLength + "m");
+        InfoArrow asdaLengthInfo = new InfoArrow(0,stripHeight+250,asdaLength,"ASDA: " + asdaLength + "m", true);
         asdaLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the LDA length.
         Integer ldaLength = controller.getRunwayLDA(id);
-        InfoArrow ldaLengthInfo = new InfoArrow(controller.getRunwayThreshold(id), stripHeight+50, ldaLength,"LDA: " + ldaLength + "m");
+        InfoArrow ldaLengthInfo = new InfoArrow(controller.getRunwayThreshold(id), stripHeight+50, ldaLength,"LDA: " + ldaLength + "m", true);
         ldaLengthInfo.drawInfoArrow(id, g2);
     }
 
@@ -403,20 +403,52 @@ public class TopView2D extends InteractiveView {
         Dimension runwayDim = controller.getRunwayDim(id);
         Dimension stopwayDim = controller.getStopwayDim(id);
         Integer stripHeight = controller.getStripWidthFromCenterline(id);
+        Integer stripEndSize = controller.getStripEndSize(id);
 
         //Draw the clearway length.
-        InfoArrow clearwayLengthInfo = new InfoArrow(runwayDim.width, -stripHeight-50, clearwayDim.width, clearwayDim.width +"m");
+        InfoArrow clearwayLengthInfo = new InfoArrow(runwayDim.width, -stripHeight-40,
+                clearwayDim.width, clearwayDim.width +"m", true);
         clearwayLengthInfo.drawInfoArrow(id, g2);
 
+        //Draw the clearway width
+        InfoArrow clearwayWidthInfo = new InfoArrow(-(clearwayDim.height - runwayDim.height)/2, 50,
+                clearwayDim.height, clearwayDim.height + "m", false);
+        clearwayWidthInfo.globalXOffset = runwayDim.width + clearwayDim.width;
+        clearwayWidthInfo.drawInfoArrow(id, g2);
+
         //Draw the stopway length.
-        InfoArrow stopwayLengthInfo = new InfoArrow(runwayDim.width, -stripHeight-130, stopwayDim.width, stopwayDim.width +"m");
+        InfoArrow stopwayLengthInfo = new InfoArrow(runwayDim.width, -stripHeight-160,
+                stopwayDim.width, stopwayDim.width +"m", true);
         stopwayLengthInfo.drawInfoArrow(id, g2);
+
+        //Draw the stopway width
+        InfoArrow stopwayWidthInfo = new InfoArrow(-(stopwayDim.height - runwayDim.height)/2, 50,
+                stopwayDim.height, stopwayDim.height + "m", false);
+        stopwayWidthInfo.globalXOffset = runwayDim.width + stopwayDim.width;
+        stopwayWidthInfo.drawInfoArrow(id, g2);
 
         //Draw the displaced threshold length if it exists.
         if(controller.getRunwayThreshold(id) > 0){
-            InfoArrow thresholdLength = new InfoArrow(0, -stripHeight-50, controller.getRunwayThreshold(id), controller.getRunwayThreshold(id) + "m");
+            InfoArrow thresholdLength = new InfoArrow(0, -stripHeight-40,
+                    controller.getRunwayThreshold(id), controller.getRunwayThreshold(id) + "m", true);
             thresholdLength.drawInfoArrow(id, g2);
         }
+
+        //Draw runway width
+        InfoArrow runwayWidthInfo = new InfoArrow(0, -stripEndSize-30,
+                runwayDim.height, runwayDim.height + "m", false);
+        runwayWidthInfo.drawInfoArrow(id, g2);
+
+        //Draw runwayStrip width.
+        InfoArrow runwayStripWidthInfo = new InfoArrow(-(2*stripHeight - runwayDim.height)/2, -stripEndSize-100,
+                stripHeight*2, stripHeight*2 + "m", false);
+        runwayStripWidthInfo.globalXOffset = -stripEndSize;
+        runwayStripWidthInfo.drawInfoArrow(id, g2);
+
+        //Draw runwayStrip length.
+        InfoArrow runwayStripLengthInfo = new InfoArrow(-stripEndSize, -stripHeight - 100,
+                stripEndSize*2 + runwayDim.width, (stripEndSize*2 + runwayDim.width) + "m", true);
+        runwayStripLengthInfo.drawInfoArrow(id, g2);
     }
 
     //Paints an outline of the clearway for a specified runway.
@@ -496,48 +528,52 @@ public class TopView2D extends InteractiveView {
         }
     }
 
+
     //Inner class representing an instance of an arrow displaying some information.
     private class InfoArrow {
-        private Integer xOffset;
-        private Integer yOffset;
+        private Integer globalXOffset;
+        private Integer globalYOffset;
+        private Integer offset;
+        private Integer helperLength;
         private Integer length;
         private String label;
+        private boolean isHorizontal;
 
-        InfoArrow(Integer xOffset, Integer yOffset, Integer length, String label){
-            this.xOffset = xOffset;
-            this.yOffset = yOffset;
+        InfoArrow(Integer offset, Integer helperLength, Integer length, String label, boolean isHorizontal){
+            globalXOffset = 0;
+            globalYOffset = 0;
+            this.offset = offset;
+            this.helperLength = helperLength;
             this.length = length;
             this.label = label;
-        }
-
-        /* Generates an Affine Transformation to local runway coordinates, so that 0,0 refers to the center of the start of
-           the runway. */
-        public AffineTransform genInfoArrowTransform(String runwayId){
-            Point pos = controller.getRunwayPos(runwayId);
-            Dimension dim = controller.getRunwayDim(runwayId);
-            AffineTransform tx = createRunwayTransform(pos,dim,runwayId);
-            tx.translate(pos.x,pos.y);
-            tx.translate(0,dim.height/2);
-            return tx;
+            this.isHorizontal = isHorizontal;
         }
 
         public void drawInfoArrow(String runwayId, Graphics2D g2){
-            if(length <1) return;
+            if(length <1){
+                return;
+            } else if (isHorizontal){
+                drawHorizontalArrow(runwayId, g2);
+            } else {
+                drawVerticalArrow(runwayId, g2);
+            }
+        }
 
+        private void drawHorizontalArrow(String runwayId, Graphics2D g2){
             AffineTransform old = g2.getTransform();
             AffineTransform tx = (AffineTransform) old.clone();
-            tx.concatenate(genInfoArrowTransform(runwayId));
+            tx.concatenate(genHorizontalInfoArrowTransform(runwayId));
             g2.setTransform(tx);
 
             //Draw helper lines.
             g2.setColor(Settings.INFO_ARROW_COLOUR);
             g2.setStroke(Settings.INFO_ARROW_HELPER_STROKE);
-            g2.drawLine(xOffset,0,xOffset,yOffset);
-            g2.drawLine(xOffset+length, 0,xOffset+length, yOffset);
+            g2.drawLine(offset,0, offset, helperLength);
+            g2.drawLine(offset +length, 0, offset +length, helperLength);
 
             //Draw arrow line.
-            Point lineStart = new Point(xOffset + Settings.TOP_DOWN_INFO_ARROW_PADDING, yOffset);
-            Point lineEnd = new Point(xOffset+length - Settings.TOP_DOWN_INFO_ARROW_PADDING, yOffset);
+            Point lineStart = new Point(offset + Settings.TOP_DOWN_INFO_ARROW_PADDING, helperLength);
+            Point lineEnd = new Point(offset +length - Settings.TOP_DOWN_INFO_ARROW_PADDING, helperLength);
             g2.setStroke(Settings.INFO_ARROW_STROKE);
             g2.drawLine(lineStart.x + Settings.TOP_DOWN_INFO_ARROW_LENGTH, lineStart.y,
                     lineEnd.x - Settings.TOP_DOWN_INFO_ARROW_LENGTH, lineEnd.y);
@@ -557,14 +593,78 @@ public class TopView2D extends InteractiveView {
             g2.setFont(Settings.INFO_TEXT_FONT);
             Integer stringLength = g2.getFontMetrics().stringWidth(label);
             Integer stringHeight = Settings.INFO_TEXT_FONT.getSize();
-            if(yOffset > 0){
-                g2.drawString(label,(lineStart.x + lineEnd.x - stringLength)/2, yOffset+stringHeight+ Settings.TOP_DOWN_INFO_TEXT_PADDING);
+            if(helperLength > 0){
+                g2.drawString(label,(lineStart.x + lineEnd.x - stringLength)/2, helperLength +stringHeight+ Settings.TOP_DOWN_INFO_TEXT_PADDING);
             } else {
-                g2.drawString(label,(lineStart.x + lineEnd.x - stringLength)/2, yOffset-Settings.TOP_DOWN_INFO_TEXT_PADDING);
+                g2.drawString(label,(lineStart.x + lineEnd.x - stringLength)/2, helperLength -Settings.TOP_DOWN_INFO_TEXT_PADDING);
             }
 
             g2.setTransform(old);
         }
-    }
 
+        private void drawVerticalArrow(String runwayId, Graphics2D g2) {
+            AffineTransform old = g2.getTransform();
+            AffineTransform tx = (AffineTransform) old.clone();
+            tx.concatenate(genVerticalInfoArrowTransform(runwayId));
+            g2.setTransform(tx);
+
+            //Draw helper lines.
+            g2.setColor(Settings.INFO_ARROW_COLOUR);
+            g2.setStroke(Settings.INFO_ARROW_HELPER_STROKE);
+            g2.drawLine(0,offset, helperLength, offset);
+            g2.drawLine(0, offset + length , helperLength,offset +length);
+
+            //Draw arrow line.
+            Point lineStart = new Point(helperLength,offset + Settings.TOP_DOWN_INFO_ARROW_PADDING);
+            Point lineEnd = new Point(helperLength, offset + length - Settings.TOP_DOWN_INFO_ARROW_PADDING);
+            g2.setStroke(Settings.INFO_ARROW_STROKE);
+            g2.drawLine(lineStart.x, lineStart.y + Settings.TOP_DOWN_INFO_ARROW_LENGTH,
+                    lineEnd.x, lineEnd.y - Settings.TOP_DOWN_INFO_ARROW_LENGTH);
+
+            //Draw arrows at each end.
+            Integer arrowHeight = Settings.TOP_DOWN_INFO_ARROW_HEIGHT;
+            Integer arrowLength = Settings.TOP_DOWN_INFO_ARROW_LENGTH;
+
+            Polygon startArrow = new Polygon(new int[] {lineStart.x - arrowHeight, lineStart.x, lineStart.x+arrowHeight},
+                    new int[] {lineStart.y+arrowLength, lineStart.y, lineStart.y+arrowLength},3);
+            Polygon endArrow = new Polygon(new int[] {lineEnd.x - arrowHeight, lineEnd.x, lineEnd.x+arrowHeight},
+                    new int[] {lineEnd.y-arrowLength, lineEnd.y, lineEnd.y-arrowLength},3);
+            g2.fillPolygon(startArrow);
+            g2.fillPolygon(endArrow);
+
+            //Draw the label;
+            g2.setColor(Settings.INFO_TEXT_COLOUR);
+            g2.setFont(Settings.INFO_TEXT_FONT);
+            Integer textPadding = Settings.TOP_DOWN_INFO_TEXT_PADDING;
+            Integer stringLength = g2.getFontMetrics().stringWidth(label);
+            Integer stringHeight = Settings.INFO_TEXT_FONT.getSize();
+            if(helperLength > 0){
+                g2.drawString(label,helperLength + textPadding,(lineEnd.y + lineStart.y + stringHeight)/2 -3);
+            } else {
+                g2.drawString(label,helperLength - textPadding - stringLength,(lineEnd.y + lineStart.y + stringHeight)/2 -3);
+            }
+
+            g2.setTransform(old);
+        }
+
+        //Generates an Affine Transformation to local runway coordinates, so that 0,0 refers to the center of the start of the runway.
+        public AffineTransform genHorizontalInfoArrowTransform(String runwayId){
+            Point pos = controller.getRunwayPos(runwayId);
+            Dimension dim = controller.getRunwayDim(runwayId);
+            AffineTransform tx = createRunwayTransform(pos,dim,runwayId);
+            tx.translate(pos.x,pos.y);
+            tx.translate(0,dim.height/2);
+            tx.translate(globalXOffset, globalYOffset);
+            return tx;
+        }
+
+        public AffineTransform genVerticalInfoArrowTransform(String runwayId){
+            Point pos = controller.getRunwayPos(runwayId);
+            Dimension dim = controller.getRunwayDim(runwayId);
+            AffineTransform tx = createRunwayTransform(pos,dim,runwayId);
+            tx.translate(pos.x,pos.y);
+            tx.translate(globalXOffset, globalYOffset);
+            return tx;
+        }
+    }
 }
