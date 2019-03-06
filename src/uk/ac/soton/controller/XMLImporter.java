@@ -5,6 +5,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import sun.rmi.runtime.Log;
 import uk.ac.soton.common.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -49,10 +50,19 @@ public class XMLImporter {
             airfield.addRunway(runway);
         }
 
-        for (Runway runway : airfield.getRunways()){
-            for(int i = 0; i + 1 < logicalRunways.size(); i++){
-                   runway.setLogicalRunways(logicalRunways.get(i),logicalRunways.get(i+1));
+        for (Runway currentRunway : airfield.getRunways()){
+            String firstLogicalRunwayID = currentRunway.getId().split("/")[0];
+            LogicalRunway firstLogicalRunway = null;
+            String secondLogicalRunwayID = currentRunway.getId().split("/")[1];
+            LogicalRunway secondLogicalRunway = null;
+            for(LogicalRunway currentLogicalRunway : logicalRunways){
+                if(currentLogicalRunway.getName().equals(firstLogicalRunwayID)){
+                    firstLogicalRunway = currentLogicalRunway;
+                } else if (currentLogicalRunway.getName().equals(secondLogicalRunwayID)){
+                    secondLogicalRunway = currentLogicalRunway;
+                }
             }
+            currentRunway.setLogicalRunways(firstLogicalRunway, secondLogicalRunway);
         }
         return airfield;
     }
@@ -142,7 +152,6 @@ public class XMLImporter {
 
             NodeList clearwayNodeList = doc.getElementsByTagName("clearway");
             NodeList stopwayNodeList = doc.getElementsByTagName("stopway");
-
 
             for (int i = 0; i < clearwayNodeList.getLength(); i++) {
                 clearways.add(getDimension(clearwayNodeList.item(i)));
