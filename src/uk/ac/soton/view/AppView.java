@@ -25,7 +25,7 @@ public class AppView extends JFrame{
         this.setLayout(new BorderLayout());
         setLookAndFeel();
 
-        AppMenuBar menuBar = new AppMenuBar(controller);
+        AppMenuBar menuBar = new AppMenuBar(controller,this);
         this.setJMenuBar(menuBar);
 
         MenuPanel menuPanel = new MenuPanel(this, controller);

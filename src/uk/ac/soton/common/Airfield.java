@@ -90,12 +90,6 @@ public class Airfield {
             // Ground support equipment
             put("Dolly without cargo", new Dimensions(3.18,2.44,0.5));
             put("Dolly with cargo", new Dimensions(3.18,2.44,2.5));
-            //put("Hydrant pit cleaner");
-            //put("Hydrant dispenser");
-            //put("45,000 litre refueller");
-            //put("18,000 litre refueller");
-            //put("12,000 litre refueller");
-            //put("4,500 litre refueller");
         }
     };
 
@@ -173,7 +167,7 @@ public class Airfield {
         dimensions.setHeight(height);
     }
 
-    public class Dimensions {
+    public static class Dimensions {
 
         private Double length = 0.0;
         private Double width = 0.0;

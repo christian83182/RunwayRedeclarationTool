@@ -1,26 +1,23 @@
 package uk.ac.soton.controller;
 
-
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.xml.sax.SAXException;
 import uk.ac.soton.common.*;
 import uk.ac.soton.view.AppView;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
+import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class AppController implements ViewController {
 
     //The controller's instance of the application's view.
     private AppView appView;
-    //The configurer used to change the configuration of the model.
-    private Configurer appConfigurer;
     //The model which the controller would interact with
     private Airfield airfield;
 
     public AppController(AppView appView){
         this.appView = appView;
-        this.appConfigurer = new Configurer();
         this.airfield = new Airfield();
     }
 
@@ -70,8 +67,13 @@ public class AppController implements ViewController {
 
     @Override
     public Set<String> getRunways() {
-        return new TreeSet<String>(airfield.getAllLogicalRunways().stream().map(r
-                -> r.getName()).collect(Collectors.toList()));
+        Set<String> logicalRunways = new TreeSet<>();
+        for(LogicalRunway runway : airfield.getAllLogicalRunways()){
+            logicalRunways.add(runway.getName());
+        }
+        return logicalRunways;
+        //return new TreeSet<String>(airfield.getAllLogicalRunways().stream().map(r
+        //        -> r.getName()).collect(Collectors.toList()));
     }
 
     @Override
@@ -204,7 +206,7 @@ public class AppController implements ViewController {
 
     @Override
     public Set<String> getPredefinedObstacleIds() {
-        return new TreeSet<String>(airfield.getPredefinedObstacles().keySet());
+        return new TreeSet<>(airfield.getPredefinedObstacles().keySet());
     }
 
     @Override
@@ -230,9 +232,17 @@ public class AppController implements ViewController {
 
     @Override
     public void importAirfieldConfiguration(String path) {
-
+        XMLImporter importer = new XMLImporter();
+        try {
+            this.airfield = importer.importAirfieldInfo(path);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        }
     }
-
 
     public Runway getRunway(String name){ return airfield.getRunway(name); }
 
