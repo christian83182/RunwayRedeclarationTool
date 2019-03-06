@@ -97,6 +97,14 @@ public class Runway extends PositionalObject{
         return stripWidth;
     }
 
+    public void setStripEnd(Integer stripEnd) {
+        this.stripEnd = stripEnd;
+    }
+
+    public void setStripWidth(Integer stripWidth) {
+        this.stripWidth = stripWidth;
+    }
+
     /**
      * Gets both logical runways of a physical runway.
      * @return An array of length 2 that contains the 2 logical runways.
