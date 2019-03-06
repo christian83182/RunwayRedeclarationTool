@@ -235,6 +235,7 @@ public class AppController implements ViewController {
         XMLImporter importer = new XMLImporter();
         try {
             this.airfield = importer.importAirfieldInfo(path);
+            System.out.println("!");
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (IOException e) {
