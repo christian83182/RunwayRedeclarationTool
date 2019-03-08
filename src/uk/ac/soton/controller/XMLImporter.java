@@ -103,6 +103,9 @@ public class XMLImporter {
             runway.setActive(Boolean.parseBoolean(getTagValue("isActive", element)));
             runway.setAls(Integer.parseInt(getTagValue("als", element)));
             runway.setResa(Integer.parseInt(getTagValue("resa", element)));
+            runway.setStripEnd(Integer.parseInt(getTagValue("stripEnd",element)));
+            runway.setStripWidth(Integer.parseInt(getTagValue("stripWidth",element)));
+
 
         }
         return runway;
