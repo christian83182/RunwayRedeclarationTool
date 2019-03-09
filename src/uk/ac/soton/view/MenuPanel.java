@@ -26,6 +26,7 @@ public class MenuPanel extends JPanel {
         this.controller = controller;
         this.setPreferredSize(new Dimension(270,100));
         this.setLayout(new GridBagLayout());
+        this.setBorder(BorderFactory.createMatteBorder(1,1,1,5,new Color(42, 42, 42)));
 
         Integer rowCounter = 0;
 

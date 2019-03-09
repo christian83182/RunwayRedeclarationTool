@@ -15,6 +15,7 @@ public class AppMenuBar extends JMenuBar {
     AppMenuBar(ViewController controller, AppView appView) {
         this.controller = controller;
         this.appView = appView;
+        this.setBorder(BorderFactory.createMatteBorder(1,1,3,1,new Color(50, 50, 50)));
 
         JMenu fileMenu = new JMenu("File");
         this.add(fileMenu);
