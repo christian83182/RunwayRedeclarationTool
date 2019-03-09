@@ -16,7 +16,7 @@ public final class Settings{
     final static Integer TOP_DOWN_INFO_ARROW_LENGTH = 15;
     final static Integer TOP_DOWN_INFO_TEXT_PADDING = 15;
 
-    final static Color AIRFIELD_COLOUR = new Color(66, 66, 66);
+    final static Color AIRFIELD_COLOUR = new Color(44, 44, 44);
     final static Color RUNWAY_STRIP_COLOUR = new Color(61, 122, 61);
     final static Color CLEAR_AND_GRADED_COLOUR = new Color(80, 160, 79);
     final static Color RUNWAY_COLOUR = new Color(147, 147, 147);

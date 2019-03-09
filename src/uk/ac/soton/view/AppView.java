@@ -57,16 +57,17 @@ public class AppView extends JFrame{
     //Set's the Look and Feel of the application to a custom theme.
     private void setLookAndFeel(){
 
-        UIManager.put("control", new Color(80,80,80)); // Primary
-        UIManager.put("nimbusBase", new Color(70,70,70)); // The colour of selectors
-        UIManager.put("nimbusBlueGrey", Color.DARK_GRAY); // The colour of buttons
+        UIManager.put("control", new Color(66, 66, 66)); // Primary
+        UIManager.put("nimbusBase", new Color(106, 106, 106)); // The colour of selectors
+        UIManager.put("nimbusBlueGrey", new Color(50, 50, 50)); // The colour of buttons
+        UIManager.put("text",new Color(255,255,255)); //Sets Default text colour to white
         UIManager.put("ScrollPane.background", Color.DARK_GRAY); //Background for the ScrollPane (affects JFileChooser)
         UIManager.put("List.background", Color.DARK_GRAY); //Background for the ScrollPane (affects JFileChooser)
         UIManager.put("TextField.background", Color.DARK_GRAY); //Background for the TextField (affects JFileChooser)
-        UIManager.put("text",Color.white); //Sets Default text colour to white
+        UIManager.put("ComboBox.background",new Color(0, 0, 0));
         UIManager.put("Menu[Enabled].textForeground",new Color(255, 255, 255));
-        UIManager.put("ComboBox.background",new Color(34, 34, 34));
-        UIManager.put("nimbusLightBackground",new Color(66, 66, 66));
+        UIManager.put("nimbusFocus",new Color(0, 104, 208));
+        UIManager.put("nimbusLightBackground",new Color(74, 74, 74));
 
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
