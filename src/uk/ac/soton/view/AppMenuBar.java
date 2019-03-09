@@ -3,6 +3,9 @@ package uk.ac.soton.view;
 import uk.ac.soton.controller.ViewController;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class AppMenuBar extends JMenuBar {
 
@@ -18,6 +21,9 @@ public class AppMenuBar extends JMenuBar {
 
         JMenu settingsMenu = new JMenu("Settings");
         this.add(settingsMenu);
+
+        JMenu helpMenu = new JMenu("Help");
+        this.add(helpMenu);
 
         JMenuItem importConfiguration = new JMenuItem("Import Configuration");
         fileMenu.add(importConfiguration);
@@ -44,5 +50,36 @@ public class AppMenuBar extends JMenuBar {
 
         JMenuItem openSettings = new JMenuItem("Settings (Unimplemented)");
         settingsMenu.add(openSettings);
+
+        JMenuItem openHelp = new JMenuItem("Open Help");
+        helpMenu.add(openHelp);
+        openHelp.addActionListener(e -> {
+            JFrame helpMenuFrame = new JFrame("Application Help");
+            helpMenuFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            helpMenuFrame.setPreferredSize(new Dimension(700,800));
+
+            String helpMessage = "This is a generic help menu.\nEventually it will contain detailed" +
+                    " documentation on the functions of the program.\n This may also not exist, and " +
+                    "just open a text file or PDF instead, as formatting a text string like this can become " +
+                    "cumbersome.\n\nFor now:\n1) Use the drop down menu in the left tool bar to select a runway. " +
+                    "\n2) Selecting a runway will highlight it in the view and display various of its attributes " +
+                    "including TORA, TODA, ASDA, LDA, width, length, clearway, stopway, strip, etc.\n3) Options exist in" +
+                    " the left panel to enable or disable most of the information displayed.\n4) Select File>Export Configuration" +
+                    " to export the current airfield's configuration. Similarly, use File>Import Configuration to import an " +
+                    "existing configuration.";
+
+            helpMenuFrame.setLayout(new BorderLayout());
+            JTextArea textArea = new JTextArea(helpMessage);
+            textArea.setEditable(false);
+            textArea.setFont(new Font("SansSerif", Font.PLAIN, 18));
+            textArea.setLineWrap(true);
+            textArea.setWrapStyleWord(true);
+            JScrollPane scrollArea = new JScrollPane(textArea);
+            helpMenuFrame.add(scrollArea,BorderLayout.CENTER);
+
+            helpMenuFrame.pack();
+            helpMenuFrame.setLocationRelativeTo(null);
+            helpMenuFrame.setVisible(true);
+        });
     }
 }
