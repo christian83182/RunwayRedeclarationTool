@@ -5,6 +5,7 @@ import uk.ac.soton.controller.ViewController;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
+import java.util.ArrayList;
 
 //Represents a JPanel designed to view a top-down view of the runways.
 public class TopView2D extends InteractiveView {
@@ -262,11 +263,9 @@ public class TopView2D extends InteractiveView {
         for(String id : controller.getRunways()){
             paintRunway(id, g2);
         }
+        ArrayList<String> drawnRunways = new ArrayList<>();
         for(String id : controller.getRunways()){
-            paintCenterline(id, g2);
-        }
-        for(String id : controller.getRunways()){
-            //paintLandingDirection(id, g2);
+            paintCenterline(id,g2);
         }
         for(String id : controller.getRunways()){
             paintRunwayName(id, g2);

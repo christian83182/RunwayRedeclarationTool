@@ -31,7 +31,7 @@ public class MenuPanel extends JPanel {
 
         //Add a "General label"
         JLabel generalLabel = new JLabel("General");
-        generalLabel.setFont(new Font("TimesRoman", Font.BOLD , 16));
+        generalLabel.setFont(new Font("SansSerif", Font.BOLD , 16));
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0; c.gridy = rowCounter;
         c.gridwidth = 3;
@@ -71,7 +71,7 @@ public class MenuPanel extends JPanel {
 
         //Add a "Top Down View" label
         JLabel topDownViewLabel = new JLabel("Top Down View");
-        topDownViewLabel.setFont(new Font("TimesRoman", Font.BOLD , 16));
+        topDownViewLabel.setFont(new Font("SansSerif", Font.BOLD , 16));
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = rowCounter;
         c.gridwidth = 3;
