@@ -5,7 +5,7 @@ import java.awt.*;
 public final class Settings{
 
     final static Dimension TOP_DOWN_DEFAULT_SIZE = new Dimension(1600,900);
-    final static Point TOP_DOWN_DEFAULT_PAN = new Point(400, 400);
+    final static Point TOP_DOWN_DEFAULT_PAN = new Point(0, 0);
     final static Double TOP_DOWN_DEFAULT_ZOOM = 1.0;
     final static Integer DEFAULT_ROTATION = 90;
     final static Integer CENTERLINE_PADDING = 20;

@@ -12,6 +12,10 @@ public class AppView extends JFrame{
     //Note that for the runwayDimensions, the length is the x value and the width is the y value.
     private String selectedRunway;
 
+    AppMenuBar menuBar;
+    MenuPanel menuPanel;
+    TopView2D topView;
+
     //Constructor calls parent's constructor and initializes member variables
     public AppView(String title){
         super(title);
@@ -25,13 +29,13 @@ public class AppView extends JFrame{
         this.setLayout(new BorderLayout());
         setLookAndFeel();
 
-        AppMenuBar menuBar = new AppMenuBar(controller,this);
+        menuBar = new AppMenuBar(controller,this);
         this.setJMenuBar(menuBar);
 
-        MenuPanel menuPanel = new MenuPanel(this, controller);
+        menuPanel = new MenuPanel(this);
         this.add(menuPanel, BorderLayout.WEST);
 
-        TopView2D topView = new TopView2D(this, controller, menuPanel);
+        topView = new TopView2D(this);
         this.add(topView,BorderLayout.CENTER);
 
         this.pack();
@@ -57,17 +61,18 @@ public class AppView extends JFrame{
     //Set's the Look and Feel of the application to a custom theme.
     private void setLookAndFeel(){
 
-        UIManager.put("control", new Color(66, 66, 66)); // Primary
-        UIManager.put("nimbusBase", new Color(106, 106, 106)); // The colour of selectors
-        UIManager.put("nimbusBlueGrey", new Color(50, 50, 50)); // The colour of buttons
+        UIManager.put("control", new Color(55, 55, 55)); // Primary
+        UIManager.put("nimbusBase", new Color(42, 42, 42)); // The colour of selectors
+        UIManager.put("nimbusBlueGrey", new Color(25, 25, 25)); // The colour of buttons
         UIManager.put("text",new Color(255,255,255)); //Sets Default text colour to white
         UIManager.put("ScrollPane.background", Color.DARK_GRAY); //Background for the ScrollPane (affects JFileChooser)
         UIManager.put("List.background", Color.DARK_GRAY); //Background for the ScrollPane (affects JFileChooser)
         UIManager.put("TextField.background", Color.DARK_GRAY); //Background for the TextField (affects JFileChooser)
-        UIManager.put("ComboBox.background",new Color(0, 0, 0));
         UIManager.put("Menu[Enabled].textForeground",new Color(255, 255, 255));
         UIManager.put("nimbusFocus",new Color(0, 104, 208));
         UIManager.put("nimbusLightBackground",new Color(74, 74, 74));
+        UIManager.put("nimbusSelectionBackground",new Color(0, 104, 208));
+        UIManager.put("ComboBox.background",new Color(208, 27, 81));
 
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -87,5 +92,17 @@ public class AppView extends JFrame{
 
     public ViewController getController(){
         return controller;
+    }
+
+    public TopView2D getTopView(){
+        return topView;
+    }
+
+    public MenuPanel getMenuPanel(){
+        return menuPanel;
+    }
+
+    public AppMenuBar getAppMenuBar(){
+        return menuBar;
     }
 }

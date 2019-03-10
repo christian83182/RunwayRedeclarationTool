@@ -10,19 +10,19 @@ import java.util.ArrayList;
 //Represents a JPanel designed to view a top-down view of the runways.
 public class TopView2D extends InteractiveView {
 
-    //Instance of the front end controller which contains the information.
-    private ViewController controller;
     //Instance of the AppView class used to access the selected runway.
     private AppView appView;
+    //Instance of the front end controller which contains the information.
+    private ViewController controller;
     //Instance of the menu panel which controls a lot of the display settings.
     private MenuPanel menuPanel;
 
 
-    TopView2D(AppView appView, ViewController controller, MenuPanel menuPanel){
+    TopView2D(AppView appView){
         super(Settings.TOP_DOWN_DEFAULT_PAN,Settings.TOP_DOWN_DEFAULT_ZOOM);
         this.appView = appView;
-        this.controller = controller;
-        this.menuPanel = menuPanel;
+        this.controller = appView.getController();
+        this.menuPanel = appView.getMenuPanel();
         this.setPreferredSize(Settings.TOP_DOWN_DEFAULT_SIZE);
     }
 
@@ -35,7 +35,7 @@ public class TopView2D extends InteractiveView {
         paintBackground(g2,Settings.AIRFIELD_COLOUR);
 
         //Rotate the view to match the rotation of the selected runway.
-        if(menuPanel.isAutoRotateOnSelection()){
+        if(menuPanel.isViewMatchedToSelection()){
             g2.rotate(Math.toRadians(-getRotationOfSelectedRunway()+90));
         }
 
@@ -130,7 +130,7 @@ public class TopView2D extends InteractiveView {
         AffineTransform old = (AffineTransform) g2.getTransform().clone();
 
         //Use a transform to rotate the compass the relevant amount.
-        if(menuPanel.isAutoRotateOnSelection()){
+        if(menuPanel.isViewMatchedToSelection()){
             AffineTransform rx = g2.getTransform();
             rx.setToRotation(Math.toRadians(-rotation+90),center.x, center.y);
             g2.setTransform(rx);
@@ -326,6 +326,7 @@ public class TopView2D extends InteractiveView {
         if(appView.getSelectedRunway() == ""){
             return;
         } else {
+            //this.setPan(new Point(400,400));
             String selectedRunway = appView.getSelectedRunway();
             Point pos = controller.getRunwayPos(selectedRunway);
             Dimension dim = controller.getRunwayDim(selectedRunway);
@@ -518,6 +519,7 @@ public class TopView2D extends InteractiveView {
         g2.drawLine(0,-10000,0,10000);
     }
 
+    //Returns the rotation of the currently selected runway.
     private Integer getRotationOfSelectedRunway(){
         String selectedRunway = appView.getSelectedRunway();
         if(selectedRunway == ""){
@@ -527,6 +529,42 @@ public class TopView2D extends InteractiveView {
         }
     }
 
+    //Returns a point representing the center of the full runway. This includes the stopway/clearway/strip end.
+    private Point getFullRunwayCenterpoint(String id){
+        //Specifies the point at the start of the runway.
+        Point runwayStart =controller.getRunwayPos(id);
+        //Specifies a length consisting of the length + the stopway/clearway + strip end size.
+        Double fullRunwayLength = (double)controller.getRunwayDim(id).width +
+                Math.max(controller.getClearwayDim(id).width, controller.getStopwayDim(id).width
+                + controller.getStripEndSize(id));
+
+        //The angle of the runway.
+        Double runwayAngle = new Double(Math.toRadians(controller.getBearing(id)-90));
+        Point runwayEnd = new Point((int)(runwayStart.x + fullRunwayLength * Math.cos(runwayAngle)),
+                (int)(runwayStart.y + fullRunwayLength * Math.sin(runwayAngle)));
+
+        //Returns the average of the start and end points. Hence the midpoint.
+        return new Point((runwayStart.x + runwayEnd.x - controller.getStripEndSize(id))/2,
+                (runwayStart.y + runwayEnd.y)/2);
+    }
+
+    //Pans and zooms the view such that the specified runway appears in the center of the screen and fully visible.
+    public void fitViewToRunway(String id){
+        Point centerPoint = getFullRunwayCenterpoint(id);
+        //Only match rotation & pan if the option is selected in the menu panel.
+        if(menuPanel.isViewMatchedToSelection()){
+            AffineTransform rx = new AffineTransform();
+            rx.setToRotation(Math.toRadians(-getRotationOfSelectedRunway()+90));
+            rx.transform(centerPoint, centerPoint);
+
+            //Set the pan to the centerpoint of the runway, and account for the width/height of the screen.
+            setPan(new Point(-centerPoint.x + getWidth()/2, -centerPoint.y + getHeight()/2));
+            Double viewWidth = controller.getRunwayDim(id).width*1.45 + controller.getClearwayDim(id).width;
+            setZoom(getWidth() / viewWidth);
+        } else {
+            this.setPan(new Point(-centerPoint.x + getWidth()/2, -centerPoint.y + getHeight()/2));
+        }
+    }
 
     //Inner class representing an instance of an arrow displaying some information.
     private class InfoArrow {

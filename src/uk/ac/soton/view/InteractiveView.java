@@ -25,10 +25,6 @@ public abstract class InteractiveView extends JPanel {
         this.addMouseMotionListener(panListener);
     }
 
-    InteractiveView(){
-        this(new Point(0,0),1.0);
-    }
-
     public abstract void paintView(Graphics2D g2);
 
     @Override
