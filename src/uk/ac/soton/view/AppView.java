@@ -63,7 +63,7 @@ public class AppView extends JFrame{
 
         UIManager.put("control", new Color(55, 55, 55)); // Primary
         UIManager.put("nimbusBase", new Color(42, 42, 42)); // The colour of selectors
-        UIManager.put("nimbusBlueGrey", new Color(25, 25, 25)); // The colour of buttons
+        UIManager.put("nimbusBlueGrey", new Color(52, 52, 52)); // The colour of buttons
         UIManager.put("text",new Color(255,255,255)); //Sets Default text colour to white
         UIManager.put("ScrollPane.background", Color.DARK_GRAY); //Background for the ScrollPane (affects JFileChooser)
         UIManager.put("List.background", Color.DARK_GRAY); //Background for the ScrollPane (affects JFileChooser)
@@ -72,7 +72,6 @@ public class AppView extends JFrame{
         UIManager.put("nimbusFocus",new Color(0, 104, 208));
         UIManager.put("nimbusLightBackground",new Color(74, 74, 74));
         UIManager.put("nimbusSelectionBackground",new Color(0, 104, 208));
-        UIManager.put("ComboBox.background",new Color(208, 27, 81));
 
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {

@@ -18,15 +18,19 @@ public class AppMenuBar extends JMenuBar {
         this.setBorder(BorderFactory.createMatteBorder(1,1,3,1,new Color(50, 50, 50)));
 
         JMenu fileMenu = new JMenu("File");
+        fileMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         this.add(fileMenu);
 
         JMenu settingsMenu = new JMenu("Settings");
+        settingsMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         this.add(settingsMenu);
 
         JMenu helpMenu = new JMenu("Help");
+        helpMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         this.add(helpMenu);
 
         JMenuItem importConfiguration = new JMenuItem("Import Configuration");
+        importConfiguration.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         fileMenu.add(importConfiguration);
         importConfiguration.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
@@ -39,6 +43,7 @@ public class AppMenuBar extends JMenuBar {
         });
 
         JMenuItem exportConfiguration = new JMenuItem("Export Configuration");
+        exportConfiguration.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         fileMenu.add(exportConfiguration);
         exportConfiguration.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
@@ -50,9 +55,11 @@ public class AppMenuBar extends JMenuBar {
         });
 
         JMenuItem openSettings = new JMenuItem("Settings (Unimplemented)");
+        openSettings.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         settingsMenu.add(openSettings);
 
         JMenuItem openHelp = new JMenuItem("Open Help");
+        openHelp.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         helpMenu.add(openHelp);
         openHelp.addActionListener(e -> {
             JFrame helpMenuFrame = new JFrame("Application Help");

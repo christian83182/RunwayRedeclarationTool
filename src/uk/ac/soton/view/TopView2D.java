@@ -263,9 +263,13 @@ public class TopView2D extends InteractiveView {
         for(String id : controller.getRunways()){
             paintRunway(id, g2);
         }
-        ArrayList<String> drawnRunways = new ArrayList<>();
+        ArrayList<Integer> drawnRunways = new ArrayList<>();
         for(String id : controller.getRunways()){
-            paintCenterline(id,g2);
+            Integer currentRunwayBearing = controller.getBearing(id);
+            if(!(drawnRunways.contains(currentRunwayBearing+180) || drawnRunways.contains(currentRunwayBearing-180))){
+                paintCenterline(id,g2);
+                drawnRunways.add(currentRunwayBearing);
+            }
         }
         for(String id : controller.getRunways()){
             paintRunwayName(id, g2);
