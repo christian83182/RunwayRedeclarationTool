@@ -47,4 +47,6 @@ public final class Settings{
     final static Font INFO_TEXT_FONT = new Font("SansSerif", Font.PLAIN, 32);
 
     final static Color RUNWAY_NAME_COLOUR = new Color(255,255,255);
+
+    final static Font SIDE_MENU_DEFAULT_FONT = new Font("SansSerif", Font.PLAIN, 16);
 }

@@ -38,14 +38,14 @@ public class MenuPanel extends JPanel {
 
         //Add a "Selected Runway" label
         JLabel selectedRunwayLabel = new JLabel("Selected Runway:");
-        selectedRunwayLabel.setFont(new Font("SansSerif", Font.PLAIN , 16));
+        selectedRunwayLabel.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 10; c.gridwidth = 2;
         this.add(selectedRunwayLabel, c);
 
         //Add a "Browse Objects" button.
         browseObstacleButton = new JButton("Browse Obstacles");
-        browseObstacleButton.setFont(new Font("SansSerif", Font.PLAIN , 16));
+        browseObstacleButton.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         browseObstacleButton.addActionListener(e -> new ObstacleBrowserWindow());
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 20; c.gridwidth = 3;
@@ -70,7 +70,7 @@ public class MenuPanel extends JPanel {
 
         //Add the "isolate selected runway" option
         isolateModeBox = new JCheckBox("Isolate Selected Runway");
-        isolateModeBox.setFont(new Font("SansSerif", Font.PLAIN , 16));
+        isolateModeBox.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         isolateModeBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 40; c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
@@ -78,7 +78,7 @@ public class MenuPanel extends JPanel {
 
         //Add the "show runway parameters" option
         showRunwayParametersBox = new JCheckBox("Show Runway Parameters");
-        showRunwayParametersBox.setFont(new Font("SansSerif", Font.PLAIN , 16));
+        showRunwayParametersBox.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         showRunwayParametersBox.setSelected(true);
         showRunwayParametersBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
@@ -87,7 +87,7 @@ public class MenuPanel extends JPanel {
 
         //Add the "show breakdown" option
         showBreakdownBox = new JCheckBox("Show Parameter Breakdown");
-        showBreakdownBox.setFont(new Font("SansSerif", Font.PLAIN , 16));
+        showBreakdownBox.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         showBreakdownBox.setEnabled(false);
         showBreakdownBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
@@ -96,7 +96,7 @@ public class MenuPanel extends JPanel {
 
         //Add the "show other distances" option
         showOtherBox = new JCheckBox("Show Other Distances");
-        showOtherBox.setFont(new Font("SansSerif", Font.PLAIN , 16));
+        showOtherBox.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         showOtherBox.setSelected(true);
         showOtherBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
@@ -105,7 +105,7 @@ public class MenuPanel extends JPanel {
 
         //Add the "show overlay" option
         showOverlayBox = new JCheckBox("Show Overlays");
-        showOverlayBox.setFont(new Font("SansSerif", Font.PLAIN , 16));
+        showOverlayBox.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         showOverlayBox.setSelected(true);
         showOverlayBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
@@ -114,7 +114,7 @@ public class MenuPanel extends JPanel {
 
         //Add the "show axis" option
         showAxisBox = new JCheckBox("Show Axis");
-        showAxisBox.setFont(new Font("SansSerif", Font.PLAIN , 16));
+        showAxisBox.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         showAxisBox.setSelected(true);
         showAxisBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
@@ -123,7 +123,7 @@ public class MenuPanel extends JPanel {
 
         //Add the "auto rotate runway" option
         matchViewToSelection = new JCheckBox("Match View to Selection");
-        matchViewToSelection.setFont(new Font("SansSerif", Font.PLAIN , 16));
+        matchViewToSelection.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         matchViewToSelection.setSelected(true);
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 100; c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
@@ -142,7 +142,7 @@ public class MenuPanel extends JPanel {
         menuItems.add("None");
         menuItems.addAll(controller.getRunways());
         runwayMenu = new JComboBox(menuItems.toArray());
-        runwayMenu.setFont(new Font("SansSerif", Font.PLAIN , 16));
+        runwayMenu.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         c = new GridBagConstraints();
         c.gridx = 2; c.gridy = 10; c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0,10,0,0);
