@@ -11,7 +11,6 @@ public class MenuPanel extends JPanel {
     private ViewController controller;
 
     private JComboBox runwayMenu;
-    private JButton browseObstacleButton;
     private JCheckBox isolateModeBox;
     private JCheckBox showRunwayParametersBox;
     private JCheckBox showBreakdownBox;
@@ -42,15 +41,6 @@ public class MenuPanel extends JPanel {
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 10; c.gridwidth = 2;
         this.add(selectedRunwayLabel, c);
-
-        //Add a "Browse Objects" button.
-        browseObstacleButton = new JButton("Browse Obstacles");
-        browseObstacleButton.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
-        browseObstacleButton.addActionListener(e -> new ObstacleBrowserWindow());
-        c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 20; c.gridwidth = 3;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        this.add(browseObstacleButton, c);
 
         //Add a separator to the menu.
         JSeparator firstSeparator = new JSeparator();
@@ -190,40 +180,5 @@ public class MenuPanel extends JPanel {
 
     public boolean isViewMatchedToSelection(){
         return matchViewToSelection.isSelected();
-    }
-
-    class ObstacleBrowserWindow extends JFrame{
-        ObstacleBrowserWindow(){
-            super("Obstacle Browser");
-            init();
-        }
-
-        public void init(){
-            this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            this.setPreferredSize(new Dimension(300,180));
-            this.setLayout(new BorderLayout(10,0));
-
-            JTextArea textArea = new JTextArea("Select an obstacle...");
-            textArea.setEditable(false);
-            this.add(textArea, BorderLayout.CENTER);
-
-            ArrayList<String> obstacleList = new ArrayList<>(controller.getPredefinedObstacleIds());
-            JComboBox obstacleComboBox = new JComboBox(obstacleList.toArray());
-            obstacleComboBox.addActionListener(e -> {
-                Double height = controller.getPredefinedObstacleHeight((String)obstacleComboBox.getSelectedItem());
-                Double length = controller.getPredefinedObstacleLength((String)obstacleComboBox.getSelectedItem());
-                Double width = controller.getPredefinedObstacleWidth((String)obstacleComboBox.getSelectedItem());
-                textArea.setText("Height: " + height + "m\nWidth: " + width + "m\nLength: " + length + "m");
-            });
-            this.add(obstacleComboBox, BorderLayout.NORTH);
-
-            JButton closeButton = new JButton("Close");
-            closeButton.addActionListener(e -> ObstacleBrowserWindow.this.dispose());
-            this.add(closeButton, BorderLayout.SOUTH);
-
-            this.pack();
-            this.setLocationRelativeTo(null);
-            this.setVisible(true);
-        }
     }
 }

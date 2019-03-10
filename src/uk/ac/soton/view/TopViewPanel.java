@@ -8,7 +8,7 @@ import java.awt.geom.NoninvertibleTransformException;
 import java.util.ArrayList;
 
 //Represents a JPanel designed to view a top-down view of the runways.
-public class TopView2D extends InteractiveView {
+public class TopViewPanel extends InteractivePanel {
 
     //Instance of the AppView class used to access the selected runway.
     private AppView appView;
@@ -18,7 +18,7 @@ public class TopView2D extends InteractiveView {
     private MenuPanel menuPanel;
 
 
-    TopView2D(AppView appView){
+    TopViewPanel(AppView appView){
         super(Settings.TOP_DOWN_DEFAULT_PAN,Settings.TOP_DOWN_DEFAULT_ZOOM);
         this.appView = appView;
         this.controller = appView.getController();

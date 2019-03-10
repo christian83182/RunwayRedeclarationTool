@@ -1,5 +1,4 @@
 package uk.ac.soton.view;
-
 import uk.ac.soton.controller.ViewController;
 
 import javax.swing.*;
@@ -17,18 +16,27 @@ public class AppMenuBar extends JMenuBar {
         this.appView = appView;
         this.setBorder(BorderFactory.createMatteBorder(1,1,3,1,new Color(50, 50, 50)));
 
+        //Creates the "File" menu in the menu bar.
         JMenu fileMenu = new JMenu("File");
         fileMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         this.add(fileMenu);
 
+        //Creates the "Edit" menu in the menu bar.
+        JMenu editMenu = new JMenu("Edit");
+        editMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
+        this.add(editMenu);
+
+        //Creates the "Settings" menu in the menu bar.
         JMenu settingsMenu = new JMenu("Settings");
         settingsMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         this.add(settingsMenu);
 
+        //Creates the "Help" menu in the menu bar.
         JMenu helpMenu = new JMenu("Help");
         helpMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         this.add(helpMenu);
 
+        //Adding the "import configuration" option to the file menu.
         JMenuItem importConfiguration = new JMenuItem("Import Configuration");
         importConfiguration.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         fileMenu.add(importConfiguration);
@@ -42,6 +50,7 @@ public class AppMenuBar extends JMenuBar {
             }
         });
 
+        //Adding the "export configuration" option to the file menu.
         JMenuItem exportConfiguration = new JMenuItem("Export Configuration");
         exportConfiguration.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         fileMenu.add(exportConfiguration);
@@ -54,10 +63,18 @@ public class AppMenuBar extends JMenuBar {
             }
         });
 
+        //Adding the "edit obstacles" option to the edit menu.
+        JMenuItem editObstaclesMenu = new JMenuItem("Edit Predefined Obstacles");
+        editObstaclesMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
+        editMenu.add(editObstaclesMenu);
+        editObstaclesMenu.addActionListener(e -> new EditObstaclesWindow(controller));
+
+        //Adding the "settings" option to the settings menu.
         JMenuItem openSettings = new JMenuItem("Settings (Unimplemented)");
         openSettings.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         settingsMenu.add(openSettings);
 
+        //Adding the "open help" option to the help menu.
         JMenuItem openHelp = new JMenuItem("Open Help");
         openHelp.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         helpMenu.add(openHelp);

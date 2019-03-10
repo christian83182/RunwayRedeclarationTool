@@ -14,12 +14,11 @@ public class AppView extends JFrame{
 
     AppMenuBar menuBar;
     MenuPanel menuPanel;
-    TopView2D topView;
+    TopViewPanel topView;
 
     //Constructor calls parent's constructor and initializes member variables
     public AppView(String title){
         super(title);
-        this.controller = new DebugModel();
         selectedRunway = "";
     }
 
@@ -35,7 +34,7 @@ public class AppView extends JFrame{
         menuPanel = new MenuPanel(this);
         this.add(menuPanel, BorderLayout.WEST);
 
-        topView = new TopView2D(this);
+        topView = new TopViewPanel(this);
         this.add(topView,BorderLayout.CENTER);
 
         this.pack();
@@ -72,6 +71,8 @@ public class AppView extends JFrame{
         UIManager.put("nimbusFocus",new Color(0, 104, 208));
         UIManager.put("nimbusLightBackground",new Color(74, 74, 74));
         UIManager.put("nimbusSelectionBackground",new Color(0, 104, 208));
+        UIManager.put("List.background",new Color(80, 80, 80));
+        UIManager.put("List[Selected].textForeground",new Color(250, 251, 255));
 
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -93,7 +94,7 @@ public class AppView extends JFrame{
         return controller;
     }
 
-    public TopView2D getTopView(){
+    public TopViewPanel getTopView(){
         return topView;
     }
 
