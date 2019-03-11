@@ -5,7 +5,7 @@ import java.awt.*;
 public final class Settings{
 
     final static Dimension TOP_DOWN_DEFAULT_SIZE = new Dimension(1600,900);
-    final static Point TOP_DOWN_DEFAULT_PAN = new Point(400, 400);
+    final static Point TOP_DOWN_DEFAULT_PAN = new Point(0, 0);
     final static Double TOP_DOWN_DEFAULT_ZOOM = 1.0;
     final static Integer DEFAULT_ROTATION = 90;
     final static Integer CENTERLINE_PADDING = 20;
@@ -16,7 +16,7 @@ public final class Settings{
     final static Integer TOP_DOWN_INFO_ARROW_LENGTH = 15;
     final static Integer TOP_DOWN_INFO_TEXT_PADDING = 15;
 
-    final static Color AIRFIELD_COLOUR = new Color(66, 66, 66);
+    final static Color AIRFIELD_COLOUR = new Color(44, 44, 44);
     final static Color RUNWAY_STRIP_COLOUR = new Color(61, 122, 61);
     final static Color CLEAR_AND_GRADED_COLOUR = new Color(80, 160, 79);
     final static Color RUNWAY_COLOUR = new Color(147, 147, 147);
@@ -37,7 +37,7 @@ public final class Settings{
     final static Color CLEARWAY_FILL_COLOUR = new Color(CLEARWAY_STROKE_COLOUR.getRed(), CLEARWAY_STROKE_COLOUR.getGreen(), CLEARWAY_STROKE_COLOUR.getBlue(),20);
     final static Stroke CLEARWAY_STROKE = new BasicStroke(3);
 
-    final static Color AXIS_COLOUR = new Color(226, 226, 226);
+    final static Color AXIS_COLOUR = new Color(226, 226, 226,80);
     final static Stroke AXIS_STROKE = new BasicStroke(1);
 
     final static Color INFO_ARROW_COLOUR = new Color(255,255,255);
@@ -47,4 +47,7 @@ public final class Settings{
     final static Font INFO_TEXT_FONT = new Font("SansSerif", Font.PLAIN, 32);
 
     final static Color RUNWAY_NAME_COLOUR = new Color(255,255,255);
+
+    final static Font SIDE_MENU_DEFAULT_FONT = new Font("SansSerif", Font.PLAIN, 14);
+    final static Font MENU_BAR_DEFAULT_FONT = new Font("SansSerif", Font.PLAIN, 14);
 }

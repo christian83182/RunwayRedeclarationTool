@@ -20,7 +20,6 @@ public interface ViewController {
      */
     Point getRunwayPos(String runwayId);
 
-
     /**
      * Returns the size of the runway as a Dimension object where the width property describes the length of the runway,
      * and the height property describes the width of the runway.
@@ -29,7 +28,6 @@ public interface ViewController {
      */
     Dimension getRunwayDim(String runwayId);
 
-
     /**
      * Returns the bearing in degrees for a given runway's name. It should be noted that a runway with bearing 00 points North.
      * Hence runway 09 would point East, and runway 27 would point West.
@@ -37,7 +35,6 @@ public interface ViewController {
      * @return The bearing of the runway in degrees.
      */
     Integer getBearing(String runwayId);
-
 
     /**
      * Returns a Dimension object representing the dimensions of the stopway for a given runway. The width property
@@ -48,7 +45,6 @@ public interface ViewController {
      */
     Dimension getStopwayDim(String runwayId);
 
-
     /**
      * Returns a Dimension object representing the dimensions of the clearway for a given runway. The width property
      * describes the length of the stopway, and the height property describes the width of the stopway. It should not be assumed that the
@@ -58,7 +54,6 @@ public interface ViewController {
      */
     Dimension getClearwayDim(String runwayId);
 
-
     /**
      *Returns the perpendicular distance from the centerline to the edge of the runway strip.
      * This will be half of the runway strip's total width.
@@ -66,7 +61,6 @@ public interface ViewController {
      * @return The distance from the centerline to the edge.
      */
     Integer getStripWidthFromCenterline(String runwayId);
-
 
     /**
      *Returns the size of the strip end for a given runway. This is the distance from the leftmost side of the runway
@@ -76,14 +70,12 @@ public interface ViewController {
      */
     Integer getStripEndSize(String runwayId);
 
-
     /**
      * Returns the Take-Off Run Available for a given runway.
      * @param runwayId the runway's name.
      * @return the runway's TORA.
      */
     Integer getRunwayTORA(String runwayId);
-
 
     /**
      * Returns the Take-Off Distance Available for a given runway.
@@ -92,14 +84,12 @@ public interface ViewController {
      */
     Integer getRunwayTODA(String runwayId);
 
-
     /**
      * Returns the Accelerate-Stop Distance Available for a given runway.
      * @param runwayId the runway's name.
      * @return the runway's ASDA.
      */
     Integer getRunwayASDA(String runwayId);
-
 
     /**
      * Returns the Landing Distance Available for a given runway.
@@ -108,14 +98,12 @@ public interface ViewController {
      */
     Integer getRunwayLDA(String runwayId);
 
-
     /**
      * Returns the Threshold for a given runway. The threshold should be 0 unless it is displaced.
      * @param runwayId The runway's name.
      * @return the runway's threshold.
      */
     Integer getRunwayThreshold(String runwayId);
-
 
     /**
      * Returns the distance from the start of the the runway to the start of the TORA.
@@ -124,14 +112,12 @@ public interface ViewController {
      */
     Integer getTORAOffset(String runwayId);
 
-
     /**
      * Returns the distance from the start of the the runway to the start of the TODA.
      * @param runwayId the runway's name.
      * @return the TODA offset.
      */
     Integer getTODAOffset(String runwayId);
-
 
     /**
      * Returns the distance from the start of the the runway to the start of the ASDA.
@@ -140,7 +126,6 @@ public interface ViewController {
      */
     Integer getASDAOffset(String runwayId);
 
-
     /**
      * Returns the distance from the start of the the runway to the start of the LDA.
      * @param runwayId the runway's name.
@@ -148,13 +133,11 @@ public interface ViewController {
      */
     Integer getLDAOffset(String runwayId);
 
-
     /**
      * Returns a set of strings where each string is the unique ID of a predefined obstacle in the application.
      * @return The set of Obstacle IDs
      */
     Set<String> getPredefinedObstacleIds();
-
 
     /**
      * Returns the width of a predefined obstacle given its ID.
@@ -163,7 +146,6 @@ public interface ViewController {
      */
     Double getPredefinedObstacleWidth(String obstacleId);
 
-
     /**
      * Returns the height of a predefined obstacle given its ID.
      * @param obstacleId the ID of the obstacle.
@@ -171,13 +153,28 @@ public interface ViewController {
      */
     Double getPredefinedObstacleHeight(String obstacleId);
 
-
     /**
      * Returns the width of a predefined obstacle given its ID.
      * @param obstacleId the ID of the obstacle.
      * @return the height of the obstacle.
      */
     Double getPredefinedObstacleLength(String obstacleId);
+
+
+    /**
+     * Adds an obstacle to the list of predefined obstacles
+     * @param id the name of the new obstacle.
+     * @param length the length of the new obstacle.
+     * @param width the width of the new obstacle.
+     * @param height the height of the new obstacle.
+     */
+    //void addObstacleToList(String id, Double length, Double width, Double height);
+
+    /**
+     * Deletes a specified object from the list of predefined obstacles.
+     * @param obstacleId the obstacle to be deleted from the list.
+     */
+    void deleteObstacleFromList(String obstacleId);
 
     /**
      * Exports the current model as an XML file to the location specified.

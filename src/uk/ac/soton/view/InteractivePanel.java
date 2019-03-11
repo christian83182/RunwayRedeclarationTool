@@ -8,14 +8,14 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
-public abstract class InteractiveView extends JPanel {
+public abstract class InteractivePanel extends JPanel {
 
     //Variable used to keep track of the current pan location.
     private Point globalPan;
     //Variable used to keep track of the current level of zoom.
     private Double globalZoom;
 
-    InteractiveView(Point globalPan, Double globalZoom){
+    InteractivePanel(Point globalPan, Double globalZoom){
         this.globalPan = globalPan;
         this.globalZoom = globalZoom;
 
@@ -23,10 +23,6 @@ public abstract class InteractiveView extends JPanel {
         this.addMouseWheelListener(panListener);
         this.addMouseListener(panListener);
         this.addMouseMotionListener(panListener);
-    }
-
-    InteractiveView(){
-        this(new Point(0,0),1.0);
     }
 
     public abstract void paintView(Graphics2D g2);
@@ -106,7 +102,7 @@ public abstract class InteractiveView extends JPanel {
         public void mouseDragged(MouseEvent e) {
             getPan().x = (int)(originalGlobalPan.x + (e.getX() - startPoint.x)/getZoom());
             getPan().y = (int)(originalGlobalPan.y + (e.getY() - startPoint.y)/getZoom());
-            InteractiveView.this.repaint();
+            InteractivePanel.this.repaint();
         }
 
         @Override
@@ -121,7 +117,7 @@ public abstract class InteractiveView extends JPanel {
             } else {
                 return;
             }
-            InteractiveView.this.repaint();
+            InteractivePanel.this.repaint();
         }
     }
 
