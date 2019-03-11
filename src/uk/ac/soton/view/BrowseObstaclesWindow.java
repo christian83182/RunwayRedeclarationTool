@@ -3,6 +3,7 @@ import uk.ac.soton.controller.ViewController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class BrowseObstaclesWindow extends JFrame {
 
@@ -10,11 +11,20 @@ public class BrowseObstaclesWindow extends JFrame {
     ViewController controller;
     //An instance of DefaultListModel used to populate a JList.
     DefaultListModel<String> obstacleModel;
+    //An instance of the JList used to select obstacles.
+    JList<String> obstacleList;
 
     BrowseObstaclesWindow(ViewController controller){
         super("Edit Predefined Obstacles");
         this.controller = controller;
+
+        //Populate the objectModel with the object given by the controller.
         obstacleModel = new DefaultListModel();
+        for (String currentObstacle : controller.getPredefinedObstacleIds()){
+            obstacleModel.addElement(currentObstacle);
+        }
+
+        obstacleList = new JList<>(obstacleModel);
         init();
     }
 
@@ -26,13 +36,8 @@ public class BrowseObstaclesWindow extends JFrame {
         this.setLayout(new GridBagLayout());
         GridBagConstraints c;
 
-        //Populate the objectModel with the object given by the controller.
-        for (String currentObstacle : controller.getPredefinedObstacleIds()){
-            obstacleModel.addElement(currentObstacle);
-        }
-
         //Create a new JList and place it in a ScrollPane so it can be scrollable.
-        JList<String> obstacleList = new JList<>(obstacleModel);
+        obstacleList = new JList<>(obstacleModel);
         obstacleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         obstacleList.setLayoutOrientation(JList.VERTICAL);
         JScrollPane obstacleListScroller = new JScrollPane(obstacleList);
@@ -97,9 +102,15 @@ public class BrowseObstaclesWindow extends JFrame {
             }
         });
 
-        //Add an action listener to the add button to open a new window where a new object can be added.
-        addButton.addActionListener(e -> {
-            addObstacleWindow prompt = new addObstacleWindow("Add Obstacle");
+        //Add a listener to the add button to open a new window where a new object can be added.
+        addButton.addActionListener(e ->{
+            new obstacleCustomizationWindow("Add Obstacle").showAddObstacleWindow();
+    });
+
+        //Add a listener to the edit button to open a new window where its details can be changed.
+        editButton.addActionListener(e -> {
+            String selectedObstacle = obstacleList.getSelectedValue();
+            new obstacleCustomizationWindow("Edit Obstacle").showEditObstacleWindow(selectedObstacle);
         });
 
         //Add an action listener to the delete button to delete the currently selected object.
@@ -111,6 +122,8 @@ public class BrowseObstaclesWindow extends JFrame {
             if(areYouSureAnswer == JOptionPane.YES_OPTION){
                 controller.deleteObstacleFromList(selectedObject);
                 obstacleModel.removeElement(selectedObject);
+                editButton.setEnabled(false);
+                deleteButton.setEnabled(false);
             }
         });
 
@@ -120,16 +133,100 @@ public class BrowseObstaclesWindow extends JFrame {
     }
 
     //An inner class used to open a simple dialogue to edit/add an object.
-    private class addObstacleWindow extends JFrame{
+    private class obstacleCustomizationWindow extends JFrame{
+
+        //These are member variables because they can change based on if the object is being created or edited.
+        JTextField nameField;
+        SpinnerNumberModel lengthModel;
+        SpinnerNumberModel widthModel;
+        SpinnerNumberModel heightModel;
+        JButton confirmButton;
 
         //Instantiate the window.
-        addObstacleWindow(String title){
+        obstacleCustomizationWindow(String title){
             super(title);
-            init();
+            nameField = new JTextField();
+            lengthModel = new SpinnerNumberModel(0,0,999,0.1);
+            widthModel = new SpinnerNumberModel(0,0,999,0.1);
+            heightModel = new SpinnerNumberModel(0,0,999,0.1);
+            confirmButton = new JButton("Confirm");
         }
 
-        //Configures and opens the dialogue.
-        public void init(){
+        //Default values are for a new object, all that is needed is the correct listener on the confirm button.
+        public void showAddObstacleWindow(){
+            confirmButton.addActionListener(e -> {
+                //Get the values from the relevant components.
+                String objectId = nameField.getText();
+                Double length = lengthModel.getNumber().doubleValue();
+                Double width = widthModel.getNumber().doubleValue();
+                Double height = heightModel.getNumber().doubleValue();
+
+                boolean isValid = isUserInputValid(objectId, length, width, height);
+                boolean alreadyExists = controller.getPredefinedObstacleIds().contains(objectId);
+
+                //If the details are valid and the object name is not in use, then add it to the model and object list.
+                if(isValid && !alreadyExists) {
+                    controller.addObstacleToList(objectId, length, width, height);
+                    obstacleModel.add(0,objectId);
+                    obstacleList.setSelectedIndex(0);
+                    dispose();
+
+                //If the object already exists then create an error dialogue box.
+                } else if (alreadyExists){
+                    JOptionPane.showMessageDialog(this,
+                            "The specified obstacle already exists. Names must be unique.",
+                            "Invalid Object Name" ,JOptionPane.ERROR_MESSAGE);
+
+                //If the object details are invalid then create an error dialogue box.
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "The values entered are not valid. Please check them and try again.",
+                            "Invalid Object Values" ,JOptionPane.ERROR_MESSAGE);
+                }
+            });
+            openDialogue();
+        }
+
+        //Values are set up according to the actual values of the object.
+        public void showEditObstacleWindow(String obstacleId){
+            //Change the value of the member variables so that their default values are the values of obstacle being edited.
+            nameField = new JTextField(obstacleId);
+            lengthModel = new SpinnerNumberModel(
+                    controller.getPredefinedObstacleLength(obstacleId).doubleValue(),0,999,0.1);
+            widthModel = new SpinnerNumberModel(
+                    controller.getPredefinedObstacleWidth(obstacleId).doubleValue(),0,999,0.1);
+            heightModel = new SpinnerNumberModel(
+                    controller.getPredefinedObstacleHeight(obstacleId).doubleValue(),0,999,0.1);
+            confirmButton = new JButton("Confirm");
+
+            //Add an action listener to the button which carried out the procedure to finalize the object's edit.
+            confirmButton.addActionListener(e -> {
+                String newObstacleId = nameField.getText();
+                Double length = lengthModel.getNumber().doubleValue();
+                Double width = widthModel.getNumber().doubleValue();
+                Double height = heightModel.getNumber().doubleValue();
+
+                //If the details are valid, then delete the old values from the list and model, and add the new ones.
+                if(isUserInputValid(newObstacleId, length, width, height)) {
+                    controller.deleteObstacleFromList(obstacleId);
+                    controller.addObstacleToList(newObstacleId, length, width, height);
+                    obstacleModel.removeElement(obstacleId);
+                    obstacleModel.add(0,newObstacleId);
+                    obstacleList.setSelectedIndex(0);
+                    dispose();
+
+                //If the details are not valid then open a error dialogue box.
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "The specified object could not be edited. Please check the values specified and try again.",
+                            "Invalid Object Details" ,JOptionPane.ERROR_MESSAGE);
+                }
+            });
+            openDialogue();
+        }
+
+        //Opens the dialogue with specified defaults and the specified listener on the confirm button.
+        private void openDialogue(){
             this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             this.setLayout(new GridBagLayout());
             this.setResizable(false);
@@ -143,8 +240,7 @@ public class BrowseObstaclesWindow extends JFrame {
             c.insets = new Insets(10,20,0,5);
             this.add(nameLabel,c);
 
-            //Adds a Jtextfield for the object's name to the UI.
-            JTextField nameField = new JTextField();
+            //Adds a JTextField for the object's name to the UI.
             c = new GridBagConstraints();
             c.gridx = 1; c.gridy = 0; c.weightx = 1; c.gridwidth = 3;
             c.fill = GridBagConstraints.HORIZONTAL;
@@ -159,7 +255,6 @@ public class BrowseObstaclesWindow extends JFrame {
             this.add(lengthLabel,c);
 
             //Adds a spinner for the length property of the new object.
-            SpinnerNumberModel lengthModel = new SpinnerNumberModel(0,0,999,0.1);
             JSpinner lengthSpinner = new JSpinner(lengthModel);
             c = new GridBagConstraints();
             c.gridx = 1; c.gridy = 1; c.fill = GridBagConstraints.HORIZONTAL; c.weightx = 1;
@@ -174,7 +269,6 @@ public class BrowseObstaclesWindow extends JFrame {
             this.add(widthLabel,c);
 
             //Adds a spinner for the width property of the new object.
-            SpinnerNumberModel widthModel = new SpinnerNumberModel(0,0,999,0.1);
             JSpinner widthSpinner = new JSpinner(widthModel);
             c = new GridBagConstraints();
             c.gridx = 1; c.gridy = 2; c.fill = GridBagConstraints.HORIZONTAL; c.weightx = 1;
@@ -189,7 +283,6 @@ public class BrowseObstaclesWindow extends JFrame {
             this.add(heightLabel,c);
 
             //Adds a spinner for the height property of the new object.
-            SpinnerNumberModel heightModel = new SpinnerNumberModel(0,0,999,0.1);
             JSpinner heightSpinner = new JSpinner(heightModel);
             c = new GridBagConstraints();
             c.gridx = 1; c.gridy = 3; c.fill = GridBagConstraints.HORIZONTAL; c.weightx = 1;
@@ -197,7 +290,6 @@ public class BrowseObstaclesWindow extends JFrame {
             this.add(heightSpinner,c);
 
             //Adds a confirm button
-            JButton confirmButton = new JButton("Confirm");
             c = new GridBagConstraints();
             c.gridx = 2; c.gridy = 4; c.weightx = 0.5;
             c.anchor = GridBagConstraints.CENTER; c.fill = GridBagConstraints.HORIZONTAL;
@@ -212,30 +304,16 @@ public class BrowseObstaclesWindow extends JFrame {
             c.insets = new Insets(5,10,10,15);
             this.add(cancelButton,c);
 
+            //Add a listener to the close button to dispose of the frame when clicked.
             cancelButton.addActionListener(e -> this.dispose());
-
-            confirmButton.addActionListener(e -> {
-                String objectId = nameField.getText();
-                Double length = lengthModel.getNumber().doubleValue();
-                Double width = widthModel.getNumber().doubleValue();
-                Double height = heightModel.getNumber().doubleValue();
-
-                if(isUserInputValid(objectId, length, width, height)) {
-                    controller.addObstacleToList(objectId, length, width, height);
-                    obstacleModel.add(0,objectId);
-                    this.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(this,
-                            "The specified object could not be created. Please check the details and try again.",
-                            "Invalid Object Details" ,JOptionPane.ERROR_MESSAGE);
-                }
-            });
+            //the confirm button will already have a listener attached depending on which method was initially called.
 
             this.pack();
             this.setLocationRelativeTo(null);
             this.setVisible(true);
         }
 
+        //Determines if the details entered are valid or not. Name must not be empty, and values between 0-999.
         private boolean isUserInputValid(String name, Double length, Double width, Double height){
             if(name.isEmpty()){
                 return false;
@@ -248,3 +326,4 @@ public class BrowseObstaclesWindow extends JFrame {
         }
     }
 }
+
