@@ -146,6 +146,24 @@ public class MenuPanel extends JPanel {
             }
         });
 
+        JButton testButton = new JButton("Disable Split View");
+        c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 110;
+        c.gridwidth = 3; c.insets = new Insets(50,0,0,0);
+        this.add(testButton, c);
+        testButton.addActionListener(e ->{
+            appView.setSplitViewVisible(false);
+        });
+
+        JButton testButton2 = new JButton("Enable Split View");
+        c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 120;
+        c.gridwidth = 3;
+        this.add(testButton2, c);
+        testButton2.addActionListener(e ->{
+            appView.setSplitViewVisible(true);
+        });
+
         //Create a spacer with high weighty to push everything else up.
         JPanel spacer = new JPanel();
         c = new GridBagConstraints();

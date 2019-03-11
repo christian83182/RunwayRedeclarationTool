@@ -15,6 +15,8 @@ public class AppView extends JFrame{
     AppMenuBar menuBar;
     MenuPanel menuPanel;
     TopViewPanel topView;
+    SideViewPanel sideView;
+    JSplitPane viewPanel;
 
     //Constructor calls parent's constructor and initializes member variables
     public AppView(String title){
@@ -35,11 +37,26 @@ public class AppView extends JFrame{
         this.add(menuPanel, BorderLayout.WEST);
 
         topView = new TopViewPanel(this);
-        this.add(topView,BorderLayout.CENTER);
+        sideView = new SideViewPanel(this);
+
+        viewPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topView, null);
+        viewPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 0));
+
+        this.add(viewPanel, BorderLayout.CENTER);
 
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+    }
+
+    public void setSplitViewVisible(boolean isVisible){
+        if(isVisible){
+            viewPanel.setBottomComponent(sideView);
+            viewPanel.setDividerLocation(getHeight()/2);
+        } else {
+            viewPanel.setBottomComponent(null);
+        }
+        repaint();
     }
 
     //Returns the name of the currently selected runway.
