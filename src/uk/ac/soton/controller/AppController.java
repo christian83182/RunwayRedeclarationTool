@@ -225,6 +225,11 @@ public class AppController implements ViewController {
     }
 
     @Override
+    public void deleteObstacleFromList(String obstacleId) {
+        airfield.removePredefinedObstacle(obstacleId);
+    }
+
+    @Override
     public void exportAirfieldConfiguration(String absolutePath) {
         XMLExporter exporter = new XMLExporter();
         exporter.saveAirfieldInfo(airfield, absolutePath);

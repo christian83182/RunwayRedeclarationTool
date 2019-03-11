@@ -3,8 +3,6 @@ import uk.ac.soton.controller.ViewController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class AppMenuBar extends JMenuBar {
 
@@ -67,7 +65,7 @@ public class AppMenuBar extends JMenuBar {
         JMenuItem editObstaclesMenu = new JMenuItem("Edit Predefined Obstacles");
         editObstaclesMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         editMenu.add(editObstaclesMenu);
-        editObstaclesMenu.addActionListener(e -> new EditObstaclesWindow(controller));
+        editObstaclesMenu.addActionListener(e -> new BrowseObstaclesWindow(controller));
 
         //Adding the "settings" option to the settings menu.
         JMenuItem openSettings = new JMenuItem("Settings (Unimplemented)");
