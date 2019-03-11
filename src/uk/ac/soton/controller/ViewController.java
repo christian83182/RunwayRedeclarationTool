@@ -160,7 +160,6 @@ public interface ViewController {
      */
     Double getPredefinedObstacleLength(String obstacleId);
 
-
     /**
      * Adds an obstacle to the list of predefined obstacles
      * @param id the name of the new obstacle.
@@ -168,7 +167,7 @@ public interface ViewController {
      * @param width the width of the new obstacle.
      * @param height the height of the new obstacle.
      */
-    //void addObstacleToList(String id, Double length, Double width, Double height);
+    void addObstacleToList(String id, Double length, Double width, Double height);
 
     /**
      * Deletes a specified object from the list of predefined obstacles.

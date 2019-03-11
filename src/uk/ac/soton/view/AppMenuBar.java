@@ -65,7 +65,7 @@ public class AppMenuBar extends JMenuBar {
         JMenuItem editObstaclesMenu = new JMenuItem("Edit Predefined Obstacles");
         editObstaclesMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         editMenu.add(editObstaclesMenu);
-        editObstaclesMenu.addActionListener(e -> new BrowseObstaclesWindow(controller));
+        editObstaclesMenu.addActionListener(e -> new BrowseObstaclesWindow(controller).init());
 
         //Adding the "settings" option to the settings menu.
         JMenuItem openSettings = new JMenuItem("Settings (Unimplemented)");
