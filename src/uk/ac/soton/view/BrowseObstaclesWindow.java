@@ -73,17 +73,20 @@ public class BrowseObstaclesWindow extends JFrame {
         c.insets = new Insets(2,10,2,10);
         this.add(deleteButton, c);
 
-        //Add a spacer so the close button appears at the bottom of the screen.
-        JPanel spacer = new JPanel();
+        //Add a text area to display the details of the selected object.
+        JTextArea detailsTextField= new JTextArea();
+        detailsTextField.setEditable(false);
         c = new GridBagConstraints();
-        c.gridx = 1; c.gridy = 3; c.fill = GridBagConstraints.VERTICAL;
-        c.weighty = 0.9; this.add(spacer, c);
+        c.gridx = 0; c.gridy = 5; c.fill = GridBagConstraints.BOTH;
+        c.weighty = 0.3; c.insets = new Insets(0,10,10,0);
+        this.add(detailsTextField, c);
 
         //Add the "close" button to the UI.
         JButton closeButton = new JButton("Close");
         c = new GridBagConstraints();
-        c.gridx = 1; c.gridy = 4; c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(5,10,5,10);
+        c.gridx = 1; c.gridy = 5; c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(5,10,12,10);
+        c.anchor = GridBagConstraints.SOUTH;
         this.add(closeButton, c);
 
         //Add a listener to the close button to dispose of the window when clicked.
@@ -95,9 +98,15 @@ public class BrowseObstaclesWindow extends JFrame {
                 if(obstacleList.getSelectedIndex() == -1){
                     deleteButton.setEnabled(false);
                     editButton.setEnabled(false);
+                    detailsTextField.setText("");
                 } else {
+                    String obstacleId = obstacleList.getSelectedValue();
                     deleteButton.setEnabled(true);
                     editButton.setEnabled(true);
+                    detailsTextField.setText("Name:     " + obstacleId +
+                            "\nLength:   " + controller.getPredefinedObstacleLength(obstacleId) +
+                            "\nWidth:     " + controller.getPredefinedObstacleWidth(obstacleId) +
+                            "\nHeight:   " + controller.getPredefinedObstacleHeight(obstacleId));
                 }
             }
         });
@@ -124,6 +133,7 @@ public class BrowseObstaclesWindow extends JFrame {
                 obstacleModel.removeElement(selectedObject);
                 editButton.setEnabled(false);
                 deleteButton.setEnabled(false);
+                detailsTextField.setText("");
             }
         });
 
