@@ -245,6 +245,11 @@ public class AppController implements ViewController {
     }
 
     @Override
+    public String getRunwayObstacle(String runwayId) {
+        return "";
+    }
+
+    @Override
     public void exportAirfieldConfiguration(String absolutePath) {
         XMLExporter exporter = new XMLExporter();
         exporter.saveAirfieldInfo(airfield, absolutePath);

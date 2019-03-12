@@ -201,6 +201,13 @@ public interface ViewController {
     void removeObstacleFromRunway(String runwayId);
 
     /**
+     * Returns the name of any obstacle on the specified runway.
+     * @param runwayId The name of the runway.
+     * @return The name of the obstacle on the runway. Return the empty string if no obstacle has been placed on it.
+     */
+    String getRunwayObstacle(String runwayId);
+
+    /**
      * Exports the current model as an XML file to the location specified.
      * @param absolutePath The full path of the file being exported, including the name of the file.
      */

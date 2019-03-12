@@ -171,6 +171,24 @@ public class MenuPanel extends JPanel {
             appView.repaint();
         });
 
+        runwayMenu.addActionListener(e -> {
+            if(runwayMenu.getSelectedItem().toString().equals("None")){
+                appView.setSelectedRunway("");
+                placeObstacleButton.setEnabled(false);
+                removeObstacleButton.setEnabled(false);
+                if(isViewMatchedToSelection()) appView.getTopView().fitViewToRunway(appView.getSelectedRunway());
+            } else {
+                appView.setSelectedRunway(runwayMenu.getSelectedItem().toString());
+                appView.getTopView().fitViewToRunway(runwayMenu.getSelectedItem().toString());
+                placeObstacleButton.setEnabled(true);
+                removeObstacleButton.setEnabled(true);
+            }
+        });
+
+        placeObstacleButton.addActionListener(e -> {
+            new PlaceObstacleWindow(controller,appView);
+        });
+
         testButton.addActionListener(e ->{
             appView.setSplitViewVisible(false);
         });
@@ -179,21 +197,6 @@ public class MenuPanel extends JPanel {
             appView.setSplitViewVisible(true);
         });
 
-        runwayMenu.addActionListener(e -> {
-            if(runwayMenu.getSelectedItem().toString().equals("None")){
-                appView.setSelectedRunway("");
-                placeObstacleButton.setEnabled(false);
-                removeObstacleButton.setEnabled(false);
-            } else {
-                appView.setSelectedRunway(runwayMenu.getSelectedItem().toString());
-                placeObstacleButton.setEnabled(true);
-                removeObstacleButton.setEnabled(true);
-            }
-        });
-
-        placeObstacleButton.addActionListener(e -> {
-            new PlaceObstacleWindow(controller);
-        });
     }
 
     public boolean isIsolateMode(){

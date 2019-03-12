@@ -1,5 +1,4 @@
 package uk.ac.soton.view;
-
 import uk.ac.soton.controller.ViewController;
 
 import javax.swing.*;
@@ -12,17 +11,19 @@ import java.util.List;
 public class PlaceObstacleWindow extends JFrame {
 
     ViewController controller;
+    AppView appView;
 
-    PlaceObstacleWindow(ViewController controller){
+    PlaceObstacleWindow(ViewController controller, AppView appView){
         super("Place Obstacle");
         this.controller = controller;
+        this.appView = appView;
         init();
     }
 
     private void init(){
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setPreferredSize(new Dimension(400,230));
-        //this.setResizable(false);
+        this.setResizable(false);
         this.setLayout(new GridBagLayout());
         GridBagConstraints c;
 
@@ -55,21 +56,22 @@ public class PlaceObstacleWindow extends JFrame {
         c.anchor = GridBagConstraints.LINE_START;
         this.add(verticalDistanceLabel,c);
 
-        SpinnerNumberModel horizontalDistanceModel = new SpinnerNumberModel();
-        JSpinner horizontalDistanceSpinner = new JSpinner(horizontalDistanceModel);
+        Dimension runwayDim = controller.getRunwayDim(appView.getSelectedRunway());
+        SpinnerNumberModel edgeDistanceModel = new SpinnerNumberModel(0,0,runwayDim.width,0.1);
+        JSpinner edgeDistanceSpinner = new JSpinner(edgeDistanceModel);
         c = new GridBagConstraints();
         c.gridx = 2; c.gridy = 1; c.gridwidth = 2;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0,0,0,15);
-        this.add(horizontalDistanceSpinner,c);
+        this.add(edgeDistanceSpinner,c);
 
-        SpinnerNumberModel verticalDistanceModel = new SpinnerNumberModel();
-        JSpinner verticalDistanceSpinner = new JSpinner(verticalDistanceModel);
+        SpinnerNumberModel centerlineDistanceModel = new SpinnerNumberModel(0,-999,999,0.1);
+        JSpinner centerlineDistanceSpinner = new JSpinner(centerlineDistanceModel);
         c = new GridBagConstraints();
         c.gridx = 2; c.gridy = 2; c.gridwidth = 2;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0,0,10,15);
-        this.add(verticalDistanceSpinner,c);
+        this.add(centerlineDistanceSpinner,c);
 
         JButton browseObstaclesButton = new JButton("Edit Obstacles");
         c = new GridBagConstraints();
@@ -112,8 +114,31 @@ public class PlaceObstacleWindow extends JFrame {
             });
         });
 
+        confirmButton.addActionListener(e ->{
+            String obstacleId = obstacleComboBox.getSelectedItem().toString();
+            Double centerlineDistance = centerlineDistanceModel.getNumber().doubleValue();
+            Double edgeDistance = edgeDistanceModel.getNumber().doubleValue();
+            if(isInputValid(obstacleId, centerlineDistance, edgeDistance)){
+                controller.addObstacleToRunway(appView.getSelectedRunway(), obstacleId, centerlineDistance, edgeDistance);
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Could not add obstacle to runway. Please check the details you entered and try again.",
+                        "Invalid Specification",JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+    }
+
+    private boolean isInputValid(String obstacleId, Double centerlineDistance, Double edgeDistance){
+        if(!controller.getPredefinedObstacleIds().contains(obstacleId)){
+            return false;
+        } else if (edgeDistance < 0){
+            return false;
+        } else {
+            return true;
+        }
     }
 }
