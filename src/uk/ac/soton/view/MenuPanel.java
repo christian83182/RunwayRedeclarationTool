@@ -53,23 +53,15 @@ public class MenuPanel extends JPanel {
         c.insets = new Insets(0,10,0,0);
         this.add(runwayMenu, c);
 
-        JButton placeObstacleButton = new JButton("Place Obstacle");
+        JButton placeObstacleButton = new JButton("Add Obstacle");
         placeObstacleButton.setEnabled(false);
-        c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 15;
-        c.gridwidth = 3; c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(5,0,0,0);
-        this.add(placeObstacleButton, c);
-
-        JButton editObstacle = new JButton("Edit");
-        editObstacle.setEnabled(false);
-        JButton removeObstacle = new JButton("Remove");
-        removeObstacle.setEnabled(false);
+        JButton removeObstacleButton = new JButton("Remove");
+        removeObstacleButton.setEnabled(false);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(1,2));
-        buttonPanel.add(editObstacle);
-        buttonPanel.add(removeObstacle);
+        buttonPanel.add(placeObstacleButton);
+        buttonPanel.add(removeObstacleButton);
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 16;
         c.gridwidth = 3; c.fill = GridBagConstraints.HORIZONTAL;
@@ -158,7 +150,6 @@ public class MenuPanel extends JPanel {
         c.gridwidth = 3; c.insets = new Insets(50,0,0,0);
         this.add(testButton, c);
 
-
         JButton testButton2 = new JButton("Enable Split View");
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 120;
@@ -186,6 +177,20 @@ public class MenuPanel extends JPanel {
 
         testButton2.addActionListener(e ->{
             appView.setSplitViewVisible(true);
+        });
+
+        runwayMenu.addActionListener(e -> {
+            if(runwayMenu.getSelectedItem().toString().equals("None")){
+                placeObstacleButton.setEnabled(false);
+                removeObstacleButton.setEnabled(false);
+            } else {
+                placeObstacleButton.setEnabled(true);
+                removeObstacleButton.setEnabled(true);
+            }
+        });
+
+        placeObstacleButton.addActionListener(e -> {
+            new PlaceObstacleWindow(controller);
         });
     }
 
