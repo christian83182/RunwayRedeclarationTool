@@ -1,5 +1,4 @@
 package uk.ac.soton.view;
-
 import uk.ac.soton.controller.ViewController;
 
 import javax.swing.*;
@@ -12,9 +11,11 @@ public class AppView extends JFrame{
     //Note that for the runwayDimensions, the length is the x value and the width is the y value.
     private String selectedRunway;
 
-    AppMenuBar menuBar;
+    CustomMenuBar menuBar;
     MenuPanel menuPanel;
     TopViewPanel topView;
+    SideViewPanel sideView;
+    JSplitPane viewPanel;
 
     //Constructor calls parent's constructor and initializes member variables
     public AppView(String title){
@@ -28,18 +29,34 @@ public class AppView extends JFrame{
         this.setLayout(new BorderLayout());
         setLookAndFeel();
 
-        menuBar = new AppMenuBar(controller,this);
+        menuBar = new CustomMenuBar(controller,this);
         this.setJMenuBar(menuBar);
 
         menuPanel = new MenuPanel(this);
         this.add(menuPanel, BorderLayout.WEST);
 
         topView = new TopViewPanel(this);
-        this.add(topView,BorderLayout.CENTER);
+        sideView = new SideViewPanel(this);
+
+        viewPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topView, null);
+        viewPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 0));
+
+        this.add(viewPanel, BorderLayout.CENTER);
 
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+    }
+
+    //Will either hide or display the split view.
+    public void setSplitViewVisible(boolean isVisible){
+        if(isVisible){
+            viewPanel.setBottomComponent(sideView);
+            viewPanel.setDividerLocation(getHeight()/2);
+        } else {
+            viewPanel.setBottomComponent(null);
+        }
+        repaint();
     }
 
     //Returns the name of the currently selected runway.
@@ -51,8 +68,10 @@ public class AppView extends JFrame{
     public void setSelectedRunway(String selectedRunway) {
         if(selectedRunway == "None"){
             this.selectedRunway = "";
+            setSplitViewVisible(false);
         } else {
             this.selectedRunway = selectedRunway;
+            setSplitViewVisible(true);
         }
         repaint();
     }
@@ -86,23 +105,28 @@ public class AppView extends JFrame{
         }
     }
 
+    //Sets the instance of ViewController used by the view.
     public void setController(ViewController newController){
         this.controller = newController;
     }
 
+    //Returns the instance of ViewController used by the view.
     public ViewController getController(){
         return controller;
     }
 
+    //Returns the TopViewPanel used to display the top view of the runway.
     public TopViewPanel getTopView(){
         return topView;
     }
 
+    //Returns the MenuPanel used to display menu options.
     public MenuPanel getMenuPanel(){
         return menuPanel;
     }
 
-    public AppMenuBar getAppMenuBar(){
+    //Returns the CustomMenuBar used to display the menu along the top of the screen.
+    public CustomMenuBar getAppMenuBar(){
         return menuBar;
     }
 }

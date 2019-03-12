@@ -225,6 +225,11 @@ public class AppController implements ViewController {
     }
 
     @Override
+    public void addObstacleToList(String id, Double length, Double width, Double height) {
+        airfield.defineNewObstacle(id, length, width, height);
+    }
+
+    @Override
     public void deleteObstacleFromList(String obstacleId) {
         airfield.removePredefinedObstacle(obstacleId);
     }
