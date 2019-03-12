@@ -181,9 +181,11 @@ public class MenuPanel extends JPanel {
 
         runwayMenu.addActionListener(e -> {
             if(runwayMenu.getSelectedItem().toString().equals("None")){
+                appView.setSelectedRunway("");
                 placeObstacleButton.setEnabled(false);
                 removeObstacleButton.setEnabled(false);
             } else {
+                appView.setSelectedRunway(runwayMenu.getSelectedItem().toString());
                 placeObstacleButton.setEnabled(true);
                 removeObstacleButton.setEnabled(true);
             }

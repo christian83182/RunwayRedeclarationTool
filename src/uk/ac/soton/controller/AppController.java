@@ -235,6 +235,16 @@ public class AppController implements ViewController {
     }
 
     @Override
+    public void addObstacleToRunway(String runwayId, String obstacleId, Double distanceFromCenterline, Double distanceFromEdge) {
+        //not yet implemented
+    }
+
+    @Override
+    public void removeObstacleFromRunway(String runwayId) {
+        //not uet implemented
+    }
+
+    @Override
     public void exportAirfieldConfiguration(String absolutePath) {
         XMLExporter exporter = new XMLExporter();
         exporter.saveAirfieldInfo(airfield, absolutePath);

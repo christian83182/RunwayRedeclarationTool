@@ -330,7 +330,6 @@ public class TopViewPanel extends InteractivePanel {
         if(appView.getSelectedRunway() == ""){
             return;
         } else {
-            //this.setPan(new Point(400,400));
             String selectedRunway = appView.getSelectedRunway();
             Point pos = controller.getRunwayPos(selectedRunway);
             Dimension dim = controller.getRunwayDim(selectedRunway);
