@@ -191,7 +191,7 @@ public interface ViewController {
      * @param distanceFromCenterline the distance from the centerline to where the obstacle will be.
      * @param distanceFromEdge the distance from the start of the runway to where the obstacle will be.
      */
-    void addObstacleToRunway(String runwayId, String obstacleId, Double distanceFromCenterline, Double distanceFromEdge);
+    void addObstacleToRunway(String runwayId, String obstacleId, Integer distanceFromCenterline, Integer distanceFromEdge);
 
     /**
      * Removes any obstacles which are currently on the specified runway. This method must also remove the obstacle from the other logical

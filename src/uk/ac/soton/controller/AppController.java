@@ -8,6 +8,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 public class AppController implements ViewController {
 
@@ -234,18 +235,67 @@ public class AppController implements ViewController {
         airfield.removePredefinedObstacle(obstacleId);
     }
 
+    public List<Runway> getPhysicalRunways(){
+        return airfield.getRunways();
+    }
+
     @Override
-    public void addObstacleToRunway(String runwayId, String obstacleId, Double distanceFromCenterline, Double distanceFromEdge) {
-        //not yet implemented
+    public void addObstacleToRunway(String runwayId, String obstacleId, Integer distanceFromCenterline, Integer distanceFromEdge) {
+        Runway runway = null;
+
+        String siblingRunway = null;
+
+        for(Runway temp: getPhysicalRunways()){
+            if(temp.getLogicalRunways()[0].getName().equals(runwayId)){
+                siblingRunway = temp.getLogicalRunways()[1].getName();
+                runway = temp;
+                break;
+            }else if(temp.getLogicalRunways()[1].getName().equals(runwayId)) {
+                siblingRunway = temp.getLogicalRunways()[0].getName();
+                runway = temp;
+                break;
+            }
+        }
+
+        Integer distanceFromThreshold;
+        Integer siblingDistanceFromThreshold;
+
+        if(distanceFromEdge < 0){
+            distanceFromThreshold = -distanceFromEdge + runway.getLogicalRunway(runwayId).getThreshold().intValue();
+        }else{
+            distanceFromThreshold = distanceFromEdge - runway.getLogicalRunway(runwayId).getThreshold().intValue();
+        }
+
+        siblingDistanceFromThreshold = runway.getLength() - distanceFromEdge - runway.getLogicalRunway(siblingRunway).getThreshold().intValue();
+
+        Obstacle obstacle = new Obstacle(distanceFromCenterline, distanceFromEdge, getPredifinedObstacles().get(obstacleId));
+        runway.placeObstacle(obstacle, runwayId, distanceFromThreshold, siblingRunway, siblingDistanceFromThreshold);
+
+
     }
 
     @Override
     public void removeObstacleFromRunway(String runwayId) {
-        //not uet implemented
+        for(Runway runway: getPhysicalRunways()){
+            if(runway.getLogicalRunways()[0].getName().equals(runwayId)){
+                runway.clearObstacle();
+                break;
+            }else if(runway.getLogicalRunways()[1].getName().equals(runwayId)) {
+                runway.clearObstacle();
+                break;
+            }
+        }
     }
 
     @Override
     public String getRunwayObstacle(String runwayId) {
+        for(Runway runway: getPhysicalRunways()){
+            if(runway.getLogicalRunways()[0].getName().equals(runwayId)){
+                return runway.getObstacle().getId();
+            }else if(runway.getLogicalRunways()[1].getName().equals(runwayId)) {
+                return runway.getObstacle().getId();
+            }
+        }
         return "";
     }
 
