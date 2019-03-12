@@ -4,12 +4,12 @@ import uk.ac.soton.controller.ViewController;
 import javax.swing.*;
 import java.awt.*;
 
-public class AppMenuBar extends JMenuBar {
+public class CustomMenuBar extends JMenuBar {
 
     ViewController controller;
     AppView appView;
 
-    AppMenuBar(ViewController controller, AppView appView) {
+    CustomMenuBar(ViewController controller, AppView appView) {
         this.controller = controller;
         this.appView = appView;
         this.setBorder(BorderFactory.createMatteBorder(1,1,3,1,new Color(50, 50, 50)));
