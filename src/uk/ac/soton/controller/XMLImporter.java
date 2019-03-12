@@ -5,7 +5,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import sun.rmi.runtime.Log;
 import uk.ac.soton.common.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -86,7 +85,7 @@ public class XMLImporter {
         }
     }
 
-    private Runway getRunway(Node node, String filename) {
+    private Runway getRunway(Node node, String filename){
         Runway runway = new Runway();
         LogicalRunway logicalRunway1;
         LogicalRunway logicalRunway2;
@@ -94,18 +93,27 @@ public class XMLImporter {
 
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
-            runway.setId(getTagValue("id", element));
-            runway.setxPos(Integer.parseInt(getTagValue("xPos", element)));
-            runway.setyPos(Integer.parseInt(getTagValue("yPos", element)));
+            int width = Integer.parseInt(getTagValue("width", element));
+            int als = Integer.parseInt(getTagValue("als", element));
+            int resa = Integer.parseInt(getTagValue("resa", element));
+            int stripEnd = Integer.parseInt(getTagValue("stripEnd", element));
+            int stripWidth = Integer.parseInt(getTagValue("stripWidth", element));
             length = Integer.parseInt(getTagValue("length", element));
-            runway.setLength(length);
-            runway.setWidth(Integer.parseInt(getTagValue("width", element)));
-            runway.setActive(Boolean.parseBoolean(getTagValue("isActive", element)));
-            runway.setAls(Integer.parseInt(getTagValue("als", element)));
-            runway.setResa(Integer.parseInt(getTagValue("resa", element)));
-            runway.setStripEnd(Integer.parseInt(getTagValue("stripEnd",element)));
-            runway.setStripWidth(Integer.parseInt(getTagValue("stripWidth",element)));
 
+            if (length > 0 && width>0 && als>0 && resa>0 && stripEnd>0 && stripWidth>0) {
+                runway.setId(getTagValue("id", element));
+                runway.setxPos(Integer.parseInt(getTagValue("xPos", element)));
+                runway.setyPos(Integer.parseInt(getTagValue("yPos", element)));
+                runway.setLength(length);
+                runway.setWidth(width);
+                runway.setActive(Boolean.parseBoolean(getTagValue("isActive", element)));
+                runway.setAls(als);
+                runway.setResa(resa);
+                runway.setStripEnd(stripEnd);
+                runway.setStripWidth(stripWidth);
+            } else {
+                throw new IllegalArgumentException("Runway measurements can not be negative");
+            }
 
         }
         return runway;
@@ -135,7 +143,11 @@ public class XMLImporter {
 
             for (int i = 0; i < nodeList.getLength(); i++) {
                 getLogicalRunwayData(nodeList.item(i), filename);
-                logicalRunways.add(new LogicalRunway(name, length, threshold, clearways.get(i), stopways.get(i)));
+                if(threshold > 0 && length > 0) {
+                    logicalRunways.add(new LogicalRunway(name, length, threshold, clearways.get(i), stopways.get(i)));
+                }else {
+                    throw new IllegalArgumentException("Logical Runway measurements can not be negative");
+                }
             }
 
 
@@ -172,8 +184,14 @@ public class XMLImporter {
 
         if(node.getNodeType() == Node.ELEMENT_NODE){
             Element element = (Element) node;
-            dimension = new Dimension((int)Double.parseDouble(getTagValue("width",element)),
-                    (int) Double.parseDouble(getTagValue("height",element)));
+            double width = Double.parseDouble(getTagValue("width",element));
+            double height = Double.parseDouble(getTagValue("height",element));
+
+            if(width > 0 && height > 0) {
+                dimension = new Dimension((int) width, (int) height);
+            }else {
+                throw new IllegalArgumentException("Clearway and Stopway measurements can not be negative");
+            }
 
         }
         return dimension;
@@ -207,10 +225,19 @@ public class XMLImporter {
         PredefinedObstacle obstacle = new PredefinedObstacle();
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
-            obstacle.id = getTagValue("id", element);
-            obstacle.length = Double.parseDouble(getTagValue("length", element));
-            obstacle.height = Double.parseDouble(getTagValue("height", element));
-            obstacle.width = Double.parseDouble(getTagValue("width", element));
+            String id = getTagValue("id", element);
+            Double length = Double.parseDouble(getTagValue("length", element));
+            Double height = Double.parseDouble(getTagValue("height", element));
+            Double width = Double.parseDouble(getTagValue("width", element));
+
+            if(length > 0 && height > 0 && width > 0){
+                obstacle.id = id;
+                obstacle.length = length;
+                obstacle.height = height;
+                obstacle.width = width;
+            } else {
+                throw new IllegalArgumentException("Obstacle measurements can not be negative");
+            }
         }
         return obstacle;
     }
@@ -227,9 +254,10 @@ public class XMLImporter {
         public Double width = 0.0;
         public Double height = 0.0;
 
-        public String toString() {
+       /* public String toString() {
             return "Obstacle :: id=" + this.id + " Height=" + this.height + " Width=" + this.width +
                     " Length=" + this.length;
         }
+        */
     }
 }
