@@ -367,7 +367,11 @@ public class AppController implements ViewController {
     }
 
     public void redeclareRunway(String runwayId){
-        airfield.getRunway(runwayId).recalculateParameters();
+       for(Runway runway: getPhysicalRunways()){
+           if(runway.getId().equals(runwayId)){
+               runway.recalculateParameters();
+           }
+       }
     }
 
     public void setResa(Runway runway, Integer resa) { runway.setResa(resa);}
