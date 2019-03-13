@@ -29,6 +29,10 @@ public final class Settings{
 
     final static Color THRESHOLD_INDICATOR_COLOUR = new Color(255, 138, 42, 100);
 
+    final static Stroke OBSTACLE_STROKE = new BasicStroke(2);
+    final static Color OBSTACLE_STROKE_COLOUR = new Color(139,0, 147);
+    final static Color OBSTACLE_FILL_COLOUR = new Color(171,0, 183);
+
     final static Color STOPWAY_STROKE_COLOUR = new Color(255, 0, 25);
     final static Stroke STOPWAY_STROKE = new BasicStroke(3);
     final static Color STOPWAY_FILL_COLOUR = new Color(STOPWAY_STROKE_COLOUR.getRed(), STOPWAY_STROKE_COLOUR.getGreen(), STOPWAY_STROKE_COLOUR.getBlue(),40);

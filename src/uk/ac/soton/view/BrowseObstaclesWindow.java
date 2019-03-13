@@ -95,11 +95,13 @@ public class BrowseObstaclesWindow extends JFrame {
         //Add a list selection listener to the JList to enable and disable some buttons when options are enabled or disabled.
         obstacleList.addListSelectionListener(e -> {
             if(e.getValueIsAdjusting()){
+                //If deselected, disable all buttons and clear the text field.
                 if(obstacleList.getSelectedIndex() == -1){
                     deleteButton.setEnabled(false);
                     editButton.setEnabled(false);
                     detailsTextField.setText("");
                 } else {
+                    //Otherwise, enable both buttons and populate the text field.
                     String obstacleId = obstacleList.getSelectedValue();
                     deleteButton.setEnabled(true);
                     editButton.setEnabled(true);
@@ -128,6 +130,7 @@ public class BrowseObstaclesWindow extends JFrame {
             int areYouSureAnswer = JOptionPane.showConfirmDialog(null,
                     "Are you sure you want to delete \"" +selectedObject +"\"?",
                     "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+            //If the use answered yes then delete the object and update the UI elements.
             if(areYouSureAnswer == JOptionPane.YES_OPTION){
                 controller.deleteObstacleFromList(selectedObject);
                 obstacleModel.removeElement(selectedObject);

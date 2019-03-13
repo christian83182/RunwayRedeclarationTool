@@ -71,6 +71,7 @@ public class CustomMenuBar extends JMenuBar {
         exportTopViewImage.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         fileMenu.add(exportTopViewImage);
         exportTopViewImage.addActionListener(e -> {
+            //If the image has size 0 in either dimension then show an error prompt.
             if(appView.getTopView().getWidth() == 0 || appView.getTopView().getHeight() == 0){
                 JOptionPane.showMessageDialog(null, "Width and Height cannot be 0","Could Not Save Image",JOptionPane.ERROR_MESSAGE);
             } else {

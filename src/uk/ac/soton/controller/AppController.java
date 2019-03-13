@@ -235,7 +235,7 @@ public class AppController implements ViewController {
         airfield.removePredefinedObstacle(obstacleId);
     }
 
-    public List<Runway> getPhysicalRunways(){
+    private List<Runway> getPhysicalRunways(){
         return airfield.getRunways();
     }
 
@@ -268,11 +268,9 @@ public class AppController implements ViewController {
 
         siblingDistanceFromThreshold = runway.getLength() - distanceFromEdge - runway.getLogicalRunway(siblingRunway).getThreshold().intValue();
 
-        Obstacle obstacle = new Obstacle(distanceFromCenterline, distanceFromEdge, getPredifinedObstacles().get(obstacleId));
+        Obstacle obstacle = new Obstacle(distanceFromEdge, distanceFromCenterline, getPredifinedObstacles().get(obstacleId));
         obstacle.setId(obstacleId);
-        runway.placeObstacle(obstacle, runwayId, distanceFromThreshold, siblingRunway, siblingDistanceFromThreshold);
-
-
+        runway.placeObstacle(obstacle, runwayId,distanceFromThreshold, siblingRunway, siblingDistanceFromThreshold);
     }
 
     @Override
@@ -307,6 +305,18 @@ public class AppController implements ViewController {
     }
 
     @Override
+    public Integer getDistanceFromCenterline(String runwayId) {
+        Runway runway = airfield.getRunway(runwayId);
+        return runway.getObstacle().getCentrelineDistance();
+    }
+
+    @Override
+    public Integer getDistanceFromThreshold(String runwayId) {
+        Runway runway = airfield.getRunway(runwayId);
+        return runway.getObstacle().getStartDistance();
+    }
+
+    @Override
     public void exportAirfieldConfiguration(String absolutePath) {
         XMLExporter exporter = new XMLExporter();
         exporter.saveAirfieldInfo(airfield, absolutePath);
@@ -327,55 +337,15 @@ public class AppController implements ViewController {
         }
     }
 
+
+
+
+
     public Runway getRunway(String name){ return airfield.getRunway(name); }
 
     public void addRunway(String id, Integer xPos, Integer yPos, Integer length, Integer width, Integer stripWidth, Integer stripEnd) {
         airfield.addRunway(new Runway(id, xPos, yPos, length, width, stripWidth, stripEnd));
     }
-
-    public void placeObstacle (String runwayId, Obstacle obstacle, String runwayOne, Number distanceOne, String runwayTwo, Number distanceTwo){
-        airfield.getRunway(runwayId).placeObstacle(obstacle, runwayOne, distanceOne, runwayTwo, distanceTwo);
-    }
-
-    public void removeObstacle(String runwayId){
-        airfield.getRunway(runwayId).clearObstacle();
-    }
-
-    public Number getObstacleHeight(String runwayId){
-        Runway runway = airfield.getRunway(runwayId);
-        if(runway.getObstacle() == null){
-            return runway.getObstacle().getHeight();
-        }
-        return 0;
-    }
-
-    public Number getObstacleLength(String runwayId){
-        Runway runway = airfield.getRunway(runwayId);
-        if(runway.getObstacle() == null){
-            return runway.getObstacle().getLength();
-        }
-        return 0;
-    }
-
-
-    public Number getObstacleWidth(String runwayId){
-        Runway runway = airfield.getRunway(runwayId);
-        if(runway.getObstacle() == null){
-            return runway.getObstacle().getWidth();
-        }
-        return 0;
-    }
-
-    public Number getObjectDistFromCentreline(String runwayId){
-        Runway runway = airfield.getRunway(runwayId);
-        return runway.getObstacle().getCentrelineDistance();
-    }
-
-    public Number getObjectDistFromStart(String runwayId){
-        Runway runway = airfield.getRunway(runwayId);
-        return runway.getObstacle().getStartDistance();
-    }
-
 
     public Map<String,Airfield.Dimensions> getPredifinedObstacles() { return airfield.getPredefinedObstacles(); }
 
@@ -395,7 +365,6 @@ public class AppController implements ViewController {
         Runway runway = airfield.getRunway(runwayId);
         runway.placeObstacle(obstacle, runwayOne, distanceOne, runwayTwo, distanceTwo);
     }
-
 
     public void redeclareRunway(String runwayId){
         airfield.getRunway(runwayId).recalculateParameters();

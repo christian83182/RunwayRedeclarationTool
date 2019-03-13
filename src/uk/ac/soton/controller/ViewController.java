@@ -208,6 +208,20 @@ public interface ViewController {
     String getRunwayObstacle(String runwayId);
 
     /**
+     * Returns the distance from the centerline of the object on the given runway.
+     * @param runwayId the runway on which the object is placed.
+     * @return The distance of the object from the centerline.
+     */
+    Integer getDistanceFromCenterline(String runwayId);
+
+    /**
+     * Returns the distance from the threshold to the object on the given runway.
+     * @param runwayId The runway on which the object is placed.
+     * @return The distance from the threshold to the obstacle.
+     */
+    Integer getDistanceFromThreshold(String runwayId);
+
+    /**
      * Exports the current model as an XML file to the location specified.
      * @param absolutePath The full path of the file being exported, including the name of the file.
      */

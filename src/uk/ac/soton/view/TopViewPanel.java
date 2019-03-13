@@ -1,5 +1,6 @@
 package uk.ac.soton.view;
 
+import uk.ac.soton.controller.AppController;
 import uk.ac.soton.controller.ViewController;
 
 import java.awt.*;
@@ -334,22 +335,18 @@ public class TopViewPanel extends InteractivePanel {
             Point pos = controller.getRunwayPos(selectedRunway);
             Dimension dim = controller.getRunwayDim(selectedRunway);
 
+            //Paint basic runway features
             paintRunway(selectedRunway, g2);
             paintCenterline(selectedRunway, g2);
             paintRunwayName(selectedRunway, g2);
             paintLandingDirection(selectedRunway, g2);
+            paintObstacles(selectedRunway, g2);
 
             //Create an Affine Transformation for the current runway.
             AffineTransform old = g2.getTransform();
             AffineTransform tx = (AffineTransform) old.clone();
             tx.concatenate(createRunwayTransform(pos,dim,selectedRunway));
             g2.setTransform(tx);
-
-            //Draw the obstacle
-            String obstacleName = controller.getRunwayObstacle(selectedRunway);
-            if(!obstacleName.equals("")){
-                g2.fillRect(pos.x, pos.y, 30,30);
-            }
 
             //Drawing the highlight box.
             g2.setColor(Settings.SELECTED_RUNWAY_HIGHLIGHT);
@@ -374,6 +371,43 @@ public class TopViewPanel extends InteractivePanel {
                 if(menuPanel.isShowBreakDownEnabled()) paintBreakdownLengths(selectedRunway, g2);
             }
         }
+    }
+
+    //Paints the obstacle (if one is present) on the specified runway.
+    private void paintObstacles(String id, Graphics2D g2){
+        Point pos = controller.getRunwayPos(id);
+        Dimension dim = controller.getRunwayDim(id);
+        String obstacleName = controller.getRunwayObstacle(id);
+
+        //Create a transformation to match the rotation of the runway.
+        AffineTransform old = g2.getTransform();
+        AffineTransform tx = (AffineTransform) old.clone();
+        tx.concatenate(createRunwayTransform(pos,dim,id));
+        g2.setTransform(tx);
+
+        //If there is an obstacle on the runway then draw it, otherwise move on.
+        if(!obstacleName.equals("")){
+            //Set up some variables use for calculations.
+            Integer centerLineDistance = controller.getDistanceFromCenterline(id);
+            Integer thresholdDistance = controller.getDistanceFromThreshold(id);
+            Integer thresholdSize = controller.getRunwayThreshold(id);
+            Double obstacleLength = controller.getPredefinedObstacleLength(obstacleName);
+            Double obstacleWidth = controller.getPredefinedObstacleWidth(obstacleName);
+
+            //Draw the fill of the rectangle.
+            g2.setColor(Settings.OBSTACLE_FILL_COLOUR);
+            g2.fillRect(pos.x + thresholdDistance + thresholdSize,
+                    pos.y + (int)(dim.height - obstacleWidth)/2 - centerLineDistance,
+                    obstacleLength.intValue(),obstacleWidth.intValue());
+            //Draw the stroke for the rectangle.
+            g2.setColor(Settings.OBSTACLE_STROKE_COLOUR);
+            g2.setStroke(Settings.OBSTACLE_STROKE);
+            g2.drawRect(pos.x + thresholdDistance + thresholdSize,
+                    pos.y + (int)(dim.height - obstacleWidth)/2 - centerLineDistance,
+                    obstacleLength.intValue(),obstacleWidth.intValue());
+        }
+        //restore the previous transformation
+        g2.setTransform(old);
     }
 
     //Prints the TODA, TORA, ASDA, and LDA for a given runway.

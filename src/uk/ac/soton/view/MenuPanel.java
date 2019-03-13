@@ -56,11 +56,13 @@ public class MenuPanel extends JPanel {
         c.insets = new Insets(0,10,0,0);
         this.add(runwayMenu, c);
 
+        //Create buttons to place and remove obstacles.
         placeObstacleButton = new JButton("Add Obstacle");
         placeObstacleButton.setEnabled(false);
         removeObstacleButton = new JButton("Remove");
         removeObstacleButton.setEnabled(false);
 
+        //Create a JPanel with a grid layout manager to make both buttons the same size.
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(1,2));
         buttonPanel.add(placeObstacleButton);
@@ -147,12 +149,14 @@ public class MenuPanel extends JPanel {
         c.gridx = 0; c.gridy = 100; c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
         this.add(matchViewToSelection, c);
 
+        //Creates a test button to disable the split view.
         JButton testButton = new JButton("Disable Split View");
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 110;
         c.gridwidth = 3; c.insets = new Insets(50,0,0,0);
         this.add(testButton, c);
 
+        //Creates another test button to enable the split view.
         JButton testButton2 = new JButton("Enable Split View");
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 120;
@@ -166,6 +170,7 @@ public class MenuPanel extends JPanel {
         c.gridwidth = 3; c.weighty = 1;
         this.add(spacer, c);
 
+        //Add an action listener to the matchViewToSelection check box, to fit the view to the runway on selection.
         matchViewToSelection.addActionListener(e -> {
             //If the box is selected and there's a runway selected then fit the view to the runway.
             if(matchViewToSelection.isSelected() && !appView.getSelectedRunway().equals("")){
@@ -174,6 +179,7 @@ public class MenuPanel extends JPanel {
             appView.repaint();
         });
 
+        //Add an action listener to the runway menu to enable and disable options, and update UI elements.
         runwayMenu.addActionListener(e -> {
             String selectedRunway = runwayMenu.getSelectedItem().toString();
             if(selectedRunway.equals("None")){
@@ -183,6 +189,7 @@ public class MenuPanel extends JPanel {
             } else {
                 appView.setSelectedRunway(runwayMenu.getSelectedItem().toString());
                 if(isViewMatchedToSelection()){
+                    //Automatically fit the view to the selected runway, when selected.
                     appView.getTopView().fitViewToRunway(selectedRunway);
                 }
                 if(controller.getRunwayObstacle(selectedRunway).equals("")){
@@ -195,10 +202,12 @@ public class MenuPanel extends JPanel {
             }
         });
 
+        //Add an action listener to open a new PlaceObstacleWindow.
         placeObstacleButton.addActionListener(e -> {
             new PlaceObstacleWindow(controller,appView);
         });
 
+        //Add an action listener to the remove button to remove the obstacle from the current runway.
         removeObstacleButton.addActionListener(e -> {
             controller.removeObstacleFromRunway(appView.getSelectedRunway());
             removeObstacleButton.setEnabled(false);
@@ -206,10 +215,12 @@ public class MenuPanel extends JPanel {
             appView.getTopView().repaint();
         });
 
+        //Action listener to disable the split view.
         testButton.addActionListener(e ->{
             appView.setSplitViewVisible(false);
         });
 
+        //Action listener to enable the split view.
         testButton2.addActionListener(e ->{
             appView.setSplitViewVisible(true);
         });
