@@ -4,6 +4,9 @@ import java.awt.*;
 
 public class LogicalRunway{
 
+    /**
+     * A parameter of a logical runway that can change due to re-declaration.
+     */
     public class Parameter{
 
         private Number original = null;
@@ -11,6 +14,11 @@ public class LogicalRunway{
         private String definition = "";
         private String breakdown = "";
 
+        /**
+         * Constructor for a re-declarable parameter.
+         * @param original The original/default value.
+         * @param definition Breakdown of the original value according to definition.
+         */
         private Parameter(Number original, String definition){
             this.original = original;
             this.definition = definition;
@@ -35,6 +43,7 @@ public class LogicalRunway{
 
         public void setRedeclaredValue(Number redeclared) {
 
+            // Resets the breakdown to the definition.
             if(redeclared == null){
                 breakdown = definition;
             }
@@ -50,6 +59,10 @@ public class LogicalRunway{
             this.breakdown = breakdown;
         }
 
+        /**
+         * Gets the currently active value for the parameter (redeclared or original).
+         * @return Current value.
+         */
         public Number getCurrentValue() {
 
             if(redeclared != null){
@@ -76,7 +89,7 @@ public class LogicalRunway{
     private Dimension stopway = new Dimension(0,0);
     private Dimension clearway = new Dimension(0,0);
 
-    private Number objectThresholdDistance;
+    private Number objectThresholdDistance = null; // Distance of the obstacle from the threshold of this runway.
 
     /**
      * Constructor for the logical runway associated with a physical one.
@@ -138,6 +151,9 @@ public class LogicalRunway{
         this.lda.setRedeclaredValue(lda);
     }
 
+    /**
+     * Resets all the parameters to their default values.
+     */
     public void revertParameters() {
         tora.setRedeclaredValue(null);
         toda.setRedeclaredValue(null);
