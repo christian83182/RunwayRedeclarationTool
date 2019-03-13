@@ -269,6 +269,7 @@ public class AppController implements ViewController {
         siblingDistanceFromThreshold = runway.getLength() - distanceFromEdge - runway.getLogicalRunway(siblingRunway).getThreshold().intValue();
 
         Obstacle obstacle = new Obstacle(distanceFromCenterline, distanceFromEdge, getPredifinedObstacles().get(obstacleId));
+        obstacle.setId(obstacleId);
         runway.placeObstacle(obstacle, runwayId, distanceFromThreshold, siblingRunway, siblingDistanceFromThreshold);
 
 

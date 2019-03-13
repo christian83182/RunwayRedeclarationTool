@@ -116,8 +116,8 @@ public class PlaceObstacleWindow extends JFrame {
 
         confirmButton.addActionListener(e ->{
             String obstacleId = obstacleComboBox.getSelectedItem().toString();
-            Double centerlineDistance = centerlineDistanceModel.getNumber().doubleValue();
-            Double edgeDistance = edgeDistanceModel.getNumber().doubleValue();
+            Integer centerlineDistance = centerlineDistanceModel.getNumber().intValue();
+            Integer edgeDistance = edgeDistanceModel.getNumber().intValue();
             if(isInputValid(obstacleId, centerlineDistance, edgeDistance)){
                 controller.addObstacleToRunway(appView.getSelectedRunway(), obstacleId, centerlineDistance, edgeDistance);
             } else {
@@ -132,7 +132,7 @@ public class PlaceObstacleWindow extends JFrame {
         this.setVisible(true);
     }
 
-    private boolean isInputValid(String obstacleId, Double centerlineDistance, Double edgeDistance){
+    private boolean isInputValid(String obstacleId, Integer centerlineDistance, Integer edgeDistance){
         if(!controller.getPredefinedObstacleIds().contains(obstacleId)){
             return false;
         } else if (edgeDistance < 0){
