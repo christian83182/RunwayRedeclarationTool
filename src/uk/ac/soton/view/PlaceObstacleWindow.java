@@ -120,6 +120,9 @@ public class PlaceObstacleWindow extends JFrame {
             Integer edgeDistance = edgeDistanceModel.getNumber().intValue();
             if(isInputValid(obstacleId, centerlineDistance, edgeDistance)){
                 controller.addObstacleToRunway(appView.getSelectedRunway(), obstacleId, centerlineDistance, edgeDistance);
+                appView.getMenuPanel().setPlaceButtonEnabled(false);
+                appView.getMenuPanel().setRemoveButtonEnabled(true);
+                appView.getTopView().repaint();
                 PlaceObstacleWindow.this.dispose();
             } else {
                 JOptionPane.showMessageDialog(null,

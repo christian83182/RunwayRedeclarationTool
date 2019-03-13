@@ -18,6 +18,9 @@ public class MenuPanel extends JPanel {
     private JCheckBox showOverlayBox;
     private JCheckBox showAxisBox;
     private JCheckBox matchViewToSelection;
+    private JButton placeObstacleButton;
+    private JButton removeObstacleButton;
+
 
     MenuPanel(AppView appView){
         this.appView = appView;
@@ -53,9 +56,9 @@ public class MenuPanel extends JPanel {
         c.insets = new Insets(0,10,0,0);
         this.add(runwayMenu, c);
 
-        JButton placeObstacleButton = new JButton("Add Obstacle");
+        placeObstacleButton = new JButton("Add Obstacle");
         placeObstacleButton.setEnabled(false);
-        JButton removeObstacleButton = new JButton("Remove");
+        removeObstacleButton = new JButton("Remove");
         removeObstacleButton.setEnabled(false);
 
         JPanel buttonPanel = new JPanel();
@@ -172,21 +175,34 @@ public class MenuPanel extends JPanel {
         });
 
         runwayMenu.addActionListener(e -> {
-            if(runwayMenu.getSelectedItem().toString().equals("None")){
+            String selectedRunway = runwayMenu.getSelectedItem().toString();
+            if(selectedRunway.equals("None")){
                 appView.setSelectedRunway("");
                 placeObstacleButton.setEnabled(false);
                 removeObstacleButton.setEnabled(false);
-                if(isViewMatchedToSelection()) appView.getTopView().fitViewToRunway(appView.getSelectedRunway());
+                if(isViewMatchedToSelection()) appView.getTopView().fitViewToRunway(selectedRunway);
             } else {
                 appView.setSelectedRunway(runwayMenu.getSelectedItem().toString());
                 appView.getTopView().fitViewToRunway(runwayMenu.getSelectedItem().toString());
-                placeObstacleButton.setEnabled(true);
-                removeObstacleButton.setEnabled(true);
+                if(controller.getRunwayObstacle(selectedRunway).equals("")){
+                    placeObstacleButton.setEnabled(true);
+                    removeObstacleButton.setEnabled(false);
+                } else {
+                    placeObstacleButton.setEnabled(false);
+                    removeObstacleButton.setEnabled(true);
+                }
             }
         });
 
         placeObstacleButton.addActionListener(e -> {
             new PlaceObstacleWindow(controller,appView);
+        });
+
+        removeObstacleButton.addActionListener(e -> {
+            controller.removeObstacleFromRunway(appView.getSelectedRunway());
+            removeObstacleButton.setEnabled(false);
+            placeObstacleButton.setEnabled(true);
+            appView.getTopView().repaint();
         });
 
         testButton.addActionListener(e ->{
@@ -225,5 +241,13 @@ public class MenuPanel extends JPanel {
 
     public boolean isViewMatchedToSelection(){
         return matchViewToSelection.isSelected();
+    }
+
+    public void setPlaceButtonEnabled(boolean isEnabled){
+        this.placeObstacleButton.setEnabled(isEnabled);
+    }
+
+    public void setRemoveButtonEnabled(boolean isEnabled){
+        this.removeObstacleButton.setEnabled(isEnabled);
     }
 }
