@@ -345,6 +345,12 @@ public class TopViewPanel extends InteractivePanel {
             tx.concatenate(createRunwayTransform(pos,dim,selectedRunway));
             g2.setTransform(tx);
 
+            //Draw the obstacle
+            String obstacleName = controller.getRunwayObstacle(selectedRunway);
+            if(!obstacleName.equals("")){
+                g2.fillRect(pos.x, pos.y, 30,30);
+            }
+
             //Drawing the highlight box.
             g2.setColor(Settings.SELECTED_RUNWAY_HIGHLIGHT);
             g2.setStroke(Settings.SELECTED_RUNWAY_STROKE);

@@ -120,6 +120,7 @@ public class PlaceObstacleWindow extends JFrame {
             Integer edgeDistance = edgeDistanceModel.getNumber().intValue();
             if(isInputValid(obstacleId, centerlineDistance, edgeDistance)){
                 controller.addObstacleToRunway(appView.getSelectedRunway(), obstacleId, centerlineDistance, edgeDistance);
+                PlaceObstacleWindow.this.dispose();
             } else {
                 JOptionPane.showMessageDialog(null,
                         "Could not add obstacle to runway. Please check the details you entered and try again.",

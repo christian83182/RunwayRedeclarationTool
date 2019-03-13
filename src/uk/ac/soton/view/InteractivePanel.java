@@ -30,21 +30,11 @@ public abstract class InteractivePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
-
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 
-        //Generate a Buffered Image to draw on instead of using the g2d object.
-        BufferedImage img = new BufferedImage(getWidth(),getHeight(), BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2 = img.createGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+        BufferedImage img = generateSnapshot();
 
-        //Configure the global transform to match the pan and zoom settings.
-        configureGlobalTransform(g2);
-        paintView(g2);
-
-        //Use the g2d object to paint the buffered image.
         g2d.drawImage(img,0,0,getWidth(),getHeight(),null);
     }
 
@@ -79,6 +69,20 @@ public abstract class InteractivePanel extends JPanel {
 
     public void setZoom(Double newZoom){
         this.globalZoom = newZoom;
+    }
+
+    public BufferedImage generateSnapshot(){
+        //Generate a Buffered Image of the size of the window to draw on.
+        BufferedImage img = new BufferedImage(getWidth(),getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = img.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+
+        //Configure the global transform to match the pan and zoom settings.
+        configureGlobalTransform(g2);
+        paintView(g2);
+
+        return img;
     }
 
     //Inner class devoted to giving the view zoom and pan functionality.
