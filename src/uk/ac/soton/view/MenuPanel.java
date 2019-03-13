@@ -180,10 +180,11 @@ public class MenuPanel extends JPanel {
                 appView.setSelectedRunway("");
                 placeObstacleButton.setEnabled(false);
                 removeObstacleButton.setEnabled(false);
-                if(isViewMatchedToSelection()) appView.getTopView().fitViewToRunway(selectedRunway);
             } else {
                 appView.setSelectedRunway(runwayMenu.getSelectedItem().toString());
-                appView.getTopView().fitViewToRunway(runwayMenu.getSelectedItem().toString());
+                if(isViewMatchedToSelection()){
+                    appView.getTopView().fitViewToRunway(selectedRunway);
+                }
                 if(controller.getRunwayObstacle(selectedRunway).equals("")){
                     placeObstacleButton.setEnabled(true);
                     removeObstacleButton.setEnabled(false);
