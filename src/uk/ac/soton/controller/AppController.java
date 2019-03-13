@@ -292,8 +292,14 @@ public class AppController implements ViewController {
     public String getRunwayObstacle(String runwayId) {
         for(Runway runway: getPhysicalRunways()){
             if(runway.getLogicalRunways()[0].getName().equals(runwayId)){
+                if(runway.getObstacle() == null){
+                    return "";
+                }
                 return runway.getObstacle().getId();
             }else if(runway.getLogicalRunways()[1].getName().equals(runwayId)) {
+                if(runway.getObstacle() == null){
+                    return "";
+                }
                 return runway.getObstacle().getId();
             }
         }
