@@ -8,9 +8,13 @@ public class LogicalRunway{
 
         private Number original = null;
         private Number redeclared = null;
+        private String definition = "";
+        private String breakdown = "";
 
-        private Parameter(Number original){
+        private Parameter(Number original, String definition){
             this.original = original;
+            this.definition = definition;
+            this.breakdown = definition;
         }
 
         public Number getOriginalValue() {
@@ -21,12 +25,29 @@ public class LogicalRunway{
             this.original = aDefault;
         }
 
+        public String getDefinition() {
+            return definition;
+        }
+
         public Number getRedeclaredValue() {
             return redeclared;
         }
 
         public void setRedeclaredValue(Number redeclared) {
+
+            if(redeclared == null){
+                breakdown = definition;
+            }
+
             this.redeclared = redeclared;
+        }
+
+        public String getBreakdown() {
+            return breakdown;
+        }
+
+        public void setBreakdown(String breakdown) {
+            this.breakdown = breakdown;
         }
 
         public Number getCurrentValue() {
@@ -60,21 +81,29 @@ public class LogicalRunway{
     /**
      * Constructor for the logical runway associated with a physical one.
      * @param name Identifier of the logical runway, for example "09" or "09R".
-     * @param length Length of the runway.
+     * @param tora Usually the length of the runway, can be different due to taxiways.
      * @param threshold Threshold of the logical runway.
      * @param clearway The width parameter of the dimension if the length of the clearway and the height is the width.
      * @param stopway The width parameter of the dimension if the length of the clearway and the height is the width
      *                (the width of the stopway can be assumed to be the same as the width of the runway).
      */
-    public LogicalRunway(String name, Number length, Integer threshold, Dimension clearway, Dimension stopway) {
+    public LogicalRunway(String name, Number tora, Integer threshold, Dimension clearway, Dimension stopway) {
         this.name = name;
         this.threshold = threshold;
         this.clearway = clearway;
         this.stopway = stopway;
-        this.tora = new Parameter(length);
-        this.toda = new Parameter(length.intValue() + clearway.width);
-        this.asda = new Parameter(length.intValue() + stopway.width);
-        this.lda = new Parameter(length.intValue() - threshold.intValue());
+
+        String toraDef = "TORA = " + tora.intValue();
+        this.tora = new Parameter(tora, toraDef);
+
+        String todaDef = "TODA = TORA + Clearway\n" + "TODA = " + tora.intValue() + " + " + clearway.width;
+        this.toda = new Parameter(tora.intValue() + clearway.width, todaDef);
+
+        String asdaDef = "ASDA = TORA + Stopway\n" + "ASDA = " + tora.intValue() + " + " + stopway.width;
+        this.asda = new Parameter(tora.intValue() + stopway.width, asdaDef);
+
+        String ldaDef = "LDA = TORA - Displaced Threshold\n" + "LDA = " + tora.intValue() + " - " + threshold;
+        this.lda = new Parameter(tora.intValue() - threshold.intValue(), ldaDef);
     }
 
     public void setName(String name){
@@ -110,10 +139,10 @@ public class LogicalRunway{
     }
 
     public void revertParameters() {
-        this.tora.setRedeclaredValue(null);
-        this.toda.setRedeclaredValue(null);
-        this.asda.setRedeclaredValue(null);
-        this.lda.setRedeclaredValue(null);
+        tora.setRedeclaredValue(null);
+        toda.setRedeclaredValue(null);
+        asda.setRedeclaredValue(null);
+        lda.setRedeclaredValue(null);
     }
 
     public Parameter getTora() {
