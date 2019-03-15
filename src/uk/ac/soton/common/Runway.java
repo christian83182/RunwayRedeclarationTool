@@ -165,8 +165,8 @@ public class Runway extends PositionalObject{
             sibling = getLogicalRunways()[0];
         }
 
-        current.setObjectDistances(obstacle.getStartDistance(), obstacle.getCentrelineDistance());
-        sibling.setObjectDistances(getLength() - obstacle.getStartDistance(), -obstacle.getCentrelineDistance());
+        current.setObjectDistances(obstacle.getStartDistance(), obstacle.getCentrelineDistance(), obstacle.getStartDistance());
+        sibling.setObjectDistances(getLength() - obstacle.getStartDistance() - obstacle.getLength().intValue(), -obstacle.getCentrelineDistance(), getLength() - obstacle.getStartDistance());
     }
 
     public Obstacle getObstacle(){
