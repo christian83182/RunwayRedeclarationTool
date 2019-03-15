@@ -120,10 +120,10 @@ public class LogicalRunway{
         this.lda = new Parameter(tora.intValue() - threshold.intValue(), ldaDef);
     }
 
-    public void setObjectDistances(Integer distanceFromEdge, Integer distanceFromCentreline){
+    public void setObjectDistances(Integer distanceFromEdge, Integer distanceFromCentreline, Integer originalDistance){
         this.objectDistanceFromCentreline = distanceFromCentreline;
         this.getObjectDistanceFromStart = distanceFromEdge;
-        this.objectDistanceFromThreshold = distanceFromEdge - getThreshold().intValue();
+        this.objectDistanceFromThreshold = originalDistance - getThreshold().intValue();
     }
 
     public void setName(String name){
