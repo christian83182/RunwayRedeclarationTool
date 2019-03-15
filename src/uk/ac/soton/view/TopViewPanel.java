@@ -389,20 +389,19 @@ public class TopViewPanel extends InteractivePanel {
         if(!obstacleName.equals("")){
             //Set up some variables use for calculations.
             Integer centerLineDistance = controller.getDistanceFromCenterline(id);
-            Integer thresholdDistance = controller.getDistanceFromThreshold(id);
-            Integer thresholdSize = controller.getRunwayThreshold(id);
+            Integer edgeDistance = controller.getDistanceFromThreshold(id);
             Double obstacleLength = controller.getPredefinedObstacleLength(obstacleName);
             Double obstacleWidth = controller.getPredefinedObstacleWidth(obstacleName);
 
             //Draw the fill of the rectangle.
             g2.setColor(Settings.OBSTACLE_FILL_COLOUR);
-            g2.fillRect(pos.x + thresholdDistance + thresholdSize,
+            g2.fillRect(pos.x + edgeDistance,
                     pos.y + (int)(dim.height - obstacleWidth)/2 - centerLineDistance,
                     obstacleLength.intValue(),obstacleWidth.intValue());
             //Draw the stroke for the rectangle.
             g2.setColor(Settings.OBSTACLE_STROKE_COLOUR);
             g2.setStroke(Settings.OBSTACLE_STROKE);
-            g2.drawRect(pos.x + thresholdDistance + thresholdSize,
+            g2.drawRect(pos.x + edgeDistance,
                     pos.y + (int)(dim.height - obstacleWidth)/2 - centerLineDistance,
                     obstacleLength.intValue(),obstacleWidth.intValue());
         }
