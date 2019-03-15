@@ -241,36 +241,11 @@ public class AppController implements ViewController {
 
     @Override
     public void addObstacleToRunway(String runwayId, String obstacleId, Integer distanceFromCenterline, Integer distanceFromEdge) {
-        Runway runway = null;
-
-        String siblingRunway = null;
-
-        for(Runway temp: getPhysicalRunways()){
-            if(temp.getLogicalRunways()[0].getName().equals(runwayId)){
-                siblingRunway = temp.getLogicalRunways()[1].getName();
-                runway = temp;
-                break;
-            }else if(temp.getLogicalRunways()[1].getName().equals(runwayId)) {
-                siblingRunway = temp.getLogicalRunways()[0].getName();
-                runway = temp;
-                break;
-            }
-        }
-
-        Integer distanceFromThreshold;
-        Integer siblingDistanceFromThreshold;
-
-        if(distanceFromEdge < 0){
-            distanceFromThreshold = -distanceFromEdge + runway.getLogicalRunway(runwayId).getThreshold().intValue();
-        }else{
-            distanceFromThreshold = distanceFromEdge - runway.getLogicalRunway(runwayId).getThreshold().intValue();
-        }
-
-        siblingDistanceFromThreshold = runway.getLength() - distanceFromEdge - runway.getLogicalRunway(siblingRunway).getThreshold().intValue();
-
+        Runway runway = airfield.getRunway(runwayId);
         Obstacle obstacle = new Obstacle(distanceFromEdge, distanceFromCenterline, getPredifinedObstacles().get(obstacleId));
         obstacle.setId(obstacleId);
-        runway.placeObstacle(obstacle, runwayId,distanceFromThreshold, siblingRunway, siblingDistanceFromThreshold);
+        runway.placeObstacle(obstacle, runwayId);
+        redeclareRunway(runwayId);
     }
 
     @Override
@@ -306,14 +281,14 @@ public class AppController implements ViewController {
 
     @Override
     public Integer getDistanceFromCenterline(String runwayId) {
-        Runway runway = airfield.getRunway(runwayId);
-        return runway.getObstacle().getCentrelineDistance();
+        LogicalRunway runway = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
+        return runway.getObjectDistanceFromCentreline().intValue();
     }
 
     @Override
     public Integer getDistanceFromThreshold(String runwayId) {
-        Runway runway = airfield.getRunway(runwayId);
-        return runway.getObstacle().getStartDistance();
+        LogicalRunway runway = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
+        return runway.getGetObjectDistanceFromStart().intValue();
     }
 
     @Override
@@ -361,11 +336,10 @@ public class AppController implements ViewController {
         airfield.redefineObstacle(type, newLength, newWidth, newHeight);
     }
 
-    public void placeObstacle(String runwayId, String type, Integer centrelineDistance, Integer startDistance, String runwayOne, Number distanceOne, String runwayTwo, Number distanceTwo) {
-
+    public void placeObstacle(String runwayId, String type, Integer centrelineDistance, Integer startDistance) {
         Obstacle obstacle = new Obstacle(startDistance, centrelineDistance, getPredifinedObstacles().get(type));
         Runway runway = airfield.getRunway(runwayId);
-        runway.placeObstacle(obstacle, runwayOne, distanceOne, runwayTwo, distanceTwo);
+        runway.placeObstacle(obstacle, runwayId);
     }
 
     public void redeclareRunway(String runwayId){
