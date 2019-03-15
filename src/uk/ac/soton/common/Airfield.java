@@ -66,6 +66,9 @@ public class Airfield {
             put("Boeing 757-300", new Dimensions(54.47,38.05,13.56));
 
             // Boeing 767
+            put("Boeing 767-200", new Dimensions(47.51,47.57,15.85));
+            put("Boeing 767-300", new Dimensions(54.94,47.57,16.8));
+            put("Boeing 767-400", new Dimensions(61.37,51.92,16.8));
 
             // Boeing 777
             put("Boeing 777-200", new Dimensions(63.7,60.9,18.5));
@@ -86,6 +89,25 @@ public class Airfield {
             put("Bombardier Dash 8-200", new Dimensions(22.25,25.89,7.49));
             put("Bombardier Dash 8-300", new Dimensions(25.68,27.43,7.49));
             put("Bombardier Dash 8-400", new Dimensions(32.81,28.4,8.3));
+
+            // Embraer E Jet
+            put("ERJ 170", new Dimensions(29.9,26.0,9.67));
+            put("ERJ 170-100", new Dimensions(29.9,26.0,9.67));
+            put("ERJ 170-200", new Dimensions(31.68,26.0,9.67));
+            put("ERJ 175", new Dimensions(31.68,26.0,9.67));
+            put("ERJ 190", new Dimensions(36.24,28.72,10.28));
+            put("ERJ 190-100", new Dimensions(36.24,28.72,10.28));
+            put("ERJ 190-200", new Dimensions(38.65,28.72,10.28));
+            put("ERJ 195", new Dimensions(38.65,28.72,10.28));
+
+            // McDonnell Douglas
+            put("DC-10-10", new Dimensions(55.55,47.35,17.53));
+            put("DC-10-30", new Dimensions(55.35,50.39,17.55));
+            put("DC-10-40", new Dimensions(55.54,50.39,17.55));
+
+            // Misc
+            put("Comac C919", new Dimensions(38.9,35.8,11.95));
+            put("Concorde Plane", new Dimensions(61.66,25.6,12.2));
 
             // Ground support equipment
             put("Dolly without cargo", new Dimensions(3.18,2.44,0.5));

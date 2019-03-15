@@ -176,6 +176,52 @@ public interface ViewController {
     void deleteObstacleFromList(String obstacleId);
 
     /**
+     * Places an obstacle on a runway. This is more complicated than it might originally seem. RunwayId specifies the ID of the
+     * logical runway on which to place the obstacle. The distance from the centerline and distance from edge are measured in respect to
+     * the logical runway given. The distance from the centerline refers to the offset from the centerline to the obstacle where a
+     * positive number will imply the object is above the centerline, and vice versa. The distance from the start of the given logical runway
+     * to the obstacle. A small number implies it is near the start and hence were planes will land, and vice versa.
+     *
+     * This method will need to find the instance of Runway to which the specified logical runway is part of, and add the obstacle to both
+     * in physically the same place. Hence the distance from the centerline will invert and the distance from the edge be (width - distance
+     * from the edge) for the second logical runway.
+     *
+     * @param runwayId the name of the logical runway to which to add the obstacle.
+     * @param obstacleId the name of the obstacle to be added.
+     * @param distanceFromCenterline the distance from the centerline to where the obstacle will be.
+     * @param distanceFromEdge the distance from the start of the runway to where the obstacle will be.
+     */
+    void addObstacleToRunway(String runwayId, String obstacleId, Integer distanceFromCenterline, Integer distanceFromEdge);
+
+    /**
+     * Removes any obstacles which are currently on the specified runway. This method must also remove the obstacle from the other logical
+     * runway belonging to the same physical runway.
+     * @param runwayId the logical runway from which to remove the obstacle.
+     */
+    void removeObstacleFromRunway(String runwayId);
+
+    /**
+     * Returns the name of any obstacle on the specified runway.
+     * @param runwayId The name of the runway.
+     * @return The name of the obstacle on the runway. Return the empty string if no obstacle has been placed on it.
+     */
+    String getRunwayObstacle(String runwayId);
+
+    /**
+     * Returns the distance from the centerline of the object on the given runway.
+     * @param runwayId the runway on which the object is placed.
+     * @return The distance of the object from the centerline.
+     */
+    Integer getDistanceFromCenterline(String runwayId);
+
+    /**
+     * Returns the distance from the threshold to the object on the given runway.
+     * @param runwayId The runway on which the object is placed.
+     * @return The distance from the threshold to the obstacle.
+     */
+    Integer getDistanceFromThreshold(String runwayId);
+
+    /**
      * Exports the current model as an XML file to the location specified.
      * @param absolutePath The full path of the file being exported, including the name of the file.
      */

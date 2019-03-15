@@ -1,8 +1,12 @@
 package uk.ac.soton.view;
 import uk.ac.soton.controller.ViewController;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class CustomMenuBar extends JMenuBar {
 
@@ -61,6 +65,34 @@ public class CustomMenuBar extends JMenuBar {
             }
         });
 
+        //Adding the "export top view button"
+        fileMenu.addSeparator();
+        JMenuItem exportTopViewImage = new JMenuItem("Export Top View");
+        exportTopViewImage.setFont(Settings.MENU_BAR_DEFAULT_FONT);
+        fileMenu.add(exportTopViewImage);
+        exportTopViewImage.addActionListener(e -> {
+            //If the image has size 0 in either dimension then show an error prompt.
+            if(appView.getTopView().getWidth() == 0 || appView.getTopView().getHeight() == 0){
+                JOptionPane.showMessageDialog(null, "Width and Height cannot be 0","Could Not Save Image",JOptionPane.ERROR_MESSAGE);
+            } else {
+                BufferedImage image = appView.getTopView().generateSnapshot();
+                saveImage(image);
+            }
+        });
+
+        //Adding the "export side view button".
+        JMenuItem exportSideView = new JMenuItem("Export Side View");
+        exportSideView.setFont(Settings.MENU_BAR_DEFAULT_FONT);
+        fileMenu.add(exportSideView);
+        exportSideView.addActionListener(e -> {
+            if(appView.getSideView().getWidth() == 0 || appView.getSideView().getHeight() == 0){
+                JOptionPane.showMessageDialog(null, "Width and Height cannot be 0","Could Not Save Image",JOptionPane.ERROR_MESSAGE);
+            } else {
+                BufferedImage image = appView.getSideView().generateSnapshot();
+                saveImage(image);
+            }
+        });
+
         //Adding the "edit obstacles" option to the edit menu.
         JMenuItem editObstaclesMenu = new JMenuItem("Edit Predefined Obstacles");
         editObstaclesMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
@@ -104,5 +136,20 @@ public class CustomMenuBar extends JMenuBar {
             helpMenuFrame.setLocationRelativeTo(null);
             helpMenuFrame.setVisible(true);
         });
+    }
+
+    private void saveImage(BufferedImage image){
+        //Create a new JFileChooser
+        JFileChooser fileChooser = new JFileChooser();
+        //Open a save dialogue create a file from the selected file.
+        if(fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
+            File file = new File(fileChooser.getSelectedFile().getAbsolutePath()+".png");
+            try {
+                //Write the image to the file.
+                ImageIO.write(image,"png",file.getAbsoluteFile());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
     }
 }

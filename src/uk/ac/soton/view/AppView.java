@@ -120,6 +120,10 @@ public class AppView extends JFrame{
         return topView;
     }
 
+    public SideViewPanel getSideView(){
+        return this.sideView;
+    }
+
     //Returns the MenuPanel used to display menu options.
     public MenuPanel getMenuPanel(){
         return menuPanel;

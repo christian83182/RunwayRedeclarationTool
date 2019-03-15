@@ -8,6 +8,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 public class AppController implements ViewController {
 
@@ -234,6 +235,87 @@ public class AppController implements ViewController {
         airfield.removePredefinedObstacle(obstacleId);
     }
 
+    private List<Runway> getPhysicalRunways(){
+        return airfield.getRunways();
+    }
+
+    @Override
+    public void addObstacleToRunway(String runwayId, String obstacleId, Integer distanceFromCenterline, Integer distanceFromEdge) {
+        Runway runway = null;
+
+        String siblingRunway = null;
+
+        for(Runway temp: getPhysicalRunways()){
+            if(temp.getLogicalRunways()[0].getName().equals(runwayId)){
+                siblingRunway = temp.getLogicalRunways()[1].getName();
+                runway = temp;
+                break;
+            }else if(temp.getLogicalRunways()[1].getName().equals(runwayId)) {
+                siblingRunway = temp.getLogicalRunways()[0].getName();
+                runway = temp;
+                break;
+            }
+        }
+
+        Integer distanceFromThreshold;
+        Integer siblingDistanceFromThreshold;
+
+        if(distanceFromEdge < 0){
+            distanceFromThreshold = -distanceFromEdge + runway.getLogicalRunway(runwayId).getThreshold().intValue();
+        }else{
+            distanceFromThreshold = distanceFromEdge - runway.getLogicalRunway(runwayId).getThreshold().intValue();
+        }
+
+        siblingDistanceFromThreshold = runway.getLength() - distanceFromEdge - runway.getLogicalRunway(siblingRunway).getThreshold().intValue();
+
+        Obstacle obstacle = new Obstacle(distanceFromEdge, distanceFromCenterline, getPredifinedObstacles().get(obstacleId));
+        obstacle.setId(obstacleId);
+        runway.placeObstacle(obstacle, runwayId,distanceFromThreshold, siblingRunway, siblingDistanceFromThreshold);
+    }
+
+    @Override
+    public void removeObstacleFromRunway(String runwayId) {
+        for(Runway runway: getPhysicalRunways()){
+            if(runway.getLogicalRunways()[0].getName().equals(runwayId)){
+                runway.clearObstacle();
+                break;
+            }else if(runway.getLogicalRunways()[1].getName().equals(runwayId)) {
+                runway.clearObstacle();
+                break;
+            }
+        }
+    }
+
+    @Override
+    public String getRunwayObstacle(String runwayId) {
+        for(Runway runway: getPhysicalRunways()){
+            if(runway.getLogicalRunways()[0].getName().equals(runwayId)){
+                if(runway.getObstacle() == null){
+                    return "";
+                }
+                return runway.getObstacle().getId();
+            }else if(runway.getLogicalRunways()[1].getName().equals(runwayId)) {
+                if(runway.getObstacle() == null){
+                    return "";
+                }
+                return runway.getObstacle().getId();
+            }
+        }
+        return "";
+    }
+
+    @Override
+    public Integer getDistanceFromCenterline(String runwayId) {
+        Runway runway = airfield.getRunway(runwayId);
+        return runway.getObstacle().getCentrelineDistance();
+    }
+
+    @Override
+    public Integer getDistanceFromThreshold(String runwayId) {
+        Runway runway = airfield.getRunway(runwayId);
+        return runway.getObstacle().getStartDistance();
+    }
+
     @Override
     public void exportAirfieldConfiguration(String absolutePath) {
         XMLExporter exporter = new XMLExporter();
@@ -255,55 +337,15 @@ public class AppController implements ViewController {
         }
     }
 
+
+
+
+
     public Runway getRunway(String name){ return airfield.getRunway(name); }
 
     public void addRunway(String id, Integer xPos, Integer yPos, Integer length, Integer width, Integer stripWidth, Integer stripEnd) {
         airfield.addRunway(new Runway(id, xPos, yPos, length, width, stripWidth, stripEnd));
     }
-
-    public void placeObstacle (String runwayId, Obstacle obstacle, String runwayOne, Number distanceOne, String runwayTwo, Number distanceTwo){
-        airfield.getRunway(runwayId).placeObstacle(obstacle, runwayOne, distanceOne, runwayTwo, distanceTwo);
-    }
-
-    public void removeObstacle(String runwayId){
-        airfield.getRunway(runwayId).clearObstacle();
-    }
-
-    public Number getObstacleHeight(String runwayId){
-        Runway runway = airfield.getRunway(runwayId);
-        if(runway.getObstacle() == null){
-            return runway.getObstacle().getHeight();
-        }
-        return 0;
-    }
-
-    public Number getObstacleLength(String runwayId){
-        Runway runway = airfield.getRunway(runwayId);
-        if(runway.getObstacle() == null){
-            return runway.getObstacle().getLength();
-        }
-        return 0;
-    }
-
-
-    public Number getObstacleWidth(String runwayId){
-        Runway runway = airfield.getRunway(runwayId);
-        if(runway.getObstacle() == null){
-            return runway.getObstacle().getWidth();
-        }
-        return 0;
-    }
-
-    public Number getObjectDistFromCentreline(String runwayId){
-        Runway runway = airfield.getRunway(runwayId);
-        return runway.getObstacle().getCentrelineDistance();
-    }
-
-    public Number getObjectDistFromStart(String runwayId){
-        Runway runway = airfield.getRunway(runwayId);
-        return runway.getObstacle().getStartDistance();
-    }
-
 
     public Map<String,Airfield.Dimensions> getPredifinedObstacles() { return airfield.getPredefinedObstacles(); }
 
@@ -324,9 +366,12 @@ public class AppController implements ViewController {
         runway.placeObstacle(obstacle, runwayOne, distanceOne, runwayTwo, distanceTwo);
     }
 
-
     public void redeclareRunway(String runwayId){
-        airfield.getRunway(runwayId).recalculateParameters();
+       for(Runway runway: getPhysicalRunways()){
+           if(runway.getId().equals(runwayId)){
+               runway.recalculateParameters();
+           }
+       }
     }
 
     public void setResa(Runway runway, Integer resa) { runway.setResa(resa);}
