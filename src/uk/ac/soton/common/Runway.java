@@ -152,6 +152,7 @@ public class Runway extends PositionalObject{
         //this.resa = 240; // Resets the RESA in case it was temporarily redefined
     }
 
+    //Runway id refers to the logical runway
     public void placeObstacle(Obstacle obstacle, String runwayId){
         this.obstacle = obstacle;
         LogicalRunway current = null;
