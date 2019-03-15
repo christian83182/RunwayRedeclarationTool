@@ -186,6 +186,7 @@ public class LogicalRunway{
     public void setObjectThresholdDistance(Number objectThresholdDistance) { this.objectThresholdDistance = objectThresholdDistance; }
 
     public Number getObjectThresholdDistance() { return objectThresholdDistance; }
+    //This property for LogicalRunway Obstacle
 
 }
 

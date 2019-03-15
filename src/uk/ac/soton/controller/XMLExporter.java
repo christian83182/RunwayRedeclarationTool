@@ -127,6 +127,12 @@ public class XMLExporter {
                 stripWidth.appendChild(document.createTextNode(airfield.getRunways().get(i).getStripWidth().toString()));
                 runway.appendChild(stripWidth);
 
+              /*  //Add the obstacle.
+                Element obstacle = document.createElement("obstacle");
+                obstacle.appendChild(document.createTextNode(airfield.getRunways().get(i).getObstacle().getId()));
+                runway.appendChild(obstacle); */
+
+
                 //Add logical runways.
                 LogicalRunway[] logicalRunways = airfield.getLogicalRunwaysOf(airfield.getRunways().get(i));
                 if (logicalRunways != null) {

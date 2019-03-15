@@ -58,11 +58,31 @@ public class Settings{
     public static void setRedGreenColourblindTheme(){
         //things like "AXIS_COLOUR = new Color(255,255,255)"
         //dont feel like you need to change every single setting. A lot of them will stay the same.
+        //AIRFIELD_COLOUR = new Color(44, 44, 44);
+        RUNWAY_STRIP_COLOUR = new Color(5, 7, 207);
+        CLEAR_AND_GRADED_COLOUR = new Color(111, 111, 210);
+        RUNWAY_COLOUR = new Color(147, 147, 147);
+        SELECTED_RUNWAY_HIGHLIGHT = new Color(254, 255, 10);
+        THRESHOLD_INDICATOR_COLOUR= new Color(226, 229, 0, 131);
+        OBSTACLE_STROKE_COLOUR = new Color(30, 30, 61, 103);
+        OBSTACLE_FILL_COLOUR = new Color(94, 94, 179, 250);
+        STOPWAY_STROKE_COLOUR = new Color(255, 233, 0, 124);
+        CLEARWAY_STROKE_COLOUR = new Color(0, 27, 255, 64);
     }
 
     public static void setBlueYellowColourblidTheme(){
         //things like "AXIS_COLOUR = new Color(255,255,255)"
         //dont feel like you need to change every single setting. A lot of them will stay the same.
+        //AIRFIELD_COLOUR = new Color(44, 44, 44);
+        RUNWAY_STRIP_COLOUR = new Color(0, 153, 153);
+        CLEAR_AND_GRADED_COLOUR = new Color(0, 230, 230);
+        RUNWAY_COLOUR = new Color(147, 147, 147);
+        SELECTED_RUNWAY_HIGHLIGHT = new Color(255, 89, 142);
+        THRESHOLD_INDICATOR_COLOUR= new Color(255, 0, 196, 180);
+        OBSTACLE_STROKE_COLOUR = new Color(255,0, 108);
+        OBSTACLE_FILL_COLOUR = new Color(255, 230, 242);
+        STOPWAY_STROKE_COLOUR = new Color(0, 252, 255);
+        CLEARWAY_STROKE_COLOUR = new Color(102, 0, 77);
     }
 
     public static void setDefaultTheme(){

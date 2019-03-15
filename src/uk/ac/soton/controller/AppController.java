@@ -334,6 +334,8 @@ public class AppController implements ViewController {
             e.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();
+        } catch (ImporterExceptions importerExceptions) {
+            importerExceptions.printStackTrace();
         }
     }
 
