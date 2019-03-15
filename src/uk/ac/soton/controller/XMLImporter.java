@@ -5,6 +5,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+//import sun.rmi.runtime.Log;
 import uk.ac.soton.common.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -13,10 +14,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class XMLImporter {
     private DocumentBuilderFactory dbFactory;
@@ -31,7 +30,7 @@ public class XMLImporter {
     private Integer length;
     private Airfield airfield;
 
-    public Airfield importAirfieldInfo(String filename) throws ParserConfigurationException, IOException, SAXException {
+    public Airfield importAirfieldInfo(String filename) throws ParserConfigurationException, IOException, SAXException, ImporterExceptions {
         File xml = new File(filename);
         dbFactory = DocumentBuilderFactory.newInstance();
         airfield = new Airfield();
@@ -82,10 +81,12 @@ public class XMLImporter {
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
+        } catch (ImporterExceptions importerExceptions) {
+            importerExceptions.printStackTrace();
         }
     }
 
-    private Runway getRunway(Node node, String filename){
+    private Runway getRunway(Node node, String filename) throws ImporterExceptions {
         Runway runway = new Runway();
         LogicalRunway logicalRunway1;
         LogicalRunway logicalRunway2;
@@ -93,33 +94,47 @@ public class XMLImporter {
 
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
-            int width = Integer.parseInt(getTagValue("width", element));
-            int als = Integer.parseInt(getTagValue("als", element));
-            int resa = Integer.parseInt(getTagValue("resa", element));
-            int stripEnd = Integer.parseInt(getTagValue("stripEnd", element));
-            int stripWidth = Integer.parseInt(getTagValue("stripWidth", element));
-            length = Integer.parseInt(getTagValue("length", element));
+            if (getTagValue("id",element) == null){
+                throw new ImporterExceptions("Error: Runway <id> is null");
+            } else { runway.setId(getTagValue("id", element)); }
+              runway.setxPos(Integer.parseInt(getTagValue("xPos", element)));
 
-            if (length > 0 && width>0 && als>0 && resa>0 && stripEnd>0 && stripWidth>0) {
-                runway.setId(getTagValue("id", element));
-                runway.setxPos(Integer.parseInt(getTagValue("xPos", element)));
-                runway.setyPos(Integer.parseInt(getTagValue("yPos", element)));
-                runway.setLength(length);
-                runway.setWidth(width);
-                runway.setActive(Boolean.parseBoolean(getTagValue("isActive", element)));
-                runway.setAls(als);
-                runway.setResa(resa);
-                runway.setStripEnd(stripEnd);
-                runway.setStripWidth(stripWidth);
-            } else {
-                throw new IllegalArgumentException("Runway measurements can not be negative");
-            }
+              runway.setyPos(Integer.parseInt(getTagValue("yPos", element)));
+
+            if (Integer.parseInt(getTagValue("length",element)) <= 0) {
+                throw new ImporterExceptions("Error: Runway <length> is '0' or negative");
+            } else { length = Integer.parseInt(getTagValue("length", element));
+                runway.setLength(length); }
+
+            if (Integer.parseInt(getTagValue("width",element)) <= 0) {
+                throw new ImporterExceptions("Error: Runway <width> is '0' or negative");
+            } else {runway.setWidth(Integer.parseInt(getTagValue("width", element)));}
+
+            runway.setActive(Boolean.parseBoolean(getTagValue("isActive", element)));
+
+            if(Integer.parseInt(getTagValue("als",element)) <= 0) {
+                throw new ImporterExceptions("Error: Runway <als> is '0' or negative");
+            } else { runway.setAls(Integer.parseInt(getTagValue("als", element))); }
+
+            if (Integer.parseInt(getTagValue("resa",element)) <= 0) {
+                throw new ImporterExceptions("Error: Runway <resa> is '0' or negative");
+            } else { runway.setResa(Integer.parseInt(getTagValue("resa", element))); }
+
+            if (Integer.parseInt(getTagValue("stripEnd",element)) <= 0){
+                throw new ImporterExceptions("Error: Runway <stripEnd> is '0' or negative");
+            } else {runway.setStripEnd(Integer.parseInt(getTagValue("stripEnd",element)));}
+
+            if (Integer.parseInt(getTagValue("stripWidth", element)) <= 0) {
+                throw new ImporterExceptions("Error: Runway <stripWidth> is '0' or negative");
+            } else {runway.setStripWidth(Integer.parseInt(getTagValue("stripWidth",element))); }
+
+
 
         }
         return runway;
     }
 
-    private void getLogicalRunwayData(Node node, String filename){
+    private void getLogicalRunwayData(Node node, String filename) {
         importDimension(filename);
 
         if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -129,7 +144,7 @@ public class XMLImporter {
         }
     }
 
-    private void importLogicalRunways(String filename) {
+    private void importLogicalRunways(String filename) throws ImporterExceptions {
         File xml = new File(filename);
         dbFactory = DocumentBuilderFactory.newInstance();
         importDimension(filename);
@@ -143,10 +158,14 @@ public class XMLImporter {
 
             for (int i = 0; i < nodeList.getLength(); i++) {
                 getLogicalRunwayData(nodeList.item(i), filename);
-                if(threshold > 0 && length > 0) {
+                if (name == null) {
+                    throw new ImporterExceptions("Error: Logical Runway <name> is null");
+                } else if (length <= 0) {
+                    throw new ImporterExceptions("Error: Logical Runway <length> is either '0' or negative");
+                } else if (threshold <= 0) {
+                    throw new ImporterExceptions("Error: Logical Runway <threshold> is either '0' or negative");
+                } else {
                     logicalRunways.add(new LogicalRunway(name, length, threshold, clearways.get(i), stopways.get(i)));
-                }else {
-                    throw new IllegalArgumentException("Logical Runway measurements can not be negative");
                 }
             }
 
@@ -176,22 +195,23 @@ public class XMLImporter {
         }
         catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
+        } catch (ImporterExceptions importerExceptions) {
+            importerExceptions.printStackTrace();
         }
     }
 
-    private Dimension getDimension(Node node){
+    private Dimension getDimension(Node node) throws ImporterExceptions{
         Dimension dimension = null;
 
         if(node.getNodeType() == Node.ELEMENT_NODE){
             Element element = (Element) node;
-            double width = Double.parseDouble(getTagValue("width",element));
-            double height = Double.parseDouble(getTagValue("height",element));
-
-            if(width > 0 && height > 0) {
-                dimension = new Dimension((int) width, (int) height);
-            }else {
-                throw new IllegalArgumentException("Clearway and Stopway measurements can not be negative");
+            if (Double.parseDouble((getTagValue("width",element))) <= 0 || Double.parseDouble(getTagValue("height",element)) <= 0){
+                throw new  ImporterExceptions("Error: <width> or <height> Dimensions are either '0' or negative");
+            } else {
+                dimension = new Dimension((int)Double.parseDouble(getTagValue("width",element)),
+                        (int) Double.parseDouble(getTagValue("height",element)));
             }
+
 
         }
         return dimension;
@@ -218,25 +238,37 @@ public class XMLImporter {
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
+        } catch (ImporterExceptions importerExceptions) {
+            importerExceptions.printStackTrace();
         }
     }
 
-    private PredefinedObstacle getObstacle(Node node) {
+    private PredefinedObstacle getObstacle(Node node) throws ImporterExceptions {
         PredefinedObstacle obstacle = new PredefinedObstacle();
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
-            String id = getTagValue("id", element);
-            Double length = Double.parseDouble(getTagValue("length", element));
-            Double height = Double.parseDouble(getTagValue("height", element));
-            Double width = Double.parseDouble(getTagValue("width", element));
-
-            if(length > 0 && height > 0 && width > 0){
-                obstacle.id = id;
-                obstacle.length = length;
-                obstacle.height = height;
-                obstacle.width = width;
+            if (obstacle.id == null){
+                throw new ImporterExceptions("Error: the obstacle <id> is null.");
             } else {
-                throw new IllegalArgumentException("Obstacle measurements can not be negative");
+                obstacle.id = getTagValue("id", element);
+            }
+
+            if (obstacle.length <= 0) {
+                throw new ImporterExceptions("Error: the obstacle <length> is either '0' or negative.");
+            } else {
+                obstacle.length = Double.parseDouble(getTagValue("length", element));
+            }
+
+            if (obstacle.height <= 0) {
+                throw new ImporterExceptions("Error: the obstacle <height> is either '0' or negative.");
+            } else {
+                obstacle.height = Double.parseDouble(getTagValue("height", element));
+            }
+
+            if (obstacle.width <= 0) {
+                throw new ImporterExceptions("Error: the obstacle <width> is either '0' or negative.");
+            } else {
+                obstacle.height = Double.parseDouble(getTagValue("width", element));
             }
         }
         return obstacle;
@@ -254,10 +286,9 @@ public class XMLImporter {
         public Double width = 0.0;
         public Double height = 0.0;
 
-       /* public String toString() {
+        public String toString() {
             return "Obstacle :: id=" + this.id + " Height=" + this.height + " Width=" + this.width +
                     " Length=" + this.length;
         }
-        */
     }
 }

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="11.0.2" class="java.beans.XMLDecoder">
+ <string>Airbus A380</string>
+ <double>73.0</double>
+ <double>24.1</double>
+ <double>79.8</double>
+ <string>Airbus A330-200ceo</string>
+ <double>58.82</double>
+ <double>17.39</double>
+ <double>60.3</double>
+ <string>Airbus A340-200</string>
+ <double>59.39</double>
+ <double>16.7</double>
+ <double>60.3</double>
+ <string>Airbus A340-300</string>
+ <double>63.6</double>
+ <double>16.85</double>
+ <double>60.3</double>
+ <string>Boeing 727-200</string>
+ <double>46.69</double>
+ <double>10.52</double>
+ <double>32.92</double>
+ <string>Boeing 727-100</string>
+ <double>40.59</double>
+ <double>10.52</double>
+ <double>32.92</double>
+ <string>Airbus A330-200F</string>
+ <double>58.82</double>
+ <double>16.9</double>
+ <double>60.3</double>
+ <string>Airbus A350-800</string>
+ <double>60.54</double>
+ <double>17.1</double>
+ <double>64.75</double>
+ <string>Airbus A350-900</string>
+ <double>66.89</double>
+ <double>17.1</double>
+ <double>64.75</double>
+ <string>Airbus A321</string>
+ <double>44.51</double>
+ <double>11.76</double>
+ <double>34.1</double>
+ <string>Airbus A330-300ceo</string>
+ <double>63.69</double>
+ <double>16.83</double>
+ <double>60.3</double>
+ <string>Airbus A320</string>
+ <double>37.57</double>
+ <double>11.76</double>
+ <double>34.1</double>
+ <string>Airbus A319</string>
+ <double>33.84</double>
+ <double>11.76</double>
+ <double>34.1</double>
+ <string>Airbus A318</string>
+ <double>31.44</double>
+ <double>12.51</double>
+ <double>34.1</double>
+ <string>Dolly without cargo</string>
+ <double>3.18</double>
+ <double>0.5</double>
+ <double>2.44</double>
+ <string>Boeing 717</string>
+ <double>37.8</double>
+ <double>8.92</double>
+ <double>28.47</double>
+ <string>Airbus A340-600</string>
+ <double>75.3</double>
+ <double>17.3</double>
+ <double>63.45</double>
+ <string>Airbus A340-500</string>
+ <double>67.9</double>
+ <double>17.1</double>
+ <double>63.45</double>
+ <string>ATR-72</string>
+ <double>27.17</double>
+ <double>7.65</double>
+ <double>27.05</double>
+ <string>Airbus A350-1000</string>
+ <double>73.88</double>
+ <double>17.1</double>
+ <double>64.75</double>
+ <string>ATR-42</string>
+ <double>22.67</double>
+ <double>7.59</double>
+ <double>24.57</double>
+ <string>Dolly with cargo</string>
+ <double>3.18</double>
+ <double>2.5</double>
+ <double>2.44</double>
+</java>

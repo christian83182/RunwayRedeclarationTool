@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="11.0.2" class="java.beans.XMLDecoder">
+ <object class="uk.ac.soton.common.Runway">
+  <void property="asda">
+   <int>5</int>
+  </void>
+  <void property="id">
+   <string>Runway</string>
+  </void>
+  <void property="lda">
+   <int>5</int>
+  </void>
+  <void property="length">
+   <int>5</int>
+  </void>
+  <void property="name">
+   <string>Runwaylol</string>
+  </void>
+  <void property="toda">
+   <int>5</int>
+  </void>
+  <void property="width">
+   <int>2</int>
+  </void>
+  <void property="xPos">
+   <int>12</int>
+  </void>
+  <void property="yPos">
+   <int>13</int>
+  </void>
+ </object>
+ <object class="uk.ac.soton.common.Obstacle">
+  <void property="centrelineDistance">
+   <int>10</int>
+  </void>
+  <void property="height">
+   <double>10.0</double>
+  </void>
+  <void property="id">
+   <string>Boeing 717</string>
+  </void>
+  <void property="length">
+   <double>30.0</double>
+  </void>
+  <void property="runwayDistance">
+   <int>20</int>
+  </void>
+  <void property="thresholdDistance">
+   <int>20</int>
+  </void>
+  <void property="width">
+   <double>20.0</double>
+  </void>
+  <void property="xPos">
+   <int>32</int>
+  </void>
+  <void property="yPos">
+   <int>13</int>
+  </void>
+ </object>
+ <object class="uk.ac.soton.common.Runway">
+  <void property="asda">
+   <int>6</int>
+  </void>
+  <void property="id">
+   <string>Runway2</string>
+  </void>
+  <void property="lda">
+   <int>6</int>
+  </void>
+  <void property="length">
+   <int>6</int>
+  </void>
+  <void property="toda">
+   <int>6</int>
+  </void>
+  <void property="width">
+   <int>3</int>
+  </void>
+  <void property="xPos">
+   <int>13</int>
+  </void>
+  <void property="yPos">
+   <int>14</int>
+  </void>
+ </object>
+</java>

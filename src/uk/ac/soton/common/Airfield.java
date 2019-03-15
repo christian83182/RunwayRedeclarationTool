@@ -118,6 +118,9 @@ public class Airfield {
     public ArrayList<Runway> getRunways(){
         return runways;
     }
+    public void setRunways(ArrayList<Runway> newRunways){
+        this.runways = newRunways;
+    }
 
     public Boolean addRunway(Runway newRunway){
 
