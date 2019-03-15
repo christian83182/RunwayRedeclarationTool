@@ -235,14 +235,123 @@ public class RunwayTest {
         assertEquals(2774, runway.getLogicalRunway("27R").getLda().getRedeclaredValue().intValue());
     }
 
+    @Test // Towards the obstacle, Slope Calculation > RESA
+    public void redeclareEquivClass1(){
+
+        Runway runway = initEquivTestingRunway();
+
+        Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11.0,10.0,15.0));
+        runway.placeObstacle(obstacle, "09",2730, "27",650);
+        runway.recalculateParameters();
+
+        // Configuration check: Slope Calculation > RESA
+        assertEquals(true, runway.getObstacle().getHeight() * runway.getAls() > runway.getResa());
+
+        // Take Off Towards, Landing Towards
+        assertEquals(2170, runway.getLogicalRunway("09").getTora().getRedeclaredValue().intValue());
+        assertEquals(2170, runway.getLogicalRunway("09").getToda().getRedeclaredValue().intValue());
+        assertEquals(2170, runway.getLogicalRunway("09").getAsda().getRedeclaredValue().intValue());
+        assertEquals(2430, runway.getLogicalRunway("09").getLda().getRedeclaredValue().intValue());
+    }
+
+    @Test // Towards the obstacle, Slope Calculation <= RESA
+    public void redeclareEquivClass2(){
+
+        Runway runway = initEquivTestingRunway();
+
+        Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11.0,10.0,3.0));
+        runway.placeObstacle(obstacle, "09",2730, "27",650);
+        runway.recalculateParameters();
+
+        // Configuration check: Slope Calculation <= RESA
+        assertEquals(true, runway.getObstacle().getHeight() * runway.getAls() <= runway.getResa());
+
+        // Take Off Towards, Landing Towards
+        assertEquals(2680, runway.getLogicalRunway("09").getTora().getRedeclaredValue().intValue());
+        assertEquals(2680, runway.getLogicalRunway("09").getToda().getRedeclaredValue().intValue());
+        assertEquals(2680, runway.getLogicalRunway("09").getAsda().getRedeclaredValue().intValue());
+        assertEquals(2430, runway.getLogicalRunway("09").getLda().getRedeclaredValue().intValue());
+    }
+
+    @Test // Away from the obstacle, Slope Calculation > RESA, Slope + Strip End > Blast Protection
+    public void redeclareEquivClass3(){
+
+        Runway runway = initEquivTestingRunway();
+
+        Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11.0,10.0,15.0));
+        runway.placeObstacle(obstacle, "09",2730, "27",650);
+        runway.recalculateParameters();
+
+        // Configuration check: Slope Calculation > RESA
+        assertEquals(true, runway.getObstacle().getHeight() * runway.getAls() > runway.getResa());
+
+        // Configuration check: Slope + Strip End > Blast Protection
+        assertEquals(true,runway.getObstacle().getHeight() * runway.getAls() + runway.getStripEnd() > runway.getBlastDistance());
+
+        // Take Off Away, Landing Over
+        assertEquals(2680, runway.getLogicalRunway("27").getTora().getRedeclaredValue().intValue());
+        assertEquals(2750, runway.getLogicalRunway("27").getToda().getRedeclaredValue().intValue());
+        assertEquals(2730, runway.getLogicalRunway("27").getAsda().getRedeclaredValue().intValue());
+        assertEquals(2170, runway.getLogicalRunway("27").getLda().getRedeclaredValue().intValue());
+    }
+
+    @Test // Away from the obstacle, Slope Calculation <= RESA, RESA + Strip End > Blast Protection
+    public void redeclareEquivClass4(){
+
+        Runway runway = initEquivTestingRunway();
+
+        Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11.0,10.0,3.0));
+        runway.placeObstacle(obstacle, "09",2730, "27",650);
+        runway.setResa(260);
+        runway.recalculateParameters();
+
+        // Configuration check: Slope Calculation <= RESA
+        assertEquals(true, runway.getObstacle().getHeight() * runway.getAls() <= runway.getResa());
+
+        // Configuration check: RESA + Strip End > Blast Protection
+        assertEquals(true,runway.getResa() + runway.getStripEnd() > runway.getBlastDistance());
+
+        assertEquals(3630, runway.getLogicalRunway("27").getLda().getOriginalValue());
+        assertEquals(260, runway.getResa().intValue());
+        assertEquals(650, runway.getLogicalRunway("27").getObjectThresholdDistance());
+        assertEquals(60, runway.getStripEnd().intValue());
+
+        // Take Off Away, Landing Over
+        assertEquals(2660, runway.getLogicalRunway("27").getTora().getRedeclaredValue().intValue());
+        assertEquals(2730, runway.getLogicalRunway("27").getToda().getRedeclaredValue().intValue());
+        assertEquals(2710, runway.getLogicalRunway("27").getAsda().getRedeclaredValue().intValue());
+        assertEquals(2660, runway.getLogicalRunway("27").getLda().getRedeclaredValue().intValue());
+    }
+
+    @Test // Away from the obstacle, Slope + Strip End <= Blast Protection, RESA + Strip End <= Blast Protection
+    public void redeclareEquivClass5(){
+
+        Runway runway = initEquivTestingRunway();
+
+        Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11.0,10.0,3.0));
+        runway.placeObstacle(obstacle, "09",2730, "27",650);
+        runway.setBlastDistance(500);
+        runway.recalculateParameters();
+
+        // Configuration check: Slope + Strip End <= Blast Protection && RESA + Strip End <= Blast Protection
+        assertEquals(true, runway.getObstacle().getHeight() * runway.getAls() <= runway.getBlastDistance() &&
+                runway.getResa() + runway.getStripEnd() <= runway.getBlastDistance());
+
+        // Take Off Away, Landing Over
+        assertEquals(2480, runway.getLogicalRunway("27").getTora().getRedeclaredValue().intValue());
+        assertEquals(2550, runway.getLogicalRunway("27").getToda().getRedeclaredValue().intValue());
+        assertEquals(2530, runway.getLogicalRunway("27").getAsda().getRedeclaredValue().intValue());
+        assertEquals(2480, runway.getLogicalRunway("27").getLda().getRedeclaredValue().intValue());
+    }
+
     public Runway initScenarioRunway09R27L(){
 
         Runway runway = new Runway("09R/27L", -1000, -200, 3660, 80, 400, 60);
-        LogicalRunway r11 = new LogicalRunway("09R",runway.getLength(),307,
+        LogicalRunway r1 = new LogicalRunway("09R",runway.getLength(),307,
                 new Dimension(0,0), new Dimension(0, 0));
-        LogicalRunway r12 = new LogicalRunway("27L",runway.getLength(),0,
+        LogicalRunway r2 = new LogicalRunway("27L",runway.getLength(),0,
                 new Dimension(0,0), new Dimension(0, 0));
-        runway.setLogicalRunways(r11,r12);
+        runway.setLogicalRunways(r1,r2);
 
         return runway;
     }
@@ -250,11 +359,23 @@ public class RunwayTest {
     public Runway initScenarioRunway09L27R(){
 
         Runway runway = new Runway("09L/27R", -1000, -200, 3902, 80, 400, 60);
-        LogicalRunway r21 = new LogicalRunway("09L",runway.getLength(),306,
+        LogicalRunway r1 = new LogicalRunway("09L",runway.getLength(),306,
                 new Dimension(0,0), new Dimension(0, 0));
-        LogicalRunway r22 = new LogicalRunway("27R",3884,0,
+        LogicalRunway r2 = new LogicalRunway("27R",3884,0,
                 new Dimension(78,220), new Dimension(0, 0));
-        runway.setLogicalRunways(r21,r22);
+        runway.setLogicalRunways(r1,r2);
+
+        return runway;
+    }
+
+    public Runway initEquivTestingRunway(){
+
+        Runway runway = new Runway("09/27", -1000, -200, 3680, 80, 400, 60);
+        LogicalRunway r1 = new LogicalRunway("09",runway.getLength(),250,
+                new Dimension(0,0), new Dimension(0, 0));
+        LogicalRunway r2 = new LogicalRunway("27",runway.getLength(),50,
+                new Dimension(70,220), new Dimension(50, runway.getWidth()));
+        runway.setLogicalRunways(r1,r2);
 
         return runway;
     }

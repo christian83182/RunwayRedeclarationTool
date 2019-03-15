@@ -296,7 +296,7 @@ public class Runway extends PositionalObject{
 
             // LDA = Original LDA - Distance from Threshold - Blast Protection
             runway.redeclareLda(runway.getLda().getOriginalValue().intValue() - runway.getObjectThresholdDistance().intValue()
-                    - slope - stripEnd);
+                    - blastDistance);
             runway.getLda().setBreakdown("LDA = Original LDA - Distance from Threshold - Blast Protection\n" +
                     "LDA = " + runway.getLda().getOriginalValue().intValue() + " - " + runway.getObjectThresholdDistance().intValue()
                     + " - " + blastDistance);
