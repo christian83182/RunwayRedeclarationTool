@@ -16,29 +16,29 @@ public class Settings{
     static Integer TOP_DOWN_INFO_ARROW_LENGTH = 15;
     static Integer TOP_DOWN_INFO_TEXT_PADDING = 15;
 
-    static Color AIRFIELD_COLOUR = new Color(44, 44, 44);
-    static Color RUNWAY_STRIP_COLOUR = new Color(61, 122, 61);
-    static Color CLEAR_AND_GRADED_COLOUR = new Color(80, 160, 79);
-    static Color RUNWAY_COLOUR = new Color(147, 147, 147);
+    static Color AIRFIELD_COLOUR;
+    static Color RUNWAY_STRIP_COLOUR;
+    static Color CLEAR_AND_GRADED_COLOUR;
+    static Color RUNWAY_COLOUR;
 
     static Color CENTERLINE_COLOUR = new Color(237, 237, 237);
     static Stroke CENTERLINE_STROKE = new BasicStroke(2, 1, 0, 10, new float[] {15,10}, 1);
 
-    static Color SELECTED_RUNWAY_HIGHLIGHT = new Color(255, 151, 71);
+    static Color SELECTED_RUNWAY_HIGHLIGHT;
     static Stroke SELECTED_RUNWAY_STROKE = new BasicStroke(3);
 
-    static Color THRESHOLD_INDICATOR_COLOUR = new Color(255, 138, 42, 100);
+    static Color THRESHOLD_INDICATOR_COLOUR;
 
     static Stroke OBSTACLE_STROKE = new BasicStroke(2);
-    static Color OBSTACLE_STROKE_COLOUR = new Color(139,0, 147);
-    static Color OBSTACLE_FILL_COLOUR = new Color(171,0, 183);
+    static Color OBSTACLE_STROKE_COLOUR;
+    static Color OBSTACLE_FILL_COLOUR;
 
-    static Color STOPWAY_STROKE_COLOUR = new Color(255, 0, 25);
+    static Color STOPWAY_STROKE_COLOUR;
+    static Color STOPWAY_FILL_COLOUR;
     static Stroke STOPWAY_STROKE = new BasicStroke(3);
-    static Color STOPWAY_FILL_COLOUR = new Color(STOPWAY_STROKE_COLOUR.getRed(), STOPWAY_STROKE_COLOUR.getGreen(), STOPWAY_STROKE_COLOUR.getBlue(),40);
 
-    static Color CLEARWAY_STROKE_COLOUR = new Color(23, 0, 255);
-    static Color CLEARWAY_FILL_COLOUR = new Color(CLEARWAY_STROKE_COLOUR.getRed(), CLEARWAY_STROKE_COLOUR.getGreen(), CLEARWAY_STROKE_COLOUR.getBlue(),20);
+    static Color CLEARWAY_STROKE_COLOUR;
+    static Color CLEARWAY_FILL_COLOUR;
     static Stroke CLEARWAY_STROKE = new BasicStroke(3);
 
     static Color AXIS_COLOUR = new Color(226, 226, 226,80);
@@ -55,37 +55,52 @@ public class Settings{
     static Font SIDE_MENU_DEFAULT_FONT = new Font("SansSerif", Font.PLAIN, 14);
     static Font MENU_BAR_DEFAULT_FONT = new Font("SansSerif", Font.PLAIN, 14);
 
+    static {
+        setDefaultTheme();
+    }
+
     public static void setRedGreenColourblindTheme(){
-        //things like "AXIS_COLOUR = new Color(255,255,255)"
-        //dont feel like you need to change every single setting. A lot of them will stay the same.
-        //AIRFIELD_COLOUR = new Color(44, 44, 44);
+        AIRFIELD_COLOUR = new Color(44, 44, 44);
         RUNWAY_STRIP_COLOUR = new Color(5, 7, 207);
         CLEAR_AND_GRADED_COLOUR = new Color(111, 111, 210);
         RUNWAY_COLOUR = new Color(147, 147, 147);
         SELECTED_RUNWAY_HIGHLIGHT = new Color(254, 255, 10);
-        THRESHOLD_INDICATOR_COLOUR= new Color(226, 229, 0, 131);
+        THRESHOLD_INDICATOR_COLOUR= new Color(226, 229, 0, 100);
         OBSTACLE_STROKE_COLOUR = new Color(30, 30, 61, 103);
         OBSTACLE_FILL_COLOUR = new Color(94, 94, 179, 250);
-        STOPWAY_STROKE_COLOUR = new Color(255, 233, 0, 124);
-        CLEARWAY_STROKE_COLOUR = new Color(0, 27, 255, 64);
+        STOPWAY_STROKE_COLOUR = new Color(255, 118, 0);
+        STOPWAY_FILL_COLOUR = new Color(STOPWAY_STROKE_COLOUR.getRed(), STOPWAY_STROKE_COLOUR.getGreen(), STOPWAY_STROKE_COLOUR.getBlue(),70);
+        CLEARWAY_STROKE_COLOUR = new Color(0, 27, 255);
+        CLEARWAY_FILL_COLOUR = new Color(CLEARWAY_STROKE_COLOUR.getRed(), CLEARWAY_STROKE_COLOUR.getGreen(), CLEARWAY_STROKE_COLOUR.getBlue(),50);
     }
 
-    public static void setBlueYellowColourblidTheme(){
-        //things like "AXIS_COLOUR = new Color(255,255,255)"
-        //dont feel like you need to change every single setting. A lot of them will stay the same.
-        //AIRFIELD_COLOUR = new Color(44, 44, 44);
+    public static void setBlueYellowColourblindTheme(){
+        AIRFIELD_COLOUR = new Color(44, 44, 44);
         RUNWAY_STRIP_COLOUR = new Color(0, 153, 153);
         CLEAR_AND_GRADED_COLOUR = new Color(0, 230, 230);
         RUNWAY_COLOUR = new Color(147, 147, 147);
         SELECTED_RUNWAY_HIGHLIGHT = new Color(255, 89, 142);
-        THRESHOLD_INDICATOR_COLOUR= new Color(255, 0, 196, 180);
+        THRESHOLD_INDICATOR_COLOUR= new Color(255, 0, 196, 100);
         OBSTACLE_STROKE_COLOUR = new Color(255,0, 108);
         OBSTACLE_FILL_COLOUR = new Color(255, 230, 242);
-        STOPWAY_STROKE_COLOUR = new Color(0, 252, 255);
+        STOPWAY_STROKE_COLOUR = new Color(0, 81, 255);
+        STOPWAY_FILL_COLOUR = new Color(STOPWAY_STROKE_COLOUR.getRed(), STOPWAY_STROKE_COLOUR.getGreen(), STOPWAY_STROKE_COLOUR.getBlue(),50);
         CLEARWAY_STROKE_COLOUR = new Color(102, 0, 77);
+        CLEARWAY_FILL_COLOUR = new Color(CLEARWAY_STROKE_COLOUR.getRed(), CLEARWAY_STROKE_COLOUR.getGreen(), CLEARWAY_STROKE_COLOUR.getBlue(),50);
     }
 
     public static void setDefaultTheme(){
-        //dont worry about this, I'll populate this later.
+        AIRFIELD_COLOUR = new Color(44, 44, 44);
+        RUNWAY_STRIP_COLOUR = new Color(61, 122, 61);
+        CLEAR_AND_GRADED_COLOUR = new Color(80, 160, 79);
+        RUNWAY_COLOUR = new Color(147, 147, 147);
+        SELECTED_RUNWAY_HIGHLIGHT = new Color(255, 151, 71);
+        THRESHOLD_INDICATOR_COLOUR = new Color(255, 138, 42, 100);
+        OBSTACLE_STROKE_COLOUR = new Color(139,0, 147);
+        OBSTACLE_FILL_COLOUR = new Color(171,0, 183);
+        STOPWAY_STROKE_COLOUR = new Color(255, 0, 25);
+        STOPWAY_FILL_COLOUR = new Color(STOPWAY_STROKE_COLOUR.getRed(), STOPWAY_STROKE_COLOUR.getGreen(), STOPWAY_STROKE_COLOUR.getBlue(),40);
+        CLEARWAY_STROKE_COLOUR = new Color(23, 0, 255);
+        CLEARWAY_FILL_COLOUR = new Color(CLEARWAY_STROKE_COLOUR.getRed(), CLEARWAY_STROKE_COLOUR.getGreen(), CLEARWAY_STROKE_COLOUR.getBlue(),20);
     }
 }

@@ -99,10 +99,32 @@ public class CustomMenuBar extends JMenuBar {
         editMenu.add(editObstaclesMenu);
         editObstaclesMenu.addActionListener(e -> new BrowseObstaclesWindow(controller));
 
-        //Adding the "settings" option to the settings menu.
-        JMenuItem openSettings = new JMenuItem("Settings (Unimplemented)");
-        openSettings.setFont(Settings.MENU_BAR_DEFAULT_FONT);
-        settingsMenu.add(openSettings);
+        //Adding the "Set Default Colour Theme" option to the settings menu.
+        JMenuItem setDefaultTheme = new JMenuItem("Set Default Colour Theme");
+        setDefaultTheme.setFont(Settings.MENU_BAR_DEFAULT_FONT);
+        settingsMenu.add(setDefaultTheme);
+        setDefaultTheme.addActionListener(e -> {
+            Settings.setDefaultTheme();
+            appView.repaint();
+        });
+
+        //Adding the "Set Red-Green Coloublind Theme" option to the settings menu.
+        JMenuItem setRedGreenColourblindTheme = new JMenuItem("Set Red-Green Coloublind Theme");
+        setRedGreenColourblindTheme.setFont(Settings.MENU_BAR_DEFAULT_FONT);
+        settingsMenu.add(setRedGreenColourblindTheme);
+        setRedGreenColourblindTheme.addActionListener(e -> {
+            Settings.setRedGreenColourblindTheme();
+            appView.repaint();
+        });
+
+        //Adding the "Set Blue-Yellow Coloublind Theme" option to the settings menu.
+        JMenuItem setYellowBlueColourblindTheme = new JMenuItem("Set Blue-Yellow Coloublind Theme");
+        setYellowBlueColourblindTheme.setFont(Settings.MENU_BAR_DEFAULT_FONT);
+        settingsMenu.add(setYellowBlueColourblindTheme);
+        setYellowBlueColourblindTheme.addActionListener(e -> {
+            Settings.setBlueYellowColourblindTheme();
+            appView.repaint();
+        });
 
         //Adding the "open help" option to the help menu.
         JMenuItem openHelp = new JMenuItem("Open Help");
