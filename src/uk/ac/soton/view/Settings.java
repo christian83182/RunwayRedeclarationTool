@@ -60,6 +60,8 @@ public class Settings{
     static Color SIDEVIEW_GROUND_COLOUR_TOP;
     static Color SIDEVIEW_GROUND_COLOUR_BOTTOM;
 
+    static Color SIDEVIEW_OBSTACLE_FILL_COLOR;
+
     static {
         setDefaultTheme();
     }
@@ -73,6 +75,7 @@ public class Settings{
         THRESHOLD_INDICATOR_COLOUR = new Color(255, 138, 42, 100);
         OBSTACLE_STROKE_COLOUR = new Color(139,0, 147);
         OBSTACLE_FILL_COLOUR = new Color(171,0, 183);
+        SIDEVIEW_OBSTACLE_FILL_COLOR =new Color(OBSTACLE_STROKE_COLOUR.getRed(), OBSTACLE_STROKE_COLOUR.getGreen(), OBSTACLE_STROKE_COLOUR.getBlue(),20);
         STOPWAY_STROKE_COLOUR = new Color(255, 0, 25);
         STOPWAY_FILL_COLOUR = new Color(STOPWAY_STROKE_COLOUR.getRed(), STOPWAY_STROKE_COLOUR.getGreen(), STOPWAY_STROKE_COLOUR.getBlue(),40);
         CLEARWAY_STROKE_COLOUR = new Color(23, 0, 255);
