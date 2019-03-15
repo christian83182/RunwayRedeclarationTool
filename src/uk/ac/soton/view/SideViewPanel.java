@@ -1,7 +1,6 @@
 package uk.ac.soton.view;
 
 import java.awt.*;
-import java.awt.geom.NoninvertibleTransformException;
 
 public class SideViewPanel extends InteractivePanel{
 
@@ -14,25 +13,15 @@ public class SideViewPanel extends InteractivePanel{
 
     @Override
     public void paintView(Graphics2D g2) {
-        paintGradientBackground(g2);
-
+        paintBackground(g2);
     }
 
-    public void paintGradientBackground(Graphics2D g2){
-        Color colorBlue = new Color(84,122,179);
-        Color colorGreen = new Color(75,161,79);
-        GradientPaint gp = new GradientPaint(0, 0, colorBlue, 0, getHeight(), colorGreen);
-        g2.setPaint(gp);
-        Point topLeft = new Point(0,0);
-        Point bottomRight = new Point(getWidth(), getHeight());
-
-        try {
-            g2.getTransform().inverseTransform(topLeft, topLeft);
-            g2.getTransform().inverseTransform(bottomRight, bottomRight);
-            g2.fillRect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
-        } catch (NoninvertibleTransformException e) {
-            e.printStackTrace();
-        }
-
+    public void paintBackground(Graphics2D g2){
+        GradientPaint skyGradient = new GradientPaint(0,0,Settings.SIDEVIEW_SKY_COLOUR_BOTTOM, 0,-2000, Settings.SIDEVIEW_SKY_COLOUR_TOP);
+        g2.setPaint(skyGradient);
+        g2.fillRect(-100000,-100000,200000,100000);
+        GradientPaint groundGradient = new GradientPaint(0,0,Settings.SIDEVIEW_GROUND_COLOUR_TOP, 0,2000, Settings.SIDEVIEW_GROUND_COLOUR_BOTTOM);
+        g2.setPaint(groundGradient);
+        g2.fillRect(-100000,0,200000,100000);
     }
 }

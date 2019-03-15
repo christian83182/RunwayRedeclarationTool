@@ -55,8 +55,32 @@ public class Settings{
     static Font SIDE_MENU_DEFAULT_FONT = new Font("SansSerif", Font.PLAIN, 14);
     static Font MENU_BAR_DEFAULT_FONT = new Font("SansSerif", Font.PLAIN, 14);
 
+    static Color SIDEVIEW_SKY_COLOUR_BOTTOM;
+    static Color SIDEVIEW_SKY_COLOUR_TOP;
+    static Color SIDEVIEW_GROUND_COLOUR_TOP;
+    static Color SIDEVIEW_GROUND_COLOUR_BOTTOM;
+
     static {
         setDefaultTheme();
+    }
+
+    public static void setDefaultTheme(){
+        AIRFIELD_COLOUR = new Color(44, 44, 44);
+        RUNWAY_STRIP_COLOUR = new Color(61, 122, 61);
+        CLEAR_AND_GRADED_COLOUR = new Color(80, 160, 79);
+        RUNWAY_COLOUR = new Color(147, 147, 147);
+        SELECTED_RUNWAY_HIGHLIGHT = new Color(255, 151, 71);
+        THRESHOLD_INDICATOR_COLOUR = new Color(255, 138, 42, 100);
+        OBSTACLE_STROKE_COLOUR = new Color(139,0, 147);
+        OBSTACLE_FILL_COLOUR = new Color(171,0, 183);
+        STOPWAY_STROKE_COLOUR = new Color(255, 0, 25);
+        STOPWAY_FILL_COLOUR = new Color(STOPWAY_STROKE_COLOUR.getRed(), STOPWAY_STROKE_COLOUR.getGreen(), STOPWAY_STROKE_COLOUR.getBlue(),40);
+        CLEARWAY_STROKE_COLOUR = new Color(23, 0, 255);
+        CLEARWAY_FILL_COLOUR = new Color(CLEARWAY_STROKE_COLOUR.getRed(), CLEARWAY_STROKE_COLOUR.getGreen(), CLEARWAY_STROKE_COLOUR.getBlue(),20);
+        SIDEVIEW_SKY_COLOUR_BOTTOM = new Color(80, 120, 199);
+        SIDEVIEW_SKY_COLOUR_TOP = new Color(152, 190, 255);
+        SIDEVIEW_GROUND_COLOUR_TOP = new Color(75,161,79);
+        SIDEVIEW_GROUND_COLOUR_BOTTOM = new Color(34, 115, 44);
     }
 
     public static void setRedGreenColourblindTheme(){
@@ -89,18 +113,5 @@ public class Settings{
         CLEARWAY_FILL_COLOUR = new Color(CLEARWAY_STROKE_COLOUR.getRed(), CLEARWAY_STROKE_COLOUR.getGreen(), CLEARWAY_STROKE_COLOUR.getBlue(),50);
     }
 
-    public static void setDefaultTheme(){
-        AIRFIELD_COLOUR = new Color(44, 44, 44);
-        RUNWAY_STRIP_COLOUR = new Color(61, 122, 61);
-        CLEAR_AND_GRADED_COLOUR = new Color(80, 160, 79);
-        RUNWAY_COLOUR = new Color(147, 147, 147);
-        SELECTED_RUNWAY_HIGHLIGHT = new Color(255, 151, 71);
-        THRESHOLD_INDICATOR_COLOUR = new Color(255, 138, 42, 100);
-        OBSTACLE_STROKE_COLOUR = new Color(139,0, 147);
-        OBSTACLE_FILL_COLOUR = new Color(171,0, 183);
-        STOPWAY_STROKE_COLOUR = new Color(255, 0, 25);
-        STOPWAY_FILL_COLOUR = new Color(STOPWAY_STROKE_COLOUR.getRed(), STOPWAY_STROKE_COLOUR.getGreen(), STOPWAY_STROKE_COLOUR.getBlue(),40);
-        CLEARWAY_STROKE_COLOUR = new Color(23, 0, 255);
-        CLEARWAY_FILL_COLOUR = new Color(CLEARWAY_STROKE_COLOUR.getRed(), CLEARWAY_STROKE_COLOUR.getGreen(), CLEARWAY_STROKE_COLOUR.getBlue(),20);
-    }
+
 }
