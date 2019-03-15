@@ -14,6 +14,15 @@ public class SideViewPanel extends InteractivePanel{
     @Override
     public void paintView(Graphics2D g2) {
         paintBackground(g2);
+
+        g2.setColor(Color.BLACK);
+        g2.drawLine(-100000,0,100000,0);
+        g2.drawLine(0,-100000, 0,100000);
+
+        Point p1 = new Point(100,0);
+        Point p2 = new Point(400,200);
+        DataArrow arrow = new DataArrow(p1,p2, -100,"Hello World");
+        arrow.drawArrow(g2);
     }
 
     public void paintBackground(Graphics2D g2){
