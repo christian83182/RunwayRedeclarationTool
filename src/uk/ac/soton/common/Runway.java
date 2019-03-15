@@ -167,14 +167,12 @@ public class Runway extends PositionalObject{
     public void recalculateParameters(){
 
         if(obstacle == null){
-            //TODO add an exception or smth here that will be displayed by the UI?
             return;
         }
         else if(obstacle.getStartDistance() < -stripEnd || obstacle.getStartDistance() > length + stripEnd ||
                 obstacle.getCentrelineDistance() > 75 || obstacle.getCentrelineDistance() < -75){
 
             // Obstacle is not within 60m (strip end) of the runway or within 75m from the centreline.
-            //TODO add an exception or smth here that will be displayed by the UI?
             return;
         }
         else{

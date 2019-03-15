@@ -147,46 +147,116 @@ public class RunwayTest {
         assertEquals(null, r1.getObstacle());
     }
 
+    @Test
+    public void redeclareScenario1() throws Exception {
+
+        Runway runway = initScenarioRunway09L27R();
+
+        Obstacle obstacle = new Obstacle(256,0, new Airfield.Dimensions(11.0,10.0,12.0));
+        runway.placeObstacle(obstacle,"09L",-50,"27R",3646);
+        runway.recalculateParameters();
+
+        // Take Off Away, Landing Over
+        assertEquals(3346, runway.getLogicalRunway("09L").getTora().getRedeclaredValue().intValue());
+        assertEquals(3346, runway.getLogicalRunway("09L").getToda().getRedeclaredValue().intValue());
+        assertEquals(3346, runway.getLogicalRunway("09L").getAsda().getRedeclaredValue().intValue());
+        assertEquals(2986, runway.getLogicalRunway("09L").getLda().getRedeclaredValue().intValue());
+
+        // Take Off Towards, Landing Towards
+        assertEquals(2986, runway.getLogicalRunway("27R").getTora().getRedeclaredValue().intValue());
+        assertEquals(2986, runway.getLogicalRunway("27R").getToda().getRedeclaredValue().intValue());
+        assertEquals(2986, runway.getLogicalRunway("27R").getAsda().getRedeclaredValue().intValue());
+        assertEquals(3346, runway.getLogicalRunway("27R").getLda().getRedeclaredValue().intValue());
+    }
 
     @Test
-    public void recalculateParameters() throws Exception {
-        Runway runway1 = new Runway("09R/27L", -1000, -200, 3660, 80, 400, 60);
-        LogicalRunway r11 = new LogicalRunway("09R",runway1.getLength(),307,
-                new Dimension(350,220), new Dimension(60, runway1.getWidth()));
-        LogicalRunway r12 = new LogicalRunway("27L",runway1.getLength(),0,
-                new Dimension(350,220), new Dimension(60,runway1.getWidth()));
-        runway1.setLogicalRunways(r11,r12);
+    public void redeclareScenario2() throws Exception {
 
-        Obstacle obstacle1 = new Obstacle(3160, -20, new Airfield.Dimensions(11.0,10.0,25.0));
+        Runway runway = initScenarioRunway09R27L();
 
-        runway1.placeObstacle(obstacle1, "09R",2853, "27L", 500 );
+        Obstacle obstacle = new Obstacle(3160, -20, new Airfield.Dimensions(11.0,10.0,25.0));
+        runway.placeObstacle(obstacle, "09R",2853, "27L", 500 );
+        runway.recalculateParameters();
 
-        runway1.recalculateParameters();
+        // Take Off Towards, Landing Towards
+        assertEquals(1850, runway.getLogicalRunway("09R").getTora().getRedeclaredValue().intValue());
+        assertEquals(1850, runway.getLogicalRunway("09R").getToda().getRedeclaredValue().intValue());
+        assertEquals(1850, runway.getLogicalRunway("09R").getAsda().getRedeclaredValue().intValue());
+        assertEquals(2553, runway.getLogicalRunway("09R").getLda().getRedeclaredValue().intValue());
 
-        assertEquals(1850, runway1.getLogicalRunway("09R").getTora().getRedeclaredValue().intValue());
-        assertEquals(1850, runway1.getLogicalRunway("09R").getToda().getRedeclaredValue().intValue());
-        assertEquals(1850, runway1.getLogicalRunway("09R").getAsda().getRedeclaredValue().intValue());
-        assertEquals(2553, runway1.getLogicalRunway("09R").getLda().getRedeclaredValue().intValue());
+        // Take Off Away, Landing Over
+        assertEquals(2860, runway.getLogicalRunway("27L").getTora().getRedeclaredValue().intValue());
+        assertEquals(2860, runway.getLogicalRunway("27L").getToda().getRedeclaredValue().intValue());
+        assertEquals(2860, runway.getLogicalRunway("27L").getAsda().getRedeclaredValue().intValue());
+        assertEquals(1850, runway.getLogicalRunway("27L").getLda().getRedeclaredValue().intValue());
+    }
 
+    @Test
+    public void redeclareScenario3() throws Exception {
 
-//
-//        Runway runway2 = new Runway("09L/27R", -1000, -200, 3902, 80, 400, 60);
-//        LogicalRunway r21 = new LogicalRunway("09L",runway2.getLength(),306,
-//                new Dimension(350,220), new Dimension(60, runway2.getWidth()));
-//        LogicalRunway r22 = new LogicalRunway("27R",runway2.getLength(),0,
-//                new Dimension(350,220), new Dimension(60,runway2.getWidth()));
-//        runway2.setLogicalRunways(r21,r22);
-//
-//        Obstacle obstacle2 = new Obstacle(100, 0, new Airfield.Dimensions(11.0,10.0,12.0));
-//
-//        runway2.placeObstacle(obstacle2, "09L",-50, "27R", 3646 );
-//
-//        runway2.recalculateParameters();
-//
-//        assertEquals(3902, runway2.getLogicalRunway("09L").getTora().getRedeclaredValue().intValue());
-//        assertEquals(3902, runway2.getLogicalRunway("09L").getToda().getRedeclaredValue().intValue());
-//        assertEquals(3902, runway2.getLogicalRunway("09L").getAsda().getRedeclaredValue().intValue());
-//        assertEquals(3596, runway2.getLogicalRunway("09L").getLda().getRedeclaredValue().intValue());
+        Runway runway = initScenarioRunway09R27L();
+
+        Obstacle obstacle = new Obstacle(457,60, new Airfield.Dimensions(11.0,10.0,15.0));
+        runway.placeObstacle(obstacle,"09R",150,"27L",3203);
+        runway.recalculateParameters();
+
+        // Take Off Away, Landing Over
+        assertEquals(2903, runway.getLogicalRunway("09R").getTora().getRedeclaredValue().intValue());
+        assertEquals(2903, runway.getLogicalRunway("09R").getToda().getRedeclaredValue().intValue());
+        assertEquals(2903, runway.getLogicalRunway("09R").getAsda().getRedeclaredValue().intValue());
+        assertEquals(2393, runway.getLogicalRunway("09R").getLda().getRedeclaredValue().intValue());
+
+        // Take Off Towards, Landing Towards
+        assertEquals(2393, runway.getLogicalRunway("27L").getTora().getRedeclaredValue().intValue());
+        assertEquals(2393, runway.getLogicalRunway("27L").getToda().getRedeclaredValue().intValue());
+        assertEquals(2393, runway.getLogicalRunway("27L").getAsda().getRedeclaredValue().intValue());
+        assertEquals(2903, runway.getLogicalRunway("27L").getLda().getRedeclaredValue().intValue());
+    }
+
+    @Test
+    public void redeclareScenario4() throws Exception {
+
+        Runway runway = initScenarioRunway09L27R();
+
+        Obstacle obstacle = new Obstacle(3852,20, new Airfield.Dimensions(11.0,10.0,20.0));
+        runway.placeObstacle(obstacle,"09L",3546,"27R",50);
+        runway.recalculateParameters();
+
+        // Take Off Towards, Landing Towards
+        assertEquals(2792, runway.getLogicalRunway("09L").getTora().getRedeclaredValue().intValue());
+        assertEquals(2792, runway.getLogicalRunway("09L").getToda().getRedeclaredValue().intValue());
+        assertEquals(2792, runway.getLogicalRunway("09L").getAsda().getRedeclaredValue().intValue());
+        assertEquals(3246, runway.getLogicalRunway("09L").getLda().getRedeclaredValue().intValue());
+
+        // Take Off Away, Landing Over
+        assertEquals(3534, runway.getLogicalRunway("27R").getTora().getRedeclaredValue().intValue());
+        assertEquals(3612, runway.getLogicalRunway("27R").getToda().getRedeclaredValue().intValue());
+        assertEquals(3534, runway.getLogicalRunway("27R").getAsda().getRedeclaredValue().intValue());
+        assertEquals(2774, runway.getLogicalRunway("27R").getLda().getRedeclaredValue().intValue());
+    }
+
+    public Runway initScenarioRunway09R27L(){
+
+        Runway runway = new Runway("09R/27L", -1000, -200, 3660, 80, 400, 60);
+        LogicalRunway r11 = new LogicalRunway("09R",runway.getLength(),307,
+                new Dimension(0,0), new Dimension(0, 0));
+        LogicalRunway r12 = new LogicalRunway("27L",runway.getLength(),0,
+                new Dimension(0,0), new Dimension(0, 0));
+        runway.setLogicalRunways(r11,r12);
+
+        return runway;
+    }
+
+    public Runway initScenarioRunway09L27R(){
+
+        Runway runway = new Runway("09L/27R", -1000, -200, 3902, 80, 400, 60);
+        LogicalRunway r21 = new LogicalRunway("09L",runway.getLength(),306,
+                new Dimension(0,0), new Dimension(0, 0));
+        LogicalRunway r22 = new LogicalRunway("27R",3884,0,
+                new Dimension(78,220), new Dimension(0, 0));
+        runway.setLogicalRunways(r21,r22);
+
+        return runway;
     }
 
 }
