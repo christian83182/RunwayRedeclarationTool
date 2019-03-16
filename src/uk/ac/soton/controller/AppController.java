@@ -187,22 +187,58 @@ public class AppController implements ViewController {
 
     @Override
     public Integer getTORAOffset(String runwayId) {
-        return 0;
+
+        Number original = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getTora().getOriginalValue();
+        Number redeclared = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getTora().getRedeclaredValue();
+
+        if(redeclared == null){
+            return 0;
+        }
+        else{
+            return original.intValue() - redeclared.intValue();
+        }
     }
 
     @Override
     public Integer getTODAOffset(String runwayId) {
-        return 0;
+
+        Number original = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getToda().getOriginalValue();
+        Number redeclared = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getToda().getRedeclaredValue();
+
+        if(redeclared == null){
+            return 0;
+        }
+        else{
+            return original.intValue() - redeclared.intValue();
+        }
     }
 
     @Override
     public Integer getASDAOffset(String runwayId) {
-        return 0;
+
+        Number original = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getAsda().getOriginalValue();
+        Number redeclared = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getAsda().getRedeclaredValue();
+
+        if(redeclared == null){
+            return 0;
+        }
+        else{
+            return original.intValue() - redeclared.intValue();
+        }
     }
 
     @Override
     public Integer getLDAOffset(String runwayId) {
-        return getRunwayThreshold(runwayId);
+
+        Number original = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getLda().getOriginalValue();
+        Number redeclared = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getLda().getRedeclaredValue();
+
+        if(redeclared == null){
+            return getRunwayThreshold(runwayId);
+        }
+        else{
+            return original.intValue() - redeclared.intValue();
+        }
     }
 
     @Override

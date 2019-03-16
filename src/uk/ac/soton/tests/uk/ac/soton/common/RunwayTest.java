@@ -241,7 +241,7 @@ public class RunwayTest {
         Runway runway = initEquivTestingRunway();
 
         Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11.0,10.0,15.0));
-        runway.placeObstacle(obstacle, "09",2730, "27",650);
+        runway.placeObstacle(obstacle, "09");
         runway.recalculateParameters();
 
         // Configuration check: Slope Calculation > RESA
@@ -260,7 +260,7 @@ public class RunwayTest {
         Runway runway = initEquivTestingRunway();
 
         Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11.0,10.0,3.0));
-        runway.placeObstacle(obstacle, "09",2730, "27",650);
+        runway.placeObstacle(obstacle, "09");
         runway.recalculateParameters();
 
         // Configuration check: Slope Calculation <= RESA
@@ -279,7 +279,7 @@ public class RunwayTest {
         Runway runway = initEquivTestingRunway();
 
         Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11.0,10.0,15.0));
-        runway.placeObstacle(obstacle, "09",2730, "27",650);
+        runway.placeObstacle(obstacle, "09");
         runway.recalculateParameters();
 
         // Configuration check: Slope Calculation > RESA
@@ -301,7 +301,7 @@ public class RunwayTest {
         Runway runway = initEquivTestingRunway();
 
         Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11.0,10.0,3.0));
-        runway.placeObstacle(obstacle, "09",2730, "27",650);
+        runway.placeObstacle(obstacle, "09");
         runway.setResa(260);
         runway.recalculateParameters();
 
@@ -329,7 +329,7 @@ public class RunwayTest {
         Runway runway = initEquivTestingRunway();
 
         Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11.0,10.0,3.0));
-        runway.placeObstacle(obstacle, "09",2730, "27",650);
+        runway.placeObstacle(obstacle, "09");
         runway.setBlastDistance(500);
         runway.recalculateParameters();
 
