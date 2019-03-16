@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class XMLImporter {
     private DocumentBuilderFactory dbFactory;
@@ -65,6 +66,7 @@ public class XMLImporter {
         return airfield;
     }
 
+
     private void importRunways(String filename) {
         File xml = new File(filename);
         dbFactory = DocumentBuilderFactory.newInstance();
@@ -94,9 +96,12 @@ public class XMLImporter {
 
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
+            Pattern pattern = Pattern.compile("([0-9]{2}[A-Z]?)/[0-9]{2}[A-Z]?");
             if (getTagValue("id",element) == null){
                 throw new ImporterExceptions("Error: Runway <id> is null");
-            } else { runway.setId(getTagValue("id", element)); }
+            } else if (getTagValue("id",element).matches(String.valueOf(pattern)) == false){
+                throw new ImporterExceptions("Error: Runway <id> not the right format");}
+                else { runway.setId(getTagValue("id", element)); }
               runway.setxPos(Integer.parseInt(getTagValue("xPos", element)));
 
               runway.setyPos(Integer.parseInt(getTagValue("yPos", element)));
@@ -158,9 +163,14 @@ public class XMLImporter {
 
             for (int i = 0; i < nodeList.getLength(); i++) {
                 getLogicalRunwayData(nodeList.item(i), filename);
+                Pattern pattern = Pattern.compile("[0-9]{2}[A-Z]?");
                 if (name == null) {
                     throw new ImporterExceptions("Error: Logical Runway <name> is null");
-                } else if (length <= 0) {
+
+                } else if (name.matches(String.valueOf(pattern)) == false){
+                    throw new ImporterExceptions("Error: Logical Runway <name> is not the right format");
+                }
+                else if (length <= 0) {
                     throw new ImporterExceptions("Error: Logical Runway <length> is either '0' or negative");
                 } else if (threshold <= 0) {
                     throw new ImporterExceptions("Error: Logical Runway <threshold> is either '0' or negative");

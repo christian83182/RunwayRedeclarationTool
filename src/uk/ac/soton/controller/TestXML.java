@@ -6,6 +6,7 @@ import uk.ac.soton.common.Runway;
 
 import javax.sql.rowset.spi.XmlReader;
 import java.awt.*;
+import java.util.regex.Pattern;
 
 public class TestXML {
 
@@ -61,6 +62,12 @@ public class TestXML {
       airfieldBristol.addRunway(southernRunway);
       xmlBristol.saveAirfieldInfo(airfieldHeathrow,"./Heathrow");
  */
+
+        Pattern pattern = Pattern.compile("([0-9]{2}[A-Z]?)/[0-9]{2}[A-Z]?");
+        String string = "02/06";
+        if(string.matches(String.valueOf(pattern)) == true){
+            System.out.println("Matches");
+        } else System.out.println("Doesn't");
 
     }
 }
