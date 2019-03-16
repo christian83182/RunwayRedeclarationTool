@@ -200,20 +200,37 @@ public class SideViewPanel extends InteractivePanel{
             Integer value = controller.getPredefinedObstacleHeight(obstacle).intValue()*50;
             Point startDistance = new Point(0,0);
             Point endDistance = new Point (obstacleDistance + value, 0);
-            DataArrow distanceArrow = new DataArrow(startDistance, endDistance, -100, "h * 50");
+            DataArrow distanceArrow = new DataArrow(startDistance, endDistance, -100, "h*50");
             distanceArrow.drawArrow(g2);
 
             //TODO: displaying height of the obstacle (problem: will be extremely small though, implement vertical arrow)
-
             //TODO: displaying resa
-            Integer resa = 240;
-
             //TODO: displaying that 60 m area that comes with resa
-
             //TODO: displaying blasting distance
-
             //TODO: displaying slope
 
+            //displayResaToTheRight(g2,obstacle, selectedRunway);
+
         }
+    }
+
+
+    //displaying threshold to the right of the obstacle
+    public void displayResaToTheRight(Graphics2D g2, String obstacle, String selectedRunway){
+
+        Integer resa = 240;
+        Integer resaOffset = controller.getDistanceFromThreshold(selectedRunway)+controller.getPredefinedObstacleHeight(obstacle).intValue() * 50;
+        String resaLabel = new String("RESA: " + resa);
+        Point startResa = new Point(-resa + resaOffset,0);
+        Point endResa = new Point (resaOffset, 0);
+        DataArrow resaArrow = new DataArrow(startResa, endResa, -300, resaLabel);
+        resaArrow.drawArrow(g2);
+
+        Integer newStripend = controller.getStripEndSize(selectedRunway);
+        String newStripEndLabel = new String (newStripend + " m");
+        Point endStripend = new Point (endResa.x + newStripend, 0);
+        DataArrow stripEndArrow = new DataArrow(endResa, endStripend, -300, newStripEndLabel);
+        stripEndArrow.drawArrow(g2);
+
     }
 }
