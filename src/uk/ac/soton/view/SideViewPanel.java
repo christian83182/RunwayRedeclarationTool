@@ -34,6 +34,7 @@ public class SideViewPanel extends InteractivePanel{
         //if there is an obstacle on the runway, paint it
         if(!controller.getRunwayObstacle(appView.getSelectedRunway()).equals("")){
             paintObstacle(g2);
+            paintParameters(g2);
         }
 
         //painting map
