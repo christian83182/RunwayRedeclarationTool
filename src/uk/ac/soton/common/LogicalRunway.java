@@ -84,12 +84,13 @@ public class LogicalRunway{
     private Parameter asda = null;
     // Landing Distance Available
     private Parameter lda = null;
-
     private Number threshold = 0;
     private Dimension stopway = new Dimension(0,0);
     private Dimension clearway = new Dimension(0,0);
+    private Number objectDistanceFromThreshold = null;
+    private Number getObjectDistanceFromStart = null;
+    private Number objectDistanceFromCentreline = null;
 
-    private Number objectThresholdDistance = null; // Distance of the obstacle from the threshold of this runway.
 
     /**
      * Constructor for the logical runway associated with a physical one.
@@ -117,6 +118,12 @@ public class LogicalRunway{
 
         String ldaDef = "LDA = TORA - Displaced Threshold\n" + "LDA = " + tora.intValue() + " - " + threshold;
         this.lda = new Parameter(tora.intValue() - threshold.intValue(), ldaDef);
+    }
+
+    public void setObjectDistances(Integer distanceFromEdge, Integer distanceFromCentreline, Integer originalDistance){
+        this.objectDistanceFromCentreline = distanceFromCentreline;
+        this.getObjectDistanceFromStart = distanceFromEdge;
+        this.objectDistanceFromThreshold = originalDistance - getThreshold().intValue();
     }
 
     public void setName(String name){
@@ -183,10 +190,17 @@ public class LogicalRunway{
 
     public void setThreshold(Number displacedThreshold) { this.threshold = displacedThreshold; }
 
-    public void setObjectThresholdDistance(Number objectThresholdDistance) { this.objectThresholdDistance = objectThresholdDistance; }
+    public Number getObjectThresholdDistance(){
+        return objectDistanceFromThreshold;
+    }
 
-    public Number getObjectThresholdDistance() { return objectThresholdDistance; }
-    //This property for LogicalRunway Obstacle
+    public Number getGetObjectDistanceFromStart() {
+        return getObjectDistanceFromStart;
+    }
+
+    public Number getObjectDistanceFromCentreline() {
+        return objectDistanceFromCentreline;
+    }
 
 }
 

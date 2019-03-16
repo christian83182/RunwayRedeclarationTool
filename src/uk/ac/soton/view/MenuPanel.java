@@ -20,6 +20,7 @@ public class MenuPanel extends JPanel {
     private JCheckBox matchViewToSelection;
     private JButton placeObstacleButton;
     private JButton removeObstacleButton;
+    private JCheckBox showOverlayBoxSideView;
 
 
     MenuPanel(AppView appView){
@@ -161,7 +162,33 @@ public class MenuPanel extends JPanel {
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 120;
         c.gridwidth = 3;
+        //testButton2.addActionListener(e -> appView.repaint());
         this.add(testButton2, c);
+
+        //Create second separator to separate the top view menu from the side view menu
+        JSeparator secondSeparator = new JSeparator();
+        secondSeparator.setOrientation(JSeparator.HORIZONTAL);
+        c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 150; c.gridwidth = 3;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(15,0,15,0);
+        this.add(secondSeparator, c);
+
+        //create label for side view menu title
+        JLabel sideViewLabel = new JLabel("Side View");
+        sideViewLabel.setFont(new Font("SansSerif", Font.BOLD , 20));
+        c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 170; c.gridwidth = 3;
+        this.add(sideViewLabel, c);
+
+        //Add the "show overlay" option for the side view menu
+        showOverlayBoxSideView = new JCheckBox("Show Overlays");
+        showOverlayBoxSideView.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
+        showOverlayBoxSideView.setSelected(true);
+        showOverlayBoxSideView.addActionListener(e -> appView.repaint());
+        c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 180; c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
+        this.add(showOverlayBoxSideView, c);
 
         //Create a spacer with high weighty to push everything else up.
         JPanel spacer = new JPanel();
@@ -243,9 +270,9 @@ public class MenuPanel extends JPanel {
         return showOtherBox.isSelected();
     }
 
-    public boolean isShowOverlay(){
-        return showOverlayBox.isSelected();
-    }
+    public boolean isShowOverlay(){ return showOverlayBox.isSelected(); }
+
+    public boolean isSideViewShowOverlay() { return showOverlayBoxSideView.isSelected(); }
 
     public boolean isShowAxis(){
         return showAxisBox.isSelected();

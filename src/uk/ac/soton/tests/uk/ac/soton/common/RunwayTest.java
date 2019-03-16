@@ -138,7 +138,7 @@ public class RunwayTest {
 
         Obstacle obstacle = new Obstacle(100, 200, new Airfield.Dimensions(5000.0,1000.0, 1500.0));
 
-        r1.placeObstacle(obstacle, "09L", 306, "27R", 257);
+        r1.placeObstacle(obstacle,"09L");
 
         assertEquals(obstacle, r1.getObstacle());
 
@@ -153,7 +153,7 @@ public class RunwayTest {
         Runway runway = initScenarioRunway09L27R();
 
         Obstacle obstacle = new Obstacle(256,0, new Airfield.Dimensions(11.0,10.0,12.0));
-        runway.placeObstacle(obstacle,"09L",-50,"27R",3646);
+        runway.placeObstacle(obstacle,"09L");
         runway.recalculateParameters();
 
         // Take Off Away, Landing Over
@@ -175,7 +175,7 @@ public class RunwayTest {
         Runway runway = initScenarioRunway09R27L();
 
         Obstacle obstacle = new Obstacle(3160, -20, new Airfield.Dimensions(11.0,10.0,25.0));
-        runway.placeObstacle(obstacle, "09R",2853, "27L", 500 );
+        runway.placeObstacle(obstacle, "09R");
         runway.recalculateParameters();
 
         // Take Off Towards, Landing Towards
@@ -197,7 +197,7 @@ public class RunwayTest {
         Runway runway = initScenarioRunway09R27L();
 
         Obstacle obstacle = new Obstacle(457,60, new Airfield.Dimensions(11.0,10.0,15.0));
-        runway.placeObstacle(obstacle,"09R",150,"27L",3203);
+        runway.placeObstacle(obstacle,"09R");
         runway.recalculateParameters();
 
         // Take Off Away, Landing Over
@@ -219,7 +219,7 @@ public class RunwayTest {
         Runway runway = initScenarioRunway09L27R();
 
         Obstacle obstacle = new Obstacle(3852,20, new Airfield.Dimensions(11.0,10.0,20.0));
-        runway.placeObstacle(obstacle,"09L",3546,"27R",50);
+        runway.placeObstacle(obstacle,"09L");
         runway.recalculateParameters();
 
         // Take Off Towards, Landing Towards

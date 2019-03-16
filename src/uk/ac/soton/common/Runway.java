@@ -147,13 +147,26 @@ public class Runway extends PositionalObject{
         this.obstacle = null;
         runways[0].revertParameters();
         runways[1].revertParameters();
+//        runways[0].setObjectDistances(null, null);
+//        runways[1].setObjectDistances(null, null);
         //this.resa = 240; // Resets the RESA in case it was temporarily redefined
     }
 
-    public void placeObstacle(Obstacle obstacle, String runwayOne, Number distanceOne, String runwayTwo, Number distanceTwo){
+    //Runway id refers to the logical runway
+    public void placeObstacle(Obstacle obstacle, String runwayId){
         this.obstacle = obstacle;
-        getLogicalRunway(runwayOne).setObjectThresholdDistance(distanceOne);
-        getLogicalRunway(runwayTwo).setObjectThresholdDistance(distanceTwo);
+        LogicalRunway current = null;
+        LogicalRunway sibling = null;
+        if(getLogicalRunways()[0].getName().equals(runwayId)){
+            current = getLogicalRunways()[0];
+            sibling = getLogicalRunways()[1];
+        }else if(getLogicalRunways()[1].getName().equals(runwayId)){
+            current = getLogicalRunways()[1];
+            sibling = getLogicalRunways()[0];
+        }
+
+        current.setObjectDistances(obstacle.getStartDistance(), obstacle.getCentrelineDistance(), obstacle.getStartDistance());
+        sibling.setObjectDistances(getLength() - obstacle.getStartDistance() - obstacle.getLength().intValue(), -obstacle.getCentrelineDistance(), getLength() - obstacle.getStartDistance());
     }
 
     public Obstacle getObstacle(){
