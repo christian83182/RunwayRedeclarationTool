@@ -127,10 +127,37 @@ public class XMLExporter {
                 stripWidth.appendChild(document.createTextNode(airfield.getRunways().get(i).getStripWidth().toString()));
                 runway.appendChild(stripWidth);
 
-              /*  //Add the obstacle.
+                //Add the obstacle.
                 Element obstacle = document.createElement("obstacle");
                 obstacle.appendChild(document.createTextNode(airfield.getRunways().get(i).getObstacle().getId()));
-                runway.appendChild(obstacle); */
+
+
+                Element startDistance = document.createElement("startDistance");
+                startDistance.appendChild(document.createTextNode(airfield.getRunways().get(i).getObstacle().getStartDistance().toString()));
+                obstacle.appendChild(startDistance);
+
+                Element centreLineDistance = document.createElement("centreLineDistance");
+                centreLineDistance.appendChild(document.createTextNode(airfield.getRunways().get(i).getObstacle().getCentrelineDistance().toString()));
+                obstacle.appendChild(centreLineDistance);
+
+              /*  Element obstacleLength = document.createElement("length");
+                obstacleLength.appendChild(document.createTextNode(airfield.getRunways().get(i).getObstacle().getLength().toString()));
+                obstacle.appendChild(obstacleLength);
+
+                Element obstacleWidth = document.createElement("width");
+                obstacleWidth.appendChild(document.createTextNode(airfield.getRunways().get(i).getObstacle().getWidth().toString()));
+                obstacle.appendChild(obstacleWidth);
+
+                Element obstacleHeight = document.createElement("height");
+                obstacleHeight.appendChild(document.createTextNode(airfield.getRunways().get(i).getObstacle().getHeight().toString()));
+                obstacle.appendChild(obstacleHeight); */
+                runway.appendChild(obstacle);
+
+
+
+
+
+
 
 
                 //Add logical runways.
@@ -173,6 +200,18 @@ public class XMLExporter {
                         stopway.appendChild(stopwayHeight);
                         logicalRunway.appendChild(stopway);
                         runway.appendChild(logicalRunway);
+
+                        Element object = document.createElement("object");
+
+                        Element objectDistanceFromStart = document.createElement("objectDistanceFromStart");
+                        objectDistanceFromStart.appendChild(document.createTextNode(logicalRunways[j].getGetObjectDistanceFromStart().toString()));
+                        object.appendChild(objectDistanceFromStart);
+
+                        Element objectDistanceFromCentre = document.createElement("objectDistanceCentreline");
+                        objectDistanceFromCentre.appendChild(document.createTextNode(logicalRunways[j].getObjectDistanceFromCentreline().toString()));
+                        object.appendChild(objectDistanceFromCentre);
+
+                        logicalRunway.appendChild(object);
                     }
                 }
             }
