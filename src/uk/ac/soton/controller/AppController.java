@@ -190,12 +190,16 @@ public class AppController implements ViewController {
 
         Number original = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getTora().getOriginalValue();
         Number redeclared = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getTora().getRedeclaredValue();
+        LogicalRunway lr = airfield.getRunway(runwayId).getObjectCloserToThisThreshold();
 
         if(redeclared == null){
             return 0;
         }
         else{
-            return original.intValue() - redeclared.intValue();
+            if(runwayId.equals(lr.getName())){
+                return original.intValue() - redeclared.intValue();
+            }
+            return 0;
         }
     }
 

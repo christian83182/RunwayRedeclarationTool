@@ -18,6 +18,8 @@ public class Runway extends PositionalObject{
     private Integer stripWidth = 0;
     private Obstacle obstacle = null;
 
+    private LogicalRunway objectCloserToThisThreshold = null;
+
     // The 2 logical runways associated with the physical one.
     private LogicalRunway[] runways = new LogicalRunway[2];
 
@@ -152,6 +154,13 @@ public class Runway extends PositionalObject{
         //this.resa = 240; // Resets the RESA in case it was temporarily redefined
     }
 
+    /**
+     * returns the Logical Runway on which the obstacle is closer to its threshold
+     */
+    public LogicalRunway getObjectCloserToThisThreshold() {
+        return objectCloserToThisThreshold;
+    }
+
     //Runway id refers to the logical runway
     public void placeObstacle(Obstacle obstacle, String runwayId){
         this.obstacle = obstacle;
@@ -191,10 +200,12 @@ public class Runway extends PositionalObject{
         else{
 
             if(runways[0].getObjectThresholdDistance().intValue() < (runways[1].getObjectThresholdDistance().intValue())){
+                objectCloserToThisThreshold = runways[0];
                 recalculateTowardsObstacle(runways[1]);
                 recalculateAwayFromObstacle(runways[0]);
             }
             else{
+                objectCloserToThisThreshold = runways[1];
                 recalculateTowardsObstacle(runways[0]);
                 recalculateAwayFromObstacle(runways[1]);
             }
