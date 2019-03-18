@@ -4,7 +4,6 @@ import uk.ac.soton.controller.ViewController;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
-//TODO: implement functionality of repainting when adding/removing obstacle
 
 public class SideViewPanel extends InteractivePanel{
 
@@ -106,9 +105,9 @@ public class SideViewPanel extends InteractivePanel{
         // Painting runway
         g2.setPaint(Settings.RUNWAY_COLOUR);
         g2.fillRect(0,0, runway.width, 50);
-        //g2.setPaint(Color.WHITE);
-        //g2.setFont(new Font("SansSerif", 0,  (runway.height/2)));
-        //g2.drawString(selectedRunway, 0, (runway.height)/2);
+        g2.setPaint(Color.WHITE);
+        g2.setFont(new Font("SansSerif", 0,  (runway.height/2)));
+        g2.drawString(selectedRunway, 0, (runway.height)/2);
 
         // Painting displaced threshold
         Integer threshold = controller.getRunwayThreshold(selectedRunway);
@@ -196,8 +195,11 @@ public class SideViewPanel extends InteractivePanel{
 
 
             //invoke displaying distances relative to their direction in which they are drawn
-            //displayDistancesToTheLeft(g2,obstacle,selectedRunway);
-            //displayDistancesToTheRight(g2,obstacle,selectedRunway);
+            if(controller.getLogicalRunwayCloserToObstacle(selectedRunway).getName().equals(selectedRunway)){
+                displayDistancesToTheRight(g2,obstacle,selectedRunway);
+            }else{
+                displayDistancesToTheLeft(g2,obstacle,selectedRunway);
+            }
 
             //TODO: displaying height of the obstacle (problem: will be extremely small though, implement vertical arrow)
             //TODO: displaying blasting distance
