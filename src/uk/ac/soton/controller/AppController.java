@@ -253,7 +253,7 @@ public class AppController implements ViewController {
             if(runwayId.equals(lr.getName())){
                 return original.intValue() - redeclared.intValue();
             }
-            return 0;
+            return  getRunwayThreshold(runwayId);
         }
     }
 
