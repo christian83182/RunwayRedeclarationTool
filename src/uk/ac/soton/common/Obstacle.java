@@ -48,6 +48,15 @@ public class Obstacle extends PositionalObject {
         this.height = dimensions.getHeight();
     }
 
+    public Obstacle(String id, Integer startDistance, Integer centrelineDistance, Airfield.Dimensions dimensions){
+        super(0,0, id);
+        this.startDistance = startDistance;
+        this.centrelineDistance = centrelineDistance;
+        this.length = dimensions.getLength();
+        this.width = dimensions.getWidth();
+        this.height = dimensions.getHeight();
+    }
+
     public Obstacle(){
         super(0,0,"DefaultID");
 

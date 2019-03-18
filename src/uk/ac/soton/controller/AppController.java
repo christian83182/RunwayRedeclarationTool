@@ -294,8 +294,7 @@ public class AppController implements ViewController {
     @Override
     public void addObstacleToRunway(String runwayId, String obstacleId, Integer distanceFromCenterline, Integer distanceFromEdge) {
         Runway runway = airfield.getRunway(runwayId);
-        Obstacle obstacle = new Obstacle(distanceFromEdge, distanceFromCenterline, getPredifinedObstacles().get(obstacleId));
-        obstacle.setId(obstacleId);
+        Obstacle obstacle = new Obstacle(obstacleId, distanceFromEdge, distanceFromCenterline, getPredifinedObstacles().get(obstacleId));
         runway.placeObstacle(obstacle, runwayId);
         redeclareRunway(runwayId);
     }
