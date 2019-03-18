@@ -367,8 +367,15 @@ public class AppController implements ViewController {
     }
 
 
-
-
+    @Override
+    public LogicalRunway getLogicalRunwayCloserToObstacle(String runwayId) {
+        Runway runway = airfield.getRunway(runwayId);
+        if (!getRunwayObstacle(runwayId).equals("")){
+            return runway.getObjectCloserToThisThreshold();
+        }else{
+            return null;
+        }
+    }
 
     public Runway getRunway(String name){ return airfield.getRunway(name); }
 

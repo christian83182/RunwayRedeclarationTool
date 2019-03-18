@@ -1,5 +1,7 @@
 package uk.ac.soton.controller;
 
+import uk.ac.soton.common.LogicalRunway;
+
 import java.awt.*;
 import java.util.Set;
 
@@ -232,5 +234,15 @@ public interface ViewController {
      * @param path The location of the XML file specified by the user.
      */
     void importAirfieldConfiguration(String path);
+
+    /**
+     * Getting the logical runway on which the obstacle (if present) is closer to its respective threshold.
+     * Returns the same logical runway if that is the one on which the obstacle is closer to its threshold and
+     * or the sibling logical runway if the reverse is true. It returns null if there is no obstacle on the specified
+     * logical runway.
+     * @param runwayID The logicalRunway on which the obstacle is present.
+     */
+    LogicalRunway getLogicalRunwayCloserToObstacle(String runwayID);
+
 }
 
