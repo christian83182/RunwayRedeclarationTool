@@ -1,6 +1,5 @@
 package uk.ac.soton.view;
 
-import uk.ac.soton.controller.AppController;
 import uk.ac.soton.controller.ViewController;
 
 import java.awt.*;
@@ -572,13 +571,15 @@ public class TopViewPanel extends InteractivePanel {
     }
 
     //Returns a point representing the center of the full runway. This includes the stopway/clearway/strip end.
-    private Point getFullRunwayCenterpoint(String id){
+    private Point getPhysicalRunwayCenterpoint(String id){
         //Specifies the point at the start of the runway.
         Point runwayStart =controller.getRunwayPos(id);
-        //Specifies a length consisting of the length + the stopway/clearway + strip end size.
-        Double fullRunwayLength = (double)controller.getRunwayDim(id).width +
-                Math.max(controller.getClearwayDim(id).width, controller.getStopwayDim(id).width
-                + controller.getStripEndSize(id));
+        Integer runwayLength = controller.getRunwayDim(id).width;
+        Integer stripEndSize = controller.getStripEndSize(id);
+        Integer stopwayLength = controller.getStopwayDim(id).width;
+        Integer clearwayLength = controller.getClearwayDim(id).width;
+        //Specifies a length consisting of the length + the stopway/clearway/strip end + strip end size.
+        Integer fullRunwayLength = runwayLength + stripEndSize + Math.max(stripEndSize, Math.max(stopwayLength, clearwayLength));
 
         //The angle of the runway.
         Double runwayAngle = new Double(Math.toRadians(controller.getBearing(id)-90));
@@ -592,7 +593,8 @@ public class TopViewPanel extends InteractivePanel {
 
     //Pans and zooms the view such that the specified runway appears in the center of the screen and fully visible.
     public void fitViewToRunway(String id){
-        Point centerPoint = getFullRunwayCenterpoint(id);
+        //The centerpoint of the runway when taking into account strip end/stopway/clearway.
+        Point centerPoint = getPhysicalRunwayCenterpoint(id);
         //Only match rotation & pan if the option is selected in the menu panel.
         if(menuPanel.isViewMatchedToSelection()){
             AffineTransform rx = new AffineTransform();
