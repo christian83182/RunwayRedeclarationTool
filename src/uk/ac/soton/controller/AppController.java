@@ -208,12 +208,16 @@ public class AppController implements ViewController {
 
         Number original = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getToda().getOriginalValue();
         Number redeclared = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getToda().getRedeclaredValue();
+        LogicalRunway lr = airfield.getRunway(runwayId).getObjectCloserToThisThreshold();
 
         if(redeclared == null){
             return 0;
         }
         else{
-            return original.intValue() - redeclared.intValue();
+            if(runwayId.equals(lr.getName())){
+                return original.intValue() - redeclared.intValue();
+            }
+            return 0;
         }
     }
 
@@ -222,12 +226,16 @@ public class AppController implements ViewController {
 
         Number original = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getAsda().getOriginalValue();
         Number redeclared = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getAsda().getRedeclaredValue();
+        LogicalRunway lr = airfield.getRunway(runwayId).getObjectCloserToThisThreshold();
 
         if(redeclared == null){
             return 0;
         }
         else{
-            return original.intValue() - redeclared.intValue();
+            if(runwayId.equals(lr.getName())){
+                return original.intValue() - redeclared.intValue();
+            }
+            return 0;
         }
     }
 
@@ -236,12 +244,16 @@ public class AppController implements ViewController {
 
         Number original = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getLda().getOriginalValue();
         Number redeclared = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getLda().getRedeclaredValue();
+        LogicalRunway lr = airfield.getRunway(runwayId).getObjectCloserToThisThreshold();
 
         if(redeclared == null){
             return getRunwayThreshold(runwayId);
         }
         else{
-            return original.intValue() - redeclared.intValue();
+            if(runwayId.equals(lr.getName())){
+                return original.intValue() - redeclared.intValue();
+            }
+            return 0;
         }
     }
 
