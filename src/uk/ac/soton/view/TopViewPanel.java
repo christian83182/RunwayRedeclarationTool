@@ -5,6 +5,7 @@ import uk.ac.soton.controller.ViewController;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 //Represents a JPanel designed to view a top-down view of the runways.
@@ -570,44 +571,111 @@ public class TopViewPanel extends InteractivePanel {
         }
     }
 
-    //Returns a point representing the center of the full runway. This includes the stopway/clearway/strip end.
-    private Point getPhysicalRunwayCenterpoint(String id){
-        //Specifies the point at the start of the runway.
-        Point runwayStart =controller.getRunwayPos(id);
+    //Returns the full length of the runway including any displayed text.
+    private Integer getFullRunwayLength(String id){
         Integer runwayLength = controller.getRunwayDim(id).width;
         Integer stripEndSize = controller.getStripEndSize(id);
         Integer stopwayLength = controller.getStopwayDim(id).width;
         Integer clearwayLength = controller.getClearwayDim(id).width;
-        //Specifies a length consisting of the length + the stopway/clearway/strip end + strip end size.
+
         Integer fullRunwayLength = runwayLength + stripEndSize + Math.max(stripEndSize, Math.max(stopwayLength, clearwayLength));
 
-        //The angle of the runway.
-        Double runwayAngle = new Double(Math.toRadians(controller.getBearing(id)-90));
-        Point runwayEnd = new Point((int)(runwayStart.x + fullRunwayLength * Math.cos(runwayAngle)),
-                (int)(runwayStart.y + fullRunwayLength * Math.sin(runwayAngle)));
+        if(menuPanel.isShowOtherEnabled()){
+            //Account for the text displaying the strip width
+            fullRunwayLength += 300;
+            //Account for the text displaying the clearway/stopway width
+            fullRunwayLength += 200;
+        }
+        return fullRunwayLength;
+    }
 
-        //Returns the average of the start and end points. Hence the midpoint.
-        return new Point((runwayStart.x + runwayEnd.x - controller.getStripEndSize(id))/2,
-                (runwayStart.y + runwayEnd.y)/2);
+    //Returns the full height of the runway including any displayed text.
+    private Integer getFullRunwayHeight(String id){
+        Integer stripWidthFromCenterline = controller.getStripWidthFromCenterline(id);
+        Integer fullRunwayHeight = stripWidthFromCenterline *2;
+
+        if(menuPanel.isShowOtherEnabled()) {
+            //Account for the text displaying the stopway length
+            fullRunwayHeight += 250;
+        }
+        if (menuPanel.isShowRunwayParametersEnabled()){
+            //Account for all the text displaying the runway parameters.
+            fullRunwayHeight += 450;
+        }
+
+        return fullRunwayHeight;
+    }
+
+    //Returns the bounding box for the specified runway
+    private Polygon getFullRunwayBoundingBox(String id){
+        Integer stripWidthFromCenterline = controller.getStripWidthFromCenterline(id);
+        Integer stripEndSize = controller.getStripEndSize(id);
+        Point runwayStart = controller.getRunwayPos(id);
+
+        Integer fullRunwayLength = getFullRunwayLength(id);
+        Integer fullRunwayHeight = getFullRunwayHeight(id);
+
+        //The point at the top left corner of the bounding box
+        Point boundingBoxPos = (Point)runwayStart.clone();
+        boundingBoxPos.translate(-stripEndSize, -stripWidthFromCenterline);
+
+        //Add some padding around the bounding box
+        fullRunwayLength+= 100;
+        fullRunwayHeight+= 100;
+        boundingBoxPos.translate(-50,-50);
+
+        //If ShowOtherEnabled is true then account for the extra space used.
+        if(menuPanel.isShowOtherEnabled()){
+            //Account for the text displaying the strip width
+            boundingBoxPos.translate(-300,0);
+            //Account for the text displaying the stopway length
+            boundingBoxPos.translate(0,-250);
+        }
+
+        //Create a polygon bounding the runway.
+        Polygon p = new Polygon(new int[] {boundingBoxPos.x, boundingBoxPos.x, boundingBoxPos.x + fullRunwayLength, boundingBoxPos.x + fullRunwayLength},
+                new int[] {boundingBoxPos.y, boundingBoxPos.y + fullRunwayHeight, boundingBoxPos.y + fullRunwayHeight, boundingBoxPos.y }, 4);
+
+        //Rotate and return the polygon to fit around the runway.
+        Double runwayAngle = new Double(Math.toRadians(controller.getBearing(id)-90));
+        return  rotatePolygon(p, runwayAngle, runwayStart.x, runwayStart.y);
     }
 
     //Pans and zooms the view such that the specified runway appears in the center of the screen and fully visible.
     public void fitViewToRunway(String id){
-        //The centerpoint of the runway when taking into account strip end/stopway/clearway.
-        Point centerPoint = getPhysicalRunwayCenterpoint(id);
-        //Only match rotation & pan if the option is selected in the menu panel.
-        if(menuPanel.isViewMatchedToSelection()){
-            AffineTransform rx = new AffineTransform();
-            rx.setToRotation(Math.toRadians(-getRotationOfSelectedRunway()+90));
-            rx.transform(centerPoint, centerPoint);
+        //Calculates the bounding box and centerpoint of the full runway.
+        Rectangle2D boundingBox = getFullRunwayBoundingBox(id).getBounds2D();
+        Point centerPoint = new Point((int)boundingBox.getCenterX(), (int)boundingBox.getCenterY());
 
-            //Set the pan to the centerpoint of the runway, and account for the width/height of the screen.
+        //Transforms the centerpoint to match it's position in the world.
+        AffineTransform rx = new AffineTransform();
+        rx.setToRotation(Math.toRadians(-getRotationOfSelectedRunway() + 90));
+        rx.transform(centerPoint, centerPoint);
+
+        //If the option is selected, pan and zoom accordingly
+        if(menuPanel.isViewMatchedToSelection()){
             setPan(new Point(-centerPoint.x + getWidth()/2, -centerPoint.y + getHeight()/2));
-            Double viewWidth = controller.getRunwayDim(id).width*1.45 + controller.getClearwayDim(id).width;
-            setZoom(getWidth() / viewWidth);
+            setZoom(Math.min((double)getHeight() / (double)getFullRunwayHeight(id),
+                    (double)getWidth() / (double)getFullRunwayLength(id)));
+        //If not then just pan, dont zoom.
         } else {
-            this.setPan(new Point(-centerPoint.x + getWidth()/2, -centerPoint.y + getHeight()/2));
+            setPan(new Point(-centerPoint.x + getWidth()/2, -centerPoint.y + getHeight()/2));
         }
+    }
+
+    //Rotates a polygon around a given point through a given angle.
+    private Polygon rotatePolygon(Polygon p, Double theta, Integer anchorx, Integer anchory){
+        int[] xPoints = new int[p.npoints];
+        int[] yPoints = new int[p.npoints];
+        AffineTransform rx = new AffineTransform();
+        rx.rotate(theta, anchorx, anchory);
+        for (int i = 0; i < p.npoints; i++){
+            Point point = new Point(p.xpoints[i], p.ypoints[i]);
+            rx.transform(point, point);
+            xPoints[i] = point.x;
+            yPoints[i] = point.y;
+        }
+        return  new Polygon(xPoints, yPoints, p.npoints);
     }
 
     //Inner class representing an instance of an arrow displaying some information.
