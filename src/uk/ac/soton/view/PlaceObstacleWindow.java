@@ -135,7 +135,7 @@ public class PlaceObstacleWindow extends JFrame {
                 controller.addObstacleToRunway(appView.getSelectedRunway(), obstacleId, centerlineDistance, edgeDistance);
                 appView.getMenuPanel().setPlaceButtonEnabled(false);
                 appView.getMenuPanel().setRemoveButtonEnabled(true);
-                appView.getTopView().repaint();
+                appView.repaint();
                 PlaceObstacleWindow.this.dispose();
 
             //Show an error message if the data inputted is not valid.

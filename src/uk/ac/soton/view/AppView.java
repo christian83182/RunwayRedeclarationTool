@@ -50,10 +50,10 @@ public class AppView extends JFrame{
 
     //Will either hide or display the split view.
     public void setSplitViewVisible(boolean isVisible){
-        if(isVisible){
+        if(viewPanel.getBottomComponent() == null && isVisible){
             viewPanel.setBottomComponent(sideView);
-            viewPanel.setDividerLocation(getHeight()/2);
-        } else {
+            viewPanel.setDividerLocation((int)(getHeight()*0.55));
+        } else if (!isVisible){
             viewPanel.setBottomComponent(null);
         }
         repaint();
@@ -68,10 +68,8 @@ public class AppView extends JFrame{
     public void setSelectedRunway(String selectedRunway) {
         if(selectedRunway == "None"){
             this.selectedRunway = "";
-            setSplitViewVisible(false);
         } else {
             this.selectedRunway = selectedRunway;
-            setSplitViewVisible(true);
         }
         repaint();
     }

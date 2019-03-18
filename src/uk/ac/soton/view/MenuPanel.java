@@ -150,21 +150,6 @@ public class MenuPanel extends JPanel {
         c.gridx = 0; c.gridy = 100; c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
         this.add(matchViewToSelection, c);
 
-        //Creates a test button to disable the split view.
-        JButton testButton = new JButton("Disable Split View");
-        c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 110;
-        c.gridwidth = 3; c.insets = new Insets(50,0,0,0);
-        this.add(testButton, c);
-
-        //Creates another test button to enable the split view.
-        JButton testButton2 = new JButton("Enable Split View");
-        c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 120;
-        c.gridwidth = 3;
-        //testButton2.addActionListener(e -> appView.repaint());
-        this.add(testButton2, c);
-
         //Create second separator to separate the top view menu from the side view menu
         JSeparator secondSeparator = new JSeparator();
         secondSeparator.setOrientation(JSeparator.HORIZONTAL);
@@ -213,11 +198,13 @@ public class MenuPanel extends JPanel {
                 appView.setSelectedRunway("");
                 placeObstacleButton.setEnabled(false);
                 removeObstacleButton.setEnabled(false);
+                appView.setSplitViewVisible(false);
             } else {
                 appView.setSelectedRunway(runwayMenu.getSelectedItem().toString());
                 if(isViewMatchedToSelection()){
                     //Automatically fit the view to the selected runway, when selected.
                     appView.getTopView().fitViewToRunway(selectedRunway);
+                    appView.setSplitViewVisible(true);
                 }
                 if(controller.getRunwayObstacle(selectedRunway).equals("")){
                     placeObstacleButton.setEnabled(true);
@@ -239,17 +226,7 @@ public class MenuPanel extends JPanel {
             controller.removeObstacleFromRunway(appView.getSelectedRunway());
             removeObstacleButton.setEnabled(false);
             placeObstacleButton.setEnabled(true);
-            appView.getTopView().repaint();
-        });
-
-        //Action listener to disable the split view.
-        testButton.addActionListener(e ->{
-            appView.setSplitViewVisible(false);
-        });
-
-        //Action listener to enable the split view.
-        testButton2.addActionListener(e ->{
-            appView.setSplitViewVisible(true);
+            appView.repaint();
         });
 
     }
