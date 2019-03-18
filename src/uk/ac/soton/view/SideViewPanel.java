@@ -195,8 +195,11 @@ public class SideViewPanel extends InteractivePanel{
 
 
             //invoke displaying distances relative to their direction in which they are drawn
-            //displayDistancesToTheLeft(g2,obstacle,selectedRunway);
-            //displayDistancesToTheRight(g2,obstacle,selectedRunway);
+            if(controller.getLogicalRunwayCloserToObstacle(selectedRunway).getName().equals(selectedRunway)){
+                displayDistancesToTheRight(g2,obstacle,selectedRunway);
+            }else{
+                displayDistancesToTheLeft(g2,obstacle,selectedRunway);
+            }
 
             //TODO: displaying height of the obstacle (problem: will be extremely small though, implement vertical arrow)
             //TODO: displaying blasting distance
