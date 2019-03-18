@@ -83,47 +83,15 @@ public class TopViewPanel extends InteractivePanel {
 
     //Draws the legend on the bottom right corner of the screen.
     private void paintLegend(Graphics2D g2){
-        Integer width = 210;
-        Integer height = 190;
-        Integer fontSize = 14;
-        Integer verticalPadding = 9;
-        Point pos = new Point(getWidth()-width-10, getHeight()-height-10);
-
-        g2.setColor(new Color(45, 45, 45, 150));
-        g2.fillRect(pos.x, pos.y, width, height);
-        g2.setColor(new Color(39, 39, 39));
-        g2.setStroke(new BasicStroke(5));
-        g2.drawRect(pos.x, pos.y, width, height);
-
-        g2.setColor(Color.WHITE);
-        g2.setFont(new Font("SansSerif", Font.BOLD, (int)(fontSize*1.5)));
-        g2.drawString("KEY", pos.x+85, pos.y + fontSize*1 + verticalPadding*2);
-
-        g2.setFont(new Font("SansSerif", Font.PLAIN, fontSize));
-        g2.drawString("Clear and Graded Area", pos.x+40, pos.y + fontSize * 1 +verticalPadding*5);
-        g2.drawString("Runway Strip", pos.x+40, pos.y + fontSize * 2 +verticalPadding*6);
-        g2.drawString("Displaced Threshold", pos.x+40, pos.y + fontSize * 3 +verticalPadding*7);
-        g2.drawString("Clearway", pos.x+40, pos.y + fontSize * 4 +verticalPadding*8);
-        g2.drawString("Stopway", pos.x+40, pos.y + fontSize * 5 +verticalPadding*9);
-        g2.drawString("Landing Direction", pos.x+40, pos.y + fontSize * 6 +verticalPadding*10);
-
-        Integer iconSize = 16;
-        g2.setColor(Settings.CLEAR_AND_GRADED_COLOUR);
-        g2.fillRect(pos.x +18, pos.y + fontSize*1 + verticalPadding*5 - iconSize+2, iconSize, iconSize);
-        g2.setColor(Settings.RUNWAY_STRIP_COLOUR);
-        g2.fillRect(pos.x +18, pos.y + fontSize*2 + verticalPadding*6 - iconSize+2, iconSize, iconSize);
-        g2.setColor(Settings.SELECTED_RUNWAY_HIGHLIGHT);
-        g2.fillRect(pos.x +18, pos.y + fontSize*3 + verticalPadding*7 - iconSize+2, iconSize, iconSize);
-        g2.setColor(Settings.CLEARWAY_STROKE_COLOUR);
-        g2.fillRect(pos.x +18, pos.y + fontSize*4 + verticalPadding*8 - iconSize+2, iconSize, iconSize);
-        g2.setColor(Settings.STOPWAY_STROKE_COLOUR);
-        g2.fillRect(pos.x +18, pos.y + fontSize*5 + verticalPadding*9 - iconSize+2, iconSize, iconSize);
-
-        Point polyLocation = new Point(pos.x + 18, pos.y + fontSize*6 + verticalPadding*10 - iconSize/2+2);
-        Polygon poly = new Polygon(new int[] {polyLocation.x, polyLocation.x +16, polyLocation.x},
-                new int[] {polyLocation.y+8, polyLocation.y, polyLocation.y-8}, 3);
-        g2.setColor(Settings.CENTERLINE_COLOUR);
-        g2.fillPolygon(poly);
+        Legend legend = new Legend("Legend");
+        legend.addToLegend("Clear & Graded Area", Settings.CLEAR_AND_GRADED_COLOUR);
+        legend.addToLegend("Runway Strip", Settings.RUNWAY_STRIP_COLOUR);
+        legend.addToLegend("Runway", Settings.RUNWAY_COLOUR);
+        legend.addToLegend("Displaced Threshold", Settings.SELECTED_RUNWAY_HIGHLIGHT);
+        legend.addToLegend("Stopway", Settings.STOPWAY_STROKE_COLOUR);
+        legend.addToLegend("Clearway", Settings.CLEARWAY_STROKE_COLOUR);
+        legend.addToLegend("Obstacle", Settings.OBSTACLE_FILL_COLOUR);
+        legend.drawLegend(g2, new Point(getWidth()-10,getHeight()-10));
     }
 
     //Draws a compass in the top left corner of the screen
@@ -163,8 +131,6 @@ public class TopViewPanel extends InteractivePanel {
         g2.setTransform(old);
 
     }
-
-
 
     //Generates an Affine transformation which rotates the runway to match its bearing
     private AffineTransform createRunwayTransform(Point pos, Dimension dim, String id){
