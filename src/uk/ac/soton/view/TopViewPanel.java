@@ -62,6 +62,7 @@ public class TopViewPanel extends InteractivePanel {
         if(menuPanel.isShowOverlay()) {
             paintCompass(getRotationOfSelectedRunway(), g2);
             paintLegend(g2);
+            paintScale(g2);
         }
     }
 
@@ -162,6 +163,8 @@ public class TopViewPanel extends InteractivePanel {
         g2.setTransform(old);
 
     }
+
+
 
     //Generates an Affine transformation which rotates the runway to match its bearing
     private AffineTransform createRunwayTransform(Point pos, Dimension dim, String id){

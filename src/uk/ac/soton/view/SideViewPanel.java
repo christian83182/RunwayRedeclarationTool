@@ -40,6 +40,7 @@ public class SideViewPanel extends InteractivePanel{
         g2.setTransform(new AffineTransform());
         if(menuPanel.isSideViewShowOverlay()) {
             paintLegend(g2);
+            paintScale(g2);
         }
     }
 

@@ -38,10 +38,10 @@ public class AppView extends JFrame{
         topView = new TopViewPanel(this);
         sideView = new SideViewPanel(this);
 
-        viewPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topView, null);
+        viewPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topView, sideView);
         viewPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 0));
-
         this.add(viewPanel, BorderLayout.CENTER);
+        setSplitViewVisible(false);
 
         this.pack();
         this.setLocationRelativeTo(null);
@@ -53,8 +53,10 @@ public class AppView extends JFrame{
         if(viewPanel.getBottomComponent() == null && isVisible){
             viewPanel.setBottomComponent(sideView);
             viewPanel.setDividerLocation((int)(getHeight()*0.55));
+            viewPanel.setDividerSize(10);
         } else if (!isVisible){
             viewPanel.setBottomComponent(null);
+            viewPanel.setDividerSize(0);
         }
         repaint();
     }
