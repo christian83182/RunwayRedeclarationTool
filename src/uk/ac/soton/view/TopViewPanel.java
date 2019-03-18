@@ -244,6 +244,14 @@ public class TopViewPanel extends InteractivePanel {
         for(String id : controller.getRunways()){
             paintRunwayName(id, g2);
         }
+        drawnRunways = new ArrayList<>();
+        for(String id : controller.getRunways()){
+            Integer currentRunwayBearing = controller.getBearing(id);
+            if(!(drawnRunways.contains(currentRunwayBearing+180) || drawnRunways.contains(currentRunwayBearing-180))){
+                paintObstacles(id,g2);
+                drawnRunways.add(currentRunwayBearing);
+            }
+        }
     }
 
     //Draws the clear and graded area for a given runway
