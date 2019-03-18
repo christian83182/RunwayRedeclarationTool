@@ -384,22 +384,26 @@ public class TopViewPanel extends InteractivePanel {
 
         //Draw the TORA length.
         Integer toraLength = controller.getRunwayTORA(id);
-        InfoArrow toraLengthInfo = new InfoArrow(0,stripHeight+150,toraLength,"TORA: " + toraLength + "m", true);
+        InfoArrow toraLengthInfo = new InfoArrow(controller.getTORAOffset(id),
+                stripHeight+150,toraLength,"TORA: " + toraLength + "m", true);
         toraLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the TODA length.
         Integer todaLength = controller.getRunwayTODA(id);
-        InfoArrow todaLengthInfo = new InfoArrow(0,stripHeight+350,todaLength,"TODA: " + todaLength + "m", true);
+        InfoArrow todaLengthInfo = new InfoArrow(controller.getTODAOffset(id),
+                stripHeight+350,todaLength,"TODA: " + todaLength + "m", true);
         todaLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the ASDA length.
         Integer asdaLength = controller.getRunwayASDA(id);
-        InfoArrow asdaLengthInfo = new InfoArrow(0,stripHeight+250,asdaLength,"ASDA: " + asdaLength + "m", true);
+        InfoArrow asdaLengthInfo = new InfoArrow(controller.getASDAOffset(id),
+                stripHeight+250,asdaLength,"ASDA: " + asdaLength + "m", true);
         asdaLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the LDA length.
         Integer ldaLength = controller.getRunwayLDA(id);
-        InfoArrow ldaLengthInfo = new InfoArrow(controller.getRunwayThreshold(id), stripHeight+50, ldaLength,"LDA: " + ldaLength + "m", true);
+        InfoArrow ldaLengthInfo = new InfoArrow(controller.getLDAOffset(id),
+                stripHeight+50, ldaLength,"LDA: " + ldaLength + "m", true);
         ldaLengthInfo.drawInfoArrow(id, g2);
     }
 
