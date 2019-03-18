@@ -81,7 +81,7 @@ public class PlaceObstacleWindow extends JFrame {
         this.add(centerlineDistanceSpinner,c);
 
         //Create a button which will open the Browse Obstacles window.
-        JButton browseObstaclesButton = new JButton("Edit Obstacles");
+        JButton browseObstaclesButton = new JButton("Edit Obstacles...");
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 3; c.gridwidth = 2;
         c.fill = GridBagConstraints.HORIZONTAL;

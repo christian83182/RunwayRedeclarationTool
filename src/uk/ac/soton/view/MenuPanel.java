@@ -58,7 +58,7 @@ public class MenuPanel extends JPanel {
         this.add(runwayMenu, c);
 
         //Create buttons to place and remove obstacles.
-        placeObstacleButton = new JButton("Add Obstacle");
+        placeObstacleButton = new JButton("Add Obstacle...");
         placeObstacleButton.setEnabled(false);
         removeObstacleButton = new JButton("Remove");
         removeObstacleButton.setEnabled(false);
