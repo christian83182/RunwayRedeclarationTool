@@ -200,12 +200,14 @@ public class MenuPanel extends JPanel {
                 removeObstacleButton.setEnabled(false);
                 appView.setSplitViewVisible(false);
             } else {
+                //set the selected runway and enable the split view.
                 appView.setSelectedRunway(runwayMenu.getSelectedItem().toString());
+                appView.setSplitViewVisible(true);
                 if(isViewMatchedToSelection()){
                     //Automatically fit the view to the selected runway, when selected.
                     appView.getTopView().fitViewToRunway(selectedRunway);
-                    appView.setSplitViewVisible(true);
                 }
+                //add or enable the buttons depending on the obstacle configuration of the runway.
                 if(controller.getRunwayObstacle(selectedRunway).equals("")){
                     placeObstacleButton.setEnabled(true);
                     removeObstacleButton.setEnabled(false);
