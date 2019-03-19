@@ -50,11 +50,15 @@ public class AppView extends JFrame{
 
     //Will either hide or display the split view.
     public void setSplitViewVisible(boolean isVisible){
+        //If the bottom component is unset and it should be visible.
         if(viewPanel.getBottomComponent() == null && isVisible){
             viewPanel.setBottomComponent(sideView);
             viewPanel.setDividerLocation((int)(getHeight()*0.55));
             viewPanel.setDividerSize(10);
+            //Manually update the size of TopView so that the view centers correctly.
+            topView.setSize(topView.getWidth(), (int)(topView.getHeight()*0.55));
         } else if (!isVisible){
+            //remove the bottom component and set the divider size to 0.
             viewPanel.setBottomComponent(null);
             viewPanel.setDividerSize(0);
         }
