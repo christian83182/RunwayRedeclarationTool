@@ -47,7 +47,7 @@ public class PlaceObstacleWindow extends JFrame {
         this.add(obstacleComboBox,c);
 
         //Add a label for "Distance from threshold"
-        JLabel horizontalDistanceLabel = new JLabel("Distance From Threshold");
+        JLabel horizontalDistanceLabel = new JLabel("Distance From Runway Start");
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 1; c.gridwidth = 2;
         c.insets = new Insets(0,15,0,10);
@@ -81,7 +81,7 @@ public class PlaceObstacleWindow extends JFrame {
         this.add(centerlineDistanceSpinner,c);
 
         //Create a button which will open the Browse Obstacles window.
-        JButton browseObstaclesButton = new JButton("Edit Obstacles");
+        JButton browseObstaclesButton = new JButton("Edit Obstacles...");
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 3; c.gridwidth = 2;
         c.fill = GridBagConstraints.HORIZONTAL;

@@ -1,8 +1,11 @@
 package uk.ac.soton.view;
+import org.xml.sax.SAXException;
+import uk.ac.soton.controller.ImporterException;
 import uk.ac.soton.controller.ViewController;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -39,7 +42,7 @@ public class CustomMenuBar extends JMenuBar {
         this.add(helpMenu);
 
         //Adding the "import configuration" option to the file menu.
-        JMenuItem importConfiguration = new JMenuItem("Import Configuration");
+        JMenuItem importConfiguration = new JMenuItem("Import Configuration...");
         importConfiguration.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         fileMenu.add(importConfiguration);
         importConfiguration.addActionListener(e -> {
@@ -47,13 +50,19 @@ public class CustomMenuBar extends JMenuBar {
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             int returnVal = fileChooser.showOpenDialog(null);
             if(returnVal == JFileChooser.APPROVE_OPTION){
-                controller.importAirfieldConfiguration(fileChooser.getSelectedFile().getAbsolutePath());
+                try {
+                    controller.importAirfieldConfiguration(fileChooser.getSelectedFile().getAbsolutePath());
+                } catch (Exception e1) {
+                    JOptionPane.showMessageDialog(fileChooser,
+                            "There was an issue importing that configuration: '" + e1.getMessage() + "'",
+                            "Import Error" ,JOptionPane.ERROR_MESSAGE);
+                }
                 appView.repaint();
             }
         });
 
         //Adding the "export configuration" option to the file menu.
-        JMenuItem exportConfiguration = new JMenuItem("Export Configuration");
+        JMenuItem exportConfiguration = new JMenuItem("Export Configuration...");
         exportConfiguration.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         fileMenu.add(exportConfiguration);
         exportConfiguration.addActionListener(e -> {
@@ -67,7 +76,7 @@ public class CustomMenuBar extends JMenuBar {
 
         //Adding the "export top view button"
         fileMenu.addSeparator();
-        JMenuItem exportTopViewImage = new JMenuItem("Export Top View");
+        JMenuItem exportTopViewImage = new JMenuItem("Export Top View...");
         exportTopViewImage.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         fileMenu.add(exportTopViewImage);
         exportTopViewImage.addActionListener(e -> {
@@ -81,7 +90,7 @@ public class CustomMenuBar extends JMenuBar {
         });
 
         //Adding the "export side view button".
-        JMenuItem exportSideView = new JMenuItem("Export Side View");
+        JMenuItem exportSideView = new JMenuItem("Export Side View...");
         exportSideView.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         fileMenu.add(exportSideView);
         exportSideView.addActionListener(e -> {
@@ -94,7 +103,7 @@ public class CustomMenuBar extends JMenuBar {
         });
 
         //Adding the "edit obstacles" option to the edit menu.
-        JMenuItem editObstaclesMenu = new JMenuItem("Edit Predefined Obstacles");
+        JMenuItem editObstaclesMenu = new JMenuItem("Edit Predefined Obstacles...");
         editObstaclesMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         editMenu.add(editObstaclesMenu);
         editObstaclesMenu.addActionListener(e -> new BrowseObstaclesWindow(controller));
@@ -127,7 +136,7 @@ public class CustomMenuBar extends JMenuBar {
         });
 
         //Adding the "open help" option to the help menu.
-        JMenuItem openHelp = new JMenuItem("Open Help");
+        JMenuItem openHelp = new JMenuItem("Open Help...");
         openHelp.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         helpMenu.add(openHelp);
         openHelp.addActionListener(e -> {

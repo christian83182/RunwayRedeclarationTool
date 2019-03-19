@@ -85,6 +85,39 @@ public abstract class InteractivePanel extends JPanel {
         return img;
     }
 
+    public void paintScale(Graphics2D g2){
+        String label = "100 m";
+        Double scaleLength = 100 * getZoom();
+
+        //Different size options should be added from largest to smallest.
+        if(scaleLength < 20){
+            scaleLength = scaleLength*5;
+            label = "500 m";
+        } else if (scaleLength <50){
+            scaleLength = scaleLength*2;
+            label= "200 m";
+        }
+
+        //Different size options should be added from smallest to largest.
+        if (scaleLength > 400) {
+            scaleLength = scaleLength / 4;
+            label = "25 m ";
+        }else if (scaleLength > 200){
+            scaleLength = scaleLength/2;
+            label = "50 m ";
+        }
+
+        Point scaleStart = new Point(20,getHeight()-10);
+        Point scaleEnd = new Point(scaleStart.x + scaleLength.intValue(), scaleStart.y);
+
+        g2.setColor(Color.WHITE);
+        g2.setStroke(new BasicStroke(3));
+        g2.drawLine(scaleStart.x, scaleStart.y, scaleEnd.x, scaleEnd.y);
+        g2.drawLine(scaleStart.x, scaleStart.y, scaleStart.x, scaleStart.y-7);
+        g2.drawLine(scaleEnd.x, scaleEnd.y, scaleEnd.x, scaleEnd.y-7);
+        g2.drawString(label, scaleEnd.x+20, scaleEnd.y);
+    }
+
     //Inner class devoted to giving the view zoom and pan functionality.
     private class PanAndZoomListener extends MouseAdapter {
 

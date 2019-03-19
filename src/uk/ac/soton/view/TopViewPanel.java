@@ -25,6 +25,9 @@ public class TopViewPanel extends InteractivePanel {
         this.controller = appView.getController();
         this.menuPanel = appView.getMenuPanel();
         this.setPreferredSize(Settings.TOP_DOWN_DEFAULT_SIZE);
+        this.setSize(Settings.TOP_DOWN_DEFAULT_SIZE);
+
+        fitViewToAllRunways();
     }
 
     @Override
@@ -53,15 +56,13 @@ public class TopViewPanel extends InteractivePanel {
         //Draw the selected runway on top of everything else.
         paintSelectedRunway(g2);
 
-        //Draw a set of axis if the option is selected in the menu panel.
-        if(menuPanel.isShowAxis()) paintAxis(g2);
-
         //Reset the transformation used by the graphics object so the overlay doesn't pan or zoom.
         g2.setTransform(new AffineTransform());
         //Paint the compass and legend if the option is selected.
         if(menuPanel.isShowOverlay()) {
             paintCompass(getRotationOfSelectedRunway(), g2);
             paintLegend(g2);
+            paintScale(g2);
         }
     }
 
@@ -82,47 +83,15 @@ public class TopViewPanel extends InteractivePanel {
 
     //Draws the legend on the bottom right corner of the screen.
     private void paintLegend(Graphics2D g2){
-        Integer width = 210;
-        Integer height = 190;
-        Integer fontSize = 14;
-        Integer verticalPadding = 9;
-        Point pos = new Point(getWidth()-width-10, getHeight()-height-10);
-
-        g2.setColor(new Color(45, 45, 45, 150));
-        g2.fillRect(pos.x, pos.y, width, height);
-        g2.setColor(new Color(39, 39, 39));
-        g2.setStroke(new BasicStroke(5));
-        g2.drawRect(pos.x, pos.y, width, height);
-
-        g2.setColor(Color.WHITE);
-        g2.setFont(new Font("SansSerif", Font.BOLD, (int)(fontSize*1.5)));
-        g2.drawString("KEY", pos.x+85, pos.y + fontSize*1 + verticalPadding*2);
-
-        g2.setFont(new Font("SansSerif", Font.PLAIN, fontSize));
-        g2.drawString("Clear and Graded Area", pos.x+40, pos.y + fontSize * 1 +verticalPadding*5);
-        g2.drawString("Runway Strip", pos.x+40, pos.y + fontSize * 2 +verticalPadding*6);
-        g2.drawString("Displaced Threshold", pos.x+40, pos.y + fontSize * 3 +verticalPadding*7);
-        g2.drawString("Clearway", pos.x+40, pos.y + fontSize * 4 +verticalPadding*8);
-        g2.drawString("Stopway", pos.x+40, pos.y + fontSize * 5 +verticalPadding*9);
-        g2.drawString("Landing Direction", pos.x+40, pos.y + fontSize * 6 +verticalPadding*10);
-
-        Integer iconSize = 16;
-        g2.setColor(Settings.CLEAR_AND_GRADED_COLOUR);
-        g2.fillRect(pos.x +18, pos.y + fontSize*1 + verticalPadding*5 - iconSize+2, iconSize, iconSize);
-        g2.setColor(Settings.RUNWAY_STRIP_COLOUR);
-        g2.fillRect(pos.x +18, pos.y + fontSize*2 + verticalPadding*6 - iconSize+2, iconSize, iconSize);
-        g2.setColor(Settings.SELECTED_RUNWAY_HIGHLIGHT);
-        g2.fillRect(pos.x +18, pos.y + fontSize*3 + verticalPadding*7 - iconSize+2, iconSize, iconSize);
-        g2.setColor(Settings.CLEARWAY_STROKE_COLOUR);
-        g2.fillRect(pos.x +18, pos.y + fontSize*4 + verticalPadding*8 - iconSize+2, iconSize, iconSize);
-        g2.setColor(Settings.STOPWAY_STROKE_COLOUR);
-        g2.fillRect(pos.x +18, pos.y + fontSize*5 + verticalPadding*9 - iconSize+2, iconSize, iconSize);
-
-        Point polyLocation = new Point(pos.x + 18, pos.y + fontSize*6 + verticalPadding*10 - iconSize/2+2);
-        Polygon poly = new Polygon(new int[] {polyLocation.x, polyLocation.x +16, polyLocation.x},
-                new int[] {polyLocation.y+8, polyLocation.y, polyLocation.y-8}, 3);
-        g2.setColor(Settings.CENTERLINE_COLOUR);
-        g2.fillPolygon(poly);
+        Legend legend = new Legend("Legend");
+        legend.addToLegend("Clear & Graded Area", Settings.CLEAR_AND_GRADED_COLOUR);
+        legend.addToLegend("Runway Strip", Settings.RUNWAY_STRIP_COLOUR);
+        legend.addToLegend("Runway", Settings.RUNWAY_COLOUR);
+        legend.addToLegend("Displaced Threshold", Settings.SELECTED_RUNWAY_HIGHLIGHT);
+        legend.addToLegend("Stopway", Settings.STOPWAY_STROKE_COLOUR);
+        legend.addToLegend("Clearway", Settings.CLEARWAY_STROKE_COLOUR);
+        legend.addToLegend("Obstacle", Settings.OBSTACLE_FILL_COLOUR);
+        legend.drawLegend(g2, new Point(getWidth()-10,getHeight()-10));
     }
 
     //Draws a compass in the top left corner of the screen
@@ -275,6 +244,14 @@ public class TopViewPanel extends InteractivePanel {
         for(String id : controller.getRunways()){
             paintRunwayName(id, g2);
         }
+        drawnRunways = new ArrayList<>();
+        for(String id : controller.getRunways()){
+            Integer currentRunwayBearing = controller.getBearing(id);
+            if(!(drawnRunways.contains(currentRunwayBearing+180) || drawnRunways.contains(currentRunwayBearing-180))){
+                paintObstacles(id,g2);
+                drawnRunways.add(currentRunwayBearing);
+            }
+        }
     }
 
     //Draws the clear and graded area for a given runway
@@ -415,22 +392,26 @@ public class TopViewPanel extends InteractivePanel {
 
         //Draw the TORA length.
         Integer toraLength = controller.getRunwayTORA(id);
-        InfoArrow toraLengthInfo = new InfoArrow(0,stripHeight+150,toraLength,"TORA: " + toraLength + "m", true);
+        InfoArrow toraLengthInfo = new InfoArrow(controller.getTORAOffset(id),
+                stripHeight+150,toraLength,"TORA: " + toraLength + "m", true);
         toraLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the TODA length.
         Integer todaLength = controller.getRunwayTODA(id);
-        InfoArrow todaLengthInfo = new InfoArrow(0,stripHeight+350,todaLength,"TODA: " + todaLength + "m", true);
+        InfoArrow todaLengthInfo = new InfoArrow(controller.getTODAOffset(id),
+                stripHeight+350,todaLength,"TODA: " + todaLength + "m", true);
         todaLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the ASDA length.
         Integer asdaLength = controller.getRunwayASDA(id);
-        InfoArrow asdaLengthInfo = new InfoArrow(0,stripHeight+250,asdaLength,"ASDA: " + asdaLength + "m", true);
+        InfoArrow asdaLengthInfo = new InfoArrow(controller.getASDAOffset(id),
+                stripHeight+250,asdaLength,"ASDA: " + asdaLength + "m", true);
         asdaLengthInfo.drawInfoArrow(id, g2);
 
         //Draw the LDA length.
         Integer ldaLength = controller.getRunwayLDA(id);
-        InfoArrow ldaLengthInfo = new InfoArrow(controller.getRunwayThreshold(id), stripHeight+50, ldaLength,"LDA: " + ldaLength + "m", true);
+        InfoArrow ldaLengthInfo = new InfoArrow(controller.getLDAOffset(id),
+                stripHeight+50, ldaLength,"LDA: " + ldaLength + "m", true);
         ldaLengthInfo.drawInfoArrow(id, g2);
     }
 
@@ -553,14 +534,6 @@ public class TopViewPanel extends InteractivePanel {
         g2.setTransform(old);
     }
 
-    //Draws a set of axis which intersect at (0,0).
-    private void paintAxis(Graphics2D g2){
-        g2.setColor(Settings.AXIS_COLOUR);
-        g2.setStroke(Settings.AXIS_STROKE);
-        g2.drawLine(-10000,0,10000,0);
-        g2.drawLine(0,-10000,0,10000);
-    }
-
     //Returns the rotation of the currently selected runway.
     private Integer getRotationOfSelectedRunway(){
         String selectedRunway = appView.getSelectedRunway();
@@ -578,6 +551,12 @@ public class TopViewPanel extends InteractivePanel {
         Integer stopwayLength = controller.getStopwayDim(id).width;
         Integer clearwayLength = controller.getClearwayDim(id).width;
 
+        //If no runway is selected then nothing is displayed but the runway and the runway strip.
+        if(appView.getSelectedRunway().equals("")){
+            return runwayLength + stripEndSize*2;
+        }
+
+        //The full length of the runway includes the stopway/clearway & strip end.
         Integer fullRunwayLength = runwayLength + stripEndSize + Math.max(stripEndSize, Math.max(stopwayLength, clearwayLength));
 
         if(menuPanel.isShowOtherEnabled()){
@@ -594,6 +573,11 @@ public class TopViewPanel extends InteractivePanel {
         Integer stripWidthFromCenterline = controller.getStripWidthFromCenterline(id);
         Integer fullRunwayHeight = stripWidthFromCenterline *2;
 
+        //If no runway is selected, then the only thing displayed is the runway and runway strip.
+        if(appView.getSelectedRunway().equals("")){
+            return fullRunwayHeight;
+        }
+
         if(menuPanel.isShowOtherEnabled()) {
             //Account for the text displaying the stopway length
             fullRunwayHeight += 250;
@@ -606,8 +590,8 @@ public class TopViewPanel extends InteractivePanel {
         return fullRunwayHeight;
     }
 
-    //Returns the bounding box for the specified runway
-    private Polygon getFullRunwayBoundingBox(String id){
+    //Returns the bounding box for the specified runway. This will depend what options are selected in the menu.
+    private Polygon getCurrentBoundingBox(String id){
         Integer stripWidthFromCenterline = controller.getStripWidthFromCenterline(id);
         Integer stripEndSize = controller.getStripEndSize(id);
         Point runwayStart = controller.getRunwayPos(id);
@@ -644,7 +628,7 @@ public class TopViewPanel extends InteractivePanel {
     //Pans and zooms the view such that the specified runway appears in the center of the screen and fully visible.
     public void fitViewToRunway(String id){
         //Calculates the bounding box and centerpoint of the full runway.
-        Rectangle2D boundingBox = getFullRunwayBoundingBox(id).getBounds2D();
+        Rectangle2D boundingBox = getCurrentBoundingBox(id).getBounds2D();
         Point centerPoint = new Point((int)boundingBox.getCenterX(), (int)boundingBox.getCenterY());
 
         //Transforms the centerpoint to match it's position in the world.
@@ -661,6 +645,23 @@ public class TopViewPanel extends InteractivePanel {
         } else {
             setPan(new Point(-centerPoint.x + getWidth()/2, -centerPoint.y + getHeight()/2));
         }
+    }
+
+    //Pans and Zooms the view such that all runways fit within the view.
+    public void fitViewToAllRunways(){
+        Integer maxX = 0, maxY = 0, minX = 0, minY= 0;
+
+        for (String id : controller.getRunways()){
+            Rectangle2D boundingBox = getCurrentBoundingBox(id).getBounds2D();
+            maxX = Math.max(maxX, (int)boundingBox.getMaxX());
+            maxY = Math.max(maxY, (int)boundingBox.getMaxY());
+            minX = Math.min(minX, (int)boundingBox.getMinX());
+            minY = Math.min(minY, (int)boundingBox.getMinY());
+        }
+
+        Point centerPoint = new Point((minX+maxX)/2, (minY+maxY)/2);
+        setPan(new Point(-centerPoint.x + getWidth()/2, -centerPoint.y + getHeight()/2));
+        setZoom(Math.min((double)getHeight() / (double)(maxY-minY), (double)getWidth() / (double)(maxX-minX)));
     }
 
     //Rotates a polygon around a given point through a given angle.

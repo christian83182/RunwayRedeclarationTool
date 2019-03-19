@@ -41,13 +41,10 @@ public class Settings{
     static Color CLEARWAY_FILL_COLOUR;
     static Stroke CLEARWAY_STROKE = new BasicStroke(3);
 
-    static Color AXIS_COLOUR = new Color(226, 226, 226,80);
-    static Stroke AXIS_STROKE = new BasicStroke(1);
-
-    static Color INFO_ARROW_COLOUR = new Color(255,255,255);
+    static Color INFO_ARROW_COLOUR;
     static Stroke INFO_ARROW_STROKE = new BasicStroke(4);
     static Stroke INFO_ARROW_HELPER_STROKE = new BasicStroke(2, 1, 0, 10, new float[] {1,10}, 1);
-    static Color INFO_TEXT_COLOUR = new Color(255,255,255);
+    static Color INFO_TEXT_COLOUR;
     static Font INFO_TEXT_FONT = new Font("SansSerif", Font.PLAIN, 32);
 
     static Color RUNWAY_NAME_COLOUR = new Color(255,255,255);
@@ -80,10 +77,12 @@ public class Settings{
         STOPWAY_FILL_COLOUR = new Color(STOPWAY_STROKE_COLOUR.getRed(), STOPWAY_STROKE_COLOUR.getGreen(), STOPWAY_STROKE_COLOUR.getBlue(),40);
         CLEARWAY_STROKE_COLOUR = new Color(23, 0, 255);
         CLEARWAY_FILL_COLOUR = new Color(CLEARWAY_STROKE_COLOUR.getRed(), CLEARWAY_STROKE_COLOUR.getGreen(), CLEARWAY_STROKE_COLOUR.getBlue(),20);
-        SIDEVIEW_SKY_COLOUR_BOTTOM = new Color(80, 120, 199);
+        SIDEVIEW_SKY_COLOUR_BOTTOM = new Color(97, 112, 199);
         SIDEVIEW_SKY_COLOUR_TOP = new Color(152, 190, 255);
-        SIDEVIEW_GROUND_COLOUR_TOP = new Color(75,161,79);
-        SIDEVIEW_GROUND_COLOUR_BOTTOM = new Color(34, 115, 44);
+        SIDEVIEW_GROUND_COLOUR_TOP = new Color(100, 171, 83);
+        SIDEVIEW_GROUND_COLOUR_BOTTOM = new Color(51, 164, 44);
+        INFO_ARROW_COLOUR = new Color(255,255,255);
+        INFO_TEXT_COLOUR = new Color(255,255,255);
     }
 
     public static void setRedGreenColourblindTheme(){
@@ -99,6 +98,10 @@ public class Settings{
         STOPWAY_FILL_COLOUR = new Color(STOPWAY_STROKE_COLOUR.getRed(), STOPWAY_STROKE_COLOUR.getGreen(), STOPWAY_STROKE_COLOUR.getBlue(),70);
         CLEARWAY_STROKE_COLOUR = new Color(0, 27, 255);
         CLEARWAY_FILL_COLOUR = new Color(CLEARWAY_STROKE_COLOUR.getRed(), CLEARWAY_STROKE_COLOUR.getGreen(), CLEARWAY_STROKE_COLOUR.getBlue(),50);
+        SIDEVIEW_SKY_COLOUR_BOTTOM = new Color(155, 130, 199);
+        SIDEVIEW_SKY_COLOUR_TOP = new Color(189, 154, 255);
+        SIDEVIEW_GROUND_COLOUR_TOP = new Color(68, 147, 183);
+        SIDEVIEW_GROUND_COLOUR_BOTTOM = new Color(7, 112, 141);
     }
 
     public static void setBlueYellowColourblindTheme(){
@@ -114,6 +117,10 @@ public class Settings{
         STOPWAY_FILL_COLOUR = new Color(STOPWAY_STROKE_COLOUR.getRed(), STOPWAY_STROKE_COLOUR.getGreen(), STOPWAY_STROKE_COLOUR.getBlue(),50);
         CLEARWAY_STROKE_COLOUR = new Color(102, 0, 77);
         CLEARWAY_FILL_COLOUR = new Color(CLEARWAY_STROKE_COLOUR.getRed(), CLEARWAY_STROKE_COLOUR.getGreen(), CLEARWAY_STROKE_COLOUR.getBlue(),50);
+        SIDEVIEW_SKY_COLOUR_BOTTOM = new Color(255, 199, 245);
+        SIDEVIEW_SKY_COLOUR_TOP = new Color(206, 112, 181);
+        SIDEVIEW_GROUND_COLOUR_TOP = new Color(0, 212, 212);
+        SIDEVIEW_GROUND_COLOUR_BOTTOM = new Color(0, 156, 156);
     }
 
 
