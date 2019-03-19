@@ -29,6 +29,11 @@ public class XMLImporter {
     private Integer threshold = null;
     private Integer length;
     private Airfield airfield;
+    private String runwayid;
+    private String obstacleid;
+    private Integer startdistanceObstacle;
+    private Integer centrelineDistanceObstacle;
+    private List<ObstacletoPlace> obstaclestoPlace = new ArrayList<>();
 
     public Airfield importAirfieldInfo(String filename) throws ParserConfigurationException, IOException, SAXException, ImporterException {
         File xml = new File(filename);
@@ -53,6 +58,7 @@ public class XMLImporter {
             LogicalRunway firstLogicalRunway = null;
             String secondLogicalRunwayID = currentRunway.getId().split("/")[1];
             LogicalRunway secondLogicalRunway = null;
+
             for(LogicalRunway currentLogicalRunway : logicalRunways){
                 if(currentLogicalRunway.getName().equals(firstLogicalRunwayID)){
                     firstLogicalRunway = currentLogicalRunway;
@@ -61,7 +67,29 @@ public class XMLImporter {
                 }
             }
             currentRunway.setLogicalRunways(firstLogicalRunway, secondLogicalRunway);
+
+
         }
+        for(Runway currentRunway: airfield.getRunways()){
+        for(ObstacletoPlace currentObstacle: obstaclestoPlace){
+
+                if(currentObstacle.returnRid()==currentRunway.getId()) {
+
+                    for (Map.Entry<String, Airfield.Dimensions> pair : airfield.getPredefinedObstacles().entrySet()) {
+                        if (pair.getKey() == currentObstacle.returnOid()) {
+                            Obstacle obstacleToPlace = new Obstacle(currentObstacle.returnOid(), currentObstacle.returnOsd(), currentObstacle.returnOcd(), pair.getValue());
+                            currentRunway.placeObstacle(obstacleToPlace, currentRunway.getLogicalRunways()[0].getName());
+                        }
+                    }
+
+
+                }
+            }
+        }
+
+
+
+
         return airfield;
     }
 
@@ -79,9 +107,11 @@ public class XMLImporter {
         }
     }
 
+
     private Runway getRunway(Node node, String filename) throws ImporterException {
         Runway runway = new Runway();
         importDimension(filename);
+
 
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
@@ -129,6 +159,12 @@ public class XMLImporter {
                 throw new ImporterException("Error: Runway <stripWidth> is '0' or negative");
 
             } else {runway.setStripWidth(Integer.parseInt(getTagValue("stripWidth",element))); }
+            if(getTagValue("runwayObstacleId",element)!=null){
+            ObstacletoPlace obstacle = new ObstacletoPlace(getTagValue("id",element),getTagValue("runwayObstacleId",element),Integer.parseInt(getTagValue("startDistance",element)),Integer.parseInt(getTagValue("centrelineDistance",element)));
+            obstaclestoPlace.add(obstacle); }
+
+
+
         }
         return runway;
     }
@@ -142,6 +178,8 @@ public class XMLImporter {
             threshold = Integer.parseInt(getTagValue("treshold", element));
         }
     }
+
+
 
     private void importLogicalRunways(String filename) throws ImporterException, ParserConfigurationException, IOException, SAXException {
         File xml = new File(filename);
@@ -205,7 +243,7 @@ public class XMLImporter {
 
         if(node.getNodeType() == Node.ELEMENT_NODE){
             Element element = (Element) node;
-            if (Double.parseDouble((getTagValue("width",element))) <= 0 || Double.parseDouble(getTagValue("height",element)) <= 0){
+            if (Double.parseDouble((getTagValue("width",element))) < 0.0 || Double.parseDouble(getTagValue("height",element)) < 0.0){
                 throw new ImporterException("Error: <width> or <height> Dimensions are either '0' or negative");
 
             } else {
@@ -239,28 +277,28 @@ public class XMLImporter {
         PredefinedObstacle obstacle = new PredefinedObstacle();
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
-            if (obstacle.id == null){
+            if (getTagValue("id",element) == null){
                 throw new ImporterException("Error: the obstacle <id> is null.");
             } else {
                 obstacle.id = getTagValue("id", element);
             }
 
-            if (obstacle.length <= 0) {
+            if (Double.parseDouble(getTagValue("length",element)) < 0.0) {
                 throw new ImporterException("Error: the obstacle <length> is either '0' or negative.");
             } else {
                 obstacle.length = Double.parseDouble(getTagValue("length", element));
             }
 
-            if (obstacle.height <= 0) {
+            if (Double.parseDouble(getTagValue("height", element)) < 0.0) {
                 throw new ImporterException("Error: the obstacle <height> is either '0' or negative.");
             } else {
                 obstacle.height = Double.parseDouble(getTagValue("height", element));
             }
 
-            if (obstacle.width <= 0) {
+            if (Double.parseDouble(getTagValue("width", element)) < 0.0) {
                 throw new ImporterException("Error: the obstacle <width> is either '0' or negative.");
             } else {
-                obstacle.height = Double.parseDouble(getTagValue("width", element));
+                obstacle.width = Double.parseDouble(getTagValue("width", element));
             }
         }
         return obstacle;
@@ -282,5 +320,36 @@ public class XMLImporter {
             return "Obstacle :: id=" + this.id + " Height=" + this.height + " Width=" + this.width +
                     " Length=" + this.length;
         }
+    }
+
+    class ObstacletoPlace{
+        private String runwayid;
+        private String obstacleid;
+        private Integer startdistanceObstacle;
+        private Integer centrelineDistanceObstacle;
+
+        public ObstacletoPlace(String id, String runwayObstacle, int startDistance, int centrelineDistance) {
+            this.runwayid=id;
+            this.obstacleid=runwayObstacle;
+            this.startdistanceObstacle=startDistance;
+            this.centrelineDistanceObstacle = centrelineDistance;
+
+    }
+
+    public String returnRid(){
+            return runwayid;
+    }
+    public String returnOid(){
+            return obstacleid;
+    }
+
+    public Integer returnOsd(){
+            return startdistanceObstacle;
+    }
+
+    public Integer returnOcd(){
+            return centrelineDistanceObstacle;
+    }
+
     }
 }
