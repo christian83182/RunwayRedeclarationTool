@@ -1,8 +1,11 @@
 package uk.ac.soton.controller;
 
+import org.xml.sax.SAXException;
 import uk.ac.soton.common.LogicalRunway;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
+import java.io.IOException;
 import java.util.Set;
 
 public interface ViewController {
@@ -233,7 +236,7 @@ public interface ViewController {
      * Imports an XML file describing a configuration of the airfield and sets it as the current model.
      * @param path The location of the XML file specified by the user.
      */
-    void importAirfieldConfiguration(String path);
+    void importAirfieldConfiguration(String path) throws ImporterException, ParserConfigurationException, SAXException, IOException;
 
     /**
      * Getting the logical runway on which the obstacle (if present) is closer to its respective threshold.

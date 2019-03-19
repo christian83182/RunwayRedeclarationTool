@@ -1,8 +1,11 @@
 package uk.ac.soton.view;
+import org.xml.sax.SAXException;
+import uk.ac.soton.controller.ImporterException;
 import uk.ac.soton.controller.ViewController;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -47,7 +50,13 @@ public class CustomMenuBar extends JMenuBar {
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             int returnVal = fileChooser.showOpenDialog(null);
             if(returnVal == JFileChooser.APPROVE_OPTION){
-                controller.importAirfieldConfiguration(fileChooser.getSelectedFile().getAbsolutePath());
+                try {
+                    controller.importAirfieldConfiguration(fileChooser.getSelectedFile().getAbsolutePath());
+                } catch (Exception e1) {
+                    JOptionPane.showMessageDialog(fileChooser,
+                            "There was an issue importing that configuration: '" + e1.getMessage() + "'",
+                            "Import Error" ,JOptionPane.ERROR_MESSAGE);
+                }
                 appView.repaint();
             }
         });

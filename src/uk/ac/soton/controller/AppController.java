@@ -294,7 +294,7 @@ public class AppController implements ViewController {
     @Override
     public void addObstacleToRunway(String runwayId, String obstacleId, Integer distanceFromCenterline, Integer distanceFromEdge) {
         Runway runway = airfield.getRunway(runwayId);
-        Obstacle obstacle = new Obstacle(obstacleId, distanceFromEdge, distanceFromCenterline, getPredifinedObstacles().get(obstacleId));
+        Obstacle obstacle = new Obstacle(obstacleId, distanceFromEdge, distanceFromCenterline, getPredefinedObstacles().get(obstacleId));
         runway.placeObstacle(obstacle, runwayId);
         redeclareRunway(runwayId);
     }
@@ -349,22 +349,10 @@ public class AppController implements ViewController {
     }
 
     @Override
-    public void importAirfieldConfiguration(String path) {
+    public void importAirfieldConfiguration(String path) throws ImporterException, ParserConfigurationException, SAXException, IOException {
         XMLImporter importer = new XMLImporter();
-        try {
-            this.airfield = importer.importAirfieldInfo(path);
-            System.out.println("!");
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (ImporterExceptions importerExceptions) {
-            importerExceptions.printStackTrace();
-        }
+        this.airfield = importer.importAirfieldInfo(path);
     }
-
 
     @Override
     public LogicalRunway getLogicalRunwayCloserToObstacle(String runwayId) {
@@ -376,13 +364,21 @@ public class AppController implements ViewController {
         }
     }
 
+    private void redeclareRunway(String runwayId){
+        airfield.getRunway(runwayId).recalculateParameters();
+    }
+
+    private Map<String,Airfield.Dimensions> getPredefinedObstacles() { return airfield.getPredefinedObstacles(); }
+
+
+    //  --------- Non-Interface Methods ----------
+
+
     public Runway getRunway(String name){ return airfield.getRunway(name); }
 
     public void addRunway(String id, Integer xPos, Integer yPos, Integer length, Integer width, Integer stripWidth, Integer stripEnd) {
         airfield.addRunway(new Runway(id, xPos, yPos, length, width, stripWidth, stripEnd));
     }
-
-    public Map<String,Airfield.Dimensions> getPredifinedObstacles() { return airfield.getPredefinedObstacles(); }
 
     public void addPredefinedObstacle(String type, Double length, Double width, Double height) {
         airfield.defineNewObstacle(type, length, width, height);
@@ -395,13 +391,9 @@ public class AppController implements ViewController {
     }
 
     public void placeObstacle(String runwayId, String type, Integer centrelineDistance, Integer startDistance) {
-        Obstacle obstacle = new Obstacle(startDistance, centrelineDistance, getPredifinedObstacles().get(type));
+        Obstacle obstacle = new Obstacle(startDistance, centrelineDistance, getPredefinedObstacles().get(type));
         Runway runway = airfield.getRunway(runwayId);
         runway.placeObstacle(obstacle, runwayId);
-    }
-
-    public void redeclareRunway(String runwayId){
-       airfield.getRunway(runwayId).recalculateParameters();
     }
 
     public void setResa(Runway runway, Integer resa) { runway.setResa(resa);}
