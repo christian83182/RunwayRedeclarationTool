@@ -33,7 +33,7 @@ public class SideViewPanel extends InteractivePanel{
         //if there is an obstacle on the runway, paint it
         if(!controller.getRunwayObstacle(appView.getSelectedRunway()).equals("")){
             paintObstacle(g2);
-            paintParameters(g2);
+            //paintParameters(g2);
         }
 
         //painting map
@@ -66,6 +66,21 @@ public class SideViewPanel extends InteractivePanel{
         legend.drawLegend(g2, new Point(getWidth()-10,getHeight()-10));
     }
 
+    private void paintThresholdDesignator(Graphics2D g2){
+        String runwayId = appView.getSelectedRunway();
+        g2.setPaint(Color.WHITE);
+
+        if(runwayId.length() == 2){
+            g2.setFont(new Font("SansSerif", 0, 40));
+            g2.drawString(runwayId, 20, 40);
+        } else {
+            g2.setFont(new Font("SansSerif", Font.BOLD, 25));
+            g2.drawString(runwayId.substring(0,2), 20, 25);
+            g2.drawString(runwayId.substring(2), 25, 45);
+        }
+
+    }
+
     //painting the runway
     public void paintRunway(Graphics2D g2){
 
@@ -75,9 +90,9 @@ public class SideViewPanel extends InteractivePanel{
         // Painting runway
         g2.setPaint(Settings.RUNWAY_COLOUR);
         g2.fillRect(0,0, runway.width, 50);
-        g2.setPaint(Color.WHITE);
-        g2.setFont(new Font("SansSerif", 0,  (runway.height/2)));
-        g2.drawString(selectedRunway, 0, (runway.height)/2);
+
+        // Painting the Threshold Designator
+        paintThresholdDesignator(g2);
 
         // Painting displaced threshold
         Integer threshold = controller.getRunwayThreshold(selectedRunway);
@@ -99,6 +114,16 @@ public class SideViewPanel extends InteractivePanel{
         g2.setColor(Settings.STOPWAY_STROKE_COLOUR);
         g2.setStroke(Settings.STOPWAY_STROKE);
         g2.drawRect(runway.width, 0, stopway.width, 50);
+    }
+
+    //Draws the RunwayStrip for the currently selected runway.
+    public void paintRunwayStrip(Graphics2D g2){
+        String runwayId = appView.getSelectedRunway();
+        Dimension runwayDim = controller.getRunwayDim(runwayId);
+        Integer stripEndSize = controller.getStripEndSize(runwayId);
+
+        g2.setColor(Settings.RUNWAY_STRIP_COLOUR);
+        g2.fillRect(-stripEndSize, 0,runwayDim.width+stripEndSize*2, 200);
     }
 
     //painting the obstacle
@@ -179,10 +204,9 @@ public class SideViewPanel extends InteractivePanel{
 
 
     // displaying distances to the right of the obstacle
-    // height*als: start point is obstaccle distance from start of runway and it goes on for h*als
-    // resa is just before the end of the above distance
+    // height*als: start point is obstacle distance from start of runway and it goes on for h*als
+    // RESA is just before the end of the above distance
     // the new strip end comes after the end of the resa
-    
     public void displayDistancesToTheRight(Graphics2D g2, String obstacle, String selectedRunway){
 
         Integer obstacleDistance = controller.getDistanceFromThreshold(selectedRunway);
@@ -214,9 +238,8 @@ public class SideViewPanel extends InteractivePanel{
 
     // displaying distances to the left of the obstacle
     // height*als: start point is (obstacle distance from start - h*als) of runway and it goes on for h*als
-    // resa is just before the start of the above distance
+    // RESA is just before the start of the above distance
     // the new strip end comes before the start of the resa
-
     public void displayDistancesToTheLeft(Graphics2D g2, String obstacle, String selectedRunway){
 
         Integer obstacleDistance = controller.getDistanceFromThreshold(selectedRunway);
