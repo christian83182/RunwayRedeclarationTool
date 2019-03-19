@@ -1,6 +1,5 @@
 package uk.ac.soton.view;
 
-import org.w3c.dom.css.Rect;
 import uk.ac.soton.controller.ViewController;
 
 import java.awt.*;
@@ -8,7 +7,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.Set;
 
 //Represents a JPanel designed to view a top-down view of the runways.
 public class TopViewPanel extends InteractivePanel {
@@ -564,6 +562,12 @@ public class TopViewPanel extends InteractivePanel {
         Integer stopwayLength = controller.getStopwayDim(id).width;
         Integer clearwayLength = controller.getClearwayDim(id).width;
 
+        //If no runway is selected then nothing is displayed but the runway and the runway strip.
+        if(appView.getSelectedRunway().equals("")){
+            return runwayLength + stripEndSize*2;
+        }
+
+        //The full length of the runway includes the stopway/clearway & strip end.
         Integer fullRunwayLength = runwayLength + stripEndSize + Math.max(stripEndSize, Math.max(stopwayLength, clearwayLength));
 
         if(menuPanel.isShowOtherEnabled()){
@@ -580,6 +584,11 @@ public class TopViewPanel extends InteractivePanel {
         Integer stripWidthFromCenterline = controller.getStripWidthFromCenterline(id);
         Integer fullRunwayHeight = stripWidthFromCenterline *2;
 
+        //If no runway is selected, then the only thing displayed is the runway and runway strip.
+        if(appView.getSelectedRunway().equals("")){
+            return fullRunwayHeight;
+        }
+
         if(menuPanel.isShowOtherEnabled()) {
             //Account for the text displaying the stopway length
             fullRunwayHeight += 250;
@@ -592,8 +601,8 @@ public class TopViewPanel extends InteractivePanel {
         return fullRunwayHeight;
     }
 
-    //Returns the bounding box for the specified runway
-    private Polygon getFullRunwayBoundingBox(String id){
+    //Returns the bounding box for the specified runway. This will depend what options are selected in the menu.
+    private Polygon getCurrentBoundingBox(String id){
         Integer stripWidthFromCenterline = controller.getStripWidthFromCenterline(id);
         Integer stripEndSize = controller.getStripEndSize(id);
         Point runwayStart = controller.getRunwayPos(id);
@@ -630,7 +639,7 @@ public class TopViewPanel extends InteractivePanel {
     //Pans and zooms the view such that the specified runway appears in the center of the screen and fully visible.
     public void fitViewToRunway(String id){
         //Calculates the bounding box and centerpoint of the full runway.
-        Rectangle2D boundingBox = getFullRunwayBoundingBox(id).getBounds2D();
+        Rectangle2D boundingBox = getCurrentBoundingBox(id).getBounds2D();
         Point centerPoint = new Point((int)boundingBox.getCenterX(), (int)boundingBox.getCenterY());
 
         //Transforms the centerpoint to match it's position in the world.
@@ -649,11 +658,12 @@ public class TopViewPanel extends InteractivePanel {
         }
     }
 
+    //Pans and Zooms the view such that all runways fit within the view.
     public void fitViewToAllRunways(){
         Integer maxX = 0, maxY = 0, minX = 0, minY= 0;
 
         for (String id : controller.getRunways()){
-            Rectangle2D boundingBox = getFullRunwayBoundingBox(id).getBounds2D();
+            Rectangle2D boundingBox = getCurrentBoundingBox(id).getBounds2D();
             maxX = Math.max(maxX, (int)boundingBox.getMaxX());
             maxY = Math.max(maxY, (int)boundingBox.getMaxY());
             minX = Math.min(minX, (int)boundingBox.getMinX());
@@ -661,8 +671,6 @@ public class TopViewPanel extends InteractivePanel {
         }
 
         Point centerPoint = new Point((minX+maxX)/2, (minY+maxY)/2);
-        System.out.println(centerPoint.x + "," + centerPoint.y);
-        System.out.println(getWidth() + " and " + getHeight());
         setPan(new Point(-centerPoint.x + getWidth()/2, -centerPoint.y + getHeight()/2));
         setZoom(Math.min((double)getHeight() / (double)(maxY-minY), (double)getWidth() / (double)(maxX-minX)));
     }
