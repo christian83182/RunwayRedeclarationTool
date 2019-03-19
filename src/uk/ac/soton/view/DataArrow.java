@@ -62,6 +62,11 @@ public class DataArrow {
             }
         }
 
+        //If the arrow length is less than 0 or negative then don't draw the arrow.
+        if(startPoint.y - endPoint.y <= 0){
+            return;
+        }
+
         //Draw the dotted "helper" lines.
         g2.setColor(Settings.INFO_ARROW_COLOUR);
         g2.setStroke(Settings.INFO_ARROW_HELPER_STROKE);
@@ -147,6 +152,11 @@ public class DataArrow {
                 arrowStart = new Point(startPoint.x + padding,endPoint.y + helperLength);
                 arrowEnd = new Point(endPoint.x - padding, endPoint.y + helperLength);
             }
+        }
+
+        //If the length of the space is less than or equal to 0 then dont draw the arrow.
+        if(startPoint.x - endPoint.x <= 0){
+            return;
         }
 
         //Draw the dotted "helper" lines.
