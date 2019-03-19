@@ -130,19 +130,26 @@ public class XMLExporter {
                 //Add the obstacle.
                 if(airfield.getRunways().get(i).getObstacle()!=null) {
                     Element runwayObstacle = document.createElement("runwayObstacle");
+                    runwayObstacle.appendChild(document.createTextNode("yes"));
+                    runway.appendChild(runwayObstacle);
                     Element runwayObstacleId = document.createElement("runwayObstacleId");
                     runwayObstacleId.appendChild(document.createTextNode(airfield.getRunways().get(i).getObstacle().getId()));
-                    runwayObstacle.appendChild(runwayObstacleId);
+                    runway.appendChild(runwayObstacleId);
 
                     Element startDistance = document.createElement("startDistance");
                     Element centrelineDistance = document.createElement("centrelineDistance");
 
                     startDistance.appendChild(document.createTextNode(airfield.getRunways().get(i).getObstacle().getStartDistance().toString()));
                     centrelineDistance.appendChild(document.createTextNode(airfield.getRunways().get(i).getObstacle().getCentrelineDistance().toString()));
-                    runwayObstacle.appendChild(startDistance);
-                    runwayObstacle.appendChild(centrelineDistance);
+                    runway.appendChild(startDistance);
+                    runway.appendChild(centrelineDistance);
+
+                } else {
+                    Element runwayObstacle = document.createElement("runwayObstacle");
+                    runwayObstacle.appendChild(document.createTextNode("no"));
                     runway.appendChild(runwayObstacle);
                 }
+
 
              /*   Element runwayDimensions = document.createElement("runwayObstacleDimensions");
                 runwayObstacle.appendChild(runwayDimensions);

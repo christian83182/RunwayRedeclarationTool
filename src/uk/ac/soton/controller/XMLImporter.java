@@ -48,49 +48,54 @@ public class XMLImporter {
         importRunways(filename);
         importLogicalRunways(filename);
 
-        airfield.setPredefinedObstacles(predefinedObstacles);
-        for (Runway runway : runwayList) {
-            airfield.addRunway(runway);
-        }
 
-        for (Runway currentRunway : airfield.getRunways()){
-            String firstLogicalRunwayID = currentRunway.getId().split("/")[0];
-            LogicalRunway firstLogicalRunway = null;
-            String secondLogicalRunwayID = currentRunway.getId().split("/")[1];
-            LogicalRunway secondLogicalRunway = null;
 
-            for(LogicalRunway currentLogicalRunway : logicalRunways){
-                if(currentLogicalRunway.getName().equals(firstLogicalRunwayID)){
-                    firstLogicalRunway = currentLogicalRunway;
-                } else if (currentLogicalRunway.getName().equals(secondLogicalRunwayID)){
-                    secondLogicalRunway = currentLogicalRunway;
-                }
+            airfield.setPredefinedObstacles(predefinedObstacles);
+            for (Runway runway : runwayList) {
+                airfield.addRunway(runway);
             }
-            currentRunway.setLogicalRunways(firstLogicalRunway, secondLogicalRunway);
 
+            for (Runway currentRunway : airfield.getRunways()) {
+                String firstLogicalRunwayID = currentRunway.getId().split("/")[0];
+                LogicalRunway firstLogicalRunway = null;
+                String secondLogicalRunwayID = currentRunway.getId().split("/")[1];
+                LogicalRunway secondLogicalRunway = null;
 
-        }
-        for(Runway currentRunway: airfield.getRunways()){
-        for(ObstacletoPlace currentObstacle: obstaclestoPlace){
-
-                if(currentObstacle.returnRid()==currentRunway.getId()) {
-
-                    for (Map.Entry<String, Airfield.Dimensions> pair : airfield.getPredefinedObstacles().entrySet()) {
-                        if (pair.getKey() == currentObstacle.returnOid()) {
-                            Obstacle obstacleToPlace = new Obstacle(currentObstacle.returnOid(), currentObstacle.returnOsd(), currentObstacle.returnOcd(), pair.getValue());
-                            currentRunway.placeObstacle(obstacleToPlace, currentRunway.getLogicalRunways()[0].getName());
-                        }
+                for (LogicalRunway currentLogicalRunway : logicalRunways) {
+                    if (currentLogicalRunway.getName().equals(firstLogicalRunwayID)) {
+                        firstLogicalRunway = currentLogicalRunway;
+                    } else if (currentLogicalRunway.getName().equals(secondLogicalRunwayID)) {
+                        secondLogicalRunway = currentLogicalRunway;
                     }
+                }
+                currentRunway.setLogicalRunways(firstLogicalRunway, secondLogicalRunway);
 
 
+            }
+            for (Runway currentRunway : airfield.getRunways()) {
+                for (ObstacletoPlace currentObstacle : obstaclestoPlace) {
+
+                    if (currentObstacle.returnRid() == currentRunway.getId()) {
+
+                        for (Map.Entry<String, Airfield.Dimensions> pair : airfield.getPredefinedObstacles().entrySet()) {
+                            if (pair.getKey() == currentObstacle.returnOid()) {
+                                Obstacle obstacleToPlace = new Obstacle(currentObstacle.returnOsd(), currentObstacle.returnOcd(), pair.getValue());
+                                currentRunway.placeObstacle(obstacleToPlace, currentRunway.getLogicalRunways()[0].getName());
+                            }
+                        }
+
+
+                    }
                 }
             }
-        }
+            return airfield;
 
 
 
 
-        return airfield;
+
+
+
     }
 
 
@@ -159,9 +164,10 @@ public class XMLImporter {
                 throw new ImporterException("Error: Runway <stripWidth> is '0' or negative");
 
             } else {runway.setStripWidth(Integer.parseInt(getTagValue("stripWidth",element))); }
-            if(getTagValue("runwayObstacleId",element)!=null){
+            if(getTagValue("runwayObstacle",element)=="yes"){
             ObstacletoPlace obstacle = new ObstacletoPlace(getTagValue("id",element),getTagValue("runwayObstacleId",element),Integer.parseInt(getTagValue("startDistance",element)),Integer.parseInt(getTagValue("centrelineDistance",element)));
-            obstaclestoPlace.add(obstacle); }
+            obstaclestoPlace.add(obstacle);
+            System.out.println(obstacle.returnOcd());}
 
 
 
@@ -201,10 +207,10 @@ public class XMLImporter {
             } else if (name.matches(String.valueOf(pattern)) == false){
                 throw new ImporterException("Error: Logical Runway <name> is not the right format");
 
-            } else if (length <= 0) {
+            } else if (length < 0) {
                 throw new ImporterException("Error: Logical Runway <length> is either '0' or negative");
 
-            } else if (threshold <= 0) {
+            } else if (threshold < 0) {
                 throw new ImporterException("Error: Logical Runway <threshold> is either '0' or negative");
 
             } else {
