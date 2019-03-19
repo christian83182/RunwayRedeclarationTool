@@ -1,5 +1,6 @@
 package uk.ac.soton.view;
 
+import org.w3c.dom.css.Rect;
 import uk.ac.soton.controller.ViewController;
 
 import java.awt.*;
@@ -7,6 +8,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.Set;
 
 //Represents a JPanel designed to view a top-down view of the runways.
 public class TopViewPanel extends InteractivePanel {
@@ -25,6 +27,9 @@ public class TopViewPanel extends InteractivePanel {
         this.controller = appView.getController();
         this.menuPanel = appView.getMenuPanel();
         this.setPreferredSize(Settings.TOP_DOWN_DEFAULT_SIZE);
+        this.setSize(Settings.TOP_DOWN_DEFAULT_SIZE);
+
+        fitViewToAllRunways();
     }
 
     @Override
@@ -642,6 +647,24 @@ public class TopViewPanel extends InteractivePanel {
         } else {
             setPan(new Point(-centerPoint.x + getWidth()/2, -centerPoint.y + getHeight()/2));
         }
+    }
+
+    public void fitViewToAllRunways(){
+        Integer maxX = 0, maxY = 0, minX = 0, minY= 0;
+
+        for (String id : controller.getRunways()){
+            Rectangle2D boundingBox = getFullRunwayBoundingBox(id).getBounds2D();
+            maxX = Math.max(maxX, (int)boundingBox.getMaxX());
+            maxY = Math.max(maxY, (int)boundingBox.getMaxY());
+            minX = Math.min(minX, (int)boundingBox.getMinX());
+            minY = Math.min(minY, (int)boundingBox.getMinY());
+        }
+
+        Point centerPoint = new Point((minX+maxX)/2, (minY+maxY)/2);
+        System.out.println(centerPoint.x + "," + centerPoint.y);
+        System.out.println(getWidth() + " and " + getHeight());
+        setPan(new Point(-centerPoint.x + getWidth()/2, -centerPoint.y + getHeight()/2));
+        setZoom(Math.min((double)getHeight() / (double)(maxY-minY), (double)getWidth() / (double)(maxX-minX)));
     }
 
     //Rotates a polygon around a given point through a given angle.
