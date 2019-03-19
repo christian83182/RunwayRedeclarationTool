@@ -3,6 +3,7 @@ import uk.ac.soton.controller.ViewController;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.util.Set;
 
 
 public class SideViewPanel extends InteractivePanel{
@@ -46,12 +47,16 @@ public class SideViewPanel extends InteractivePanel{
 
     //painting the background
     public void paintBackground(Graphics2D g2){
-        GradientPaint skyGradient = new GradientPaint(0,0,Settings.SIDEVIEW_SKY_COLOUR_BOTTOM, 0,-2000, Settings.SIDEVIEW_SKY_COLOUR_TOP);
+        GradientPaint skyGradient = new GradientPaint(0,500,Settings.SIDEVIEW_SKY_COLOUR_BOTTOM, 0,-2000, Settings.SIDEVIEW_SKY_COLOUR_TOP);
         g2.setPaint(skyGradient);
         g2.fillRect(-100000,-100000,200000,100000);
-        GradientPaint groundGradient = new GradientPaint(0,0,Settings.RUNWAY_STRIP_COLOUR, 0,2000, Settings.CLEAR_AND_GRADED_COLOUR);
+        GradientPaint groundGradient = new GradientPaint(0,0,Settings.SIDEVIEW_GROUND_COLOUR_TOP, 0,2000, Settings.SIDEVIEW_GROUND_COLOUR_BOTTOM);
         g2.setPaint(groundGradient);
         g2.fillRect(-100000,0,200000,100000);
+        Color horizonColour = Settings.SIDEVIEW_SKY_COLOUR_BOTTOM.darker();
+        g2.setColor(horizonColour);
+        g2.setStroke(new BasicStroke(1));
+        g2.drawLine(-100000,0,100000,0);
     }
 
     //painting the legend
@@ -68,8 +73,11 @@ public class SideViewPanel extends InteractivePanel{
 
     private void paintThresholdDesignator(Graphics2D g2){
         String runwayId = appView.getSelectedRunway();
-        g2.setPaint(Color.WHITE);
 
+        g2.setColor(Settings.RUNWAY_COLOUR);
+        g2.fillRect(0,0,100,50);
+
+        g2.setPaint(Color.WHITE);
         if(runwayId.length() == 2){
             g2.setFont(new Font("SansSerif", 0, 40));
             g2.drawString(runwayId, 20, 40);
@@ -83,47 +91,61 @@ public class SideViewPanel extends InteractivePanel{
 
     //painting the runway
     public void paintRunway(Graphics2D g2){
-
         String selectedRunway = appView.getSelectedRunway();
-        Dimension runway = controller.getRunwayDim(selectedRunway);
+        Dimension runwayDim = controller.getRunwayDim(selectedRunway);
+
+        //Painting the Runway Strip
+        Integer stripEndSize = controller.getStripEndSize(selectedRunway);
+        g2.setColor(Settings.RUNWAY_STRIP_COLOUR);
+        g2.fillRect(-stripEndSize, 0,runwayDim.width+stripEndSize*2, 20);
+        g2.fillRoundRect(-stripEndSize, 0,runwayDim.width+stripEndSize*2, 70,50,50);
 
         // Painting runway
         g2.setPaint(Settings.RUNWAY_COLOUR);
-        g2.fillRect(0,0, runway.width, 50);
+        g2.fillRect(0,0, runwayDim.width, 50);
+        g2.setColor(Settings.RUNWAY_COLOUR.darker());
+        g2.setStroke(new BasicStroke(1));
+        g2.drawRect(0,0, runwayDim.width, 50);
+
+        // Paint the centerline
+        g2.setColor(Settings.CENTERLINE_COLOUR);
+        g2.setStroke(Settings.CENTERLINE_STROKE);
+        g2.drawLine(Settings.CENTERLINE_PADDING, 20, runwayDim.width-Settings.CENTERLINE_PADDING-50, 20);
 
         // Painting the Threshold Designator
         paintThresholdDesignator(g2);
+
+        //Painting the landing direction
+        Point arrowStart = new Point((int)(runwayDim.width*0.2), 20);
+        Polygon arrow = new Polygon(new int[] {arrowStart.x, arrowStart.x, arrowStart.x + 25},
+                new int[] {arrowStart.y-8, arrowStart.y+13, arrowStart.y}, 3);
+        g2.setColor(Settings.CENTERLINE_COLOUR);
+        g2.fillPolygon(arrow);
+
 
         // Painting displaced threshold
         Integer threshold = controller.getRunwayThreshold(selectedRunway);
         g2.setColor(Settings.THRESHOLD_INDICATOR_COLOUR);
         g2.fillRect(0, 0, threshold, 50);
+        g2.setColor(Settings.SELECTED_RUNWAY_HIGHLIGHT);
+        g2.setStroke(new BasicStroke(2));
+        g2.drawRect(0, 0, threshold, 50);
 
         // Painting clearway
         Dimension clearway = controller.getClearwayDim(selectedRunway);
         g2.setColor(Settings.CLEARWAY_FILL_COLOUR);
-        g2.fillRect(runway.width, 0, clearway.width, 50);
+        g2.fillRect(runwayDim.width, 0, clearway.width, 50);
         g2.setColor(Settings.CLEARWAY_STROKE_COLOUR);
         g2.setStroke(Settings.CLEARWAY_STROKE);
-        g2.drawRect(runway.width, 0, clearway.width, 50);
+        g2.drawRect(runwayDim.width, 0, clearway.width, 50);
 
         // Painting stopway
         Dimension stopway = controller.getStopwayDim(selectedRunway);
         g2.setColor(Settings.STOPWAY_FILL_COLOUR);
-        g2.fillRect(runway.width, 0, stopway.width, 50);
+        g2.fillRect(runwayDim.width, 0, stopway.width, 50);
         g2.setColor(Settings.STOPWAY_STROKE_COLOUR);
         g2.setStroke(Settings.STOPWAY_STROKE);
-        g2.drawRect(runway.width, 0, stopway.width, 50);
-    }
-
-    //Draws the RunwayStrip for the currently selected runway.
-    public void paintRunwayStrip(Graphics2D g2){
-        String runwayId = appView.getSelectedRunway();
-        Dimension runwayDim = controller.getRunwayDim(runwayId);
-        Integer stripEndSize = controller.getStripEndSize(runwayId);
-
-        g2.setColor(Settings.RUNWAY_STRIP_COLOUR);
-        g2.fillRect(-stripEndSize, 0,runwayDim.width+stripEndSize*2, 200);
+        g2.drawRect(runwayDim.width, 0, stopway.width, 50);
     }
 
     //painting the obstacle
