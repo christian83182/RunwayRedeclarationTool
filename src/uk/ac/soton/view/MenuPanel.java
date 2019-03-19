@@ -16,7 +16,6 @@ public class MenuPanel extends JPanel {
     private JCheckBox showBreakdownBox;
     private JCheckBox showOtherBox;
     private JCheckBox showOverlayBox;
-    private JCheckBox showAxisBox;
     private JCheckBox matchViewToSelection;
     private JButton placeObstacleButton;
     private JButton removeObstacleButton;
@@ -133,15 +132,6 @@ public class MenuPanel extends JPanel {
         c.gridx = 0; c.gridy = 80; c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
         this.add(showOverlayBox, c);
 
-        //Add the "show axis" option
-        showAxisBox = new JCheckBox("Show Axis");
-        showAxisBox.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
-        showAxisBox.setSelected(true);
-        showAxisBox.addActionListener(e -> appView.repaint());
-        c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 90; c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
-        this.add(showAxisBox, c);
-
         //Add the "auto rotate runway" option
         matchViewToSelection = new JCheckBox("Match View to Selection");
         matchViewToSelection.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
@@ -252,10 +242,6 @@ public class MenuPanel extends JPanel {
     public boolean isShowOverlay(){ return showOverlayBox.isSelected(); }
 
     public boolean isSideViewShowOverlay() { return showOverlayBoxSideView.isSelected(); }
-
-    public boolean isShowAxis(){
-        return showAxisBox.isSelected();
-    }
 
     public boolean isViewMatchedToSelection(){
         return matchViewToSelection.isSelected();
