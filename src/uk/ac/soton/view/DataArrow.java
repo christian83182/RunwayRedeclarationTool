@@ -63,7 +63,7 @@ public class DataArrow {
         }
 
         //If the arrow length is less than 0 or negative then don't draw the arrow.
-        if(startPoint.y - endPoint.y <= 0){
+        if(startPoint.y >= endPoint.y){
             return;
         }
 
@@ -155,7 +155,7 @@ public class DataArrow {
         }
 
         //If the length of the space is less than or equal to 0 then dont draw the arrow.
-        if(startPoint.x - endPoint.x <= 0){
+        if(startPoint.x >= endPoint.x){
             return;
         }
 

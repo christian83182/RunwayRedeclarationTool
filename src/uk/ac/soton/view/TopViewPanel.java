@@ -56,9 +56,6 @@ public class TopViewPanel extends InteractivePanel {
         //Draw the selected runway on top of everything else.
         paintSelectedRunway(g2);
 
-        //Draw a set of axis if the option is selected in the menu panel.
-        if(menuPanel.isShowAxis()) paintAxis(g2);
-
         //Reset the transformation used by the graphics object so the overlay doesn't pan or zoom.
         g2.setTransform(new AffineTransform());
         //Paint the compass and legend if the option is selected.
@@ -535,14 +532,6 @@ public class TopViewPanel extends InteractivePanel {
         g2.drawRect(pos.x+runwayDim.width, pos.y-(stopwayDim.height-runwayDim.height)/2,
                 stopwayDim.width, stopwayDim.height);
         g2.setTransform(old);
-    }
-
-    //Draws a set of axis which intersect at (0,0).
-    private void paintAxis(Graphics2D g2){
-        g2.setColor(Settings.AXIS_COLOUR);
-        g2.setStroke(Settings.AXIS_STROKE);
-        g2.drawLine(-10000,0,10000,0);
-        g2.drawLine(0,-10000,0,10000);
     }
 
     //Returns the rotation of the currently selected runway.
