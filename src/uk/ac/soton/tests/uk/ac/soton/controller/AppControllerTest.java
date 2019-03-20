@@ -36,7 +36,7 @@ public class AppControllerTest {
         airfield = new Airfield();
         airfield.setPredefinedObstacles(airfield.getPredefinedObstacles());
 
-        appController.airfield = airfield;
+        appController.setAirfield(airfield);
 
         List<Runway> runways = new ArrayList<>();
         r1 = new Runway("09L/27R",-1000,-200,1800,80,400,60);

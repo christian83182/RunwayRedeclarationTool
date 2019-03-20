@@ -14,6 +14,7 @@ public class AppController implements ViewController {
 
     //The controller's instance of the application's view.
     private AppView appView;
+
     //The model which the controller would interact with
     private Airfield airfield;
 
@@ -64,6 +65,15 @@ public class AppController implements ViewController {
         airfield.addRunway(r3);
         airfield.addRunway(r4);
         airfield.addRunway(r5);
+    }
+
+
+    public Airfield getAirfield() {
+        return airfield;
+    }
+
+    public void setAirfield(Airfield airfield) {
+        this.airfield = airfield;
     }
 
     @Override
