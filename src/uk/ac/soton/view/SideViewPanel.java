@@ -236,20 +236,20 @@ public class SideViewPanel extends InteractivePanel{
         Point startDistance = new Point(obstacleDistance, 0);
         Point endDistance = new Point(obstacleDistance + value, 0);
         DataArrow distanceArrow = new DataArrow(startDistance, endDistance, -100, "h*50");
-        distanceArrow.drawHorizontalArrow(g2);
+        //distanceArrow.drawHorizontalArrow(g2);
 
         Integer resa = 240;
         String resaLabel = new String("RESA: " + resa);
         Point startResa = new Point(endDistance.x - resa,0);
         Point endResa = new Point (endDistance.x, 0);
         DataArrow resaArrow = new DataArrow(startResa, endResa, -300, resaLabel);
-        resaArrow.drawHorizontalArrow(g2);
+        //resaArrow.drawHorizontalArrow(g2);
 
         Integer newStripend = controller.getStripEndSize(selectedRunway);
         String newStripEndLabel = new String (newStripend + " m");
         Point endStripend = new Point (endResa.x + newStripend, 0);
         DataArrow stripEndArrow = new DataArrow(endResa, endStripend, -300, newStripEndLabel);
-        stripEndArrow.drawHorizontalArrow(g2);
+        //stripEndArrow.drawHorizontalArrow(g2);
 
         g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
         Point startSlope = new Point(obstacleDistance, -controller.getPredefinedObstacleHeight(obstacle).intValue());
@@ -271,21 +271,21 @@ public class SideViewPanel extends InteractivePanel{
         Point startDistance = new Point(obstacleDistance + obstacleLength - value, 0);
         Point endDistance = new Point(obstacleDistance + obstacleLength, 0);
         DataArrow distanceArrow = new DataArrow(startDistance, endDistance, -100, "h*50");
-        distanceArrow.drawHorizontalArrow(g2);
+        //distanceArrow.drawHorizontalArrow(g2);
 
         Integer resa = 240;
         String resaLabel = new String("RESA: " + resa);
         Point startResa = new Point(startDistance.x,0);
         Point endResa = new Point (startDistance.x + resa, 0);
         DataArrow resaArrow = new DataArrow(startResa, endResa, -300, resaLabel);
-        resaArrow.drawHorizontalArrow(g2);
+        //resaArrow.drawHorizontalArrow(g2);
 
         Integer newStripend = controller.getStripEndSize(selectedRunway);
         String newStripEndLabel = new String (newStripend + " m");
         Point startStripEnd = new Point(startResa.x - newStripend, 0);
         Point endStripEnd = new Point (startResa.x, 0);
         DataArrow stripEndArrow = new DataArrow(startStripEnd , endStripEnd, -300, newStripEndLabel);
-        stripEndArrow.drawHorizontalArrow(g2);
+        //stripEndArrow.drawHorizontalArrow(g2);
 
         g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
         Point startSlope = new Point(startResa.x, 0);
