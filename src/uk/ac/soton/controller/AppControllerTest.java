@@ -1,4 +1,4 @@
-package uk.ac.soton.controller.tests.uk.ac.soton.controller;
+package uk.ac.soton.controller;
 
 import com.oracle.tools.packager.Log;
 import org.junit.Test;
