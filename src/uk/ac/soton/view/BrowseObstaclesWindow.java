@@ -137,6 +137,7 @@ public class BrowseObstaclesWindow extends JFrame {
                 editButton.setEnabled(false);
                 deleteButton.setEnabled(false);
                 detailsTextField.setText("");
+                NotificationLogger.logger.addToLog("Removed Obstacle: '" + selectedObject + "' from the obstacle list");
             }
         });
 
@@ -179,6 +180,7 @@ public class BrowseObstaclesWindow extends JFrame {
 
                 //If the details are valid and the object name is not in use, then add it to the model and object list.
                 if(isValid && !alreadyExists) {
+                    NotificationLogger.logger.addToLog("New obstacle: '" + objectId +"' added to obstacle list");
                     controller.addObstacleToList(objectId, length, width, height);
                     obstacleModel.add(0,objectId);
                     obstacleList.setSelectedIndex(0);
@@ -189,12 +191,14 @@ public class BrowseObstaclesWindow extends JFrame {
                     JOptionPane.showMessageDialog(this,
                             "The specified obstacle already exists. Names must be unique.",
                             "Invalid Object Name" ,JOptionPane.ERROR_MESSAGE);
+                    NotificationLogger.logger.addToLog("Obstacle: '" + objectId +"' could not be added, obstacle already exists");
 
                 //If the object details are invalid then create an error dialogue box.
                 } else {
                     JOptionPane.showMessageDialog(this,
                             "The values entered are not valid. Please check them and try again.",
                             "Invalid Object Values" ,JOptionPane.ERROR_MESSAGE);
+                    NotificationLogger.logger.addToLog("Obstacle: '" + objectId +"' could not be added, invalid values");
                 }
             });
             openDialogue();
@@ -221,6 +225,7 @@ public class BrowseObstaclesWindow extends JFrame {
 
                 //If the details are valid, then delete the old values from the list and model, and add the new ones.
                 if(isUserInputValid(newObstacleId, length, width, height)) {
+                    NotificationLogger.logger.addToLog("Obstacle: '" + newObstacleId +"' was edited");
                     controller.deleteObstacleFromList(obstacleId);
                     controller.addObstacleToList(newObstacleId, length, width, height);
                     obstacleModel.removeElement(obstacleId);
@@ -233,6 +238,7 @@ public class BrowseObstaclesWindow extends JFrame {
                     JOptionPane.showMessageDialog(this,
                             "The specified object could not be edited. Please check the values specified and try again.",
                             "Invalid Object Details" ,JOptionPane.ERROR_MESSAGE);
+                    NotificationLogger.logger.addToLog("Obstacle: '" + newObstacleId +"' could not be edited, invalid values");
                 }
             });
             openDialogue();

@@ -52,10 +52,12 @@ public class CustomMenuBar extends JMenuBar {
             if(returnVal == JFileChooser.APPROVE_OPTION){
                 try {
                     controller.importAirfieldConfiguration(fileChooser.getSelectedFile().getAbsolutePath());
+                    NotificationLogger.logger.addToLog("Configuration '"+ fileChooser.getSelectedFile().getName()+"' was imported");
                 } catch (Exception e1) {
                     JOptionPane.showMessageDialog(fileChooser,
                             "There was an issue importing that configuration: '" + e1.getMessage() + "'",
                             "Import Error" ,JOptionPane.ERROR_MESSAGE);
+                    NotificationLogger.logger.addToLog("Configuration '"+ fileChooser.getSelectedFile().getName()+"' could not be imported");
                 }
                 appView.repaint();
             }
@@ -71,6 +73,7 @@ public class CustomMenuBar extends JMenuBar {
             int returnVal = fileChooser.showSaveDialog(null);
             if(returnVal == JFileChooser.APPROVE_OPTION){
                 controller.exportAirfieldConfiguration(fileChooser.getSelectedFile().getAbsolutePath());
+                NotificationLogger.logger.addToLog("The current configuration was exported as '" + fileChooser.getSelectedFile().getName()+"'");
             }
         });
 
@@ -83,6 +86,7 @@ public class CustomMenuBar extends JMenuBar {
             //If the image has size 0 in either dimension then show an error prompt.
             if(appView.getTopView().getWidth() == 0 || appView.getTopView().getHeight() == 0){
                 JOptionPane.showMessageDialog(null, "Width and Height cannot be 0","Could Not Save Image",JOptionPane.ERROR_MESSAGE);
+                NotificationLogger.logger.addToLog("Top View could not be exported");
             } else {
                 BufferedImage image = appView.getTopView().generateSnapshot();
                 saveImage(image);
@@ -96,6 +100,7 @@ public class CustomMenuBar extends JMenuBar {
         exportSideView.addActionListener(e -> {
             if(appView.getSideView().getWidth() == 0 || appView.getSideView().getHeight() == 0){
                 JOptionPane.showMessageDialog(null, "Width and Height cannot be 0","Could Not Save Image",JOptionPane.ERROR_MESSAGE);
+                NotificationLogger.logger.addToLog("Side View could not be exported");
             } else {
                 BufferedImage image = appView.getSideView().generateSnapshot();
                 saveImage(image);
@@ -114,6 +119,7 @@ public class CustomMenuBar extends JMenuBar {
         settingsMenu.add(setDefaultTheme);
         setDefaultTheme.addActionListener(e -> {
             Settings.setDefaultTheme();
+            NotificationLogger.logger.addToLog("Colour Theme set to: 'Default'");
             appView.repaint();
         });
 
@@ -123,6 +129,7 @@ public class CustomMenuBar extends JMenuBar {
         settingsMenu.add(setRedGreenColourblindTheme);
         setRedGreenColourblindTheme.addActionListener(e -> {
             Settings.setRedGreenColourblindTheme();
+            NotificationLogger.logger.addToLog("Colour Theme set to: 'Red-Green'");
             appView.repaint();
         });
 
@@ -132,6 +139,7 @@ public class CustomMenuBar extends JMenuBar {
         settingsMenu.add(setYellowBlueColourblindTheme);
         setYellowBlueColourblindTheme.addActionListener(e -> {
             Settings.setBlueYellowColourblindTheme();
+            NotificationLogger.logger.addToLog("Colour Theme set to: 'Blue-Yellow'");
             appView.repaint();
         });
 
@@ -140,10 +148,6 @@ public class CustomMenuBar extends JMenuBar {
         openHelp.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         helpMenu.add(openHelp);
         openHelp.addActionListener(e -> {
-            JFrame helpMenuFrame = new JFrame("Application Help");
-            helpMenuFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            helpMenuFrame.setPreferredSize(new Dimension(700,800));
-
             String helpMessage = "This is a generic help menu.\nEventually it will contain detailed" +
                     " documentation on the functions of the program.\n This may also not exist, and " +
                     "just open a text file or PDF instead, as formatting a text string like this can become " +
@@ -153,19 +157,7 @@ public class CustomMenuBar extends JMenuBar {
                     " the left panel to enable or disable most of the information displayed.\n4) Select File>Export Configuration" +
                     " to export the current airfield's configuration. Similarly, use File>Import Configuration to import an " +
                     "existing configuration.";
-
-            helpMenuFrame.setLayout(new BorderLayout());
-            JTextArea textArea = new JTextArea(helpMessage);
-            textArea.setEditable(false);
-            textArea.setFont(new Font("SansSerif", Font.PLAIN, 18));
-            textArea.setLineWrap(true);
-            textArea.setWrapStyleWord(true);
-            JScrollPane scrollArea = new JScrollPane(textArea);
-            helpMenuFrame.add(scrollArea,BorderLayout.CENTER);
-
-            helpMenuFrame.pack();
-            helpMenuFrame.setLocationRelativeTo(null);
-            helpMenuFrame.setVisible(true);
+            new ScrollableTextWindow(helpMessage, new Dimension(400,600));
         });
     }
 
@@ -178,8 +170,10 @@ public class CustomMenuBar extends JMenuBar {
             try {
                 //Write the image to the file.
                 ImageIO.write(image,"png",file.getAbsoluteFile());
+                NotificationLogger.logger.addToLog("View exported as was exported as '" + fileChooser.getSelectedFile().getName()+"'");
             } catch (IOException e1) {
                 e1.printStackTrace();
+                NotificationLogger.logger.addToLog("View could not be exported");
             }
         }
     }

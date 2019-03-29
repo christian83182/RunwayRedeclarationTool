@@ -132,6 +132,7 @@ public class PlaceObstacleWindow extends JFrame {
             Integer centerlineDistance = centerlineDistanceModel.getNumber().intValue();
             Integer edgeDistance = edgeDistanceModel.getNumber().intValue();
             if(isInputValid(obstacleId, centerlineDistance, edgeDistance)){
+                NotificationLogger.logger.addToLog("Added obstacle '" + obstacleId+ "' to runway '" + appView.getSelectedRunway() + "'");
                 controller.addObstacleToRunway(appView.getSelectedRunway(), obstacleId, centerlineDistance, edgeDistance);
                 appView.getMenuPanel().setPlaceButtonEnabled(false);
                 appView.getMenuPanel().setRemoveButtonEnabled(true);
@@ -143,6 +144,9 @@ public class PlaceObstacleWindow extends JFrame {
                 JOptionPane.showMessageDialog(null,
                         "Could not add obstacle to runway. Please check the details you entered and try again.",
                         "Invalid Specification",JOptionPane.ERROR_MESSAGE);
+                NotificationLogger.logger.addToLog("Failed to add obstacle '" +
+                        controller.getRunwayObstacle(appView.getSelectedRunway()) + "' to runway '" +
+                        appView.getSelectedRunway() + "'");
             }
         });
 

@@ -127,6 +127,9 @@ public class MenuPanel extends JPanel {
         c.gridx = 0; c.gridy = 0; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(5,10,0,10);
         topViewPane.add(isolateModeBox, c);
+        isolateModeBox.addActionListener(e -> {
+            NotificationLogger.logger.addToLog("'Isolate Selected Runway' Toggled: '" +isolateModeBox.isSelected()+ "'");
+        });
 
         //Add the "show runway parameters" option
         showRunwayParametersBox = new JCheckBox("Show Runway Parameters");
@@ -137,6 +140,9 @@ public class MenuPanel extends JPanel {
         c.gridx = 0; c.gridy = 10; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0,10,0,10);
         topViewPane.add(showRunwayParametersBox, c);
+        showRunwayParametersBox.addActionListener(e -> {
+            NotificationLogger.logger.addToLog("'Show Runway Parameters' Toggled: '" +showRunwayParametersBox.isSelected()+ "'");
+        });
 
         //Add the "show breakdown" option
         showBreakdownBox = new JCheckBox("Show Parameter Breakdown");
@@ -147,6 +153,9 @@ public class MenuPanel extends JPanel {
         c.gridx = 0; c.gridy = 20; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0,10,0,10);
         topViewPane.add(showBreakdownBox, c);
+        showBreakdownBox.addActionListener(e -> {
+            NotificationLogger.logger.addToLog("'Show Parameter Breakdown' Toggled: '" +showBreakdownBox.isSelected()+ "'");
+        });
 
         //Add the "show other distances" option
         showOtherBox = new JCheckBox("Show Other Distances");
@@ -157,6 +166,9 @@ public class MenuPanel extends JPanel {
         c.gridx = 0; c.gridy = 30; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0,10,0,10);
         topViewPane.add(showOtherBox, c);
+        showOtherBox.addActionListener(e -> {
+            NotificationLogger.logger.addToLog("'Show Other Distances' Toggled: '" +showOtherBox.isSelected()+ "'");
+        });
 
         //Add the "show overlay" option
         showOverlayBox = new JCheckBox("Show Overlays");
@@ -167,6 +179,9 @@ public class MenuPanel extends JPanel {
         c.gridx = 0; c.gridy = 40; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0,10,0,10);
         topViewPane.add(showOverlayBox, c);
+        showOverlayBox.addActionListener(e -> {
+            NotificationLogger.logger.addToLog("Top View's 'Show Overlay' Toggled: '" +showOverlayBox.isSelected()+ "'");
+        });
 
         //Add the "auto rotate runway" option
         matchViewToSelection = new JCheckBox("Match View to Selection");
@@ -176,6 +191,9 @@ public class MenuPanel extends JPanel {
         c.gridx = 0; c.gridy = 50; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0,10,10,10);
         topViewPane.add(matchViewToSelection, c);
+        matchViewToSelection.addActionListener(e -> {
+            NotificationLogger.logger.addToLog("'Match View to Selection' Toggled: '" +matchViewToSelection.isSelected()+ "'");
+        });
 
         //  ---- Adding elements to the side view pane ----
 
@@ -188,6 +206,9 @@ public class MenuPanel extends JPanel {
         c.gridx = 0; c.gridy = 0; c.anchor = GridBagConstraints.LINE_START; c.weightx = 1;
         c.insets = new Insets(10,10,10,10);
         sideViewPane.add(showOverlayBoxSideView, c);
+        showOverlayBoxSideView.addActionListener(e -> {
+            NotificationLogger.logger.addToLog("Side View's 'Show Overlay' Toggled: '" +showOverlayBoxSideView.isSelected()+ "'");
+        });
 
         //  ---- Adding action listeners to elements in the menu ----
 
@@ -208,8 +229,10 @@ public class MenuPanel extends JPanel {
                 placeObstacleButton.setEnabled(false);
                 removeObstacleButton.setEnabled(false);
                 appView.setSplitViewVisible(false);
+                NotificationLogger.logger.addToLog("Runway Selected: 'None'");
             } else {
                 //set the selected runway and enable the split view.
+                NotificationLogger.logger.addToLog("Runway Selected: '" + runwayMenu.getSelectedItem().toString() + "'");
                 appView.setSelectedRunway(runwayMenu.getSelectedItem().toString());
                 appView.setSplitViewVisible(true);
                 if(isViewMatchedToSelection()){
@@ -234,6 +257,9 @@ public class MenuPanel extends JPanel {
 
         //Add an action listener to the remove button to remove the obstacle from the current runway.
         removeObstacleButton.addActionListener(e -> {
+            NotificationLogger.logger.addToLog("Obstacle '" +
+                    controller.getRunwayObstacle(appView.getSelectedRunway()) +"' removed from runway '" +
+                    appView.getSelectedRunway() +"'");
             controller.removeObstacleFromRunway(appView.getSelectedRunway());
             removeObstacleButton.setEnabled(false);
             placeObstacleButton.setEnabled(true);

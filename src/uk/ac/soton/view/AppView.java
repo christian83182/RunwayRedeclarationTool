@@ -30,23 +30,39 @@ public class AppView extends JFrame{
         this.setLayout(new BorderLayout());
         setLookAndFeel();
 
+        //Create all the main UI elements
         menuBar = new CustomMenuBar(controller,this);
         menuPanel = new MenuPanel(this);
         topView = new TopViewPanel(this);
         sideView = new SideViewPanel(this);
 
+        //Create the elements for the notification bar
+        JPanel notificationPanel = new JPanel();
+        notificationPanel.setLayout(new FlowLayout(FlowLayout.LEADING,7,2));
+        JButton logButton = new JButton("");
+        logButton.addActionListener(e -> new ScrollableTextWindow(NotificationLogger.logger.getAllLog(), new Dimension(400,500)));
+        notificationPanel.add(logButton);
+        notificationPanel.add(NotificationLogger.logger.getLabel());
+
+        //Create a split pane for the views, and a split pane for the menu.
         viewSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topView, sideView);
         viewSplitPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 0));
         mainSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, menuPanel, viewSplitPane);
         mainSplitPane.setDividerSize(0);
         mainSplitPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 0));
 
+        //Add the split view containing all the UI elements to the center of the window.
         this.add(mainSplitPane, BorderLayout.CENTER);
+        //Add the notification window to the bottom fo the screen
+        this.add(notificationPanel, BorderLayout.SOUTH);
+        //Add the menu bar.
         this.setJMenuBar(menuBar);
 
-        setMenuBarVisible(true);
+        //set the menu panel to visible, and set the split view to not visible.
+        setMenuPanelVisible(true);
         setSplitViewVisible(false);
 
+        //Pack the UI elements, make the window open in the center of the screen, and display the window.
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -70,7 +86,7 @@ public class AppView extends JFrame{
     }
 
     //Will either hide or display the menu.
-    public void setMenuBarVisible(boolean isVisible){
+    public void setMenuPanelVisible(boolean isVisible){
         //If the left component is unset and it should be visible then...
         if(mainSplitPane.getLeftComponent() == null && isVisible){
             mainSplitPane.setLeftComponent(menuPanel);
@@ -85,6 +101,7 @@ public class AppView extends JFrame{
         repaint();
     }
 
+    //Returns whether the menu var is visible or not.
     public boolean isMenuBarVisible(){
         if (mainSplitPane.getLeftComponent() == null){
             return false;

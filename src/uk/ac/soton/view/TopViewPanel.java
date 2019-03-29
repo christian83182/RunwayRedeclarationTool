@@ -18,7 +18,6 @@ public class TopViewPanel extends InteractivePanel {
     //Instance of the menu panel which controls a lot of the display settings.
     private MenuPanel menuPanel;
 
-
     TopViewPanel(AppView appView){
         super(Settings.TOP_DOWN_DEFAULT_PAN,Settings.TOP_DOWN_DEFAULT_ZOOM);
         this.appView = appView;
