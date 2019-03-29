@@ -17,8 +17,7 @@ public class NotificationLogger {
     //The constructor is private so an instance of the class cannot be made.
     private NotificationLogger(){
         this.log = new StringBuilder();
-        this.log.append("Nothing to show yet");
-        this.logLabel = new JLabel(log.toString());
+        this.logLabel = new JLabel("");
     }
 
     /**
@@ -26,7 +25,7 @@ public class NotificationLogger {
      * @param notification
      */
     public void addToLog(String notification){
-        log.append(notification).append("\n");
+        log.append("- "+ notification + "\n");
         logLabel.setText(notification);
         logLabel.repaint();
     }
