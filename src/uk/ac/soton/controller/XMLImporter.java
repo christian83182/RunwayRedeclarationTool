@@ -89,13 +89,6 @@ public class XMLImporter {
                 }
             }
             return airfield;
-
-
-
-
-
-
-
     }
 
 

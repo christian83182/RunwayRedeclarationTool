@@ -2,6 +2,8 @@ package uk.ac.soton.view;
 import uk.ac.soton.controller.ViewController;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,7 @@ public class MenuPanel extends JPanel {
     private AppView appView;
     private ViewController controller;
 
+    //UI elements
     private JComboBox runwayMenu;
     private JCheckBox isolateModeBox;
     private JCheckBox showRunwayParametersBox;
@@ -21,7 +24,6 @@ public class MenuPanel extends JPanel {
     private JButton removeObstacleButton;
     private JCheckBox showOverlayBoxSideView;
 
-
     MenuPanel(AppView appView){
         this.appView = appView;
         this.controller = appView.getController();
@@ -30,22 +32,64 @@ public class MenuPanel extends JPanel {
         this.setLayout(new GridBagLayout());
         this.setBorder(BorderFactory.createMatteBorder(1,1,1,5,new Color(42, 42, 42)));
 
-        //Add a "General label"
-        JLabel generalLabel = new JLabel("General");
-        generalLabel.setFont(new Font("SansSerif", Font.BOLD , 20));
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 0; c.gridwidth = 3;
-        c.insets = new Insets(25,0,0,0);
-        this.add(generalLabel, c);
+        //Create three panels to group components into, with a titled border.
+        JPanel generalPane =  new JPanel();
+        TitledBorder generalBorder = BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.GRAY,1),"General",0,2,
+                Settings.MENU_BAR_DEFAULT_FONT,Color.WHITE);
+        generalPane.setBorder(generalBorder);
+        generalPane.setLayout(new GridBagLayout());
+
+        JPanel topViewPane = new JPanel();
+        TitledBorder topViewBorder = BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.GRAY,1),"Top View",0,2,
+                Settings.MENU_BAR_DEFAULT_FONT,Color.WHITE);
+        topViewPane.setBorder(topViewBorder);
+        topViewPane.setLayout(new GridBagLayout());
+
+        JPanel sideViewPane = new JPanel();
+        TitledBorder sideViewBorder = BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.GRAY,1),"Side View",0,2,
+                Settings.MENU_BAR_DEFAULT_FONT,Color.WHITE);
+        sideViewPane.setBorder(sideViewBorder);
+        sideViewPane.setLayout(new GridBagLayout());
+
+        //Add the three panels to the menu. Add a spacer with high weighty to push everything up.
+        GridBagConstraints c;
+        c = new GridBagConstraints(); c.gridx = 0; c.gridy = 0; c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(10,5,25,5);
+        this.add(generalPane,c);
+
+        c = new GridBagConstraints(); c.gridx = 0; c.gridy = 1; c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(0,5,25,5);
+        this.add(topViewPane,c);
+
+        c = new GridBagConstraints(); c.gridx = 0; c.gridy = 2; c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(0,5,25,5);
+        this.add(sideViewPane,c);
+
+        c = new GridBagConstraints(); c.gridx = 0; c.gridy = 3; c.weighty = 1;
+        this.add(new JPanel(),c);
+
+
+        //Create a spacer with high weighty to push everything else up.
+        JPanel spacer = new JPanel();
+        c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 1000;
+        c.gridwidth = 3; c.weighty = 1;
+        sideViewPane.add(spacer, c);
+
+        //  ---- Creating & adding elements to the general Pane ----
 
         //Add a "Selected Runway" label
         JLabel selectedRunwayLabel = new JLabel("Selected Runway:");
         selectedRunwayLabel.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 10; c.gridwidth = 2;
-        this.add(selectedRunwayLabel, c);
+        c.insets = new Insets(10,10,0,0);
+        generalPane.add(selectedRunwayLabel, c);
 
-        //Has to go a the bottom since it uses other components which must be declared first.
+        //Add the JComboBox to select a runway.
         List<String> menuItems = new ArrayList<>();
         menuItems.add("None");
         menuItems.addAll(controller.getRunways());
@@ -53,8 +97,8 @@ public class MenuPanel extends JPanel {
         runwayMenu.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         c = new GridBagConstraints();
         c.gridx = 2; c.gridy = 10; c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(0,10,0,0);
-        this.add(runwayMenu, c);
+        c.insets = new Insets(0,10,0,10);
+        generalPane.add(runwayMenu, c);
 
         //Create buttons to place and remove obstacles.
         placeObstacleButton = new JButton("Add Obstacle...");
@@ -68,33 +112,21 @@ public class MenuPanel extends JPanel {
         buttonPanel.add(placeObstacleButton);
         buttonPanel.add(removeObstacleButton);
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 16;
+        c.gridx = 0; c.gridy = 20;
         c.gridwidth = 3; c.fill = GridBagConstraints.HORIZONTAL;
-        this.add(buttonPanel, c);
+        c.insets = new Insets(5,10,10,10);
+        generalPane.add(buttonPanel, c);
 
-        //Add a separator to the menu.
-        JSeparator firstSeparator = new JSeparator();
-        firstSeparator.setOrientation(JSeparator.HORIZONTAL);
-        c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 20; c.gridwidth = 3;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(15,0,15,0);
-        this.add(firstSeparator, c);
-
-        //Add a "Top Down View" label
-        JLabel topDownViewLabel = new JLabel("Top Down View");
-        topDownViewLabel.setFont(new Font("SansSerif", Font.BOLD , 20));
-        c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 30; c.gridwidth = 3;
-        this.add(topDownViewLabel, c);
+        //  ---- Adding elements to the top view pane ----
 
         //Add the "isolate selected runway" option
         isolateModeBox = new JCheckBox("Isolate Selected Runway");
         isolateModeBox.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         isolateModeBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 40; c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
-        this.add(isolateModeBox, c);
+        c.gridx = 0; c.gridy = 0; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(5,10,0,10);
+        topViewPane.add(isolateModeBox, c);
 
         //Add the "show runway parameters" option
         showRunwayParametersBox = new JCheckBox("Show Runway Parameters");
@@ -102,8 +134,9 @@ public class MenuPanel extends JPanel {
         showRunwayParametersBox.setSelected(true);
         showRunwayParametersBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 50; c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
-        this.add(showRunwayParametersBox, c);
+        c.gridx = 0; c.gridy = 10; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(0,10,0,10);
+        topViewPane.add(showRunwayParametersBox, c);
 
         //Add the "show breakdown" option
         showBreakdownBox = new JCheckBox("Show Parameter Breakdown");
@@ -111,8 +144,9 @@ public class MenuPanel extends JPanel {
         showBreakdownBox.setEnabled(false);
         showBreakdownBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 60; c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
-        this.add(showBreakdownBox, c);
+        c.gridx = 0; c.gridy = 20; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(0,10,0,10);
+        topViewPane.add(showBreakdownBox, c);
 
         //Add the "show other distances" option
         showOtherBox = new JCheckBox("Show Other Distances");
@@ -120,8 +154,9 @@ public class MenuPanel extends JPanel {
         showOtherBox.setSelected(true);
         showOtherBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 70; c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
-        this.add(showOtherBox, c);
+        c.gridx = 0; c.gridy = 30; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(0,10,0,10);
+        topViewPane.add(showOtherBox, c);
 
         //Add the "show overlay" option
         showOverlayBox = new JCheckBox("Show Overlays");
@@ -129,32 +164,20 @@ public class MenuPanel extends JPanel {
         showOverlayBox.setSelected(true);
         showOverlayBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 80; c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
-        this.add(showOverlayBox, c);
+        c.gridx = 0; c.gridy = 40; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(0,10,0,10);
+        topViewPane.add(showOverlayBox, c);
 
         //Add the "auto rotate runway" option
         matchViewToSelection = new JCheckBox("Match View to Selection");
         matchViewToSelection.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         matchViewToSelection.setSelected(true);
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 100; c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
-        this.add(matchViewToSelection, c);
+        c.gridx = 0; c.gridy = 50; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(0,10,10,10);
+        topViewPane.add(matchViewToSelection, c);
 
-        //Create second separator to separate the top view menu from the side view menu
-        JSeparator secondSeparator = new JSeparator();
-        secondSeparator.setOrientation(JSeparator.HORIZONTAL);
-        c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 150; c.gridwidth = 3;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(15,0,15,0);
-        this.add(secondSeparator, c);
-
-        //create label for side view menu title
-        JLabel sideViewLabel = new JLabel("Side View");
-        sideViewLabel.setFont(new Font("SansSerif", Font.BOLD , 20));
-        c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 170; c.gridwidth = 3;
-        this.add(sideViewLabel, c);
+        //  ---- Adding elements to the side view pane ----
 
         //Add the "show overlay" option for the side view menu
         showOverlayBoxSideView = new JCheckBox("Show Overlays");
@@ -162,15 +185,11 @@ public class MenuPanel extends JPanel {
         showOverlayBoxSideView.setSelected(true);
         showOverlayBoxSideView.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 180; c.gridwidth = 3; c.anchor = GridBagConstraints.LINE_START;
-        this.add(showOverlayBoxSideView, c);
+        c.gridx = 0; c.gridy = 0; c.anchor = GridBagConstraints.LINE_START; c.weightx = 1;
+        c.insets = new Insets(10,10,10,10);
+        sideViewPane.add(showOverlayBoxSideView, c);
 
-        //Create a spacer with high weighty to push everything else up.
-        JPanel spacer = new JPanel();
-        c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 1000;
-        c.gridwidth = 3; c.weighty = 1;
-        this.add(spacer, c);
+        //  ---- Adding action listeners to elements in the menu ----
 
         //Add an action listener to the matchViewToSelection check box, to fit the view to the runway on selection.
         matchViewToSelection.addActionListener(e -> {
