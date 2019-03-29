@@ -1,6 +1,5 @@
-package uk.ac.soton.controller;
+package uk.ac.soton.tests.uk.ac.soton.controller;
 
-import com.oracle.tools.packager.Log;
 import org.junit.Test;
 import uk.ac.soton.common.Airfield;
 import uk.ac.soton.common.LogicalRunway;
@@ -11,7 +10,6 @@ import uk.ac.soton.view.AppView;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -44,8 +42,6 @@ public class AppControllerTest {
                 new Dimension(350,220), new Dimension(60,r1.getWidth()));
         lr12 = new LogicalRunway("27R",r1.getLength(),100,
                 new Dimension(350,220), new Dimension(60,r1.getWidth()));
-
-
 
         r1.setLogicalRunways(lr11,lr12);
 
