@@ -27,7 +27,11 @@ public class TopViewPanel extends InteractivePanel {
         this.setPreferredSize(Settings.TOP_DOWN_DEFAULT_SIZE);
         this.setSize(Settings.TOP_DOWN_DEFAULT_SIZE);
 
+        init();
         fitViewToAllRunways();
+    }
+
+    private void init(){
     }
 
     @Override

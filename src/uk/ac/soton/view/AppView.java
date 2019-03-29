@@ -15,7 +15,8 @@ public class AppView extends JFrame{
     MenuPanel menuPanel;
     TopViewPanel topView;
     SideViewPanel sideView;
-    JSplitPane viewPanel;
+    JSplitPane viewSplitPane;
+    JSplitPane mainSplitPane;
 
     //Constructor calls parent's constructor and initializes member variables
     public AppView(String title){
@@ -30,17 +31,20 @@ public class AppView extends JFrame{
         setLookAndFeel();
 
         menuBar = new CustomMenuBar(controller,this);
-        this.setJMenuBar(menuBar);
-
         menuPanel = new MenuPanel(this);
-        this.add(menuPanel, BorderLayout.WEST);
-
         topView = new TopViewPanel(this);
         sideView = new SideViewPanel(this);
 
-        viewPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topView, sideView);
-        viewPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 0));
-        this.add(viewPanel, BorderLayout.CENTER);
+        viewSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topView, sideView);
+        viewSplitPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 0));
+        mainSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, menuPanel, viewSplitPane);
+        mainSplitPane.setDividerSize(0);
+        mainSplitPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 0));
+
+        this.add(mainSplitPane, BorderLayout.CENTER);
+        this.setJMenuBar(menuBar);
+
+        setMenuBarVisible(true);
         setSplitViewVisible(false);
 
         this.pack();
@@ -50,19 +54,43 @@ public class AppView extends JFrame{
 
     //Will either hide or display the split view.
     public void setSplitViewVisible(boolean isVisible){
-        //If the bottom component is unset and it should be visible.
-        if(viewPanel.getBottomComponent() == null && isVisible){
-            viewPanel.setBottomComponent(sideView);
-            viewPanel.setDividerLocation((int)(getHeight()*0.55));
-            viewPanel.setDividerSize(10);
+        //If the bottom component is unset and it should be visible then...
+        if(viewSplitPane.getBottomComponent() == null && isVisible){
+            viewSplitPane.setBottomComponent(sideView);
+            viewSplitPane.setDividerLocation((int)(getHeight()*0.55));
+            viewSplitPane.setDividerSize(10);
             //Manually update the size of TopView so that the view centers correctly.
             topView.setSize(topView.getWidth(), (int)(topView.getHeight()*0.55));
         } else if (!isVisible){
-            //remove the bottom component and set the divider size to 0.
-            viewPanel.setBottomComponent(null);
-            viewPanel.setDividerSize(0);
+            //Remove the bottom component and set the divider size to 0.
+            viewSplitPane.setBottomComponent(null);
+            viewSplitPane.setDividerSize(0);
         }
         repaint();
+    }
+
+    //Will either hide or display the menu.
+    public void setMenuBarVisible(boolean isVisible){
+        //If the left component is unset and it should be visible then...
+        if(mainSplitPane.getLeftComponent() == null && isVisible){
+            mainSplitPane.setLeftComponent(menuPanel);
+            mainSplitPane.setDividerLocation(270);
+            //Manually update the size of TopView so that the view centers correctly.
+            //topView.setSize(topView.getWidth() - 270, topView.getHeight());
+            //sideView.setSize(sideView.getWidth() - 270, sideView.getHeight());
+        } else if (!isVisible){
+            //Remove the left component and remove the divider.
+            mainSplitPane.setLeftComponent(null);
+        }
+        repaint();
+    }
+
+    public boolean isMenuBarVisible(){
+        if (mainSplitPane.getLeftComponent() == null){
+            return false;
+        } else {
+            return true;
+        }
     }
 
     //Returns the name of the currently selected runway.
