@@ -11,9 +11,9 @@ import java.util.List;
 public class PlaceObstacleWindow extends JFrame {
 
     //An instance of the controller used to modify the model.
-    ViewController controller;
+    private ViewController controller;
     //An instance of the View providing the UI.
-    AppView appView;
+    private AppView appView;
 
     PlaceObstacleWindow(ViewController controller, AppView appView){
         super("Place Obstacle");

@@ -10,8 +10,8 @@ import java.util.Map;
  */
 public class Legend {
 
-    Map<String, Color> legendMap;
-    String title;
+    private Map<String, Color> legendMap;
+    private String title;
 
     /**
      * The constructor takes a title which is displayed as the title in the box when drawLegend is called.

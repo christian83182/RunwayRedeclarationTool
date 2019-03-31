@@ -10,13 +10,12 @@ public class AppView extends JFrame{
     private ViewController controller;
     //Note that for the runwayDimensions, the length is the x value and the width is the y value.
     private String selectedRunway;
-
-    CustomMenuBar menuBar;
-    MenuPanel menuPanel;
-    TopViewPanel topView;
-    SideViewPanel sideView;
-    JSplitPane viewSplitPane;
-    JSplitPane mainSplitPane;
+    private CustomMenuBar menuBar;
+    private MenuPanel menuPanel;
+    private TopViewPanel topView;
+    private SideViewPanel sideView;
+    private JSplitPane viewSplitPane;
+    private JSplitPane mainSplitPane;
 
     //Constructor calls parent's constructor and initializes member variables
     public AppView(String title){
@@ -40,7 +39,7 @@ public class AppView extends JFrame{
         JPanel notificationPanel = new JPanel();
         notificationPanel.setLayout(new FlowLayout(FlowLayout.LEADING,7,2));
         JButton logButton = new JButton("");
-        logButton.addActionListener(e -> new ScrollableTextWindow(NotificationLogger.logger.getAllLog(), new Dimension(400,500)));
+        logButton.addActionListener(e -> new ScrollableTextWindow("Notification History", new Dimension(450,500), NotificationLogger.logger.getAllLog()));
         notificationPanel.add(logButton);
         notificationPanel.add(NotificationLogger.logger.getLabel());
 

@@ -8,9 +8,9 @@ import java.util.Set;
 
 public class SideViewPanel extends InteractivePanel{
 
-    AppView appView;
-    MenuPanel menuPanel;
-    ViewController controller;
+    private AppView appView;
+    private MenuPanel menuPanel;
+    private ViewController controller;
     final Integer OBSTACLE_RESCALE_VALUE = 1;
 
     SideViewPanel(AppView appView){

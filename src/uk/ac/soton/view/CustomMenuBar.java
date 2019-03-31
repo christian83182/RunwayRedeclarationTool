@@ -157,7 +157,7 @@ public class CustomMenuBar extends JMenuBar {
                     " the left panel to enable or disable most of the information displayed.\n4) Select File>Export Configuration" +
                     " to export the current airfield's configuration. Similarly, use File>Import Configuration to import an " +
                     "existing configuration.";
-            new ScrollableTextWindow(helpMessage, new Dimension(400,600));
+            new ScrollableTextWindow("Application Help", new Dimension(400,600), helpMessage);
         });
     }
 

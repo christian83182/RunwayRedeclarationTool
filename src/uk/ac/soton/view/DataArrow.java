@@ -8,13 +8,13 @@ import java.awt.*;
 public class DataArrow {
 
     //The start point of the distance being displayed. This should always be less than the endpoint.
-    Point startPoint;
+    private Point startPoint;
     //The end point of the distance being displayed. This should always be greater than the startpoint.
-    Point endPoint;
+    private Point endPoint;
     //The length of the dotted line separating the arrow from the start and end point.
-    Integer helperLength;
+    private Integer helperLength;
     //The string to appear in the center of the line.
-    String label;
+    private String label;
 
     /**
      * The constructor to the class.

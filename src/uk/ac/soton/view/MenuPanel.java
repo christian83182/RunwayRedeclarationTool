@@ -71,7 +71,6 @@ public class MenuPanel extends JPanel {
         c = new GridBagConstraints(); c.gridx = 0; c.gridy = 3; c.weighty = 1;
         this.add(new JPanel(),c);
 
-
         //Create a spacer with high weighty to push everything else up.
         JPanel spacer = new JPanel();
         c = new GridBagConstraints();
@@ -82,6 +81,7 @@ public class MenuPanel extends JPanel {
         //  ---- Creating & adding elements to the general Pane ----
 
         //Add a "Selected Runway" label
+        String s= new String();
         JLabel selectedRunwayLabel = new JLabel("Selected Runway:");
         selectedRunwayLabel.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         c = new GridBagConstraints();
@@ -114,8 +114,26 @@ public class MenuPanel extends JPanel {
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 20;
         c.gridwidth = 3; c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(5,10,10,10);
+        c.insets = new Insets(20,10,0,10);
         generalPane.add(buttonPanel, c);
+
+        //Create a button to display the parameter breakdown.
+        JButton showCalculationButton = new JButton("Show Calculations");
+        showCalculationButton.setEnabled(false);
+        c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 30;
+        c.gridwidth = 3; c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(0,10,0,10);
+        generalPane.add(showCalculationButton, c);
+
+        //Create a button to show the 3D view.
+        JButton show3DViewButton = new JButton("Show 3D view");
+        c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 40;
+        c.gridwidth = 3; c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(0,10,10,10);
+        generalPane.add(show3DViewButton, c);
+
 
         //  ---- Adding elements to the top view pane ----
 
@@ -228,6 +246,7 @@ public class MenuPanel extends JPanel {
                 appView.setSelectedRunway("");
                 placeObstacleButton.setEnabled(false);
                 removeObstacleButton.setEnabled(false);
+                showCalculationButton.setEnabled(false);
                 appView.setSplitViewVisible(false);
                 NotificationLogger.logger.addToLog("Runway Selected: 'None'");
             } else {
@@ -235,6 +254,7 @@ public class MenuPanel extends JPanel {
                 NotificationLogger.logger.addToLog("Runway Selected: '" + runwayMenu.getSelectedItem().toString() + "'");
                 appView.setSelectedRunway(runwayMenu.getSelectedItem().toString());
                 appView.setSplitViewVisible(true);
+                showCalculationButton.setEnabled(true);
                 if(isViewMatchedToSelection()){
                     //Automatically fit the view to the selected runway, when selected.
                     appView.getTopView().fitViewToRunway(selectedRunway);
@@ -264,6 +284,10 @@ public class MenuPanel extends JPanel {
             removeObstacleButton.setEnabled(false);
             placeObstacleButton.setEnabled(true);
             appView.repaint();
+        });
+
+        show3DViewButton.addActionListener(e -> {
+            SwingUtilities.invokeLater(() -> new View3D(appView));
         });
 
     }

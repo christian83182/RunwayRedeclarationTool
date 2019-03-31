@@ -10,7 +10,8 @@ public class ScrollableTextWindow extends JFrame {
      * @param windowContent The String to be displayed by the window.
      * @param size The preferred size of the window.
      */
-    ScrollableTextWindow(String windowContent, Dimension size){
+    ScrollableTextWindow(String title, Dimension size, String windowContent) {
+        super(title);
         init(windowContent, size);
     }
 

@@ -68,16 +68,16 @@ public class AppController implements ViewController {
     }
 
 
-    public Airfield getAirfield() {
+    public synchronized Airfield getAirfield() {
         return airfield;
     }
 
-    public void setAirfield(Airfield airfield) {
+    public synchronized void setAirfield(Airfield airfield) {
         this.airfield = airfield;
     }
 
     @Override
-    public Set<String> getRunways() {
+    public synchronized Set<String> getRunways() {
         Set<String> logicalRunways = new TreeSet<>();
         for(LogicalRunway runway : airfield.getAllLogicalRunways()){
             logicalRunways.add(runway.getName());
@@ -88,7 +88,7 @@ public class AppController implements ViewController {
     }
 
     @Override
-    public Point getRunwayPos(String runwayId) {
+    public synchronized Point getRunwayPos(String runwayId) {
 
         Runway r = airfield.getRunway(runwayId);
         Point pos = new Point(r.getxPos(), r.getyPos());
@@ -119,84 +119,84 @@ public class AppController implements ViewController {
     }
 
     @Override
-    public Dimension getRunwayDim(String runwayId) {
+    public synchronized Dimension getRunwayDim(String runwayId) {
 
         Runway r = airfield.getRunway(runwayId);
         return new Dimension(r.getLength(), r.getWidth());
     }
 
     @Override
-    public Integer getBearing(String runwayId) {
+    public synchronized Integer getBearing(String runwayId) {
 
         LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
         return Integer.parseInt(lr.getName().substring(0,2))*10;
     }
 
     @Override
-    public Dimension getStopwayDim(String runwayId) {
+    public synchronized Dimension getStopwayDim(String runwayId) {
 
         LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
         return lr.getStopway();
     }
 
     @Override
-    public Dimension getClearwayDim(String runwayId) {
+    public synchronized Dimension getClearwayDim(String runwayId) {
 
         LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
         return lr.getClearway();
     }
 
     @Override
-    public Integer getStripWidthFromCenterline(String runwayId) {
+    public synchronized Integer getStripWidthFromCenterline(String runwayId) {
 
         Runway r = airfield.getRunway(runwayId);
         return r.getStripWidth() / 2;
     }
 
     @Override
-    public Integer getStripEndSize(String runwayId) {
+    public synchronized Integer getStripEndSize(String runwayId) {
 
         Runway r = airfield.getRunway(runwayId);
         return r.getStripEnd();
     }
 
     @Override
-    public Integer getRunwayTORA(String runwayId) {
+    public synchronized Integer getRunwayTORA(String runwayId) {
 
         LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
         return lr.getTora().getCurrentValue().intValue();
     }
 
     @Override
-    public Integer getRunwayTODA(String runwayId) {
+    public synchronized Integer getRunwayTODA(String runwayId) {
 
         LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
         return lr.getToda().getCurrentValue().intValue();
     }
 
     @Override
-    public Integer getRunwayASDA(String runwayId) {
+    public synchronized Integer getRunwayASDA(String runwayId) {
 
         LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
         return lr.getAsda().getCurrentValue().intValue();
     }
 
     @Override
-    public Integer getRunwayLDA(String runwayId) {
+    public synchronized Integer getRunwayLDA(String runwayId) {
 
         LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
         return lr.getLda().getCurrentValue().intValue();
     }
 
     @Override
-    public Integer getRunwayThreshold(String runwayId) {
+    public synchronized Integer getRunwayThreshold(String runwayId) {
 
         LogicalRunway lr = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
         return lr.getThreshold().intValue();
     }
 
     @Override
-    public Integer getTORAOffset(String runwayId) {
+    public synchronized Integer getTORAOffset(String runwayId) {
 
         Number original = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getTora().getOriginalValue();
         Number redeclared = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getTora().getRedeclaredValue();
@@ -214,7 +214,7 @@ public class AppController implements ViewController {
     }
 
     @Override
-    public Integer getTODAOffset(String runwayId) {
+    public synchronized Integer getTODAOffset(String runwayId) {
 
         Number original = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getToda().getOriginalValue();
         Number redeclared = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getToda().getRedeclaredValue();
@@ -232,7 +232,7 @@ public class AppController implements ViewController {
     }
 
     @Override
-    public Integer getASDAOffset(String runwayId) {
+    public synchronized Integer getASDAOffset(String runwayId) {
 
         Number original = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getAsda().getOriginalValue();
         Number redeclared = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getAsda().getRedeclaredValue();
@@ -250,7 +250,7 @@ public class AppController implements ViewController {
     }
 
     @Override
-    public Integer getLDAOffset(String runwayId) {
+    public synchronized Integer getLDAOffset(String runwayId) {
 
         Number original = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getLda().getOriginalValue();
         Number redeclared = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getLda().getRedeclaredValue();
@@ -268,41 +268,41 @@ public class AppController implements ViewController {
     }
 
     @Override
-    public Set<String> getPredefinedObstacleIds() {
+    public synchronized Set<String> getPredefinedObstacleIds() {
         return new TreeSet<>(airfield.getPredefinedObstacles().keySet());
     }
 
     @Override
-    public Double getPredefinedObstacleWidth(String obstacleId) {
+    public synchronized Double getPredefinedObstacleWidth(String obstacleId) {
         return airfield.getPredefinedObstacles().get(obstacleId).getWidth();
     }
 
     @Override
-    public Double getPredefinedObstacleHeight(String obstacleId) {
+    public synchronized Double getPredefinedObstacleHeight(String obstacleId) {
         return airfield.getPredefinedObstacles().get(obstacleId).getHeight();
     }
 
     @Override
-    public Double getPredefinedObstacleLength(String obstacleId) {
+    public synchronized Double getPredefinedObstacleLength(String obstacleId) {
         return airfield.getPredefinedObstacles().get(obstacleId).getLength();
     }
 
     @Override
-    public void addObstacleToList(String id, Double length, Double width, Double height) {
+    public synchronized void addObstacleToList(String id, Double length, Double width, Double height) {
         airfield.defineNewObstacle(id, length, width, height);
     }
 
     @Override
-    public void deleteObstacleFromList(String obstacleId) {
+    public synchronized void deleteObstacleFromList(String obstacleId) {
         airfield.removePredefinedObstacle(obstacleId);
     }
 
-    private List<Runway> getPhysicalRunways(){
+    private synchronized List<Runway> getPhysicalRunways(){
         return airfield.getRunways();
     }
 
     @Override
-    public void addObstacleToRunway(String runwayId, String obstacleId, Integer distanceFromCenterline, Integer distanceFromEdge) {
+    public synchronized void addObstacleToRunway(String runwayId, String obstacleId, Integer distanceFromCenterline, Integer distanceFromEdge) {
         Runway runway = airfield.getRunway(runwayId);
         Obstacle obstacle = new Obstacle(obstacleId, distanceFromEdge, distanceFromCenterline, getPredefinedObstacles().get(obstacleId));
         runway.placeObstacle(obstacle, runwayId);
@@ -310,7 +310,7 @@ public class AppController implements ViewController {
     }
 
     @Override
-    public void removeObstacleFromRunway(String runwayId) {
+    public synchronized void removeObstacleFromRunway(String runwayId) {
         for(Runway runway: getPhysicalRunways()){
             if(runway.getLogicalRunways()[0].getName().equals(runwayId)){
                 runway.clearObstacle();
@@ -323,7 +323,7 @@ public class AppController implements ViewController {
     }
 
     @Override
-    public String getRunwayObstacle(String runwayId) {
+    public synchronized String getRunwayObstacle(String runwayId) {
         for(Runway runway: getPhysicalRunways()){
             if(runway.getLogicalRunways()[0].getName().equals(runwayId)){
                 if(runway.getObstacle() == null){
@@ -341,31 +341,31 @@ public class AppController implements ViewController {
     }
 
     @Override
-    public Integer getDistanceFromCenterline(String runwayId) {
+    public synchronized Integer getDistanceFromCenterline(String runwayId) {
         LogicalRunway runway = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
         return runway.getObjectDistanceFromCentreline().intValue();
     }
 
     @Override
-    public Integer getDistanceFromThreshold(String runwayId) {
+    public synchronized Integer getDistanceFromThreshold(String runwayId) {
         LogicalRunway runway = airfield.getRunway(runwayId).getLogicalRunway(runwayId);
         return runway.getGetObjectDistanceFromStart().intValue();
     }
 
     @Override
-    public void exportAirfieldConfiguration(String absolutePath) {
+    public synchronized void exportAirfieldConfiguration(String absolutePath) {
         XMLExporter exporter = new XMLExporter();
         exporter.saveAirfieldInfo(airfield, absolutePath);
     }
 
     @Override
-    public void importAirfieldConfiguration(String path) throws ImporterException, ParserConfigurationException, SAXException, IOException {
+    public synchronized void importAirfieldConfiguration(String path) throws ImporterException, ParserConfigurationException, SAXException, IOException {
         XMLImporter importer = new XMLImporter();
         this.airfield = importer.importAirfieldInfo(path);
     }
 
     @Override
-    public LogicalRunway getLogicalRunwayCloserToObstacle(String runwayId) {
+    public synchronized LogicalRunway getLogicalRunwayCloserToObstacle(String runwayId) {
         Runway runway = airfield.getRunway(runwayId);
         if (!getRunwayObstacle(runwayId).equals("")){
             return runway.getObjectCloserToThisThreshold();
@@ -374,11 +374,11 @@ public class AppController implements ViewController {
         }
     }
 
-    private void redeclareRunway(String runwayId){
+    private synchronized void redeclareRunway(String runwayId){
         airfield.getRunway(runwayId).recalculateParameters();
     }
 
-    private Map<String,Airfield.Dimensions> getPredefinedObstacles() { return airfield.getPredefinedObstacles(); }
+    private synchronized Map<String,Airfield.Dimensions> getPredefinedObstacles() { return airfield.getPredefinedObstacles(); }
 
 
     //  --------- Non-Interface Methods ----------

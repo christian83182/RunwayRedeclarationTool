@@ -8,11 +8,11 @@ import java.awt.event.ActionListener;
 public class BrowseObstaclesWindow extends JFrame {
 
     //An instance of the controller used to link the view to the model.
-    ViewController controller;
+    private ViewController controller;
     //An instance of DefaultListModel used to populate a JList.
-    DefaultListModel<String> obstacleModel;
+    private DefaultListModel<String> obstacleModel;
     //An instance of the JList used to select obstacles.
-    JList<String> obstacleList;
+    private JList<String> obstacleList;
 
     BrowseObstaclesWindow(ViewController controller){
         super("Edit Predefined Obstacles");
