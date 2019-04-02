@@ -4,7 +4,9 @@ import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.embed.swing.JFXPanel;
+import javafx.geometry.Point3D;
 import javafx.scene.*;
+import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -22,14 +24,18 @@ public class View3D extends JFrame{
     private AppView appView;
     private ViewController controller;
 
-    private double startX, startY, anchorAngleX = 0, anchorAngleY = 0;
-    private DoubleProperty angleX = new SimpleDoubleProperty(60);
-    private DoubleProperty angleY = new SimpleDoubleProperty(-45);
+    private double dragStartX, dragStartY, anchorAngleX, anchorAngleY;
+    private double xOffset, yOffset, zOffset;
+    private DoubleProperty angleX, angleY;
 
     View3D(AppView appView){
         super("3D Visualization");
         this.appView = appView;
         this.controller = appView.getController();
+
+        angleX = new SimpleDoubleProperty(60);
+        angleY = new SimpleDoubleProperty(-45);
+
         initSwing();
     }
 
@@ -50,31 +56,86 @@ public class View3D extends JFrame{
 
     //Initializes the JavaFX content for the JFXPanel. Should run in a separate thread from the EDT.
     private void initJFX(JFXPanel fxPanel) {
-        //Create a new group to act as the root node for the scene.
-        Group root = new Group();
-        //Create a new scene using root, based on the dimensions of the screen, enable the depth buffer so objects intersect correctly.
-        Scene scene = new Scene(root, getWidth(), getHeight(), true);
-        scene.setFill(convertToJFXColour(Settings.AIRFIELD_COLOUR));
-        //Initialize the camera, and populate the scene.
-        initCamera(scene, root);
-        createScene(scene, root);
-        //Set the panel's scene to the newly created scene.
+
+        Group globalRoot = new Group();
+        Scene scene = new Scene(globalRoot, getWidth(), getHeight());
+        scene.setFill(Color.WHITE);
+
+        Group root3D = new Group();
+        SubScene scene3D = new SubScene(root3D, getWidth(), getHeight(), true, SceneAntialiasing.BALANCED);
+        scene3D.setFill(convertToJFXColour(Settings.AIRFIELD_COLOUR));
+        globalRoot.getChildren().add(scene3D);
+
+        createScene(globalRoot, root3D);
+        initCamera(scene3D, root3D);
+
         fxPanel.setScene(scene);
     }
 
     //Creates the JavaFx scene which should be contained within the JFXPanel.
-    private void createScene(Scene scene, Group root) {
+    private void createScene(Group globalRoot, Group root3D) {
         if(appView.getSelectedRunway().equals("")){
-            generateRunways(root);
+            createGeneralScene(root3D);
         } else if(appView.getMenuPanel().isIsolateMode()){
-            //draw only one one runway, focus on one.
+            createIsolatedScene(globalRoot, root3D);
         } else {
-            //draw all runways, focus on one.
+            createSelectedScene(globalRoot, root3D);
         }
     }
 
+    private void createGeneralScene(Group root3D){
+        generateRunways(root3D);
+        pointCameraAt(new Point3D(0,0,0),root3D);
+    }
+
+    private void createIsolatedScene(Group globalRoot, Group root3D){
+        String selectedRunway = appView.getSelectedRunway();
+        Point pos = controller.getRunwayPos(selectedRunway);
+        Dimension dim = controller.getRunwayDim(selectedRunway);
+        Integer bearing = controller.getBearing(selectedRunway)-90;
+
+        generateRunwayStrip(root3D, selectedRunway);
+        generateClearAndGraded(root3D, selectedRunway);
+        generateRunway(root3D, selectedRunway);
+        pointCameraAt(new Point3D(pos.x,0, -pos.y),root3D);
+
+        Slider slider = new Slider();
+        slider.setMin(0);
+        slider.setMax(dim.width);
+        slider.setPrefSize(800,20);
+        slider.valueProperty().addListener(e -> {
+            Double xComp = Math.cos(Math.toRadians(bearing))* slider.getValue();
+            Double zComp = Math.sin(-Math.toRadians(bearing))* slider.getValue();
+            pointCameraAt(new Point3D(pos.x + xComp,0, -pos.y + zComp),root3D);
+        });
+
+        globalRoot.getChildren().add(slider);
+    }
+
+    private void createSelectedScene(Group globalRoot, Group root3D){
+        String selectedRunway = appView.getSelectedRunway();
+        Point pos = controller.getRunwayPos(selectedRunway);
+        Dimension dim = controller.getRunwayDim(selectedRunway);
+        Integer bearing = controller.getBearing(selectedRunway)-90;
+
+        generateRunways(root3D);
+        pointCameraAt(new Point3D(pos.x,0, -pos.y),root3D);
+
+        Slider slider = new Slider();
+        slider.setMin(0);
+        slider.setMax(dim.width);
+        slider.setPrefSize(800,20);
+        slider.valueProperty().addListener(e -> {
+            Double xComp = Math.cos(Math.toRadians(bearing))* slider.getValue();
+            Double zComp = Math.sin(-Math.toRadians(bearing))* slider.getValue();
+            pointCameraAt(new Point3D(pos.x + xComp,0, -pos.y + zComp),root3D);
+        });
+
+        globalRoot.getChildren().add(slider);
+    }
+
     //Initializes a perspective camera in the scene, enables rotation and zooming.
-    private void initCamera(Scene scene, Group root){
+    private void initCamera(SubScene scene, Group root){
         //Create a perspective camera for 3D use and add it to the scene.
         PerspectiveCamera camera = new PerspectiveCamera(true);
         scene.setCamera(camera);
@@ -96,8 +157,8 @@ public class View3D extends JFrame{
 
         //Add an event listener to track the start of a mouse drag when the mouse is clicked.
         scene.setOnMousePressed(event -> {
-            startX = event.getSceneX();
-            startY = event.getSceneY();
+            dragStartX = event.getSceneX();
+            dragStartY = event.getSceneY();
             anchorAngleX = angleX.get();
             anchorAngleY = angleY.get();
         });
@@ -105,7 +166,7 @@ public class View3D extends JFrame{
         //Add an event listener to update the rotation objects based on the distance dragged.
         scene.setOnMouseDragged(event -> {
             //A modifier (0.2 in this case) is used to control the sensitivity.
-            Double newAngleX = anchorAngleX - (startY - event.getSceneY())*0.2;
+            Double newAngleX = anchorAngleX - (dragStartY - event.getSceneY())*0.2;
             //Restrict the rotation to angles less than 90.
             if(newAngleX > 90){
                 angleX.set(90);
@@ -115,7 +176,7 @@ public class View3D extends JFrame{
             } else {
                 angleX.set(newAngleX);
             }
-            angleY.set(anchorAngleY + (startX - event.getSceneX())*0.2);
+            angleY.set(anchorAngleY + (dragStartX - event.getSceneX())*0.2);
         });
 
         //Add an event listener to move the camera away or towards the scene using the mouse wheel.
@@ -299,11 +360,23 @@ public class View3D extends JFrame{
         root.getChildren().add(stripBox);
     }
 
-    /**
-     * Converts a java AWT colour to a JavaFX colour.
-     * @param swingColour The AWT colour which should be converted.
-     * @return the same colour but as a JavaFX colour object.
-     */
+    private void pointCameraAt(Point3D target,Group root){
+        for(Node node: root.getChildren()){
+            node.setTranslateX(node.getTranslateX()-xOffset);
+            node.setTranslateY(node.getTranslateY()-yOffset);
+            node.setTranslateZ(node.getTranslateZ()-zOffset);
+        }
+
+        xOffset = -target.getX(); yOffset = -target.getY(); zOffset = -target.getZ();
+
+        for(Node node: root.getChildren()){
+            node.setTranslateX(node.getTranslateX()+xOffset);
+            node.setTranslateY(node.getTranslateY()+yOffset);
+            node.setTranslateZ(node.getTranslateZ()+zOffset);
+        }
+    }
+
+    // Converts a java AWT colour to a JavaFX colour.
     private Color convertToJFXColour(java.awt.Color swingColour){
         double red = swingColour.getRed()/255.0;
         double green = swingColour.getGreen()/255.0;

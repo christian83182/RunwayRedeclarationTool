@@ -590,7 +590,7 @@ public class TopViewPanel extends InteractivePanel {
     }
 
     //Returns the bounding box for the specified runway. This will depend what options are selected in the menu.
-    private Polygon getCurrentBoundingBox(String id){
+    public Polygon getCurrentBoundingBox(String id){
         Integer stripWidthFromCenterline = controller.getStripWidthFromCenterline(id);
         Integer stripEndSize = controller.getStripEndSize(id);
         Point runwayStart = controller.getRunwayPos(id);
