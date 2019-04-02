@@ -11,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.MeshView;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
 import uk.ac.soton.controller.ViewController;
@@ -41,7 +43,8 @@ public class View3D extends JFrame{
 
     //Initializes the Swing components.
     private void initSwing() {
-        this.setPreferredSize(new Dimension(1400,900));
+        this.setPreferredSize(new Dimension(1600,900));
+        this.setResizable(false);
 
         //Create a JFXPanel for the 3D content.
         JFXPanel fxPanel = new JFXPanel();
@@ -91,47 +94,23 @@ public class View3D extends JFrame{
     private void createIsolatedScene(Group globalRoot, Group root3D){
         String selectedRunway = appView.getSelectedRunway();
         Point pos = controller.getRunwayPos(selectedRunway);
-        Dimension dim = controller.getRunwayDim(selectedRunway);
-        Integer bearing = controller.getBearing(selectedRunway)-90;
 
         generateRunwayStrip(root3D, selectedRunway);
         generateClearAndGraded(root3D, selectedRunway);
         generateRunway(root3D, selectedRunway);
         pointCameraAt(new Point3D(pos.x,0, -pos.y),root3D);
 
-        Slider slider = new Slider();
-        slider.setMin(0);
-        slider.setMax(dim.width);
-        slider.setPrefSize(800,20);
-        slider.valueProperty().addListener(e -> {
-            Double xComp = Math.cos(Math.toRadians(bearing))* slider.getValue();
-            Double zComp = Math.sin(-Math.toRadians(bearing))* slider.getValue();
-            pointCameraAt(new Point3D(pos.x + xComp,0, -pos.y + zComp),root3D);
-        });
-
-        globalRoot.getChildren().add(slider);
+        generateOverlay(globalRoot, root3D);
     }
 
     private void createSelectedScene(Group globalRoot, Group root3D){
         String selectedRunway = appView.getSelectedRunway();
         Point pos = controller.getRunwayPos(selectedRunway);
-        Dimension dim = controller.getRunwayDim(selectedRunway);
-        Integer bearing = controller.getBearing(selectedRunway)-90;
 
         generateRunways(root3D);
         pointCameraAt(new Point3D(pos.x,0, -pos.y),root3D);
 
-        Slider slider = new Slider();
-        slider.setMin(0);
-        slider.setMax(dim.width);
-        slider.setPrefSize(800,20);
-        slider.valueProperty().addListener(e -> {
-            Double xComp = Math.cos(Math.toRadians(bearing))* slider.getValue();
-            Double zComp = Math.sin(-Math.toRadians(bearing))* slider.getValue();
-            pointCameraAt(new Point3D(pos.x + xComp,0, -pos.y + zComp),root3D);
-        });
-
-        globalRoot.getChildren().add(slider);
+        generateOverlay(globalRoot, root3D);
     }
 
     //Initializes a perspective camera in the scene, enables rotation and zooming.
@@ -360,6 +339,45 @@ public class View3D extends JFrame{
         root.getChildren().add(stripBox);
     }
 
+    private void generateOverlay(Group globalRoot, Group root3D){
+
+        Double sliderLength = getWidth()*0.6;
+        Double sliderStartX = getWidth()/2-sliderLength/2;
+
+        Polygon poly = new Polygon(sliderStartX-80, getHeight(), sliderStartX-20, getHeight()-85,
+               sliderStartX+sliderLength+20, getHeight()-85,  sliderStartX+sliderLength+80, getHeight());
+
+        poly.setFill(convertToJFXColour(new java.awt.Color(72, 72, 72)));
+        poly.setStroke(convertToJFXColour(new java.awt.Color(52, 52, 52)));
+        poly.setStrokeWidth(3);
+        globalRoot.getChildren().add(poly);
+
+        Slider slider = prepareSlider(root3D, appView.getSelectedRunway());
+        globalRoot.getChildren().add(slider);
+    }
+
+    private Slider prepareSlider(Group root3D, String runwayId){
+        Point pos = controller.getRunwayPos(runwayId);
+        Dimension dim = controller.getRunwayDim(runwayId);
+        Integer bearing = controller.getBearing(runwayId)-90;
+
+        Slider slider = new Slider();
+        slider.setMin(5);
+        slider.setMax(dim.width-5);
+        slider.setPrefSize(getWidth()*0.6,1);
+        slider.setLayoutX(getWidth()/2-slider.getPrefWidth()/2);
+        slider.setLayoutY(getHeight()-70);
+
+        slider.valueProperty().addListener(e -> {
+            Double xComp = Math.cos(Math.toRadians(bearing))* slider.getValue();
+            Double zComp = Math.sin(-Math.toRadians(bearing))* slider.getValue();
+            pointCameraAt(new Point3D(pos.x + xComp,0, -pos.y + zComp),root3D);
+        });
+
+        return slider;
+    }
+
+    //Translates the world to simulate the camera pointing at a certain position.
     private void pointCameraAt(Point3D target,Group root){
         for(Node node: root.getChildren()){
             node.setTranslateX(node.getTranslateX()-xOffset);
