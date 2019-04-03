@@ -99,6 +99,7 @@ public class View3D extends JFrame{
         generateRunwayStrip(root3D, selectedRunway);
         generateClearAndGraded(root3D, selectedRunway);
         generateRunway(root3D, selectedRunway);
+        generateParameters(root3D, selectedRunway);
         generateLighting(root3D);
         pointCameraAt(new Point3D(pos.x,0, -pos.y),root3D);
 
@@ -185,6 +186,7 @@ public class View3D extends JFrame{
             if(!(generatedRunways.contains(currentRunwayBearing+180) || generatedRunways.contains(currentRunwayBearing-180))){
 
                 generateRunway(root, runwayId);
+                generateParameters(root, runwayId);
                 generateRunwayStrip(root, runwayId);
                 generateClearAndGraded(root, runwayId);
 
@@ -192,6 +194,21 @@ public class View3D extends JFrame{
                 generatedRunways.add(currentRunwayBearing);
             }
         }
+    }
+
+    private void generateParameters(Group root, String runwayId){
+
+        //draw the stopway
+        genStopway(root, runwayId, 23);
+
+        //draw the clearway
+        genClearway(root, runwayId, 30);
+
+        //if an obstacle exists, place the obstacle on the airfield
+        if(!controller.getRunwayObstacle(runwayId).equals("")){
+            genObstacle(root, runwayId, 9);
+        }
+
     }
 
     //Creates a Box of the same dimensions and position as runwayId, with the correct material, and adds it to root.
@@ -216,17 +233,6 @@ public class View3D extends JFrame{
 
         //Add the box to the root group.
         root.getChildren().add(runwayBox);
-
-        //draw the stopway
-        genStopway(root, runwayId, 23);
-
-        //draw the clearway
-        genClearway(root, runwayId, 30);
-
-        //if an obstacle exists, place the obstacle on the airfield
-        if(!controller.getRunwayObstacle(runwayId).equals("")){
-           genObstacle(root, runwayId, height);
-        }
 
         //display label name of the runway
         genRunwayName(root, runwayId, height);
