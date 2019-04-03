@@ -286,6 +286,10 @@ public class MenuPanel extends JPanel {
             appView.repaint();
         });
 
+        showCalculationButton.addActionListener( e -> {
+            new ViewCalculationsWindow(controller,appView);
+        });
+
         show3DViewButton.addActionListener(e -> {
             SwingUtilities.invokeLater(() -> new View3D(appView));
         });

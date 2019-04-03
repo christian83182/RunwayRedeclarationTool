@@ -268,6 +268,94 @@ public class AppController implements ViewController {
     }
 
     @Override
+    public String getTORABreakdown(String runwayId) {
+        return airfield.getRunway(runwayId).getLogicalRunway(runwayId).getTora().getBreakdown();
+    }
+
+    @Override
+    public String getTODABreakdown(String runwayId) {
+        return airfield.getRunway(runwayId).getLogicalRunway(runwayId).getToda().getBreakdown();
+    }
+
+    @Override
+    public String getASDABreakdown(String runwayId) {
+        return airfield.getRunway(runwayId).getLogicalRunway(runwayId).getAsda().getBreakdown();
+    }
+
+    @Override
+    public String getLDABreakdown(String runwayId) {
+        return airfield.getRunway(runwayId).getLogicalRunway(runwayId).getLda().getBreakdown();
+    }
+
+    @Override
+    public Integer getTORAOriginal(String runwayId) {
+        return airfield.getRunway(runwayId).getLogicalRunway(runwayId).getTora().getOriginalValue().intValue();
+    }
+
+    @Override
+    public Integer getTORARedeclared(String runwayId) {
+        Number redeclared = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getTora().getRedeclaredValue();
+
+        if(redeclared != null){
+            return redeclared.intValue();
+        }
+        else{
+            return null;
+        }
+    }
+
+    @Override
+    public Integer getTODAOriginal(String runwayId) {
+        return airfield.getRunway(runwayId).getLogicalRunway(runwayId).getToda().getOriginalValue().intValue();
+    }
+
+    @Override
+    public Integer getTODARedeclared(String runwayId) {
+        Number redeclared = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getToda().getRedeclaredValue();
+
+        if(redeclared != null){
+            return redeclared.intValue();
+        }
+        else{
+            return null;
+        }
+    }
+
+    @Override
+    public Integer getASDAOriginal(String runwayId) {
+        return airfield.getRunway(runwayId).getLogicalRunway(runwayId).getAsda().getOriginalValue().intValue();
+    }
+
+    @Override
+    public Integer getASDARedeclared(String runwayId) {
+        Number redeclared = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getAsda().getRedeclaredValue();
+
+        if(redeclared != null){
+            return redeclared.intValue();
+        }
+        else{
+            return null;
+        }
+    }
+
+    @Override
+    public Integer getLDAOriginal(String runwayId) {
+        return airfield.getRunway(runwayId).getLogicalRunway(runwayId).getLda().getOriginalValue().intValue();
+    }
+
+    @Override
+    public Integer getLDARedeclared(String runwayId) {
+        Number redeclared = airfield.getRunway(runwayId).getLogicalRunway(runwayId).getLda().getRedeclaredValue();
+
+        if(redeclared != null){
+            return redeclared.intValue();
+        }
+        else{
+            return null;
+        }
+    }
+
+    @Override
     public synchronized Set<String> getPredefinedObstacleIds() {
         return new TreeSet<>(airfield.getPredefinedObstacles().keySet());
     }

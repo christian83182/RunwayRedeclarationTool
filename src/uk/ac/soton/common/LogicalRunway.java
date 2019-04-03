@@ -106,18 +106,28 @@ public class LogicalRunway{
         this.threshold = threshold;
         this.clearway = clearway;
         this.stopway = stopway;
+        initParams(tora);
+    }
+
+    public void initParams(Number tora){
 
         String toraDef = "TORA = " + tora.intValue();
         this.tora = new Parameter(tora, toraDef);
 
-        String todaDef = "TODA = TORA + Clearway\n" + "TODA = " + tora.intValue() + " + " + clearway.width;
-        this.toda = new Parameter(tora.intValue() + clearway.width, todaDef);
+        Integer toda = tora.intValue() + clearway.width;
+        String todaDef = "TODA = TORA + Clearway\n\n" + "TODA = " + tora.intValue() + " + " + clearway.width +
+                " = " + toda;
+        this.toda = new Parameter(toda, todaDef);
 
-        String asdaDef = "ASDA = TORA + Stopway\n" + "ASDA = " + tora.intValue() + " + " + stopway.width;
-        this.asda = new Parameter(tora.intValue() + stopway.width, asdaDef);
+        Integer asda = tora.intValue() + stopway.width;
+        String asdaDef = "ASDA = TORA + Stopway\n\n" + "ASDA = " + tora.intValue() + " + " + stopway.width +
+                " = " + asda;
+        this.asda = new Parameter(asda, asdaDef);
 
-        String ldaDef = "LDA = TORA - Displaced Threshold\n" + "LDA = " + tora.intValue() + " - " + threshold;
-        this.lda = new Parameter(tora.intValue() - threshold.intValue(), ldaDef);
+        Integer lda = tora.intValue() - threshold.intValue();
+        String ldaDef = "LDA = TORA - Displaced Threshold\n\n" + "LDA = " + tora.intValue() + " - " + threshold +
+                " = " + lda;
+        this.lda = new Parameter(lda, ldaDef);
     }
 
     public void setObjectDistances(Integer distanceFromEdge, Integer distanceFromCentreline, Integer originalDistance){

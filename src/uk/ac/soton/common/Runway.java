@@ -225,34 +225,36 @@ public class Runway extends PositionalObject{
             // TORA = Distance from Threshold + Displaced Threshold - Slope Calculation - Strip End
             runway.redeclareTora(runway.getObjectThresholdDistance().intValue() + runway.getThreshold().intValue()
                     - slope - stripEnd);
-            runway.getTora().setBreakdown("TORA = Distance from Threshold + Displaced Threshold - Slope Calculation* - Strip End\n" +
+            runway.getTora().setBreakdown("TORA = Distance from Threshold + Displaced Threshold - Slope Calculation - Strip End\n\n" +
                     "TORA = " + runway.getObjectThresholdDistance().intValue() + " + " + runway.getThreshold().intValue() +
-                    " - \u2308" + obstacle.getHeight() + "\u2309 * " + als + " - " + stripEnd);
+                    " - \u2308" + obstacle.getHeight() + "\u2309 * " + als + " - " + stripEnd +
+                    " = " + runway.getTora().getRedeclaredValue().intValue());
         }
         else{
 
             // TORA = Distance from Threshold + Displaced Threshold - RESA - Strip End
             runway.redeclareTora(runway.getObjectThresholdDistance().intValue() + runway.getThreshold().intValue()
                     - resa - stripEnd);
-            runway.getTora().setBreakdown("TORA = Distance from Threshold + Displaced Threshold - RESA - Strip End\n" +
+            runway.getTora().setBreakdown("TORA = Distance from Threshold + Displaced Threshold - RESA - Strip End\n\n" +
                     "TORA = " + runway.getObjectThresholdDistance().intValue() + " + " + runway.getThreshold().intValue() +
-                    " - " + resa + " - " + stripEnd);
+                    " - " + resa + " - " + stripEnd + " = " + runway.getTora().getRedeclaredValue().intValue());
         }
 
         // TODA = Redeclared TORA
         runway.redeclareToda(runway.getTora().getRedeclaredValue());
-        runway.getToda().setBreakdown("TODA = Redeclared TORA\n" +
-                "TODA = " + runway.getTora().getRedeclaredValue());
+        runway.getToda().setBreakdown("TODA = Redeclared TORA\n\n" +
+                "TODA = " + runway.getTora().getRedeclaredValue().intValue());
 
         // ASDA = Redeclared TORA
         runway.redeclareAsda(runway.getTora().getRedeclaredValue());
-        runway.getAsda().setBreakdown("ASDA = Redeclared TORA\n" +
-                "ASDA = " + runway.getTora().getRedeclaredValue());
+        runway.getAsda().setBreakdown("ASDA = Redeclared TORA\n\n" +
+                "ASDA = " + runway.getTora().getRedeclaredValue().intValue());
 
         // LDA = Distance from Threshold - RESA - Strip End
         runway.redeclareLda(runway.getObjectThresholdDistance().intValue() - resa - stripEnd);
-        runway.getLda().setBreakdown("LDA = Distance from Threshold - RESA - Strip End\n" +
-                "LDA = " + runway.getObjectThresholdDistance().intValue() + " - " + resa + " - " + stripEnd);
+        runway.getLda().setBreakdown("LDA = Distance from Threshold - RESA - Strip End\n\n" +
+                "LDA = " + runway.getObjectThresholdDistance().intValue() + " - " + resa + " - " + stripEnd + " = " +
+                runway.getLda().getRedeclaredValue().intValue());
     }
 
     /**
@@ -268,9 +270,10 @@ public class Runway extends PositionalObject{
             // TORA = Original TORA - Strip End - RESA - Distance from Threshold - Displaced Threshold
             runway.redeclareTora(runway.getTora().getOriginalValue().intValue() - stripEnd - resa
                     - runway.getObjectThresholdDistance().intValue() - runway.getThreshold().intValue());
-            runway.getTora().setBreakdown("TORA = Original TORA - Strip End - RESA - Distance from Threshold - Displaced Threshold\n" +
+            runway.getTora().setBreakdown("TORA = Original TORA - Strip End - RESA - Distance from Threshold - Displaced Threshold\n\n" +
                     "TORA = " + runway.getTora().getOriginalValue() + " - " + stripEnd + " - " + resa +
-                    " - " + runway.getObjectThresholdDistance() + " - " + runway.getThreshold().intValue());
+                    " - " + runway.getObjectThresholdDistance() + " - " + runway.getThreshold().intValue() +
+                    " = " + runway.getTora().getRedeclaredValue().intValue());
 
         }
         else{
@@ -278,20 +281,23 @@ public class Runway extends PositionalObject{
             // TORA = Original TORA - Blast Protection - Distance from Threshold - Displaced Threshold
             runway.redeclareTora(runway.getTora().getOriginalValue().intValue() - blastDistance
                     - runway.getObjectThresholdDistance().intValue() - runway.getThreshold().intValue());
-            runway.getTora().setBreakdown("TORA = Original TORA - Blast Protection - Distance from Threshold - Displaced Threshold\n" +
+            runway.getTora().setBreakdown("TORA = Original TORA - Blast Protection - Distance from Threshold - Displaced Threshold\n\n" +
                     "TORA = " + runway.getTora().getOriginalValue() + " - " + blastDistance +
-                    " - " + runway.getObjectThresholdDistance() + " - " + runway.getThreshold().intValue());
+                    " - " + runway.getObjectThresholdDistance() + " - " + runway.getThreshold().intValue() +
+                    " = " + runway.getTora().getRedeclaredValue().intValue());
         }
 
         // TODA = Redeclared TORA + Clearway Length
         runway.redeclareToda(runway.getTora().getRedeclaredValue().intValue() + runway.getClearway().width);
-        runway.getToda().setBreakdown("TODA = Redeclared TORA + Clearway\n" +
-                "TODA = " + runway.getTora().getRedeclaredValue() + runway.getClearway().width);
+        runway.getToda().setBreakdown("TODA = Redeclared TORA + Clearway\n\n" +
+                "TODA = " + runway.getTora().getRedeclaredValue() + " + " + runway.getClearway().width +
+                " = " + runway.getToda().getRedeclaredValue().intValue());
 
         // ASDA = Redeclared TORA + Stopway Length
         runway.redeclareAsda(runway.getTora().getRedeclaredValue().intValue() + runway.getStopway().width);
-        runway.getAsda().setBreakdown("ASDA = Redeclared TORA + Stopway\n" +
-                "ASDA = " + runway.getTora().getRedeclaredValue() + runway.getStopway().width);
+        runway.getAsda().setBreakdown("ASDA = Redeclared TORA + Stopway\n\n" +
+                "ASDA = " + runway.getTora().getRedeclaredValue() + " + " + runway.getStopway().width +
+                " = " + runway.getAsda().getRedeclaredValue().intValue());
 
 
         if(slope + stripEnd > blastDistance || resa + stripEnd > blastDistance){
@@ -301,9 +307,10 @@ public class Runway extends PositionalObject{
                 // LDA = Original LDA - Distance from Threshold - Slope Calculation - Strip End
                 runway.redeclareLda(runway.getLda().getOriginalValue().intValue() - runway.getObjectThresholdDistance().intValue()
                         - slope - stripEnd);
-                runway.getLda().setBreakdown("LDA = Original LDA - Distance from Threshold - Slope Calculation* - Strip End\n" +
+                runway.getLda().setBreakdown("LDA = Original LDA - Distance from Threshold - Slope Calculation - Strip End\n\n" +
                         "LDA = " + runway.getLda().getOriginalValue().intValue() + " - " + runway.getObjectThresholdDistance().intValue()
-                        + " - \u2308" + obstacle.getHeight() + "\u2309 * " + als + " - " + stripEnd);
+                        + " - \u2308" + obstacle.getHeight() + "\u2309 * " + als + " - " + stripEnd +
+                        " = " + runway.getLda().getRedeclaredValue().intValue());
 
             }
             else{
@@ -311,9 +318,9 @@ public class Runway extends PositionalObject{
                 // LDA = Original LDA - Distance from Threshold - RESA - Strip End
                 runway.redeclareLda(runway.getLda().getOriginalValue().intValue() - runway.getObjectThresholdDistance().intValue()
                         - resa - stripEnd);
-                runway.getLda().setBreakdown("LDA = Original LDA - Distance from Threshold - RESA - Strip End\n" +
+                runway.getLda().setBreakdown("LDA = Original LDA - Distance from Threshold - RESA - Strip End\n\n" +
                         "LDA = " + runway.getLda().getOriginalValue().intValue() + " - " + runway.getObjectThresholdDistance().intValue()
-                        + " - " + resa + " - " + stripEnd);
+                        + " - " + resa + " - " + stripEnd + " = " + runway.getLda().getRedeclaredValue().intValue());
             }
         }
         else{
@@ -321,9 +328,9 @@ public class Runway extends PositionalObject{
             // LDA = Original LDA - Distance from Threshold - Blast Protection
             runway.redeclareLda(runway.getLda().getOriginalValue().intValue() - runway.getObjectThresholdDistance().intValue()
                     - blastDistance);
-            runway.getLda().setBreakdown("LDA = Original LDA - Distance from Threshold - Blast Protection\n" +
+            runway.getLda().setBreakdown("LDA = Original LDA - Distance from Threshold - Blast Protection\n\n" +
                     "LDA = " + runway.getLda().getOriginalValue().intValue() + " - " + runway.getObjectThresholdDistance().intValue()
-                    + " - " + blastDistance);
+                    + " - " + blastDistance + " = " + runway.getLda().getRedeclaredValue().intValue());
         }
     }
 

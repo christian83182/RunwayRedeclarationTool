@@ -139,6 +139,90 @@ public interface ViewController {
     Integer getLDAOffset(String runwayId);
 
     /**
+     * Returns a String explaining the calculation process of the current TORA value.
+     * @param runwayId the runway's name.
+     * @return the TORA breakdown.
+     */
+    String getTORABreakdown(String runwayId);
+
+    /**
+     * Returns a String explaining the calculation process of the current TODA value.
+     * @param runwayId the runway's name.
+     * @return the TODA breakdown.
+     */
+    String getTODABreakdown(String runwayId);
+
+    /**
+     * Returns a String explaining the calculation process of the current ASDA value.
+     * @param runwayId the runway's name.
+     * @return the ASDA breakdown.
+     */
+    String getASDABreakdown(String runwayId);
+
+    /**
+     * Returns a String explaining the calculation process of the current LDA value.
+     * @param runwayId the runway's name.
+     * @return the LDA breakdown.
+     */
+    String getLDABreakdown(String runwayId);
+
+    /**
+     * Returns the original TORA value.
+     * @param runwayId the runway's name.
+     * @return original TORA.
+     */
+    Integer getTORAOriginal(String runwayId);
+
+    /**
+     * Returns the redeclared TORA value.
+     * @param runwayId the runway's name.
+     * @return redeclared TORA.
+     */
+    Integer getTORARedeclared(String runwayId);
+
+    /**
+     * Returns the original TODA value.
+     * @param runwayId the runway's name.
+     * @return original TODA.
+     */
+    Integer getTODAOriginal(String runwayId);
+
+    /**
+     * Returns the redeclared TODA value.
+     * @param runwayId the runway's name.
+     * @return redeclared TODA.
+     */
+    Integer getTODARedeclared(String runwayId);
+
+    /**
+     * Returns the original ASDA value.
+     * @param runwayId the runway's name.
+     * @return original ASDA.
+     */
+    Integer getASDAOriginal(String runwayId);
+
+    /**
+     * Returns the redeclared ASDA value.
+     * @param runwayId the runway's name.
+     * @return redeclared ASDA.
+     */
+    Integer getASDARedeclared(String runwayId);
+
+    /**
+     * Returns the original LDA value.
+     * @param runwayId the runway's name.
+     * @return original LDA.
+     */
+    Integer getLDAOriginal(String runwayId);
+
+    /**
+     * Returns the redeclared LDA value.
+     * @param runwayId the runway's name.
+     * @return redeclared LDA.
+     */
+    Integer getLDARedeclared(String runwayId);
+
+    /**
      * Returns a set of strings where each string is the unique ID of a predefined obstacle in the application.
      * @return The set of Obstacle IDs
      */
