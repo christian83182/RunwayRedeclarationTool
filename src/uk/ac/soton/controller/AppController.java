@@ -1,5 +1,6 @@
 package uk.ac.soton.controller;
 
+import com.sun.org.apache.regexp.internal.RE;
 import org.xml.sax.SAXException;
 import uk.ac.soton.common.*;
 import uk.ac.soton.view.AppView;
@@ -386,6 +387,32 @@ public class AppController implements ViewController {
             return runway.getLogicalRunways()[1].getName();
         }
         return runway.getLogicalRunways()[0].getName();
+    }
+
+    @Override
+    public Integer getBlastingDistance(String runwayId) {
+        return airfield.getRunway(runwayId).getBlastDistance();
+    }
+
+    @Override
+    public Integer getRESADistance(String runwayId) {
+        return airfield.getRunway(runwayId).getResa();
+    }
+
+    @Override
+    public Integer getALS(String runwayId) {
+        return airfield.getRunway(runwayId).getAls();
+    }
+
+    @Override
+    public void setRESADistance(String runwayId, Integer RESAvalue) {
+        airfield.getRunway(runwayId).setResa(RESAvalue);
+
+    }
+
+    @Override
+    public void setBlastingDistance(String runwayId, Integer blastingDistance) {
+        airfield.getRunway(runwayId).setBlastDistance(blastingDistance);
     }
 
     private synchronized void redeclareRunway(String runwayId){

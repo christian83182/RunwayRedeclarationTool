@@ -253,11 +253,47 @@ public interface ViewController {
     String getAirfieldName();
 
     /**
-     * Gets the sibling logical runway based on the id of the current logical runway
+     * Gets the sibling logical runway based on the id of the current logical runway.
      * @param runwayId The logicalRunway on which the obstacle is present.
      * @return The name which should be the sibling logical runway.
      */
     String getSiblingLogicalRunway(String runwayId);
+
+    /**
+     * Gets the for the blasting distance of the logical runway.
+     * @param runwayId The logicalRunway on which the obstacle is present.
+     * @return The value of the blasting distance.
+     */
+    Integer getBlastingDistance(String runwayId);
+
+    /**
+     * Gets the RESA value of the logical runway.
+     * @param runwayId The logicalRunway on which the obstacle is present.
+     * @return The value of the RESA.
+     */
+    Integer getRESADistance(String runwayId);
+
+    /**
+     * Gets the ALS value of the specified logical runway.
+     * @param runwayId The logicalRunway on which the obstacle is present.
+     * @return The value of the ALS.
+     */
+    Integer getALS(String runwayId);
+
+    /**
+     * Sets the RESA value of the logical runway.
+     * @param runwayId The logicalRunway on which the obstacle is present.
+     * @param RESADistance The new RESA distance for the logical runway.
+     */
+    void setRESADistance(String runwayId, Integer RESADistance);
+
+    /**
+     * Sets the blasting distance of the logical runway.
+     * @param runwayId The logicalRunway on which the obstacle is present.
+     * @param blastingDistance The new blasting distance for the logical runway.
+     */
+    void setBlastingDistance(String runwayId, Integer blastingDistance);
+
 
 }
 

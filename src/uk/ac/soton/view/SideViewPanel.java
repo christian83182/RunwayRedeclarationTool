@@ -244,20 +244,21 @@ public class SideViewPanel extends InteractivePanel{
         Integer obstacleDistance = controller.getDistanceFromThreshold(selectedRunway);
         Integer obstacleLength = controller.getPredefinedObstacleLength(obstacle).intValue();
 
-        Integer alsDistance = controller.getPredefinedObstacleHeight(obstacle).intValue()*50;
-        drawParameterToTheRight(g2, -100, "h*50", alsDistance, obstacleDistance);
+        Integer alsDistance = controller.getPredefinedObstacleHeight(obstacle).intValue()* controller.getALS(selectedRunway);
+        drawParameterToTheRight(g2, -100, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance);
 
-
-        Integer resa = 240;
+        Integer resa = controller.getRESADistance(selectedRunway);
         drawParameterToTheRight(g2, -300, new String("RESA: " + resa), resa, obstacleDistance + obstacleLength);
 
         Integer newStripEnd = controller.getStripEndSize(selectedRunway);
-
         if(resa > alsDistance){
             drawParameterToTheRight(g2, -300, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength + resa);
         }else{
             drawParameterToTheRight(g2, -300, new String (newStripEnd + " m"), newStripEnd, obstacleDistance +  alsDistance);
         }
+
+        Integer blastingDistance = controller.getBlastingDistance(selectedRunway);
+        drawParameterToTheRight(g2, -400, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance + obstacleLength);
 
         g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
         Point startSlope = new Point(obstacleDistance, -controller.getPredefinedObstacleHeight(obstacle).intValue());
@@ -285,10 +286,10 @@ public class SideViewPanel extends InteractivePanel{
         Integer obstacleDistance = controller.getDistanceFromThreshold(selectedRunway);
         Integer obstacleLength = controller.getPredefinedObstacleLength(obstacle).intValue();
 
-        Integer alsDistance = controller.getPredefinedObstacleHeight(obstacle).intValue()*50;
-        drawParameterToTheLeft(g2, -100, "h*50", alsDistance, obstacleDistance + obstacleLength);
+        Integer alsDistance = controller.getPredefinedObstacleHeight(obstacle).intValue()*controller.getALS(selectedRunway);
+        drawParameterToTheLeft(g2, -100, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance + obstacleLength);
 
-        Integer resa = 240;
+        Integer resa = controller.getRESADistance(selectedRunway);
         drawParameterToTheLeft(g2, -300, new String("RESA: " + resa), resa, obstacleDistance + obstacleLength);
 
         Integer newStripEnd = controller.getStripEndSize(selectedRunway);
@@ -298,6 +299,9 @@ public class SideViewPanel extends InteractivePanel{
         }else{
             drawParameterToTheLeft(g2, -300, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength - alsDistance);
         }
+
+        Integer blastingDistance = controller.getBlastingDistance(selectedRunway);
+        drawParameterToTheRight(g2, -400, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance - blastingDistance);
 
         g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
         Point startSlope = new Point(obstacleDistance + obstacleLength - alsDistance, 0);
