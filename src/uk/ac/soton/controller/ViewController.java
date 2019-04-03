@@ -281,6 +281,13 @@ public interface ViewController {
     Integer getALS(String runwayId);
 
     /**
+     * Returns true if the obstacle on the runway, if present, has triggered a redeclaration of parameters.
+     * @param runwayId The logicalRunway on which the obstacle is present.
+     * @return True if the runway is redeclared and false otherwise.
+     */
+    boolean isRedeclared (String runwayId);
+
+    /**
      * Sets the RESA value of the logical runway.
      * @param runwayId The logicalRunway on which the obstacle is present.
      * @param RESADistance The new RESA distance for the logical runway.
@@ -293,7 +300,6 @@ public interface ViewController {
      * @param blastingDistance The new blasting distance for the logical runway.
      */
     void setBlastingDistance(String runwayId, Integer blastingDistance);
-
 
 }
 

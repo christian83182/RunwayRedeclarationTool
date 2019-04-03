@@ -211,16 +211,17 @@ public class SideViewPanel extends InteractivePanel{
         //if obstacle exists, display obstacle related distances
         if(!obstacle.equals("")){
 
-
-            //invoke displaying distances relative to their direction in which they are drawn
-            if(controller.getLogicalRunwayCloserToObstacle(selectedRunway).getName().equals(selectedRunway)){
-                displayDistancesToTheRight(g2,obstacle,selectedRunway);
-            }else{
-                displayDistancesToTheLeft(g2,obstacle,selectedRunway);
+            //if the obstacle has triggered a redeclaration of the runway, draw the redeclared parameters
+            if(controller.isRedeclared(selectedRunway)) {
+                //invoke displaying distances relative to their direction in which they are drawn
+                if (controller.getLogicalRunwayCloserToObstacle(selectedRunway).getName().equals(selectedRunway)) {
+                    displayDistancesToTheRight(g2, obstacle, selectedRunway);
+                } else {
+                    displayDistancesToTheLeft(g2, obstacle, selectedRunway);
+                }
             }
 
             //TODO: displaying height of the obstacle (problem: will be extremely small though, implement vertical arrow)
-            //TODO: displaying blasting distance
 
         }
     }

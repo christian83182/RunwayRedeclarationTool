@@ -405,6 +405,11 @@ public class AppController implements ViewController {
     }
 
     @Override
+    public boolean isRedeclared(String runwayId) {
+        return airfield.getRunway(runwayId).isRedeclared();
+    }
+
+    @Override
     public void setRESADistance(String runwayId, Integer RESAvalue) {
         airfield.getRunway(runwayId).setResa(RESAvalue);
 
