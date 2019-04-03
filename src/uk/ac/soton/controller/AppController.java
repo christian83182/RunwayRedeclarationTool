@@ -379,6 +379,15 @@ public class AppController implements ViewController {
         return "Heathrow";
     }
 
+    @Override
+    public String getSiblingLogicalRunway(String runwayId) {
+        Runway runway = airfield.getRunway(runwayId);
+        if(runway.getLogicalRunways()[0].getName().equals(runwayId)){
+            return runway.getLogicalRunways()[1].getName();
+        }
+        return runway.getLogicalRunways()[0].getName();
+    }
+
     private synchronized void redeclareRunway(String runwayId){
         airfield.getRunway(runwayId).recalculateParameters();
     }

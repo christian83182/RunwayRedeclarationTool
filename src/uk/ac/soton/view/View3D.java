@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Polygon;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import uk.ac.soton.controller.ViewController;
 
@@ -226,6 +227,45 @@ public class View3D extends JFrame{
         if(!controller.getRunwayObstacle(runwayId).equals("")){
            genObstacle(root, runwayId, height);
         }
+
+        //display label name of the runway
+        genRunwayName(root, runwayId, height);
+
+    }
+
+    // helper function to display the name of each logical runway
+    private void genRunwayName(Group root, String runwayId, Integer helperHeight){
+        Point runwayPos  = controller.getRunwayPos(runwayId);
+        Dimension runwayDim = controller.getRunwayDim(runwayId);
+
+        Text text = new Text(runwayId);
+        text.setFill(Color.WHITE);
+        text.setFont(javafx.scene.text.Font.font("SansSerif", runwayDim.height));
+
+        Integer offset = 100;
+        text.setTranslateX(runwayPos.x - runwayDim.height/2);
+        text.setTranslateZ(-runwayPos.y + runwayDim.width - offset);
+        text.setTranslateY(-helperHeight);
+        Rotate rotate =  new Rotate(controller.getBearing(runwayId), runwayDim.height/2,0,-runwayDim.width + offset, Rotate.Y_AXIS);
+        text.getTransforms().add(rotate);
+        text.setCache(true);
+        text.setCacheHint(CacheHint.QUALITY);
+        root.getChildren().add(text);
+
+        Text sibling = new Text(controller.getSiblingLogicalRunway(runwayId));
+        sibling.setFill(Color.WHITE);
+        sibling.setFont(javafx.scene.text.Font.font("SansSerif", runwayDim.height));
+
+        sibling.setTranslateX(runwayPos.x - runwayDim.height/2);
+        sibling.setTranslateZ(-runwayPos.y + offset);
+        sibling.setTranslateY(-helperHeight);
+
+        Rotate siblingRotate = new Rotate(controller.getBearing(runwayId), runwayDim.height/2,0,-offset, Rotate.Y_AXIS);
+
+        sibling.getTransforms().add(siblingRotate);
+        sibling.setCache(true);
+        sibling.setCacheHint(CacheHint.QUALITY);
+        root.getChildren().add(sibling);
 
     }
 

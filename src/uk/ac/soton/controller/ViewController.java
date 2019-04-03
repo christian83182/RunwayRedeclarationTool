@@ -252,5 +252,12 @@ public interface ViewController {
      */
     String getAirfieldName();
 
+    /**
+     * Gets the sibling logical runway based on the id of the current logical runway
+     * @param runwayId The logicalRunway on which the obstacle is present.
+     * @return The name which should be the sibling logical runway.
+     */
+    String getSiblingLogicalRunway(String runwayId);
+
 }
 
