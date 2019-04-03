@@ -295,7 +295,9 @@ public class View3D extends JFrame{
             obstacle.setTranslateX(runwayPos.x - controller.getDistanceFromCenterline(runwayId) + controller.getPredefinedObstacleLength(obstacleId));
         }
         obstacle.setTranslateZ(-runwayPos.y + controller.getDistanceFromThreshold(runwayId) );
-        obstacle.setTranslateY(-helperHeight);
+        
+        //TODO: change this so when the obstacle is not on the runway then it doesn t show a larger height than the height of the obstacle
+        obstacle.setTranslateY(-helperHeight-controller.getPredefinedObstacleHeight(obstacleId));
 
         Rotate rotate = new Rotate(controller.getBearing(runwayId), -controller.getDistanceFromCenterline(runwayId),0,- controller.getDistanceFromThreshold(runwayId), Rotate.Y_AXIS);
         obstacle.getTransforms().add(rotate);
