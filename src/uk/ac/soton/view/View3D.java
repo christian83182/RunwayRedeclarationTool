@@ -215,6 +215,57 @@ public class View3D extends JFrame{
 
         //Add the box to the root group.
         root.getChildren().add(runwayBox);
+
+        //draw the stopway
+        genStopway(root, runwayId, 23);
+
+        //draw the clearway
+        genClearway(root, runwayId, 30);
+
+    }
+
+    private void genStopway(Group root, String runwayId, Integer helperHeight){
+
+        Point runwayPosition = controller.getRunwayPos(runwayId);
+        Dimension stopwayDimension = controller.getStopwayDim(runwayId);
+        Double runwayWidth = controller.getRunwayDim(runwayId).getWidth();
+
+        Box stopwayBox = new Box(stopwayDimension.height, helperHeight, stopwayDimension.width);
+        PhongMaterial stopwayMaterial = new PhongMaterial(convertToJFXColour(Settings.STOPWAY_FILL_COLOUR));
+        stopwayBox.setMaterial(stopwayMaterial);
+
+        stopwayBox.setTranslateX(runwayPosition.x);
+        stopwayBox.setTranslateZ(-runwayPosition.y + runwayWidth + stopwayDimension.width/2);
+        stopwayBox.setTranslateY(-helperHeight);
+
+        Rotate rStopway = new Rotate(controller.getBearing(runwayId), 0,0,-runwayWidth - stopwayDimension.width/2, Rotate.Y_AXIS);
+        stopwayBox.getTransforms().add(rStopway);
+
+
+        root.getChildren().add(stopwayBox);
+
+    }
+
+    private void genClearway(Group root, String runwayId, Integer helperHeight){
+
+        Point runwayPosition = controller.getRunwayPos(runwayId);
+        Dimension clearwayDimension = controller.getClearwayDim(runwayId);
+        Double runwayWidth = controller.getRunwayDim(runwayId).getWidth();
+
+        Box clearwayBox = new Box(clearwayDimension.height, helperHeight, clearwayDimension.width);
+        PhongMaterial stopwayMaterial = new PhongMaterial(convertToJFXColour(Settings.CLEARWAY_FILL_COLOUR));
+        clearwayBox.setMaterial(stopwayMaterial);
+
+        clearwayBox.setTranslateX(runwayPosition.x);
+        clearwayBox.setTranslateZ(-runwayPosition.y + runwayWidth + clearwayDimension.width/2);
+        clearwayBox.setTranslateY(-helperHeight);
+
+        Rotate rClearway = new Rotate(controller.getBearing(runwayId), 0,0,-runwayWidth - clearwayDimension.width/2, Rotate.Y_AXIS);
+        clearwayBox.getTransforms().add(rClearway);
+
+
+        root.getChildren().add(clearwayBox);
+
     }
 
     //Generates a group containing meshes which simulate an extruded clear and graded area for the given runwayId.
