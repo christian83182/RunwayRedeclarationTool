@@ -222,8 +222,42 @@ public class View3D extends JFrame{
         //draw the clearway
         genClearway(root, runwayId, 30);
 
+        //if an obstacle exists, place the obstacle on the airfield
+        if(!controller.getRunwayObstacle(runwayId).equals("")){
+           genObstacle(root, runwayId, height);
+        }
+
     }
 
+    //placing the obstacle on the runway
+    private void genObstacle(Group root, String runwayId, Integer helperHeight){
+        String obstacleId = controller.getRunwayObstacle(runwayId);
+        Integer obstacleHeight = controller.getPredefinedObstacleHeight(obstacleId).intValue();
+        Integer obstacleWidth = controller.getPredefinedObstacleWidth(obstacleId).intValue();
+        Integer obstacleLength = controller.getPredefinedObstacleLength(obstacleId).intValue();
+
+        Box obstacle = new Box(obstacleLength, obstacleHeight, obstacleWidth);
+        PhongMaterial obstacleMaterial = new PhongMaterial(convertToJFXColour(Settings.OBSTACLE_FILL_COLOUR));
+        obstacle.setMaterial(obstacleMaterial);
+
+        //the position of the obstacle on the runway has to dependent on the distance from threshold and centerline
+        //the position relative to the centerline needs to be adjusted depending if the number is positive or negative
+        Point runwayPos = controller.getRunwayPos(runwayId);
+        if(controller.getDistanceFromCenterline(runwayId)>0) {
+            obstacle.setTranslateX(runwayPos.x - controller.getDistanceFromCenterline(runwayId) - controller.getPredefinedObstacleLength(obstacleId));
+        }else{
+            obstacle.setTranslateX(runwayPos.x - controller.getDistanceFromCenterline(runwayId) + controller.getPredefinedObstacleLength(obstacleId));
+        }
+        obstacle.setTranslateZ(-runwayPos.y + controller.getDistanceFromThreshold(runwayId) );
+        obstacle.setTranslateY(-helperHeight);
+
+        Rotate rotate = new Rotate(controller.getBearing(runwayId), -controller.getDistanceFromCenterline(runwayId),0,- controller.getDistanceFromThreshold(runwayId), Rotate.Y_AXIS);
+        obstacle.getTransforms().add(rotate);
+
+        root.getChildren().add(obstacle);
+    }
+
+    //placing the stopway at the end of the runway
     private void genStopway(Group root, String runwayId, Integer helperHeight){
 
         Point runwayPosition = controller.getRunwayPos(runwayId);
@@ -246,6 +280,7 @@ public class View3D extends JFrame{
 
     }
 
+    //placing the clearway at the end of the runway
     private void genClearway(Group root, String runwayId, Integer helperHeight){
 
         Point runwayPosition = controller.getRunwayPos(runwayId);
