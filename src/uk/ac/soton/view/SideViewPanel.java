@@ -1,4 +1,5 @@
 package uk.ac.soton.view;
+import uk.ac.soton.common.Obstacle;
 import uk.ac.soton.controller.ViewController;
 
 import java.awt.*;
@@ -224,72 +225,83 @@ public class SideViewPanel extends InteractivePanel{
         }
     }
 
+    //all parameters drawn to the left of the obstacle are drawn from a specified distance
+    //and the line of the parameter ends at the specified distance + the length of the parameter
+    public void drawParameterToTheRight(Graphics2D g2, Integer helperLength, String label, Integer distanceLength, Integer startPointX){
+
+        Point startDistance = new Point(startPointX, 0);
+        Point endDistance = new Point(startPointX + distanceLength, 0);
+        DataArrow distanceArrow = new DataArrow(startDistance, endDistance, helperLength, label);
+        distanceArrow.drawHorizontalArrow(g2);
+    }
 
     // displaying distances to the right of the obstacle
     // height*als: start point is obstacle distance from start of runway and it goes on for h*als
-    // RESA is just before the end of the above distance
-    // the new strip end comes after the end of the resa
+    // RESA is drawn to the right of the obstacle
+    // the new strip end comes after the end of the resa or the end of the height*als distance, whichever is longer
     public void displayDistancesToTheRight(Graphics2D g2, String obstacle, String selectedRunway){
 
         Integer obstacleDistance = controller.getDistanceFromThreshold(selectedRunway);
-        Integer value = controller.getPredefinedObstacleHeight(obstacle).intValue()*50;
-        Point startDistance = new Point(obstacleDistance, 0);
-        Point endDistance = new Point(obstacleDistance + value, 0);
-        DataArrow distanceArrow = new DataArrow(startDistance, endDistance, -100, "h*50");
-        //distanceArrow.drawHorizontalArrow(g2);
+        Integer obstacleLength = controller.getPredefinedObstacleLength(obstacle).intValue();
+
+        Integer alsDistance = controller.getPredefinedObstacleHeight(obstacle).intValue()*50;
+        drawParameterToTheRight(g2, -100, "h*50", alsDistance, obstacleDistance);
+
 
         Integer resa = 240;
-        String resaLabel = new String("RESA: " + resa);
-        Point startResa = new Point(endDistance.x - resa,0);
-        Point endResa = new Point (endDistance.x, 0);
-        DataArrow resaArrow = new DataArrow(startResa, endResa, -300, resaLabel);
-        //resaArrow.drawHorizontalArrow(g2);
+        drawParameterToTheRight(g2, -300, new String("RESA: " + resa), resa, obstacleDistance + obstacleLength);
 
-        Integer newStripend = controller.getStripEndSize(selectedRunway);
-        String newStripEndLabel = new String (newStripend + " m");
-        Point endStripend = new Point (endResa.x + newStripend, 0);
-        DataArrow stripEndArrow = new DataArrow(endResa, endStripend, -300, newStripEndLabel);
-        //stripEndArrow.drawHorizontalArrow(g2);
+        Integer newStripEnd = controller.getStripEndSize(selectedRunway);
+
+        if(resa > alsDistance){
+            drawParameterToTheRight(g2, -300, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength + resa);
+        }else{
+            drawParameterToTheRight(g2, -300, new String (newStripEnd + " m"), newStripEnd, obstacleDistance +  alsDistance);
+        }
 
         g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
         Point startSlope = new Point(obstacleDistance, -controller.getPredefinedObstacleHeight(obstacle).intValue());
-        Point endSlope = new Point(endResa.x, 0);
+        Point endSlope = new Point(obstacleDistance + obstacleLength + resa, 0);
         g2.drawLine(startSlope.x, startSlope.y, endSlope.x, endSlope.y);
 
     }
 
-    // displaying distances to the left of the obstacle
-    // height*als: start point is (obstacle distance from start - h*als) of runway and it goes on for h*als
-    // RESA is just before the start of the above distance
-    // the new strip end comes before the start of the resa
+    //all parameters drawn to the left of the obstacle are drawn from a specified distance - the length of the parameter
+    //and the line of the parameter ends at the specified distance
+    public void drawParameterToTheLeft(Graphics2D g2, Integer helperLength, String label, Integer distanceLength, Integer endPointX){
+
+        Point startDistance = new Point(endPointX - distanceLength, 0);
+        Point endDistance = new Point(endPointX, 0);
+        DataArrow distanceArrow = new DataArrow(startDistance, endDistance, helperLength, label);
+        distanceArrow.drawHorizontalArrow(g2);
+    }
+
+    // displaying distances to the right of the obstacle
+    // height*als: start point is obstacle distance from start of runway and it goes on for h*als
+    // RESA is drawn to the left of the obstacle
+    // the new strip end comes before the end of the resa or the end of the height*als distance, whichever is longer
     public void displayDistancesToTheLeft(Graphics2D g2, String obstacle, String selectedRunway){
 
         Integer obstacleDistance = controller.getDistanceFromThreshold(selectedRunway);
-
         Integer obstacleLength = controller.getPredefinedObstacleLength(obstacle).intValue();
-        Integer value = controller.getPredefinedObstacleHeight(obstacle).intValue()*50;
-        Point startDistance = new Point(obstacleDistance + obstacleLength - value, 0);
-        Point endDistance = new Point(obstacleDistance + obstacleLength, 0);
-        DataArrow distanceArrow = new DataArrow(startDistance, endDistance, -100, "h*50");
-        //distanceArrow.drawHorizontalArrow(g2);
+
+        Integer alsDistance = controller.getPredefinedObstacleHeight(obstacle).intValue()*50;
+        drawParameterToTheLeft(g2, -100, "h*50", alsDistance, obstacleDistance + obstacleLength);
 
         Integer resa = 240;
-        String resaLabel = new String("RESA: " + resa);
-        Point startResa = new Point(startDistance.x,0);
-        Point endResa = new Point (startDistance.x + resa, 0);
-        DataArrow resaArrow = new DataArrow(startResa, endResa, -300, resaLabel);
-        //resaArrow.drawHorizontalArrow(g2);
+        drawParameterToTheLeft(g2, -300, new String("RESA: " + resa), resa, obstacleDistance + obstacleLength);
 
-        Integer newStripend = controller.getStripEndSize(selectedRunway);
-        String newStripEndLabel = new String (newStripend + " m");
-        Point startStripEnd = new Point(startResa.x - newStripend, 0);
-        Point endStripEnd = new Point (startResa.x, 0);
-        DataArrow stripEndArrow = new DataArrow(startStripEnd , endStripEnd, -300, newStripEndLabel);
-        //stripEndArrow.drawHorizontalArrow(g2);
+        Integer newStripEnd = controller.getStripEndSize(selectedRunway);
+
+        if(resa > alsDistance){
+            drawParameterToTheLeft(g2, -300, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength - resa);
+        }else{
+            drawParameterToTheLeft(g2, -300, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength - alsDistance);
+        }
 
         g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
-        Point startSlope = new Point(startResa.x, 0);
-        Point endSlope = new Point (endDistance.x, -controller.getPredefinedObstacleHeight(obstacle).intValue());
+        Point startSlope = new Point(obstacleDistance + obstacleLength - alsDistance, 0);
+        Point endSlope = new Point (obstacleDistance + obstacleLength, -controller.getPredefinedObstacleHeight(obstacle).intValue());
         g2.drawLine(startSlope.x, startSlope.y, endSlope.x, endSlope.y);
 
     }
