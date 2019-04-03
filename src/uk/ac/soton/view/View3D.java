@@ -7,13 +7,11 @@ import javafx.embed.swing.JFXPanel;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.control.Slider;
+import javafx.scene.paint.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.*;
 import javafx.scene.shape.Box;
-import javafx.scene.shape.MeshView;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
 import uk.ac.soton.controller.ViewController;
 
@@ -59,7 +57,6 @@ public class View3D extends JFrame{
 
     //Initializes the JavaFX content for the JFXPanel. Should run in a separate thread from the EDT.
     private void initJFX(JFXPanel fxPanel) {
-
         Group globalRoot = new Group();
         Scene scene = new Scene(globalRoot, getWidth(), getHeight());
         scene.setFill(Color.WHITE);
@@ -86,11 +83,14 @@ public class View3D extends JFrame{
         }
     }
 
+    //Populates the root3D scene and manipulates the camera such that the camera orbits about the origin, with all runways visible.
     private void createGeneralScene(Group root3D){
         generateRunways(root3D);
+        generateLighting(root3D);
         pointCameraAt(new Point3D(0,0,0),root3D);
     }
 
+    //Restricts the camera to one runway and only renders that one runway.
     private void createIsolatedScene(Group globalRoot, Group root3D){
         String selectedRunway = appView.getSelectedRunway();
         Point pos = controller.getRunwayPos(selectedRunway);
@@ -98,16 +98,19 @@ public class View3D extends JFrame{
         generateRunwayStrip(root3D, selectedRunway);
         generateClearAndGraded(root3D, selectedRunway);
         generateRunway(root3D, selectedRunway);
+        generateLighting(root3D);
         pointCameraAt(new Point3D(pos.x,0, -pos.y),root3D);
 
         generateOverlay(globalRoot, root3D);
     }
 
+    //Restricts the camera to one runway but still renders all other runways.
     private void createSelectedScene(Group globalRoot, Group root3D){
         String selectedRunway = appView.getSelectedRunway();
         Point pos = controller.getRunwayPos(selectedRunway);
 
         generateRunways(root3D);
+        generateLighting(root3D);
         pointCameraAt(new Point3D(pos.x,0, -pos.y),root3D);
 
         generateOverlay(globalRoot, root3D);
@@ -123,7 +126,7 @@ public class View3D extends JFrame{
         camera.setFieldOfView(80);
         camera.setNearClip(1);
         camera.setFarClip(5000);
-        camera.setTranslateZ(-200);
+        camera.setTranslateZ(-1000);
 
         //Initiate the rotation objects used for rotating the camera about the world.
         Rotate xRotate = new Rotate(0, Rotate.X_AXIS);
@@ -337,6 +340,16 @@ public class View3D extends JFrame{
 
         //Add the box to the root group.
         root.getChildren().add(stripBox);
+    }
+
+    private void generateLighting(Group root){
+        PointLight p1= new PointLight(Color.WHITE);
+        p1.setTranslateY(-400);
+        root.getChildren().add(p1);
+
+        Double intensity = 0.6;
+        AmbientLight ambientLight = new AmbientLight(new Color(intensity, intensity, intensity,1));
+        root.getChildren().add(ambientLight);
     }
 
     private void generateOverlay(Group globalRoot, Group root3D){

@@ -374,6 +374,11 @@ public class AppController implements ViewController {
         }
     }
 
+    @Override
+    public String getAirfieldName() {
+        return "Heathrow";
+    }
+
     private synchronized void redeclareRunway(String runwayId){
         airfield.getRunway(runwayId).recalculateParameters();
     }

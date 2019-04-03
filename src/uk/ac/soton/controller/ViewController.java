@@ -247,5 +247,10 @@ public interface ViewController {
      */
     LogicalRunway getLogicalRunwayCloserToObstacle(String runwayID);
 
+    /**
+     * @return The name which should be displayed as the airport name.
+     */
+    String getAirfieldName();
+
 }
 
