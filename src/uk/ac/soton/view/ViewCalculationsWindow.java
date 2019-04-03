@@ -7,7 +7,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class ViewCalculationsWindow extends JFrame{
+class ViewCalculationsWindow extends JFrame{
 
     private ViewController controller;
     private AppView appView;
@@ -63,7 +63,7 @@ public class ViewCalculationsWindow extends JFrame{
     }
 
     // Creates a content panel for a tab including the parameter breakdown and original/redeclared values.
-    protected JComponent setPanelContent(String text, Integer original, Integer redeclared){
+    private JComponent setPanelContent(String text, Integer original, Integer redeclared){
 
         JPanel panel = new JPanel();
         JTextArea breakdown = new JTextArea(text);
@@ -71,7 +71,7 @@ public class ViewCalculationsWindow extends JFrame{
         breakdown.setWrapStyleWord(true);
         breakdown.setEditable(false);
 
-        JTable table = null;
+        JTable table;
         String[] headings = new String[]{"Original", "Re-declared"};
 
         if(redeclared == null){
