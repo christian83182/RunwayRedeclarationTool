@@ -7,6 +7,7 @@ public class Runway extends PositionalObject{
     private Integer width = 0;
     private String status = "";
     private Boolean active = true;
+    private Boolean redeclared = false;
 
     // Runway end safety area
     private Integer resa = 240;
@@ -199,6 +200,8 @@ public class Runway extends PositionalObject{
         }
         else{
 
+            redeclared = true;
+
             if(runways[0].getObjectThresholdDistance().intValue() < (runways[1].getObjectThresholdDistance().intValue())){
                 objectCloserToThisThreshold = runways[0];
                 recalculateTowardsObstacle(runways[1]);
@@ -210,6 +213,10 @@ public class Runway extends PositionalObject{
                 recalculateAwayFromObstacle(runways[1]);
             }
         }
+    }
+
+    public boolean isRedeclared(){
+        return this.redeclared;
     }
 
     /**

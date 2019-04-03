@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Polygon;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import uk.ac.soton.controller.ViewController;
 
@@ -98,6 +99,7 @@ public class View3D extends JFrame{
         generateRunwayStrip(root3D, selectedRunway);
         generateClearAndGraded(root3D, selectedRunway);
         generateRunway(root3D, selectedRunway);
+        generateParameters(root3D, selectedRunway);
         generateLighting(root3D);
         pointCameraAt(new Point3D(pos.x,0, -pos.y),root3D);
 
@@ -184,6 +186,7 @@ public class View3D extends JFrame{
             if(!(generatedRunways.contains(currentRunwayBearing+180) || generatedRunways.contains(currentRunwayBearing-180))){
 
                 generateRunway(root, runwayId);
+                generateParameters(root, runwayId);
                 generateRunwayStrip(root, runwayId);
                 generateClearAndGraded(root, runwayId);
 
@@ -191,6 +194,21 @@ public class View3D extends JFrame{
                 generatedRunways.add(currentRunwayBearing);
             }
         }
+    }
+
+    private void generateParameters(Group root, String runwayId){
+
+        //draw the stopway
+        genStopway(root, runwayId, 23);
+
+        //draw the clearway
+        genClearway(root, runwayId, 30);
+
+        //if an obstacle exists, place the obstacle on the airfield
+        if(!controller.getRunwayObstacle(runwayId).equals("")){
+            genObstacle(root, runwayId, 9);
+        }
+
     }
 
     //Creates a Box of the same dimensions and position as runwayId, with the correct material, and adds it to root.
@@ -216,16 +234,44 @@ public class View3D extends JFrame{
         //Add the box to the root group.
         root.getChildren().add(runwayBox);
 
-        //draw the stopway
-        genStopway(root, runwayId, 23);
+        //display label name of the runway
+        genRunwayName(root, runwayId, height);
 
-        //draw the clearway
-        genClearway(root, runwayId, 30);
+    }
 
-        //if an obstacle exists, place the obstacle on the airfield
-        if(!controller.getRunwayObstacle(runwayId).equals("")){
-           genObstacle(root, runwayId, height);
-        }
+    // helper function to display the name of each logical runway
+    private void genRunwayName(Group root, String runwayId, Integer helperHeight){
+        Point runwayPos  = controller.getRunwayPos(runwayId);
+        Dimension runwayDim = controller.getRunwayDim(runwayId);
+
+        Text text = new Text(runwayId);
+        text.setFill(Color.WHITE);
+        text.setFont(javafx.scene.text.Font.font("SansSerif", runwayDim.height));
+
+        Integer offset = 100;
+        text.setTranslateX(runwayPos.x - runwayDim.height/2);
+        text.setTranslateZ(-runwayPos.y + runwayDim.width - offset);
+        text.setTranslateY(-helperHeight);
+        Rotate rotate =  new Rotate(controller.getBearing(runwayId), runwayDim.height/2,0,-runwayDim.width + offset, Rotate.Y_AXIS);
+        text.getTransforms().add(rotate);
+        text.setCache(true);
+        text.setCacheHint(CacheHint.QUALITY);
+        root.getChildren().add(text);
+
+        Text sibling = new Text(controller.getSiblingLogicalRunway(runwayId));
+        sibling.setFill(Color.WHITE);
+        sibling.setFont(javafx.scene.text.Font.font("SansSerif", runwayDim.height));
+
+        sibling.setTranslateX(runwayPos.x - runwayDim.height/2);
+        sibling.setTranslateZ(-runwayPos.y + offset);
+        sibling.setTranslateY(-helperHeight);
+
+        Rotate siblingRotate = new Rotate(controller.getBearing(runwayId), runwayDim.height/2,0,-offset, Rotate.Y_AXIS);
+
+        sibling.getTransforms().add(siblingRotate);
+        sibling.setCache(true);
+        sibling.setCacheHint(CacheHint.QUALITY);
+        root.getChildren().add(sibling);
 
     }
 
@@ -249,7 +295,9 @@ public class View3D extends JFrame{
             obstacle.setTranslateX(runwayPos.x - controller.getDistanceFromCenterline(runwayId) + controller.getPredefinedObstacleLength(obstacleId));
         }
         obstacle.setTranslateZ(-runwayPos.y + controller.getDistanceFromThreshold(runwayId) );
-        obstacle.setTranslateY(-helperHeight);
+        
+        //TODO: change this so when the obstacle is not on the runway then it doesn t show a larger height than the height of the obstacle
+        obstacle.setTranslateY(-helperHeight-controller.getPredefinedObstacleHeight(obstacleId));
 
         Rotate rotate = new Rotate(controller.getBearing(runwayId), -controller.getDistanceFromCenterline(runwayId),0,- controller.getDistanceFromThreshold(runwayId), Rotate.Y_AXIS);
         obstacle.getTransforms().add(rotate);
