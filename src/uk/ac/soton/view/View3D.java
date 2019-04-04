@@ -20,6 +20,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+//todo Offset the start and stopway by an arbitrary amount to prevent shading conflicts.
+//todo Change the rendering of text such that the method renders it for only the logical runway given, and is displayed flat on the runway.
+//todo Add/Implement a method to draw the centerline for each runway.
+
 public class View3D extends JFrame{
 
     private AppView appView;
@@ -186,29 +190,29 @@ public class View3D extends JFrame{
             if(!(generatedRunways.contains(currentRunwayBearing+180) || generatedRunways.contains(currentRunwayBearing-180))){
 
                 generateRunway(root, runwayId);
-                generateParameters(root, runwayId);
                 generateRunwayStrip(root, runwayId);
                 generateClearAndGraded(root, runwayId);
+
+                if(!controller.getRunwayObstacle(runwayId).equals("")){
+                    genObstacle(root, runwayId, 18);
+                }
 
                 //Add the runway to the list of generated runways.
                 generatedRunways.add(currentRunwayBearing);
             }
         }
+        //Use a second loop to iterate over all logical runways and render anything which should be displayed for both.
+        for(String runwayId: controller.getRunways()){
+            generateParameters(root, runwayId);
+        }
     }
 
     private void generateParameters(Group root, String runwayId){
-
-        //draw the stopway
+        //Draw the stopway
         genStopway(root, runwayId, 23);
 
-        //draw the clearway
+        //Draw the clearway
         genClearway(root, runwayId, 30);
-
-        //if an obstacle exists, place the obstacle on the airfield
-        if(!controller.getRunwayObstacle(runwayId).equals("")){
-            genObstacle(root, runwayId, 9);
-        }
-
     }
 
     //Creates a Box of the same dimensions and position as runwayId, with the correct material, and adds it to root.
@@ -233,10 +237,6 @@ public class View3D extends JFrame{
 
         //Add the box to the root group.
         root.getChildren().add(runwayBox);
-
-        //display label name of the runway
-        genRunwayName(root, runwayId, height);
-
     }
 
     // helper function to display the name of each logical runway
@@ -276,30 +276,25 @@ public class View3D extends JFrame{
     }
 
     //placing the obstacle on the runway
-    private void genObstacle(Group root, String runwayId, Integer helperHeight){
+    private void genObstacle(Group root, String runwayId, Integer verticalOffset){
         String obstacleId = controller.getRunwayObstacle(runwayId);
         Integer obstacleHeight = controller.getPredefinedObstacleHeight(obstacleId).intValue();
         Integer obstacleWidth = controller.getPredefinedObstacleWidth(obstacleId).intValue();
         Integer obstacleLength = controller.getPredefinedObstacleLength(obstacleId).intValue();
+        Integer distanceFromCenterline = controller.getDistanceFromCenterline(runwayId);
+        Integer distanceFromThreshold = controller.getDistanceFromThreshold(runwayId);
 
-        Box obstacle = new Box(obstacleLength, obstacleHeight, obstacleWidth);
+        Box obstacle = new Box(obstacleWidth, obstacleHeight, obstacleLength);
         PhongMaterial obstacleMaterial = new PhongMaterial(convertToJFXColour(Settings.OBSTACLE_FILL_COLOUR));
         obstacle.setMaterial(obstacleMaterial);
 
-        //the position of the obstacle on the runway has to dependent on the distance from threshold and centerline
-        //the position relative to the centerline needs to be adjusted depending if the number is positive or negative
+        //The position of the obstacle on the runway has to dependent on the distance from threshold and centerline
         Point runwayPos = controller.getRunwayPos(runwayId);
-        if(controller.getDistanceFromCenterline(runwayId)>0) {
-            obstacle.setTranslateX(runwayPos.x - controller.getDistanceFromCenterline(runwayId) - controller.getPredefinedObstacleLength(obstacleId));
-        }else{
-            obstacle.setTranslateX(runwayPos.x - controller.getDistanceFromCenterline(runwayId) + controller.getPredefinedObstacleLength(obstacleId));
-        }
-        obstacle.setTranslateZ(-runwayPos.y + controller.getDistanceFromThreshold(runwayId) );
-        
-        //TODO: change this so when the obstacle is not on the runway then it doesn t show a larger height than the height of the obstacle
-        obstacle.setTranslateY(-helperHeight-controller.getPredefinedObstacleHeight(obstacleId));
+        obstacle.setTranslateX(runwayPos.x - distanceFromCenterline);
+        obstacle.setTranslateZ(-runwayPos.y + distanceFromThreshold);
+        obstacle.setTranslateY(-obstacleHeight/2-verticalOffset);
 
-        Rotate rotate = new Rotate(controller.getBearing(runwayId), -controller.getDistanceFromCenterline(runwayId),0,- controller.getDistanceFromThreshold(runwayId), Rotate.Y_AXIS);
+        Rotate rotate = new Rotate(controller.getBearing(runwayId), distanceFromCenterline, 0,-distanceFromThreshold, Rotate.Y_AXIS);
         obstacle.getTransforms().add(rotate);
 
         root.getChildren().add(obstacle);
