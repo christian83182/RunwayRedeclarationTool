@@ -1,11 +1,14 @@
 package uk.ac.soton.view;
 
+import javafx.scene.transform.Affine;
 import uk.ac.soton.controller.ViewController;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 import java.util.ArrayList;
 
 //Represents a JPanel designed to view a top-down view of the runways.
@@ -77,6 +80,28 @@ public class TopViewPanel extends InteractivePanel {
             g2.fillRect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
         } catch (NoninvertibleTransformException e) {
             e.printStackTrace();
+        }
+
+        if(controller.getBackgroundImage()!=null){
+            BufferedImage img = controller.getBackgroundImage();
+            Point offset = controller.getBackgroundImageOffset();
+            Double scale = controller.getBackgroundImageScale();
+            Double rotation = controller.getBackgroundRotation();
+
+            Integer xPos = (int)(-img.getWidth()*scale)/2 + offset.x;
+            Integer yPos = (int)(-img.getHeight()*scale)/2 + offset.y;
+            Integer width = (int)(img.getWidth()*scale);
+            Integer height = (int)(img.getHeight()*scale);
+
+            AffineTransform old = g2.getTransform();
+            AffineTransform tx = (AffineTransform) old.clone();
+            AffineTransform rx = new AffineTransform();
+            rx.setToRotation(Math.toRadians(rotation),xPos+width/2,yPos+height/2);
+            tx.concatenate(rx);
+            g2.setTransform(tx);
+
+            g2.drawImage(img, xPos, yPos, width, height,null);
+            g2.setTransform(old);
         }
     }
 

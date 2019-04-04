@@ -5,8 +5,11 @@ import org.xml.sax.SAXException;
 import uk.ac.soton.common.*;
 import uk.ac.soton.view.AppView;
 
+import javax.imageio.ImageIO;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -19,9 +22,18 @@ public class AppController implements ViewController {
     //The model which the controller would interact with
     private Airfield airfield;
 
+    private BufferedImage backgroundImage;
+
     public AppController(AppView appView){
         this.appView = appView;
         this.airfield = new Airfield();
+
+        try {
+            File imageFile = new File(".\\src\\uk\\ac\\soton\\TestImage.png");
+            backgroundImage = ImageIO.read(imageFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void testRunways(){
@@ -67,7 +79,6 @@ public class AppController implements ViewController {
         airfield.addRunway(r4);
         airfield.addRunway(r5);
     }
-
 
     public synchronized Airfield getAirfield() {
         return airfield;
@@ -393,7 +404,7 @@ public class AppController implements ViewController {
     @Override
     public synchronized void addObstacleToRunway(String runwayId, String obstacleId, Integer distanceFromCenterline, Integer distanceFromEdge) {
         Runway runway = airfield.getRunway(runwayId);
-        Obstacle obstacle = new Obstacle(obstacleId, distanceFromEdge, distanceFromCenterline, getPredefinedObstacles().get(obstacleId));
+        Obstacle obstacle = new Obstacle(obstacleId, distanceFromEdge, distanceFromCenterline, airfield.getPredefinedObstacles().get(obstacleId));
         runway.placeObstacle(obstacle, runwayId);
         redeclareRunway(runwayId);
     }
@@ -464,12 +475,12 @@ public class AppController implements ViewController {
     }
 
     @Override
-    public String getAirfieldName() {
+    public synchronized String getAirfieldName() {
         return "Heathrow";
     }
 
     @Override
-    public String getSiblingLogicalRunway(String runwayId) {
+    public synchronized String getSiblingLogicalRunway(String runwayId) {
         Runway runway = airfield.getRunway(runwayId);
         if(runway.getLogicalRunways()[0].getName().equals(runwayId)){
             return runway.getLogicalRunways()[1].getName();
@@ -478,45 +489,62 @@ public class AppController implements ViewController {
     }
 
     @Override
-    public Integer getBlastingDistance(String runwayId) {
+    public synchronized Integer getBlastingDistance(String runwayId) {
         return airfield.getRunway(runwayId).getBlastDistance();
     }
 
     @Override
-    public Integer getRESADistance(String runwayId) {
+    public synchronized Integer getRESADistance(String runwayId) {
         return airfield.getRunway(runwayId).getResa();
     }
 
     @Override
-    public Integer getALS(String runwayId) {
+    public synchronized Integer getALS(String runwayId) {
         return airfield.getRunway(runwayId).getAls();
     }
 
     @Override
-    public boolean isRedeclared(String runwayId) {
+    public synchronized boolean isRedeclared(String runwayId) {
         return airfield.getRunway(runwayId).isRedeclared();
     }
 
     @Override
-    public void setRESADistance(String runwayId, Integer RESAvalue) {
+    public synchronized void setRESADistance(String runwayId, Integer RESAvalue) {
         airfield.getRunway(runwayId).setResa(RESAvalue);
-
     }
 
     @Override
-    public void setBlastingDistance(String runwayId, Integer blastingDistance) {
+    public synchronized void setBlastingDistance(String runwayId, Integer blastingDistance) {
         airfield.getRunway(runwayId).setBlastDistance(blastingDistance);
     }
+
+    @Override
+    public synchronized BufferedImage getBackgroundImage() {
+        return backgroundImage;
+    }
+
+    @Override
+    public synchronized Point getBackgroundImageOffset() {
+        return new Point(0,0);
+    }
+
+    @Override
+    public synchronized Double getBackgroundImageScale() {
+        return 1.0;
+    }
+
+    @Override
+    public Double getBackgroundRotation() {
+        return 0.0;
+    }
+
+    //  --------- Non-Interface Methods ----------
 
     private synchronized void redeclareRunway(String runwayId){
         airfield.getRunway(runwayId).recalculateParameters();
     }
 
     private synchronized Map<String,Airfield.Dimensions> getPredefinedObstacles() { return airfield.getPredefinedObstacles(); }
-
-
-    //  --------- Non-Interface Methods ----------
-
 
     public Runway getRunway(String name){ return airfield.getRunway(name); }
 
@@ -535,7 +563,7 @@ public class AppController implements ViewController {
     }
 
     public void placeObstacle(String runwayId, String type, Integer centrelineDistance, Integer startDistance) {
-        Obstacle obstacle = new Obstacle(startDistance, centrelineDistance, getPredefinedObstacles().get(type));
+        Obstacle obstacle = new Obstacle(startDistance, centrelineDistance, airfield.getPredefinedObstacles().get(type));
         Runway runway = airfield.getRunway(runwayId);
         runway.placeObstacle(obstacle, runwayId);
     }

@@ -5,6 +5,7 @@ import uk.ac.soton.common.LogicalRunway;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Set;
 
@@ -384,6 +385,29 @@ public interface ViewController {
      * @param blastingDistance The new blasting distance for the logical runway.
      */
     void setBlastingDistance(String runwayId, Integer blastingDistance);
+
+    /**
+     * Returns an instance of Image which represents the image which should be displayed as the background on the top view.
+     * @return The image which should be used as a background. Null if there is no background image.
+     */
+    BufferedImage getBackgroundImage();
+
+    /**
+     * Returns a point representing the offset of the image from the origin. In other words, how much the image should be moved to line up
+     * with the local coordinate system used by the program.
+     * @return The offset of the image from the origin as a Point object.
+     */
+    Point getBackgroundImageOffset();
+
+    /**
+     * @return A double representing the scaling which should be applied to the background image.
+     */
+    Double getBackgroundImageScale();
+
+    /**
+     * @return A double representing the rotation which should be applied to the background image.
+     */
+    Double getBackgroundRotation();
 
 }
 
