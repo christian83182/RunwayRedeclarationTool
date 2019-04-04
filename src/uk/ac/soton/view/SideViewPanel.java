@@ -169,9 +169,21 @@ public class SideViewPanel extends InteractivePanel{
     public void paintParameters(Graphics2D g2){
 
         String selectedRunway = appView.getSelectedRunway();
+        String obstacle = controller.getRunwayObstacle(selectedRunway);
 
         //displaying lda
         Integer ldaOffset = controller.getLDAOffset(selectedRunway);
+
+        if(!obstacle.equals("")){
+            if(controller.isRedeclared(selectedRunway)) {
+
+                // If LDA will be drawn to the right of the obstacle
+                if (controller.getLogicalRunwayCloserToObstacle(selectedRunway).getName().equals(selectedRunway)) {
+                    ldaOffset = ldaOffset + controller.getRunwayThreshold(selectedRunway);
+                }
+            }
+        }
+
         Integer lda = controller.getRunwayLDA(selectedRunway);
         String ldaLabel = new String("LDA: " + lda);
         Point startLda = new Point(ldaOffset,0);
@@ -205,8 +217,6 @@ public class SideViewPanel extends InteractivePanel{
         Point endAsda = new Point (asda + asdaOffset, 0);
         DataArrow asdaArrow = new DataArrow(startAsda, endAsda, 400, asdaLabel);
         asdaArrow.drawHorizontalArrow(g2);
-
-        String obstacle = controller.getRunwayObstacle(selectedRunway);
 
         //if obstacle exists, display obstacle related distances
         if(!obstacle.equals("")){

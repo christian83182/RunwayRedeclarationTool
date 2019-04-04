@@ -409,7 +409,19 @@ public class TopViewPanel extends InteractivePanel {
 
         //Draw the LDA length.
         Integer ldaLength = controller.getRunwayLDA(id);
-        InfoArrow ldaLengthInfo = new InfoArrow(controller.getLDAOffset(id),
+        Integer ldaOffset = controller.getLDAOffset(id);
+
+        if(!controller.getRunwayObstacle(id).equals("")){
+            if(controller.isRedeclared(id)) {
+
+                // If LDA will be drawn to the right of the obstacle
+                if (controller.getLogicalRunwayCloserToObstacle(id).getName().equals(id)) {
+                    ldaOffset = ldaOffset + controller.getRunwayThreshold(id);
+                }
+            }
+        }
+
+        InfoArrow ldaLengthInfo = new InfoArrow(ldaOffset,
                 stripHeight+50, ldaLength,"LDA: " + ldaLength + "m", true);
         ldaLengthInfo.drawInfoArrow(id, g2);
     }
