@@ -345,11 +345,10 @@ public interface ViewController {
     String getSiblingLogicalRunway(String runwayId);
 
     /**
-     * Gets the for the blasting distance of the logical runway.
-     * @param runwayId The logicalRunway on which the obstacle is present.
+     * Gets the blasting distance.
      * @return The value of the blasting distance.
      */
-    Integer getBlastingDistance(String runwayId);
+    Integer getBlastingDistance();
 
     /**
      * Gets the RESA value of the logical runway.
@@ -380,11 +379,10 @@ public interface ViewController {
     void setRESADistance(String runwayId, Integer RESADistance);
 
     /**
-     * Sets the blasting distance of the logical runway.
-     * @param runwayId The logicalRunway on which the obstacle is present.
+     * Sets the blasting distance.
      * @param blastingDistance The new blasting distance for the logical runway.
      */
-    void setBlastingDistance(String runwayId, Integer blastingDistance);
+    void setBlastingDistance(Integer blastingDistance);
 
     /**
      * Returns an instance of Image which represents the image which should be displayed as the background on the top view.

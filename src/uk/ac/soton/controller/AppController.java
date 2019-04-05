@@ -486,9 +486,8 @@ public class AppController implements ViewController {
         return runway.getLogicalRunways()[0].getName();
     }
 
-    // TODO runwayId not needed anymore
     @Override
-    public synchronized Integer getBlastingDistance(String runwayId) {
+    public synchronized Integer getBlastingDistance() {
         return Airfield.getBlastProtection();
     }
 
@@ -512,9 +511,8 @@ public class AppController implements ViewController {
         airfield.getRunway(runwayId).setResa(RESAvalue);
     }
 
-    // TODO runwayId not needed anymore
     @Override
-    public synchronized void setBlastingDistance(String runwayId, Integer blastingDistance) {
+    public synchronized void setBlastingDistance(Integer blastingDistance) {
         Airfield.setBlastProtection(blastingDistance);
     }
 

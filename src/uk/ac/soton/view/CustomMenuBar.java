@@ -107,6 +107,12 @@ public class CustomMenuBar extends JMenuBar {
             }
         });
 
+        //Adding the Edit Blast Protection option to the edit menu.
+        JMenuItem editBlastMenu = new JMenuItem("Edit Blast Protection...");
+        editBlastMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
+        editMenu.add(editBlastMenu);
+        editBlastMenu.addActionListener(e -> blastValueInputLoop());
+
         //Adding the "edit obstacles" option to the edit menu.
         JMenuItem editObstaclesMenu = new JMenuItem("Edit Predefined Obstacles...");
         editObstaclesMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
@@ -180,6 +186,54 @@ public class CustomMenuBar extends JMenuBar {
             } catch (IOException e1) {
                 e1.printStackTrace();
                 NotificationLogger.logger.addToLog("View could not be exported");
+            }
+        }
+    }
+
+    private void blastValueInputLoop(){
+        while(true){
+            try{
+                String input = JOptionPane.showInputDialog(
+                        appView,
+                        "Enter Blast Protection value (300-500):",
+                        "Edit Blast Protection",
+                        JOptionPane.PLAIN_MESSAGE
+                );
+
+                if(input == null){
+                    return;
+                }
+                Integer newValue = Integer.parseInt(input);
+
+                while(newValue < 300 || newValue > 500){
+                    JOptionPane.showMessageDialog(appView,
+                            "Please enter a value between 300-500.",
+                            "Input Error",
+                            JOptionPane.ERROR_MESSAGE);
+
+                    input = JOptionPane.showInputDialog(
+                            appView,
+                            "Enter Blast Protection value (300-500):",
+                            "Edit Blast Protection",
+                            JOptionPane.PLAIN_MESSAGE
+                    );
+
+                    if(input == null){
+                        return;
+                    }
+                    newValue = Integer.parseInt(input);
+                }
+
+                controller.setBlastingDistance(newValue);
+                //TODO redeclare all runways with obstacles
+                break;
+            }
+            catch(NumberFormatException nfe){
+
+                JOptionPane.showMessageDialog(appView,
+                        "Non-digit characters recognised, please enter a valid number.",
+                        "Input Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
     }

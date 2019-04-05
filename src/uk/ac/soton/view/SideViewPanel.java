@@ -268,7 +268,7 @@ public class SideViewPanel extends InteractivePanel{
             drawParameterToTheRight(g2, -300, new String (newStripEnd + " m"), newStripEnd, obstacleDistance +  alsDistance);
         }
 
-        Integer blastingDistance = controller.getBlastingDistance(selectedRunway);
+        Integer blastingDistance = controller.getBlastingDistance();
         drawParameterToTheRight(g2, -400, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance + obstacleLength);
 
         g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
@@ -311,7 +311,7 @@ public class SideViewPanel extends InteractivePanel{
             drawParameterToTheLeft(g2, -300, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength - alsDistance);
         }
 
-        Integer blastingDistance = controller.getBlastingDistance(selectedRunway);
+        Integer blastingDistance = controller.getBlastingDistance();
         drawParameterToTheRight(g2, -400, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance - blastingDistance);
 
         g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
