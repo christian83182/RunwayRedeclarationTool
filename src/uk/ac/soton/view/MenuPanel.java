@@ -81,7 +81,6 @@ public class MenuPanel extends JPanel {
         //  ---- Creating & adding elements to the general Pane ----
 
         //Add a "Selected Runway" label
-        String s= new String();
         JLabel selectedRunwayLabel = new JLabel("Selected Runway:");
         selectedRunwayLabel.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         c = new GridBagConstraints();
@@ -133,7 +132,6 @@ public class MenuPanel extends JPanel {
         c.gridwidth = 3; c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0,10,10,10);
         generalPane.add(show3DViewButton, c);
-
 
         //  ---- Adding elements to the top view pane ----
 

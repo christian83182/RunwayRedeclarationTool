@@ -23,17 +23,17 @@ public class AppController implements ViewController {
     private Airfield airfield;
 
     private BufferedImage backgroundImage;
+    private Point bgImageOffset;
+    private Double bgImageScale;
+    private Double bgImageRotation;
 
     public AppController(AppView appView){
         this.appView = appView;
         this.airfield = new Airfield();
-
-        try {
-            File imageFile = new File(".\\src\\uk\\ac\\soton\\TestImage.png");
-            backgroundImage = ImageIO.read(imageFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.backgroundImage = null;
+        this.bgImageOffset = new Point(0,0);
+        this.bgImageScale = 1.0;
+        this.bgImageRotation = 0.0;
     }
 
     public void testRunways(){
@@ -524,19 +524,41 @@ public class AppController implements ViewController {
     }
 
     @Override
+    public void setBackgroundImage(BufferedImage img){
+        this.backgroundImage = img;
+    }
+
+    @Override
     public synchronized Point getBackgroundImageOffset() {
-        return new Point(0,0);
+        return bgImageOffset;
+    }
+
+    @Override
+    public void setBackgroundImageOffset(Point offset) {
+        this.bgImageOffset = offset;
     }
 
     @Override
     public synchronized Double getBackgroundImageScale() {
-        return 1.0;
+        return bgImageScale;
+    }
+
+    @Override
+    public void setBackgroundImageScale(Double scale) {
+        this.bgImageScale = scale;
     }
 
     @Override
     public Double getBackgroundRotation() {
-        return 0.0;
+        return bgImageRotation;
     }
+
+    @Override
+    public void setBackgroundRotation(Double rotation) {
+        this.bgImageRotation = rotation;
+    }
+
+
 
     //  --------- Non-Interface Methods ----------
 
