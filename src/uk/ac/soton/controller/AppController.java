@@ -20,7 +20,7 @@ public class AppController implements ViewController {
     private AppView appView;
 
     //The model which the controller would interact with
-    private Airfield airfield;
+    public Airfield airfield;
 
     private BufferedImage backgroundImage;
     private Point bgImageOffset;

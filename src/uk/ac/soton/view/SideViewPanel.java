@@ -234,6 +234,7 @@ public class SideViewPanel extends InteractivePanel{
             //TODO: displaying height of the obstacle (problem: will be extremely small though, implement vertical arrow)
 
         }
+
     }
 
     //all parameters drawn to the left of the obstacle are drawn from a specified distance
