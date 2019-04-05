@@ -95,8 +95,6 @@ public class AppController implements ViewController {
             logicalRunways.add(runway.getName());
         }
         return logicalRunways;
-        //return new TreeSet<String>(airfield.getAllLogicalRunways().stream().map(r
-        //        -> r.getName()).collect(Collectors.toList()));
     }
 
     @Override
@@ -610,7 +608,7 @@ public class AppController implements ViewController {
 
     public void setRunwayStatus(Runway runway, String status) { runway.setStatus(status);  }
 
-    public void setBlastDistance(Runway runway, Integer blastDistance){ runway.setBlastDistance(blastDistance);}
+    public void setBlastDistance(Runway runway, Integer blastDistance){ Airfield.setBlastProtection(blastDistance);}
 
-    public Integer getBlastDistance(Runway runway) { return runway.getBlastDistance(); }
+    public Integer getBlastDistance(Runway runway) { return Airfield.getBlastProtection(); }
 }
