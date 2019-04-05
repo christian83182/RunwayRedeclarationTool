@@ -514,6 +514,12 @@ public class AppController implements ViewController {
     @Override
     public synchronized void setBlastingDistance(Integer blastingDistance) {
         Airfield.setBlastProtection(blastingDistance);
+
+        ArrayList<Runway> runways = airfield.getRunways();
+
+        for(int i = 0; i < runways.size(); i++){
+            runways.get(i).recalculateParameters();
+        }
     }
 
     @Override

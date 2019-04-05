@@ -225,7 +225,6 @@ public class CustomMenuBar extends JMenuBar {
                 }
 
                 controller.setBlastingDistance(newValue);
-                //TODO redeclare all runways with obstacles
                 break;
             }
             catch(NumberFormatException nfe){
