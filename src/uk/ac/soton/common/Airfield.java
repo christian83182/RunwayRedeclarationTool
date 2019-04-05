@@ -5,6 +5,8 @@ import java.util.*;
 public class Airfield {
 
     private ArrayList<Runway> runways = new ArrayList<Runway>();
+    private static Integer blastProtection = 300;
+
     private Map<String,Dimensions> predefinedObstacles = new HashMap<String,Dimensions>(){
         {
             // Airbus 320 series
@@ -190,6 +192,14 @@ public class Airfield {
         dimensions.setLength(length);
         dimensions.setWidth(width);
         dimensions.setHeight(height);
+    }
+
+    public static Integer getBlastProtection() {
+        return blastProtection;
+    }
+
+    public static void setBlastProtection(Integer blast) {
+        blastProtection = blast;
     }
 
     public static class Dimensions {
