@@ -1,6 +1,7 @@
-package uk.ac.soton.common;
+package uk.ac.soton.tests.uk.ac.soton.common;
 
 import org.junit.Test;
+import uk.ac.soton.common.*;
 
 import java.awt.*;
 import java.util.*;
@@ -190,4 +191,11 @@ public class AirfieldTest {
         assertEquals(true, airfield.getPredefinedObstacles().get("object1").getHeight() == 12.3);
     }
 
+    @Test
+    public void setBlastProtection() throws Exception {
+        Airfield.setBlastProtection(500);
+        assertEquals((Integer)500, Airfield.getBlastProtection());
+        Airfield.setBlastProtection(300);
+        assertEquals((Integer)300, Airfield.getBlastProtection());
+    }
 }

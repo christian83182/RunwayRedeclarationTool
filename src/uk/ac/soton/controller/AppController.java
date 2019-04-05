@@ -479,7 +479,7 @@ public class AppController implements ViewController {
 
     @Override
     public Integer getBlastingDistance(String runwayId) {
-        return airfield.getRunway(runwayId).getBlastDistance();
+        return Airfield.getBlastProtection();
     }
 
     @Override
@@ -500,12 +500,12 @@ public class AppController implements ViewController {
     @Override
     public void setRESADistance(String runwayId, Integer RESAvalue) {
         airfield.getRunway(runwayId).setResa(RESAvalue);
-
     }
 
+    // TODO runwayId not needed anymore
     @Override
     public void setBlastingDistance(String runwayId, Integer blastingDistance) {
-        airfield.getRunway(runwayId).setBlastDistance(blastingDistance);
+        Airfield.setBlastProtection(blastingDistance);
     }
 
     private synchronized void redeclareRunway(String runwayId){
@@ -557,8 +557,4 @@ public class AppController implements ViewController {
     public String getRunwayStatus(Runway runway) { return runway.getStatus(); }
 
     public void setRunwayStatus(Runway runway, String status) { runway.setStatus(status);  }
-
-    public void setBlastDistance(Runway runway, Integer blastDistance){ runway.setBlastDistance(blastDistance);}
-
-    public Integer getBlastDistance(Runway runway) { return runway.getBlastDistance(); }
 }
