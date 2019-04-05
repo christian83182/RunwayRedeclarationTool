@@ -1,18 +1,20 @@
 package uk.ac.soton.view;
 
 import javafx.application.Platform;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.*;
 import javafx.embed.swing.JFXPanel;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Tooltip;
 import javafx.scene.paint.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Rotate;
 import uk.ac.soton.controller.ViewController;
 
@@ -20,9 +22,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+import static uk.ac.soton.view.Settings.*;
+
 //todo Offset the start and stopway by an arbitrary amount to prevent shading conflicts.
-//todo Change the rendering of text such that the method renders it for only the logical runway given, and is displayed flat on the runway.
-//todo Add/Implement a method to draw the centerline for each runway.
 
 public class View3D extends JFrame{
 
@@ -32,6 +34,8 @@ public class View3D extends JFrame{
     private double dragStartX, dragStartY, anchorAngleX, anchorAngleY;
     private double xOffset, yOffset, zOffset;
     private DoubleProperty angleX, angleY;
+
+    private final Integer runwayNameOffset = 50;
 
     View3D(AppView appView){
         super("3D Visualization");
@@ -68,7 +72,7 @@ public class View3D extends JFrame{
 
         Group root3D = new Group();
         SubScene scene3D = new SubScene(root3D, getWidth(), getHeight(), true, SceneAntialiasing.BALANCED);
-        scene3D.setFill(convertToJFXColour(Settings.AIRFIELD_COLOUR));
+        scene3D.setFill(convertToJFXColour(AIRFIELD_COLOUR));
         globalRoot.getChildren().add(scene3D);
 
         createScene(globalRoot, root3D);
@@ -104,6 +108,8 @@ public class View3D extends JFrame{
         generateClearAndGraded(root3D, selectedRunway);
         generateRunway(root3D, selectedRunway);
         generateParameters(root3D, selectedRunway);
+        genRunwayName(root3D, selectedRunway, 18);
+        genCenterline(root3D, selectedRunway, 18);
         generateLighting(root3D);
         pointCameraAt(new Point3D(pos.x,0, -pos.y),root3D);
 
@@ -190,6 +196,7 @@ public class View3D extends JFrame{
             if(!(generatedRunways.contains(currentRunwayBearing+180) || generatedRunways.contains(currentRunwayBearing-180))){
 
                 generateRunway(root, runwayId);
+                genCenterline(root, runwayId, 18);
                 generateRunwayStrip(root, runwayId);
                 generateClearAndGraded(root, runwayId);
 
@@ -204,6 +211,7 @@ public class View3D extends JFrame{
         //Use a second loop to iterate over all logical runways and render anything which should be displayed for both.
         for(String runwayId: controller.getRunways()){
             generateParameters(root, runwayId);
+            genRunwayName(root, runwayId, 18);
         }
     }
 
@@ -223,7 +231,7 @@ public class View3D extends JFrame{
 
         //Creates a box of the right size and material.
         Box runwayBox = new Box(dim.height,height,dim.width);
-        PhongMaterial runwayMaterial = new PhongMaterial(convertToJFXColour(Settings.RUNWAY_COLOUR));
+        PhongMaterial runwayMaterial = new PhongMaterial(convertToJFXColour(RUNWAY_COLOUR));
         runwayBox.setMaterial(runwayMaterial);
 
         //Moves the box to the correct position, and elevates it so it's entirely above the x=0, z=0 plane.
@@ -244,34 +252,35 @@ public class View3D extends JFrame{
         Point runwayPos  = controller.getRunwayPos(runwayId);
         Dimension runwayDim = controller.getRunwayDim(runwayId);
 
-        Text text = new Text(runwayId);
-        text.setFill(Color.WHITE);
-        text.setFont(javafx.scene.text.Font.font("SansSerif", runwayDim.height));
+        //set text color and text font
+        javafx.scene.text.Font font = new javafx.scene.text.Font("SansSerif", runwayDim.height/2);
+        Color fontColor = convertToJFXColour(Settings.RUNWAY_NAME_COLOUR);
 
-        Integer offset = 100;
-        text.setTranslateX(runwayPos.x - runwayDim.height/2);
-        text.setTranslateZ(-runwayPos.y + runwayDim.width - offset);
+        Text text = new Text(runwayId);
+        text.setFill(fontColor);
+        text.setFont(font);
+
+        Integer textOffset;
+
+        if(runwayId.length() == 2){
+            textOffset = 15;
+        }else{
+            textOffset = 0;
+        }
+
+        text.setTranslateX(runwayPos.x - runwayDim.height/2 + textOffset);
+        text.setTranslateZ(-runwayPos.y + runwayDim.width - runwayNameOffset);
         text.setTranslateY(-helperHeight);
-        Rotate rotate =  new Rotate(controller.getBearing(runwayId), runwayDim.height/2,0,-runwayDim.width + offset, Rotate.Y_AXIS);
+
+        Rotate rotate =  new Rotate(controller.getBearing(runwayId), runwayDim.height/2 - textOffset,0,-runwayDim.width + runwayNameOffset, Rotate.Y_AXIS);
         text.getTransforms().add(rotate);
+
+        Rotate rotate2 = new Rotate(-90,0,-1,0, Rotate.X_AXIS);
+        text.getTransforms().add(rotate2);
+
         text.setCache(true);
         text.setCacheHint(CacheHint.QUALITY);
         root.getChildren().add(text);
-
-        Text sibling = new Text(controller.getSiblingLogicalRunway(runwayId));
-        sibling.setFill(Color.WHITE);
-        sibling.setFont(javafx.scene.text.Font.font("SansSerif", runwayDim.height));
-
-        sibling.setTranslateX(runwayPos.x - runwayDim.height/2);
-        sibling.setTranslateZ(-runwayPos.y + offset);
-        sibling.setTranslateY(-helperHeight);
-
-        Rotate siblingRotate = new Rotate(controller.getBearing(runwayId), runwayDim.height/2,0,-offset, Rotate.Y_AXIS);
-
-        sibling.getTransforms().add(siblingRotate);
-        sibling.setCache(true);
-        sibling.setCacheHint(CacheHint.QUALITY);
-        root.getChildren().add(sibling);
 
     }
 
@@ -285,19 +294,45 @@ public class View3D extends JFrame{
         Integer distanceFromThreshold = controller.getDistanceFromThreshold(runwayId);
 
         Box obstacle = new Box(obstacleWidth, obstacleHeight, obstacleLength);
-        PhongMaterial obstacleMaterial = new PhongMaterial(convertToJFXColour(Settings.OBSTACLE_FILL_COLOUR));
+        PhongMaterial obstacleMaterial = new PhongMaterial(convertToJFXColour(OBSTACLE_FILL_COLOUR));
         obstacle.setMaterial(obstacleMaterial);
 
         //The position of the obstacle on the runway has to dependent on the distance from threshold and centerline
         Point runwayPos = controller.getRunwayPos(runwayId);
         obstacle.setTranslateX(runwayPos.x - distanceFromCenterline);
-        obstacle.setTranslateZ(-runwayPos.y + distanceFromThreshold);
+        obstacle.setTranslateZ(-runwayPos.y + distanceFromThreshold + obstacleWidth/2);
         obstacle.setTranslateY(-obstacleHeight/2-verticalOffset);
 
-        Rotate rotate = new Rotate(controller.getBearing(runwayId), distanceFromCenterline, 0,-distanceFromThreshold, Rotate.Y_AXIS);
+        Rotate rotate = new Rotate(controller.getBearing(runwayId), distanceFromCenterline, 0,-distanceFromThreshold - obstacleWidth/2, Rotate.Y_AXIS);
         obstacle.getTransforms().add(rotate);
 
         root.getChildren().add(obstacle);
+    }
+
+    //draw centerline of the runway
+    private void genCenterline(Group root, String runwayId, Integer helperHeight){
+        Point runwayPos = controller.getRunwayPos(runwayId);
+        Integer runwayLength = ((Double)controller.getRunwayDim(runwayId).getWidth()).intValue();
+        Integer runwayHeight = ((Double)controller.getRunwayDim(runwayId).getHeight()).intValue();
+
+        //when drawing the centerline take into account the offset of where the name is displayed and the font size of the name
+        Line line = new Line (0, runwayNameOffset + runwayHeight/2 ,  0, runwayLength - runwayNameOffset - runwayHeight/2);
+        line.setStroke(convertToJFXColour(Settings.CENTERLINE_COLOUR));
+        line.setStrokeWidth(5);
+        line.getStrokeDashArray().add(25.0);
+        line.setTranslateX(runwayPos.x );
+        line.setTranslateZ(-runwayPos.y);
+        line.setTranslateY(-helperHeight-1);
+
+        //rotate the lines so that they go over the center of each runway at the specific angle
+        Rotate rotate = new Rotate(controller.getBearing(runwayId), 0, 0,0, Rotate.Y_AXIS);
+        line.getTransforms().add(rotate);
+
+        //rotate them so they are flat on the runway
+        Rotate rotate1 = new Rotate(90, 0, 0, 0 ,Rotate.X_AXIS);
+        line.getTransforms().add(rotate1);
+
+        root.getChildren().add(line);
     }
 
     //placing the stopway at the end of the runway
@@ -307,8 +342,8 @@ public class View3D extends JFrame{
         Dimension stopwayDimension = controller.getStopwayDim(runwayId);
         Double runwayWidth = controller.getRunwayDim(runwayId).getWidth();
 
-        Box stopwayBox = new Box(stopwayDimension.height, helperHeight, stopwayDimension.width);
-        PhongMaterial stopwayMaterial = new PhongMaterial(convertToJFXColour(Settings.STOPWAY_FILL_COLOUR));
+        Box stopwayBox = new Box(stopwayDimension.height , helperHeight, stopwayDimension.width-1);
+        PhongMaterial stopwayMaterial = new PhongMaterial(convertToJFXColour(STOPWAY_FILL_COLOUR));
         stopwayBox.setMaterial(stopwayMaterial);
 
         stopwayBox.setTranslateX(runwayPosition.x);
@@ -331,7 +366,7 @@ public class View3D extends JFrame{
         Double runwayWidth = controller.getRunwayDim(runwayId).getWidth();
 
         Box clearwayBox = new Box(clearwayDimension.height, helperHeight, clearwayDimension.width);
-        PhongMaterial stopwayMaterial = new PhongMaterial(convertToJFXColour(Settings.CLEARWAY_FILL_COLOUR));
+        PhongMaterial stopwayMaterial = new PhongMaterial(convertToJFXColour(CLEARWAY_FILL_COLOUR));
         clearwayBox.setMaterial(stopwayMaterial);
 
         clearwayBox.setTranslateX(runwayPosition.x);
@@ -382,7 +417,7 @@ public class View3D extends JFrame{
         }
         //Create a MeshView for the mesh, set the material, and add it to the mesh group.
         MeshView topMeshView = new MeshView(meshTop);
-        topMeshView.setMaterial(new PhongMaterial(convertToJFXColour(Settings.CLEAR_AND_GRADED_COLOUR)));
+        topMeshView.setMaterial(new PhongMaterial(convertToJFXColour(CLEAR_AND_GRADED_COLOUR)));
         meshGroup.getChildren().add(topMeshView);
 
         //Add all the vertices in topMesh to sideMesh.
@@ -416,7 +451,7 @@ public class View3D extends JFrame{
         }
         //Create a MeshView for the mesh, set the material, and add it to the mesh group.
         MeshView sideMeshView = new MeshView(meshSide);
-        sideMeshView.setMaterial(new PhongMaterial(convertToJFXColour(Settings.CLEAR_AND_GRADED_COLOUR)));
+        sideMeshView.setMaterial(new PhongMaterial(convertToJFXColour(CLEAR_AND_GRADED_COLOUR)));
         meshGroup.getChildren().add(sideMeshView);
 
         //return the group containing both meshes.
@@ -455,7 +490,7 @@ public class View3D extends JFrame{
 
         //Creates a box of the right size and material.
         Box stripBox = new Box(distanceFromCenterline*2,height,dim.width+stripEndSize*2+1);
-        PhongMaterial stripMaterial = new PhongMaterial(convertToJFXColour(Settings.RUNWAY_STRIP_COLOUR));
+        PhongMaterial stripMaterial = new PhongMaterial(convertToJFXColour(RUNWAY_STRIP_COLOUR));
         stripBox.setMaterial(stripMaterial);
 
         //Moves the box to the correct position, and elevates it so it's entirely above the x=0, z=0 plane.
