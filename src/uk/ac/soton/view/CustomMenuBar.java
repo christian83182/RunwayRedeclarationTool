@@ -113,6 +113,12 @@ public class CustomMenuBar extends JMenuBar {
         editMenu.add(editObstaclesMenu);
         editObstaclesMenu.addActionListener(e -> new BrowseObstaclesWindow(controller));
 
+        //Adding the Configure Background Image option
+        JMenuItem configureBgMenu = new JMenuItem("Configure Background Image...");
+        configureBgMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
+        editMenu.add(configureBgMenu);
+        configureBgMenu.addActionListener(e -> new BackgroundConfigWindow(appView));
+
         //Adding the "Set Default Colour Theme" option to the settings menu.
         JMenuItem setDefaultTheme = new JMenuItem("Set Default Colour Theme");
         setDefaultTheme.setFont(Settings.MENU_BAR_DEFAULT_FONT);

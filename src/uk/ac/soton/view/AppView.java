@@ -126,7 +126,6 @@ public class AppView extends JFrame{
 
     //Set's the Look and Feel of the application to a custom theme.
     private void setLookAndFeel(){
-
         UIManager.put("control", new Color(55, 55, 55)); // Primary
         UIManager.put("nimbusBase", new Color(42, 42, 42)); // The colour of selectors
         UIManager.put("nimbusBlueGrey", new Color(52, 52, 52)); // The colour of buttons
@@ -140,6 +139,7 @@ public class AppView extends JFrame{
         UIManager.put("nimbusSelectionBackground",new Color(0, 104, 208));
         UIManager.put("List.background",new Color(80, 80, 80));
         UIManager.put("List[Selected].textForeground",new Color(250, 251, 255));
+        UIManager.put("Slider.tickColor",new Color(250, 251, 255));
 
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
