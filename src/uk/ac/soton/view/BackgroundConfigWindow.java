@@ -14,9 +14,12 @@ import java.util.Hashtable;
 
 public class BackgroundConfigWindow extends JFrame{
 
+    //An instance of the appView class used by the application.
     AppView appView;
+    //An instance of the controller which is used by appView to access the model.
     ViewController controller;
 
+    //Various variables to keep track of the background image's configuration.
     BufferedImage bgImage;
     Double xOffset, yOffset, scale, rotation;
 
@@ -42,6 +45,7 @@ public class BackgroundConfigWindow extends JFrame{
         init();
     }
 
+    //Swing initialization code.
     private void init(){
         this.setPreferredSize(new Dimension(1600,900));
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -55,7 +59,8 @@ public class BackgroundConfigWindow extends JFrame{
         this.setVisible(true);
     }
 
-    private JPanel prepareSideMenu(){
+    //Returns a JPanel which is populated with functional menu elements.
+    private JPanel prepareSideMenu(){//Create a JPanel to populate with the menu.
         JPanel sideMenu = new JPanel();
         sideMenu.setPreferredSize(new Dimension(350,350));
         sideMenu.setLayout(new GridBagLayout());
@@ -129,22 +134,21 @@ public class BackgroundConfigWindow extends JFrame{
         c.insets = new Insets(10,10,0,10);
         imagePanel.add(imageNameLabel,c);
 
-        //Create a Button to add/change the image.
-        JButton changeImageButton = new JButton("Add Background Image");
+        //Create and populate a JPanel with buttons for modifying or clearing the current image.
+        JButton changeImageButton = new JButton("Add Image");
+        JButton clearImageButton = new JButton("Clear Image");
+        clearImageButton.setEnabled(false);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(1,2));
+        buttonPanel.add(changeImageButton);
+        buttonPanel.add(clearImageButton);
+
+        //Ad the buttonPanel to the imagePanel.
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 20; c.gridwidth = 2;
         c.fill = GridBagConstraints.HORIZONTAL; c.weightx = 1;
         c.insets = new Insets(5,10,0,10);
-        imagePanel.add(changeImageButton, c);
-
-        //Create a button to clear/remove the image.
-        JButton clearImageButton = new JButton("Remove Background Image");
-        clearImageButton.setEnabled(false);
-        c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 30; c.gridwidth = 2;
-        c.fill = GridBagConstraints.HORIZONTAL; c.weightx = 1;
-        c.insets = new Insets(0,10,10,10);
-        imagePanel.add(clearImageButton, c);
+        imagePanel.add(buttonPanel, c);
 
         //Create a label displaying "Horizontal Offset"
         JLabel xOffsetLabel = new JLabel("Horizontal Offset");
@@ -199,7 +203,7 @@ public class BackgroundConfigWindow extends JFrame{
         c.insets = new Insets(10,10,0,10);
         configPanel.add(scaleLabel,c);
 
-        //Create a slider to control the yOffset
+        //Create a slider to control the scale. Custom labels are used because sliders don't support doubles.
         JSlider scaleSlider = new JSlider(JSlider.HORIZONTAL,0,200,100);
         Hashtable labelTable = new Hashtable();
         labelTable.put( 0, new JLabel("0.0")); labelTable.put( 50, new JLabel("0.5"));
@@ -217,7 +221,7 @@ public class BackgroundConfigWindow extends JFrame{
         c.insets = new Insets(0,10,20,10);
         configPanel.add(scaleSlider,c);
 
-        //Create a label displaying "Vertical Offset";
+        //Create a label displaying "Rotation";
         JLabel rotationLabel = new JLabel("Rotation");
         rotationLabel.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         c = new GridBagConstraints();
@@ -226,7 +230,7 @@ public class BackgroundConfigWindow extends JFrame{
         c.insets = new Insets(10,10,0,10);
         configPanel.add(rotationLabel,c);
 
-        //Create a slider to control the yOffset
+        //Create a slider to control the rotation
         JSlider rotationSlider = new JSlider(JSlider.HORIZONTAL,-180,180,0);
         rotationSlider.setMajorTickSpacing(90);
         rotationSlider.setMinorTickSpacing(45);
@@ -239,9 +243,9 @@ public class BackgroundConfigWindow extends JFrame{
         c.insets = new Insets(0,10,20,10);
         configPanel.add(rotationSlider,c);
 
-        //If the application already has an image loaded, change a few labels to reflect this.
+        //If the application already has an image loaded, change a few labels and enable the sliders to reflect this.
         if(bgImage != null){
-            changeImageButton.setText("Change Background Image");
+            changeImageButton.setText("Change Image");
             imageNameLabel.setText("Imported from Application");
             clearImageButton.setEnabled(true);
             xOffsetSlider.setEnabled(true);
@@ -252,11 +256,13 @@ public class BackgroundConfigWindow extends JFrame{
 
         //Add an action listener to the changeImage button.
         changeImageButton.addActionListener(e -> {
+            //Create a file chooser, add a filter so only images can be selected.
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files","jpeg","png");
             fileChooser.setFileFilter(filter);
 
+            //If the user chooses a file, then load that file, and enable all the sliders.
             int returnVal = fileChooser.showOpenDialog(null);
             if(returnVal == JFileChooser.APPROVE_OPTION){
                 try {
@@ -271,6 +277,7 @@ public class BackgroundConfigWindow extends JFrame{
                     rotationSlider.setEnabled(true);
                     this.repaint();
                 } catch (Exception err) {
+                    //Output an error message in the event that an exception was thrown.
                     JOptionPane.showMessageDialog(fileChooser,
                             "There was an issue importing that image: '" +
                                     err.getMessage() + "'", "IO Error" ,JOptionPane.ERROR_MESSAGE);
@@ -278,6 +285,7 @@ public class BackgroundConfigWindow extends JFrame{
             }
         });
 
+        //Add a listener to the clear button, which removes the current image, updates a few labels, and disables all the sliders.
         clearImageButton.addActionListener(e -> {
             bgImage = null;
             imageNameLabel.setText("No Image Selected");
@@ -291,28 +299,34 @@ public class BackgroundConfigWindow extends JFrame{
             this.revalidate();
         });
 
+        //Add a change listener to update the xOffset value when this slider changes.
         xOffsetSlider.addChangeListener(e -> {
             xOffset = (double) xOffsetSlider.getValue();
             this.repaint();
         });
 
+        //Add a change listener to update the yxOffset value when this slider changes.
         yOffsetSlider.addChangeListener(e -> {
             yOffset = (double) -yOffsetSlider.getValue();
             this.repaint();
         });
 
+        //Add a change listener to update the scale value when this slider changes.
         scaleSlider.addChangeListener(e -> {
             scale = (double) scaleSlider.getValue()/100;
             this.repaint();
         });
 
+        //Add a change listener to update the rotation value when this slider changes.
         rotationSlider.addChangeListener(e -> {
             rotation = (double) rotationSlider.getValue();
             this.repaint();
         });
 
+        //Add an action listener to the close button which closes the window.
         closeButton.addActionListener(e -> this.dispose());
 
+        //Add an action listener to the confirm button which updates the configuration in the controller, and closes the window.
         confirmButton.addActionListener(e -> {
             controller.setBackgroundImage(bgImage);
             controller.setBackgroundImageOffset(new Point(xOffset.intValue(), yOffset.intValue()));
@@ -322,11 +336,14 @@ public class BackgroundConfigWindow extends JFrame{
             this.dispose();
         });
 
+        //Return the newly created side panel.
         return sideMenu;
     }
 
+    //Returns an fully functional interactive panel which displays a semi-transparent outline of all the runways,
+    //... along with any background image, displayed according to the offset, scale and rotation.
     private JPanel prepareInteractivePanel(){
-        InteractivePanel mainPanel = new InteractivePanel(new Point(800,400),0.4) {
+        InteractivePanel mainPanel = new InteractivePanel(new Point(800,450),0.4) {
             @Override
             public void paintView(Graphics2D g2) {
                 g2.setColor(Settings.AIRFIELD_COLOUR);
@@ -346,8 +363,13 @@ public class BackgroundConfigWindow extends JFrame{
                     g2.setTransform(tx);
 
                     g2.drawImage(bgImage,xPos,yPos, width, height,null);
+
+                    g2.setColor(Color.BLACK);
+                    g2.setStroke(new BasicStroke(10));
+                    g2.drawRect(xPos,yPos,width,height);
                     g2.setTransform(old);
                 }
+
 
                 for (String runwayId : controller.getRunways()){
                     Point pos = controller.getRunwayPos(runwayId);
@@ -367,13 +389,23 @@ public class BackgroundConfigWindow extends JFrame{
                     g2.setStroke(new BasicStroke(3));
                     g2.drawRect(pos.x, pos.y, dim.width, dim.height);
 
+                    g2.setColor(Color.RED);
+                    g2.setStroke(new BasicStroke(1));
+                    g2.drawRect(pos.x, pos.y, dim.width, dim.height);
+
                     g2.setTransform(old);
                 }
+
+                g2.setColor(Color.DARK_GRAY);
+                g2.setStroke(new BasicStroke(2));
+                g2.drawLine(-100000,0,10000,0);
+                g2.drawLine(0,-100000,0,100000);
             }
         };
         return mainPanel;
     }
 
+    //Creates a transform used to rotate a runway to the correct orientation, and translate to the correct position.
     private AffineTransform createRunwayTransform(Point pos, Dimension dim, String id){
         Double bearing = Math.toRadians(controller.getBearing(id)-90);
         AffineTransform tx = new AffineTransform();
