@@ -5,16 +5,13 @@ import javafx.beans.property.*;
 import javafx.embed.swing.JFXPanel;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Slider;
-import javafx.scene.control.Tooltip;
 import javafx.scene.paint.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Rotate;
 import uk.ac.soton.controller.ViewController;
 
@@ -24,7 +21,7 @@ import java.util.ArrayList;
 
 import static uk.ac.soton.view.Settings.*;
 
-//todo Offset the start and stopway by an arbitrary amount to prevent shading conflicts.
+//todo fix the showing of the name where runways overlap
 
 public class View3D extends JFrame{
 
@@ -210,8 +207,8 @@ public class View3D extends JFrame{
         }
         //Use a second loop to iterate over all logical runways and render anything which should be displayed for both.
         for(String runwayId: controller.getRunways()){
-            generateParameters(root, runwayId);
             genRunwayName(root, runwayId, 18);
+            generateParameters(root, runwayId);
         }
     }
 
@@ -221,6 +218,9 @@ public class View3D extends JFrame{
 
         //Draw the clearway
         genClearway(root, runwayId, 30);
+
+        //Draw displaced threshold
+        genDisplacedThreshold(root, runwayId, 18);
     }
 
     //Creates a Box of the same dimensions and position as runwayId, with the correct material, and adds it to root.
@@ -252,35 +252,71 @@ public class View3D extends JFrame{
         Point runwayPos  = controller.getRunwayPos(runwayId);
         Dimension runwayDim = controller.getRunwayDim(runwayId);
 
-        //set text color and text font
+        //text color and text font
         javafx.scene.text.Font font = new javafx.scene.text.Font("SansSerif", runwayDim.height/2);
         Color fontColor = convertToJFXColour(Settings.RUNWAY_NAME_COLOUR);
 
-        Text text = new Text(runwayId);
-        text.setFill(fontColor);
-        text.setFont(font);
+        // rotate to make the string flat on the runway
+        Rotate flatRotation = new Rotate(-90,0,-1,0, Rotate.X_AXIS);
 
-        Integer textOffset;
+        //offset for the id
+        Integer idOffset = 16;
+        //offset for the letter;
+        Double letterOffset = 30.5;
+        //offset for putting the letter which has a smaller font higher
+        Integer letterHeightOffset = 10;
 
         if(runwayId.length() == 2){
-            textOffset = 15;
+
+            Text text = new Text(runwayId);
+            text.setFill(fontColor);
+            text.setFont(font);
+            text.setTranslateX(runwayPos.x - runwayDim.height/2 + idOffset);
+            text.setTranslateZ(-runwayPos.y + runwayDim.width - runwayNameOffset);
+            text.setTranslateY(-helperHeight);
+
+            Rotate rotate =  new Rotate(controller.getBearing(runwayId), runwayDim.height/2 - idOffset,0,-runwayDim.width + runwayNameOffset, Rotate.Y_AXIS);
+            text.getTransforms().add(rotate);
+            text.getTransforms().add(flatRotation);
+
+            text.setCache(true);
+            text.setCacheHint(CacheHint.QUALITY);
+            root.getChildren().add(text);
+
         }else{
-            textOffset = 0;
+            Text newRunwayId = new Text(runwayId.substring(0,2));
+            newRunwayId.setFill(fontColor);
+            newRunwayId.setFont(font);
+            Text letter = new Text(runwayId.charAt(2) + "");
+            letter.setFill(fontColor);
+            letter.setFont(new javafx.scene.text.Font("SansSerif", runwayDim.height/2-10));
+
+            newRunwayId.setTranslateX(runwayPos.x - runwayDim.height/2 + idOffset);
+            newRunwayId.setTranslateZ(-runwayPos.y + runwayDim.width - runwayNameOffset);
+            newRunwayId.setTranslateY(-helperHeight);
+
+            Rotate IdRotate =  new Rotate(controller.getBearing(runwayId), runwayDim.height/2 - idOffset,0,-runwayDim.width + runwayNameOffset, Rotate.Y_AXIS);
+            newRunwayId.getTransforms().add(IdRotate);
+
+            letter.setTranslateX(runwayPos.x - runwayDim.height/2 + letterOffset);
+            letter.setTranslateZ(-runwayPos.y + runwayDim.width - runwayNameOffset - runwayDim.height/2 + letterHeightOffset);
+            letter.setTranslateY(-helperHeight);
+
+            Rotate letterRotate =  new Rotate(controller.getBearing(runwayId), runwayDim.height/2 - letterOffset,0,-runwayDim.width + runwayNameOffset + runwayDim.height/2 - letterHeightOffset, Rotate.Y_AXIS);
+            letter.getTransforms().add(letterRotate);
+
+            newRunwayId.getTransforms().add(flatRotation);
+            letter.getTransforms().add(flatRotation);
+
+            newRunwayId.setCache(true);
+            newRunwayId.setCacheHint(CacheHint.QUALITY);
+
+            letter.setCache(true);
+            letter.setCacheHint(CacheHint.QUALITY);
+
+            root.getChildren().add(newRunwayId);
+            root.getChildren().add(letter);
         }
-
-        text.setTranslateX(runwayPos.x - runwayDim.height/2 + textOffset);
-        text.setTranslateZ(-runwayPos.y + runwayDim.width - runwayNameOffset);
-        text.setTranslateY(-helperHeight);
-
-        Rotate rotate =  new Rotate(controller.getBearing(runwayId), runwayDim.height/2 - textOffset,0,-runwayDim.width + runwayNameOffset, Rotate.Y_AXIS);
-        text.getTransforms().add(rotate);
-
-        Rotate rotate2 = new Rotate(-90,0,-1,0, Rotate.X_AXIS);
-        text.getTransforms().add(rotate2);
-
-        text.setCache(true);
-        text.setCacheHint(CacheHint.QUALITY);
-        root.getChildren().add(text);
 
     }
 
@@ -378,6 +414,31 @@ public class View3D extends JFrame{
 
 
         root.getChildren().add(clearwayBox);
+
+    }
+
+
+    // display displaced threshold
+    private void genDisplacedThreshold(Group root, String runwayId, Integer helperHeight){
+        Point runwayPosition = controller.getRunwayPos(runwayId);
+        Integer displacedThreshold = controller.getRunwayThreshold(runwayId);
+        Double runwayHeight = controller.getRunwayDim(runwayId).getHeight();
+        Double runwayWidth = controller.getRunwayDim(runwayId).getWidth();
+
+        Box thresholdBox = new Box(runwayHeight, helperHeight, displacedThreshold);
+        PhongMaterial thresholdMaterial = new PhongMaterial(convertToJFXColour(Settings.THRESHOLD_INDICATOR_COLOUR));
+        thresholdBox.setMaterial(thresholdMaterial);
+
+        // to avoid shading conflicts subtract one from the position on the z axis
+        thresholdBox.setTranslateX(runwayPosition.x);
+        thresholdBox.setTranslateZ(-runwayPosition.y + runwayWidth - displacedThreshold/2 -1);
+        thresholdBox.setTranslateY(-helperHeight);
+
+        Rotate rThreshold = new Rotate(controller.getBearing(runwayId), 0,0, - runwayWidth + displacedThreshold/2 + 1, Rotate.Y_AXIS);
+        thresholdBox.getTransforms().add(rThreshold);
+
+
+        root.getChildren().add(thresholdBox);
 
     }
 
