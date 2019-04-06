@@ -59,13 +59,13 @@ public class NewExporter {
         //Add a node for the minimum angle of decent.
         //todo Implement MAoD into the application correctly.
         Element minAngOfDecElement = document.createElement("Minimum_Angle_Of_Decent");
-        minAngOfDecElement.appendChild(document.createTextNode("50");
+        minAngOfDecElement.appendChild(document.createTextNode("50"));
         airfieldElement.appendChild(minAngOfDecElement);
 
         //Add a node for the airport's blast distance policy.
         //todo correctly hook up the blast distance to this method.
         Element blastDistanceElement = document.createElement("Blast_Distance_Policy");
-        blastDistanceElement.appendChild(document.createTextNode("300");
+        blastDistanceElement.appendChild(document.createTextNode("300"));
         airfieldElement.appendChild(blastDistanceElement);
 
         //Create a transformer which creates an output stream from the document. Use this to output the file to the given path.
