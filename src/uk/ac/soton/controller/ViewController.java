@@ -4,6 +4,7 @@ import org.xml.sax.SAXException;
 import uk.ac.soton.common.LogicalRunway;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -315,7 +316,7 @@ public interface ViewController {
      * Exports the current model as an XML file to the location specified.
      * @param absolutePath The full path of the file being exported, including the name of the file.
      */
-    void exportAirfieldConfiguration(String absolutePath);
+    void exportAirfieldConfiguration(String absolutePath) throws TransformerException, ParserConfigurationException;
 
     /**
      * Imports an XML file describing a configuration of the airfield and sets it as the current model.

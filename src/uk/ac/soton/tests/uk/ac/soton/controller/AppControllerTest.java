@@ -31,7 +31,7 @@ public class AppControllerTest {
     public AppController getAppController(){
         AppView appView = new AppView("App");
         AppController appController = new AppController(appView);
-        airfield = new Airfield();
+        airfield = new Airfield("Unnamed Airfield");
         airfield.setPredefinedObstacles(airfield.getPredefinedObstacles());
 
         appController.setAirfield(airfield);

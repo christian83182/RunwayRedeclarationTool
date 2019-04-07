@@ -6,6 +6,7 @@ import uk.ac.soton.controller.ViewController;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -72,8 +73,15 @@ public class CustomMenuBar extends JMenuBar {
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             int returnVal = fileChooser.showSaveDialog(null);
             if(returnVal == JFileChooser.APPROVE_OPTION){
-                controller.exportAirfieldConfiguration(fileChooser.getSelectedFile().getAbsolutePath());
-                NotificationLogger.logger.addToLog("The current configuration was exported as '" + fileChooser.getSelectedFile().getName()+"'");
+                try {
+                    controller.exportAirfieldConfiguration(fileChooser.getSelectedFile().getAbsolutePath());
+                    NotificationLogger.logger.addToLog("The current configuration was exported as '" + fileChooser.getSelectedFile().getName()+"'");
+                } catch (Exception e1) {
+                    JOptionPane.showMessageDialog(fileChooser,
+                            "There was an issue exporting that configuration: '" + e1.getMessage() + "'",
+                            "Export Error" ,JOptionPane.ERROR_MESSAGE);
+                    NotificationLogger.logger.addToLog("Configuration '"+ fileChooser.getSelectedFile().getName()+"' could not be exported");
+                }
             }
         });
 

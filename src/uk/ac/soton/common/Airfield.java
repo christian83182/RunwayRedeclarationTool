@@ -4,8 +4,18 @@ import java.util.*;
 
 public class Airfield {
 
-    private ArrayList<Runway> runways = new ArrayList<Runway>();
+    private ArrayList<Runway> runways = new ArrayList<>();
+    private String airfieldName;
     private static Integer blastProtection = 300;
+    private static Integer minAngleOfDecent = 50;
+
+    public Airfield(String airfieldName){
+        this.airfieldName = airfieldName;
+    }
+
+    public Airfield(){
+        this("Unnamed Airfield");
+    }
 
     private Map<String,Dimensions> predefinedObstacles = new HashMap<String,Dimensions>(){
         {
@@ -120,6 +130,7 @@ public class Airfield {
     public ArrayList<Runway> getRunways(){
         return runways;
     }
+
     public void setRunways(ArrayList<Runway> newRunways){
         this.runways = newRunways;
     }
@@ -194,12 +205,28 @@ public class Airfield {
         dimensions.setHeight(height);
     }
 
+    public String getName() {
+        return airfieldName;
+    }
+
+    public void setName(String id) {
+        this.airfieldName = id;
+    }
+
     public static Integer getBlastProtection() {
         return blastProtection;
     }
 
     public static void setBlastProtection(Integer blast) {
         blastProtection = blast;
+    }
+
+    public static Integer getMinAngleOfDecent(){
+        return minAngleOfDecent;
+    }
+
+    public static void setMinAngleOfDecent(Integer newMinAngle){
+        Airfield.minAngleOfDecent = newMinAngle;
     }
 
     public static class Dimensions {
