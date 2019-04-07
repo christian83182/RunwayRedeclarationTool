@@ -116,15 +116,15 @@ public class Importer {
 
             //Retrieve the obstacle length from the currentObstacle node.
             Node obstacleLengthNode = currentObstacle.getElementsByTagName("ObstacleLength").item(0);
-            Double obstacleLength = Double.parseDouble(obstacleLengthNode.getTextContent());
+            Integer obstacleLength = Integer.parseInt(obstacleLengthNode.getTextContent());
 
             //Retrieve the obstacle width from the currentObstacle node.
             Node obstacleWidthNode = currentObstacle.getElementsByTagName("ObstacleWidth").item(0);
-            Double obstacleWidth = Double.parseDouble(obstacleWidthNode.getTextContent());
+            Integer obstacleWidth = Integer.parseInt(obstacleWidthNode.getTextContent());
 
             //Retrieve the obstacle height from the currentObstacle node.
             Node obstacleHeightNode = currentObstacle.getElementsByTagName("ObstacleHeight").item(0);
-            Double obstacleHeight = Double.parseDouble(obstacleHeightNode.getTextContent());
+            Integer obstacleHeight = Integer.parseInt(obstacleHeightNode.getTextContent());
 
             //Defined a new obstacle in airfield using the data extracted from the currentObstacle node.
             airfield.defineNewObstacle(obstacleId, obstacleLength, obstacleWidth, obstacleHeight);
