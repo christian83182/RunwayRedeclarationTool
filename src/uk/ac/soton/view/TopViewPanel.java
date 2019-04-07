@@ -391,8 +391,8 @@ public class TopViewPanel extends InteractivePanel {
             //Set up some variables use for calculations.
             Integer centerLineDistance = controller.getDistanceFromCenterline(id);
             Integer edgeDistance = controller.getDistanceFromThreshold(id);
-            Double obstacleLength = controller.getPredefinedObstacleLength(obstacleName);
-            Double obstacleWidth = controller.getPredefinedObstacleWidth(obstacleName);
+            Integer obstacleLength = controller.getPredefinedObstacleLength(obstacleName);
+            Integer obstacleWidth = controller.getPredefinedObstacleWidth(obstacleName);
 
             //Draw the fill of the rectangle.
             g2.setColor(Settings.OBSTACLE_FILL_COLOUR);

@@ -3,9 +3,9 @@ package uk.ac.soton.common;
 //A child of the PositionalObject class which describes a 3D Box representing an obstacle on the runway.
 public class Obstacle extends PositionalObject {
 
-    private Double height = 0.0;
-    private Double length = 0.0;
-    private Double width = 0.0;
+    private Integer height = 0;
+    private Integer length = 0;
+    private Integer width = 0;
 
     private Integer startDistance = 0;
     private Integer centrelineDistance = 0;
@@ -62,32 +62,32 @@ public class Obstacle extends PositionalObject {
 
         this.centrelineDistance = 0;
 
-        this.height = 0.0;
-        this.width = 0.0;
-        this.length = 0.0;
+        this.height = 0;
+        this.width = 0;
+        this.length = 0;
     }
 
-    public Double getHeight() {
+    public Integer getHeight() {
         return height;
     }
 
-    public void setHeight(Double height) {
+    public void setHeight(Integer height) {
         this.height = height;
     }
 
-    public Double getLength() {
+    public Integer getLength() {
         return length;
     }
 
-    public void setLength(Double length) {
+    public void setLength(Integer length) {
         this.length = length;
     }
 
-    public Double getWidth() {
+    public Integer getWidth() {
         return width;
     }
 
-    public void setWidth(Double width) {
+    public void setWidth(Integer width) {
         this.width = width;
     }
 
@@ -107,7 +107,7 @@ public class Obstacle extends PositionalObject {
      * Turns obstacle sideways (length of the object perpendicular to the length of the runway).
      */
     public void sideways(){
-        Double temp = length;
+        Integer temp = length;
         length = width;
         width = temp;
     }

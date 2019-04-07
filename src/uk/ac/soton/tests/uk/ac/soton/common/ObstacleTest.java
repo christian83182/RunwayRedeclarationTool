@@ -1,4 +1,4 @@
-package uk.ac.soton.tests.uk.ac.soton.common;
+package uk.ac.soton.common;
 
 import org.junit.Test;
 import uk.ac.soton.common.Airfield;
@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 public class ObstacleTest {
 
     public Obstacle getObstacle(){
-        Obstacle obstacle = new Obstacle(50,30,new Airfield.Dimensions(35.2,30.4,14.7));
+        Obstacle obstacle = new Obstacle(50,30,new Airfield.Dimensions(35,30,14));
 
         return obstacle;
     }
@@ -18,7 +18,7 @@ public class ObstacleTest {
     public void getSetHeight() {
         Obstacle obstacle = getObstacle();
 
-        obstacle.setHeight(16.0);
+        obstacle.setHeight(16);
 
         assertEquals((long) 16.0, (long) obstacle.getHeight().doubleValue());
     }
@@ -27,7 +27,7 @@ public class ObstacleTest {
     public void getSetLength() {
         Obstacle obstacle = getObstacle();
 
-        obstacle.setLength(33.0);
+        obstacle.setLength(33);
 
         assertEquals((long) 33.0, (long) obstacle.getLength().doubleValue());
     }
@@ -36,9 +36,9 @@ public class ObstacleTest {
     public void getSetWidth() {
         Obstacle obstacle = getObstacle();
 
-        obstacle.setWidth(29.3);
+        obstacle.setWidth(29);
 
-        assertEquals((long) 29.3, (long) obstacle.getWidth().doubleValue());
+        assertEquals((long) 29, (long) obstacle.getWidth().doubleValue());
     }
 
     @Test
@@ -64,7 +64,7 @@ public class ObstacleTest {
         Obstacle obstacle = getObstacle();
         obstacle.sideways();
 
-        assertEquals( (long) 35.2, (long) obstacle.getWidth().doubleValue());
-        assertEquals( (long) 30.4, (long) obstacle.getLength().doubleValue());
+        assertEquals( (long) 35, (long) obstacle.getWidth().doubleValue());
+        assertEquals( (long) 30, (long) obstacle.getLength().doubleValue());
     }
 }

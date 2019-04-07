@@ -1,4 +1,4 @@
-package uk.ac.soton.tests.uk.ac.soton.common;
+package uk.ac.soton.common;
 
 import org.junit.Test;
 import uk.ac.soton.common.*;
@@ -126,7 +126,7 @@ public class RunwayTest {
 
         r1.setLogicalRunways(lr11,lr12);
 
-        Obstacle obstacle = new Obstacle(100, 200, new Airfield.Dimensions(5000.0,1000.0, 1500.0));
+        Obstacle obstacle = new Obstacle(100, 200, new Airfield.Dimensions(5000,1000, 1500));
 
         r1.placeObstacle(obstacle,"09L");
 
@@ -142,7 +142,7 @@ public class RunwayTest {
 
         Runway runway = initScenarioRunway09L27R();
 
-        Obstacle obstacle = new Obstacle(256,0, new Airfield.Dimensions(11.0,10.0,12.0));
+        Obstacle obstacle = new Obstacle(256,0, new Airfield.Dimensions(11,10,12));
         runway.placeObstacle(obstacle,"09L");
         runway.recalculateParameters();
 
@@ -164,7 +164,7 @@ public class RunwayTest {
 
         Runway runway = initScenarioRunway09R27L();
 
-        Obstacle obstacle = new Obstacle(3160, -20, new Airfield.Dimensions(11.0,10.0,25.0));
+        Obstacle obstacle = new Obstacle(3160, -20, new Airfield.Dimensions(11,10,25));
         runway.placeObstacle(obstacle, "09R");
         runway.recalculateParameters();
 
@@ -186,7 +186,7 @@ public class RunwayTest {
 
         Runway runway = initScenarioRunway09R27L();
 
-        Obstacle obstacle = new Obstacle(457,60, new Airfield.Dimensions(11.0,10.0,15.0));
+        Obstacle obstacle = new Obstacle(457,60, new Airfield.Dimensions(11,10,15));
         runway.placeObstacle(obstacle,"09R");
         runway.recalculateParameters();
 
@@ -208,7 +208,7 @@ public class RunwayTest {
 
         Runway runway = initScenarioRunway09L27R();
 
-        Obstacle obstacle = new Obstacle(3852,20, new Airfield.Dimensions(11.0,10.0,20.0));
+        Obstacle obstacle = new Obstacle(3852,20, new Airfield.Dimensions(11,10,20));
         runway.placeObstacle(obstacle,"09L");
         runway.recalculateParameters();
 
@@ -230,7 +230,7 @@ public class RunwayTest {
 
         Runway runway = initEquivTestingRunway();
 
-        Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11.0,10.0,15.0));
+        Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11,10,15));
         runway.placeObstacle(obstacle, "09");
         runway.recalculateParameters();
 
@@ -249,7 +249,7 @@ public class RunwayTest {
 
         Runway runway = initEquivTestingRunway();
 
-        Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11.0,10.0,3.0));
+        Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11,10,3));
         runway.placeObstacle(obstacle, "09");
         runway.recalculateParameters();
 
@@ -268,7 +268,7 @@ public class RunwayTest {
 
         Runway runway = initEquivTestingRunway();
 
-        Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11.0,10.0,15.0));
+        Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11,10,15));
         runway.placeObstacle(obstacle, "09");
         runway.recalculateParameters();
 
@@ -290,7 +290,7 @@ public class RunwayTest {
 
         Runway runway = initEquivTestingRunway();
 
-        Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11.0,10.0,3.0));
+        Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11,10,3));
         runway.placeObstacle(obstacle, "09");
         runway.setResa(260);
         runway.recalculateParameters();
@@ -318,7 +318,7 @@ public class RunwayTest {
 
         Runway runway = initEquivTestingRunway();
 
-        Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11.0,10.0,3.0));
+        Obstacle obstacle = new Obstacle(2980,0, new Airfield.Dimensions(11,10,3));
         runway.placeObstacle(obstacle, "09");
         Airfield.setBlastProtection(500);
         runway.recalculateParameters();
