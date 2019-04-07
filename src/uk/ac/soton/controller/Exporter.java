@@ -19,7 +19,7 @@ import java.util.ArrayList;
 /**
  * A class created to export the current airfield configuration as an XML file.
  */
-public class NewExporter {
+public class Exporter {
 
     //An instance of the controller used to access the model.
     AppController controller;
@@ -27,7 +27,7 @@ public class NewExporter {
     Airfield airfield;
 
     //Initialize member variables.
-    NewExporter(AppController controller){
+    Exporter(AppController controller){
         this.controller = controller;
         this.airfield = controller.getAirfield();
     }

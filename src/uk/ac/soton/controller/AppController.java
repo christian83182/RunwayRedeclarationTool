@@ -1,16 +1,13 @@
 package uk.ac.soton.controller;
 
-import com.sun.org.apache.regexp.internal.RE;
 import org.xml.sax.SAXException;
 import uk.ac.soton.common.*;
 import uk.ac.soton.view.AppView;
 
-import javax.imageio.ImageIO;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -453,7 +450,7 @@ public class AppController implements ViewController {
 
     @Override
     public synchronized void exportAirfieldConfiguration(String absolutePath) throws TransformerException, ParserConfigurationException {
-        NewExporter exporter = new NewExporter(this);
+        Exporter exporter = new Exporter(this);
         exporter.exportConfiguration(absolutePath);
     }
 
