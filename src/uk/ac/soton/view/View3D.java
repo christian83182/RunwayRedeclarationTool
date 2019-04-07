@@ -34,6 +34,15 @@ public class View3D extends JFrame{
 
     private final Integer runwayNameOffset = 50;
 
+    //The height of the boxes off the plane x=0, z=0.
+    private final Integer runwayElevation = 18;
+    private final Integer runwayStripElevation = 4;
+    private final Integer clearAndGradedAreaElevation = 12;
+    private final Integer stopwayElevation = runwayElevation + 1;
+    private final Integer clearwayElevation = runwayElevation + 2;
+
+    private final Integer verticalOffset = 18;
+
     View3D(AppView appView){
         super("3D Visualization");
         this.appView = appView;
@@ -101,12 +110,12 @@ public class View3D extends JFrame{
         String selectedRunway = appView.getSelectedRunway();
         Point pos = controller.getRunwayPos(selectedRunway);
 
-        generateRunwayStrip(root3D, selectedRunway);
-        generateClearAndGraded(root3D, selectedRunway);
-        generateRunway(root3D, selectedRunway);
+        generateRunwayStrip(root3D, selectedRunway, runwayStripElevation);
+        generateClearAndGraded(root3D, selectedRunway, clearAndGradedAreaElevation);
+        generateRunway(root3D, selectedRunway, runwayElevation);
         generateParameters(root3D, selectedRunway);
-        genRunwayName(root3D, selectedRunway, 18);
-        genCenterline(root3D, selectedRunway, 18);
+        genRunwayName(root3D, selectedRunway, runwayElevation);
+        genCenterline(root3D, selectedRunway, runwayElevation);
         generateLighting(root3D);
         pointCameraAt(new Point3D(pos.x,0, -pos.y),root3D);
 
@@ -192,13 +201,13 @@ public class View3D extends JFrame{
             //If runwayId the the id of a runway that hasn't been generated then...
             if(!(generatedRunways.contains(currentRunwayBearing+180) || generatedRunways.contains(currentRunwayBearing-180))){
 
-                generateRunway(root, runwayId);
-                genCenterline(root, runwayId, 18);
-                generateRunwayStrip(root, runwayId);
-                generateClearAndGraded(root, runwayId);
+                generateRunway(root, runwayId, runwayElevation);
+                genCenterline(root, runwayId, runwayElevation);
+                generateRunwayStrip(root, runwayId, runwayStripElevation);
+                generateClearAndGraded(root, runwayId, clearAndGradedAreaElevation);
 
                 if(!controller.getRunwayObstacle(runwayId).equals("")){
-                    genObstacle(root, runwayId, 18);
+                    genObstacle(root, runwayId, verticalOffset);
                 }
 
                 //Add the runway to the list of generated runways.
@@ -207,37 +216,36 @@ public class View3D extends JFrame{
         }
         //Use a second loop to iterate over all logical runways and render anything which should be displayed for both.
         for(String runwayId: controller.getRunways()){
-            genRunwayName(root, runwayId, 18);
+            genRunwayName(root, runwayId, runwayElevation);
             generateParameters(root, runwayId);
         }
     }
 
     private void generateParameters(Group root, String runwayId){
         //Draw the stopway
-        genStopway(root, runwayId, 23);
+        genStopway(root, runwayId, stopwayElevation);
 
         //Draw the clearway
-        genClearway(root, runwayId, 30);
+        genClearway(root, runwayId, clearwayElevation);
 
         //Draw displaced threshold
-        genDisplacedThreshold(root, runwayId, 18);
+        genDisplacedThreshold(root, runwayId, runwayElevation);
     }
 
     //Creates a Box of the same dimensions and position as runwayId, with the correct material, and adds it to root.
-    private void generateRunway(Group root, String runwayId){
+    private void generateRunway(Group root, String runwayId, Integer helperHeight){
         Point pos = controller.getRunwayPos(runwayId);
         Dimension dim = controller.getRunwayDim(runwayId);
-        Integer height = 18; //The height of the runway box off the plane x=0, z=0.
 
         //Creates a box of the right size and material.
-        Box runwayBox = new Box(dim.height,height,dim.width);
+        Box runwayBox = new Box(dim.height,helperHeight,dim.width);
         PhongMaterial runwayMaterial = new PhongMaterial(convertToJFXColour(RUNWAY_COLOUR));
         runwayBox.setMaterial(runwayMaterial);
 
         //Moves the box to the correct position, and elevates it so it's entirely above the x=0, z=0 plane.
         runwayBox.setTranslateX(pos.x);
         runwayBox.setTranslateZ(-pos.y + dim.width/2.0);
-        runwayBox.setTranslateY(-height/2);
+        runwayBox.setTranslateY(-helperHeight/2);
 
         //Rotates the box to match the rotation of the runway.
         Rotate r = new Rotate(controller.getBearing(runwayId), 0,0,-dim.width/2.0, Rotate.Y_AXIS);
@@ -420,6 +428,12 @@ public class View3D extends JFrame{
 
     // display displaced threshold
     private void genDisplacedThreshold(Group root, String runwayId, Integer helperHeight){
+
+        //do not draw displaced threshold if it is not present
+        if(controller.getRunwayThreshold(runwayId) == 0){
+            return;
+        }
+        
         Point runwayPosition = controller.getRunwayPos(runwayId);
         Integer displacedThreshold = controller.getRunwayThreshold(runwayId);
         Double runwayHeight = controller.getRunwayDim(runwayId).getHeight();
@@ -520,18 +534,17 @@ public class View3D extends JFrame{
     }
 
     //Creates a mesh of the correct dimensions for the given runway, in the correct position and rotation, and adds it to the given group.
-    private void generateClearAndGraded(Group root, String runwayId){
+    private void generateClearAndGraded(Group root, String runwayId, Integer helperHeight){
         Point pos = controller.getRunwayPos(runwayId);
         Dimension dim = controller.getRunwayDim(runwayId);
-        Integer height = 12; //The height of the runway box off the plane x=0, z=0.
 
         //Use the genClearAndGradedMesh to get a group containing meshes simulating a 3D clear and graded area.
-        Group gradedMeshGroup = genClearAndGradedMesh(runwayId, height);
+        Group gradedMeshGroup = genClearAndGradedMesh(runwayId, helperHeight);
 
         //Moves the mesh to the correct position, and elevates it so it's entirely above the x=0, z=0 plane.
         gradedMeshGroup.setTranslateX(pos.x);
         gradedMeshGroup.setTranslateZ(-pos.y + dim.width/2.0);
-        gradedMeshGroup.setTranslateY(-height/2);
+        gradedMeshGroup.setTranslateY(-helperHeight/2);
 
         //Rotates the mesh to match the rotation of the runway.
         Rotate r = new Rotate(controller.getBearing(runwayId), 0,0,-dim.width/2.0, Rotate.Y_AXIS);
@@ -542,22 +555,21 @@ public class View3D extends JFrame{
     }
 
     //Creates a Box of the same dimensions and position as runwayId's runway strip, with the correct material, and adds it to root.
-    private void generateRunwayStrip(Group root, String runwayId){
+    private void generateRunwayStrip(Group root, String runwayId, Integer helperHeight){
         Point pos = controller.getRunwayPos(runwayId);
         Dimension dim = controller.getRunwayDim(runwayId);
         Integer distanceFromCenterline = controller.getStripWidthFromCenterline(runwayId);
         Integer stripEndSize = controller.getStripEndSize(runwayId);
-        Integer height = 4; //The height of the runway box off the plane x=0, z=0.
 
         //Creates a box of the right size and material.
-        Box stripBox = new Box(distanceFromCenterline*2,height,dim.width+stripEndSize*2+1);
+        Box stripBox = new Box(distanceFromCenterline*2,helperHeight,dim.width+stripEndSize*2+1);
         PhongMaterial stripMaterial = new PhongMaterial(convertToJFXColour(RUNWAY_STRIP_COLOUR));
         stripBox.setMaterial(stripMaterial);
 
         //Moves the box to the correct position, and elevates it so it's entirely above the x=0, z=0 plane.
         stripBox.setTranslateX(pos.x);
         stripBox.setTranslateZ(-pos.y + dim.width/2.0);
-        stripBox.setTranslateY(-height/2);
+        stripBox.setTranslateY(-helperHeight/2);
 
         //Rotates the box to match the rotation of the runway.
         Rotate r = new Rotate(controller.getBearing(runwayId), 0,0,-dim.width/2.0, Rotate.Y_AXIS);
