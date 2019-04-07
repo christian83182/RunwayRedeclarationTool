@@ -128,6 +128,8 @@ public class View3D extends JFrame{
         Point pos = controller.getRunwayPos(selectedRunway);
 
         generateRunways(root3D);
+        generateParameters(root3D, selectedRunway);
+
         generateLighting(root3D);
         pointCameraAt(new Point3D(pos.x,0, -pos.y),root3D);
 
@@ -217,19 +219,17 @@ public class View3D extends JFrame{
         //Use a second loop to iterate over all logical runways and render anything which should be displayed for both.
         for(String runwayId: controller.getRunways()){
             genRunwayName(root, runwayId, runwayElevation);
-            generateParameters(root, runwayId);
+            genDisplacedThreshold(root, runwayId, runwayElevation);
         }
     }
 
+    //generate stopway and clearway for the runway
     private void generateParameters(Group root, String runwayId){
         //Draw the stopway
         genStopway(root, runwayId, stopwayElevation);
 
         //Draw the clearway
         genClearway(root, runwayId, clearwayElevation);
-
-        //Draw displaced threshold
-        genDisplacedThreshold(root, runwayId, runwayElevation);
     }
 
     //Creates a Box of the same dimensions and position as runwayId, with the correct material, and adds it to root.
@@ -433,12 +433,12 @@ public class View3D extends JFrame{
         if(controller.getRunwayThreshold(runwayId) == 0){
             return;
         }
-        
+
         Point runwayPosition = controller.getRunwayPos(runwayId);
         Integer displacedThreshold = controller.getRunwayThreshold(runwayId);
         Double runwayHeight = controller.getRunwayDim(runwayId).getHeight();
         Double runwayWidth = controller.getRunwayDim(runwayId).getWidth();
-
+        
         Box thresholdBox = new Box(runwayHeight, helperHeight, displacedThreshold);
         PhongMaterial thresholdMaterial = new PhongMaterial(convertToJFXColour(Settings.THRESHOLD_INDICATOR_COLOUR));
         thresholdBox.setMaterial(thresholdMaterial);
