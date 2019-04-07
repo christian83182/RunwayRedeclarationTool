@@ -181,7 +181,7 @@ public class Exporter {
                 xPositionElement.appendChild(document.createTextNode(currentRunway.getxPos().toString()));
 
                 //Create and add a yPositionElement to runwayElement. Defined from the perspective of the first logical runway.
-                Element yPositionElement = document.createElement("yPosition");
+                Element yPositionElement = document.createElement("YPosition");
                 runwayElement.appendChild(yPositionElement);
                 yPositionElement.appendChild(document.createTextNode(currentRunway.getyPos().toString()));
 

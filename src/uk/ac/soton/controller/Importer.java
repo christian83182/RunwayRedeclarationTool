@@ -6,6 +6,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import uk.ac.soton.common.Airfield;
+import uk.ac.soton.common.Runway;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -44,6 +45,9 @@ public class Importer {
 
         //Import obstacle list properties: length, width, height and name for all obstacles.
         importObstacleProperties(airfieldElement);
+
+        //Import runway properties
+        importRunwayProperties(airfieldElement);
 
     }
 
@@ -103,7 +107,7 @@ public class Importer {
 
         //Iterate over all the child nodes (obstacles) of the predefinedObstaclesElement node.
         for(int i = 0; i < obstacleList.getLength(); i++){
-            //Retrieve the obstacle element from the predefinedObstaclesElement.
+            //Retrieve the obstacle element from the predefinedObstaclesElement at the index position.
             Element currentObstacle = (Element) obstacleList.item(i);
 
             //Retrieve the obstacle name from the currentObstacle node.
@@ -124,6 +128,61 @@ public class Importer {
 
             //Defined a new obstacle in airfield using the data extracted from the currentObstacle node.
             airfield.defineNewObstacle(obstacleId, obstacleLength, obstacleWidth, obstacleHeight);
+        }
+    }
+
+    //Imports the properties of all defined runways given the root node airfieldElement.
+    private void importRunwayProperties(Element airfieldElement){
+        //Retrieve the physicalRunwaysElement node from the root airfieldElement node.
+        Element physicalRunwaysElement = (Element) airfieldElement.getElementsByTagName("PhysicalRunways").item(0);
+        NodeList runwayList = physicalRunwaysElement.getElementsByTagName("Runway");
+
+        //Iterate over all the child nodes (runways) of physicalRunwayElement.
+        for(int i = 0; i < runwayList.getLength(); i++){
+            //Retrieve the runway at the index position from runwayList.
+            Element currentRunway = (Element) runwayList.item(i);
+
+            //Retrieve the firstLogicalRunway's name from the currentRunway node.
+            Node firstLogicalRunwayNode = currentRunway.getElementsByTagName("FirstLogicalRunwayName").item(0);
+            String firstLogicalRunwayName = firstLogicalRunwayNode.getTextContent();
+
+            //Retrieve the secondLogicalRunway's name from the currentRunway node.
+            Node secondLogicalRunwayNode = currentRunway.getElementsByTagName("SecondLogicalRunwayName").item(0);
+            String secondLogicalRunwayName = secondLogicalRunwayNode.getTextContent();
+
+            //Retrieve the xPosition from the currentRunway node.
+            Node xPositionNode = currentRunway.getElementsByTagName("XPosition").item(0);
+            Integer xPosition = Integer.parseInt(xPositionNode.getTextContent());
+
+            //Retrieve the yPosition from the currentRunway node.
+            Node yPositionNode = currentRunway.getElementsByTagName("YPosition").item(0);
+            Integer yPosition = Integer.parseInt(yPositionNode.getTextContent());
+
+            //Retrieve the length from the currentRunway node.
+            Node lengthNode = currentRunway.getElementsByTagName("Length").item(0);
+            Integer length = Integer.parseInt(lengthNode.getTextContent());
+
+            //Retrieve the width from the currentRunway node.
+            Node widthNode = currentRunway.getElementsByTagName("Width").item(0);
+            Integer width = Integer.parseInt(widthNode.getTextContent());
+
+            //Retrieve the stripEndSize from the currentRunway node.
+            Node stripEndNode = currentRunway.getElementsByTagName("StripEndLength").item(0);
+            Integer stripEndSize = Integer.parseInt(stripEndNode.getTextContent());
+
+            //Retrieve the stripWidth from the currentRunway node.
+            Node stripWidthNode = currentRunway.getElementsByTagName("stripWidthElement").item(0);
+            Integer stripWidth = Integer.parseInt(stripWidthNode.getTextContent());
+
+            //Retrieve the resaSize from the currentRunway node.
+            Node resaSizeNode = currentRunway.getElementsByTagName("RESALength").item(0);
+            Integer resaSize = Integer.parseInt(resaSizeNode.getTextContent());
+
+            //Construct a new Runway object using the data extracted from currentObject.
+            String runwayName = firstLogicalRunwayName + "/" + secondLogicalRunwayName;
+            Runway physicalRunway = new Runway(runwayName, xPosition, yPosition, length, width, stripWidth, stripEndSize);
+            physicalRunway.setResa(resaSize);
+            airfield.addRunway(physicalRunway);
         }
     }
 }
