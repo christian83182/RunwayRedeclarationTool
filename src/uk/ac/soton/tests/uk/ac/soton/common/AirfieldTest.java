@@ -50,7 +50,7 @@ public class AirfieldTest {
 
     @Test
     public void getRunways() throws Exception {
-        Airfield airfield = new Airfield();
+        Airfield airfield = new Airfield("");
         List<Runway> runways = createRunwayList();
         for(Runway runway: runways){
             airfield.addRunway(runway);
@@ -61,7 +61,7 @@ public class AirfieldTest {
 
     @Test
     public void addRunway() throws Exception {
-        Airfield airfield = new Airfield();
+        Airfield airfield = new Airfield("");
         Runway runway = getSingleRunway();
         airfield.addRunway(runway);
 
@@ -71,7 +71,7 @@ public class AirfieldTest {
 
     @Test
     public void getRunway() throws Exception {
-        Airfield airfield = new Airfield();
+        Airfield airfield = new Airfield("");
         Runway r1 = new Runway("09L/27R",-1000,-200,1800,80,400,60);
         LogicalRunway lr11 = new LogicalRunway("09L",r1.getLength(),100,
                 new Dimension(350,220), new Dimension(60,r1.getWidth()));
@@ -89,7 +89,7 @@ public class AirfieldTest {
     @Test
     public void removeRunway() throws Exception {
 
-        Airfield airfield = new Airfield();
+        Airfield airfield = new Airfield("");
         List<Runway> runways = createRunwayList();
         for(Runway runway: runways){
             airfield.addRunway(runway);
@@ -104,7 +104,7 @@ public class AirfieldTest {
 
     @Test
     public void getAllLogicalRunways() throws Exception {
-        Airfield airfield = new Airfield();
+        Airfield airfield = new Airfield("");
 
         List<Runway> runways = createRunwayList();
 
@@ -121,7 +121,7 @@ public class AirfieldTest {
 
     @Test
     public void getLogicalRunwaysOf() throws Exception {
-        Airfield airfield = new Airfield();
+        Airfield airfield = new Airfield("");
         Runway r1 = new Runway("09L/27R",-1000,-200,1800,80,400,60);
         LogicalRunway lr11 = new LogicalRunway("09L",r1.getLength(),100,
                 new Dimension(350,220), new Dimension(60,r1.getWidth()));
@@ -137,7 +137,7 @@ public class AirfieldTest {
 
     @Test
     public void setPredefinedObstacles() throws Exception {
-        Airfield airfield = new Airfield();
+        Airfield airfield = new Airfield("");
 
         HashMap<String, Airfield.Dimensions> obstacles = new HashMap<>();
         obstacles.put("object1", new Airfield.Dimensions(1.2,2.1,1.1));
@@ -151,7 +151,7 @@ public class AirfieldTest {
 
     @Test
     public void defineNewObstacle() throws Exception {
-        Airfield airfield = new Airfield();
+        Airfield airfield = new Airfield("");
         airfield.defineNewObstacle("object type", 20.09, 98.3, 4.00);
 
         assertEquals( true, airfield.getPredefinedObstacles().containsKey("object type"));
@@ -159,7 +159,7 @@ public class AirfieldTest {
 
     @Test
     public void removePredefinedObstacle() throws Exception {
-        Airfield airfield = new Airfield();
+        Airfield airfield = new Airfield("");
 
         HashMap<String, Airfield.Dimensions> obstacles = new HashMap<>();
         obstacles.put("object1", new Airfield.Dimensions(1.2,2.1,1.1));
@@ -175,7 +175,7 @@ public class AirfieldTest {
 
     @Test
     public void redefineObstacle() throws Exception {
-        Airfield airfield = new Airfield();
+        Airfield airfield = new Airfield("");
 
         HashMap<String, Airfield.Dimensions> obstacles = new HashMap<>();
         obstacles.put("object1", new Airfield.Dimensions(1.2,2.1,1.1));
