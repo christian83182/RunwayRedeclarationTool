@@ -14,7 +14,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
 import java.io.File;
-import java.util.ArrayList;
 
 /**
  * A class created to export the current airfield configuration as an XML file.
@@ -22,9 +21,9 @@ import java.util.ArrayList;
 public class Exporter {
 
     //An instance of the controller used to access the model.
-    AppController controller;
+    private AppController controller;
     //An instance of the airfield which acts as the model.
-    Airfield airfield;
+    private Airfield airfield;
 
     //Initialize member variables.
     Exporter(AppController controller){
@@ -275,7 +274,7 @@ public class Exporter {
 
         //Create a stopwayWidth and add it to the given logicalRunwayElement.
         //Note, logicalRunway.getStopway().height refers to the width of the stopway.
-        Element stopwayWidth = document.createElement("ClearwayWidth");
+        Element stopwayWidth = document.createElement("StopwayWidth");
         logicalRunwayElement.appendChild(stopwayWidth);
         stopwayWidth.appendChild(document.createTextNode(Integer.toString(logicalRunway.getStopway().height)));
 

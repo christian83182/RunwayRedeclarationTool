@@ -322,7 +322,7 @@ public interface ViewController {
      * Imports an XML file describing a configuration of the airfield and sets it as the current model.
      * @param path The location of the XML file specified by the user.
      */
-    void importAirfieldConfiguration(String path) throws ImporterException, ParserConfigurationException, SAXException, IOException;
+    void importAirfieldConfiguration(String path) throws ParserConfigurationException, SAXException, IOException;
 
     /**
      * Getting the logical runway on which the obstacle (if present) is closer to its respective threshold.
