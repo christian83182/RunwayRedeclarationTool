@@ -46,7 +46,7 @@ public class TopViewPanel extends InteractivePanel {
         }
 
         //Only draw all runways if isolate mode isn't on, or if it is on but no runway is selected
-        if(!isIsolated  || (isIsolated && !isRunwaySelected)){
+        if(!isIsolated || (isIsolated && !isRunwaySelected)){
             paintStrips(g2);
             paintAllClearAndGraded(g2);
             paintRunways(g2);
@@ -371,6 +371,12 @@ public class TopViewPanel extends InteractivePanel {
                 paintRunwayParameters(selectedRunway, g2);
                 if(menuPanel.isShowBreakDownEnabled()) paintBreakdownLengths(selectedRunway, g2);
             }
+
+            if(menuPanel.isShowBreakDownEnabled()){
+                if(!controller.getRunwayObstacle(selectedRunway).equals("") && controller.isRedeclared(selectedRunway)){
+                    paintObstacleParameters(selectedRunway, controller.getRunwayObstacle(selectedRunway), g2);
+                }
+            }
         }
     }
 
@@ -408,6 +414,64 @@ public class TopViewPanel extends InteractivePanel {
         }
         //restore the previous transformation
         g2.setTransform(old);
+    }
+
+    public void paintObstacleParameters(String runwayId, String obstacleId, Graphics2D g2){
+
+        //if the obstacle has triggered a redeclaration of the runway, draw the redeclared parameters
+        if(controller.isRedeclared(runwayId)) {
+            Integer stripHeight = controller.getStripWidthFromCenterline(runwayId);
+
+            //draw parameters to the right
+            if(controller.getLogicalRunwayCloserToObstacle(runwayId).getName().equals(runwayId)) {
+
+                Integer resa = controller.getRESADistance(runwayId);
+                Integer resaOffset = controller.getDistanceFromThreshold(runwayId) + controller.getPredefinedObstacleLength(obstacleId).intValue();
+                InfoArrow resaLengthInfo = new InfoArrow(resaOffset, -stripHeight/2 -50, resa, "RESA: " + resa + "m", true);
+                resaLengthInfo.drawInfoArrow(runwayId, g2);
+
+                Integer alsDistance = controller.getPredefinedObstacleHeight(obstacleId).intValue() * controller.getALS(runwayId);
+                Integer alsOffset = controller.getDistanceFromThreshold(runwayId);
+                InfoArrow alsLengthInfo = new InfoArrow(alsOffset, -stripHeight/2 + 10, alsDistance, "h*" + controller.getALS(runwayId) + "m", true);
+                alsLengthInfo.drawInfoArrow(runwayId, g2);
+
+                Integer newStripEnd = controller.getStripEndSize(runwayId);
+                InfoArrow newStripEndInfo;
+
+                if (resa > alsDistance) {
+                    newStripEndInfo = new InfoArrow(resaOffset + resa, -stripHeight/2 - 50, newStripEnd, newStripEnd + " m", true);
+                } else {
+                    newStripEndInfo = new InfoArrow(alsOffset + alsDistance, -stripHeight/2 - 50, newStripEnd, newStripEnd + " m", true);
+                }
+
+                newStripEndInfo.drawInfoArrow(runwayId, g2);
+
+            }else{
+
+                //draw parameters to the left
+                Integer resa = controller.getRESADistance(runwayId);
+                Integer resaOffset = controller.getDistanceFromThreshold(runwayId) + controller.getPredefinedObstacleLength(obstacleId).intValue();
+                InfoArrow resaLengthInfo = new InfoArrow(resaOffset - resa, -stripHeight/2 -50, resa, "RESA: " + resa + "m", true);
+                resaLengthInfo.drawInfoArrow(runwayId, g2);
+
+                Integer alsDistance = controller.getPredefinedObstacleHeight(obstacleId).intValue() * controller.getALS(runwayId);
+                Integer alsOffset = controller.getDistanceFromThreshold(runwayId);
+                Integer obstacleLength = controller.getPredefinedObstacleLength(controller.getRunwayObstacle(runwayId));
+                InfoArrow alsLengthInfo = new InfoArrow(alsOffset - alsDistance + obstacleLength, -stripHeight/2 + 10, alsDistance, "h*" + controller.getALS(runwayId) + "m", true);
+                alsLengthInfo.drawInfoArrow(runwayId, g2);
+
+                Integer newStripEnd = controller.getStripEndSize(runwayId);
+                InfoArrow newStripEndInfo;
+
+                if (resa > alsDistance) {
+                    newStripEndInfo = new InfoArrow(resaOffset - resa - newStripEnd, -stripHeight/2 - 50, newStripEnd, newStripEnd + " m", true);
+                } else {
+                    newStripEndInfo = new InfoArrow(alsOffset - alsDistance + obstacleLength - newStripEnd, -stripHeight/2 - 50, newStripEnd, newStripEnd + " m", true);
+                }
+
+                newStripEndInfo.drawInfoArrow(runwayId, g2);
+            }
+        }
     }
 
     //Prints the TODA, TORA, ASDA, and LDA for a given runway.
