@@ -267,9 +267,9 @@ public class XMLImporter {
             obstacleList.add(getObstacle(nodeList.item(i)));
         }
 
-        for(PredefinedObstacle obstacle : obstacleList){
-            predefinedObstacles.put(obstacle.id, new Airfield.Dimensions(obstacle.length,obstacle.width,obstacle.height));
-        }
+//        for(PredefinedObstacle obstacle : obstacleList){
+//            predefinedObstacles.put(obstacle.id, new Airfield.Dimensions(obstacle.length, obstacle.width, obstacle.height));
+//        }
     }
 
     private PredefinedObstacle getObstacle(Node node) throws ImporterException {

@@ -1,4 +1,4 @@
-package uk.ac.soton.tests.uk.ac.soton.common;
+package uk.ac.soton.common;
 
 import org.junit.Test;
 import uk.ac.soton.common.LogicalRunway;

@@ -140,9 +140,9 @@ public class AirfieldTest {
         Airfield airfield = new Airfield("");
 
         HashMap<String, Airfield.Dimensions> obstacles = new HashMap<>();
-        obstacles.put("object1", new Airfield.Dimensions(1.2,2.1,1.1));
-        obstacles.put("object2", new Airfield.Dimensions(30.6,60.3,70.8));
-        obstacles.put("object3", new Airfield.Dimensions(1000.9,900.45,1700.1));
+        obstacles.put("object1", new Airfield.Dimensions(1,2,1));
+        obstacles.put("object2", new Airfield.Dimensions(30,60,70));
+        obstacles.put("object3", new Airfield.Dimensions(1000,900,1700));
 
         airfield.setPredefinedObstacles(obstacles);
 
@@ -152,7 +152,7 @@ public class AirfieldTest {
     @Test
     public void defineNewObstacle() throws Exception {
         Airfield airfield = new Airfield("");
-        airfield.defineNewObstacle("object type", 20.09, 98.3, 4.00);
+        airfield.defineNewObstacle("object type", 20, 98, 4);
 
         assertEquals( true, airfield.getPredefinedObstacles().containsKey("object type"));
     }
@@ -162,9 +162,9 @@ public class AirfieldTest {
         Airfield airfield = new Airfield("");
 
         HashMap<String, Airfield.Dimensions> obstacles = new HashMap<>();
-        obstacles.put("object1", new Airfield.Dimensions(1.2,2.1,1.1));
-        obstacles.put("object2", new Airfield.Dimensions(30.6,60.3,70.8));
-        obstacles.put("object3", new Airfield.Dimensions(1000.9,900.45,1700.1));
+        obstacles.put("object1", new Airfield.Dimensions(1,2,1));
+        obstacles.put("object2", new Airfield.Dimensions(30,60,70));
+        obstacles.put("object3", new Airfield.Dimensions(1000,900,1700));
 
         airfield.setPredefinedObstacles(obstacles);
 
@@ -178,17 +178,17 @@ public class AirfieldTest {
         Airfield airfield = new Airfield("");
 
         HashMap<String, Airfield.Dimensions> obstacles = new HashMap<>();
-        obstacles.put("object1", new Airfield.Dimensions(1.2,2.1,1.1));
-        obstacles.put("object2", new Airfield.Dimensions(30.6,60.3,70.8));
-        obstacles.put("object3", new Airfield.Dimensions(1000.9,900.45,1700.1));
+        obstacles.put("object1", new Airfield.Dimensions(1,2,1));
+        obstacles.put("object2", new Airfield.Dimensions(30,60,70));
+        obstacles.put("object3", new Airfield.Dimensions(1000,900,1700));
 
         airfield.setPredefinedObstacles(obstacles);
 
-        airfield.redefineObstacle("object1", 9.00, 80.6, 12.3);
+        airfield.redefineObstacle("object1", 9, 80, 12);
 
-        assertEquals(true, airfield.getPredefinedObstacles().get("object1").getLength() == 9.00);
-        assertEquals(true, airfield.getPredefinedObstacles().get("object1").getWidth() == 80.6);
-        assertEquals(true, airfield.getPredefinedObstacles().get("object1").getHeight() == 12.3);
+        assertEquals(true, airfield.getPredefinedObstacles().get("object1").getLength() == 9);
+        assertEquals(true, airfield.getPredefinedObstacles().get("object1").getWidth() == 80);
+        assertEquals(true, airfield.getPredefinedObstacles().get("object1").getHeight() == 12);
     }
 
     @Test
