@@ -21,6 +21,13 @@ import java.util.ArrayList;
 
 import static uk.ac.soton.view.Settings.*;
 
+//todo Add legend to 3D view.
+//todo Clearway/Stopway/displaced threshold should only be visible on selected runway, when a runway is selected.
+//todo Add a plane displaying als/tocs.
+//todo Fix runway names so they display correctly - currently the names are displayed at the wrong end of the runway.
+//todo Give various elements: threshold/stopway/clearway borders so they look less flat.
+//todo Threshold indicators are displayed at the wrong end of the runway.
+//todo Landing direction faces the wrong way.
 
 public class View3D extends JFrame{
 
@@ -31,14 +38,14 @@ public class View3D extends JFrame{
     private double xOffset, yOffset, zOffset;
     private DoubleProperty angleX, angleY;
 
-    private final Integer runwayNameOffset = 50;
+    private final Integer runwayNameOffset = 40;
 
     //The height of the boxes off the plane x=0, z=0.
     private final Integer runwayElevation = 18;
     private final Integer runwayStripElevation = 4;
     private final Integer clearAndGradedAreaElevation = 12;
-    private final Integer stopwayElevation = runwayElevation + 1;
-    private final Integer clearwayElevation = runwayElevation + 2;
+    private final Integer stopwayElevation = 20;
+    private final Integer clearwayElevation = 40;
 
     private final Integer verticalOffset = 18;
 
@@ -112,6 +119,7 @@ public class View3D extends JFrame{
         generateRunwayStrip(root3D, selectedRunway, runwayStripElevation);
         generateClearAndGraded(root3D, selectedRunway, clearAndGradedAreaElevation);
         generateRunway(root3D, selectedRunway, runwayElevation);
+        genDisplacedThreshold(root3D, selectedRunway, runwayElevation);
         generateParameters(root3D, selectedRunway);
         genDisplacedThreshold(root3D,selectedRunway,runwayElevation);
         genRunwayName(root3D, selectedRunway, runwayElevation);
@@ -129,6 +137,7 @@ public class View3D extends JFrame{
         Point pos = controller.getRunwayPos(selectedRunway);
 
         generateRunways(root3D);
+        genDisplacedThreshold(root3D, selectedRunway, runwayElevation);
         generateParameters(root3D, selectedRunway);
         genLandingDirection(root3D, selectedRunway,runwayElevation);
 
@@ -221,7 +230,6 @@ public class View3D extends JFrame{
         //Use a second loop to iterate over all logical runways and render anything which should be displayed for both.
         for(String runwayId: controller.getRunways()){
             genRunwayName(root, runwayId, runwayElevation);
-            genDisplacedThreshold(root, runwayId, runwayElevation);
         }
     }
 
@@ -277,7 +285,6 @@ public class View3D extends JFrame{
         Integer letterHeightOffset = 10;
 
         if(runwayId.length() == 2){
-
             Text text = new Text(runwayId);
             text.setFill(fontColor);
             text.setFont(font);
@@ -396,7 +403,7 @@ public class View3D extends JFrame{
         Integer runwayHeight = ((Double)controller.getRunwayDim(runwayId).getHeight()).intValue();
 
         //when drawing the centerline take into account the offset of where the name is displayed and the font size of the name
-        Line line = new Line (0, runwayNameOffset + runwayHeight/2 ,  0, runwayLength - runwayNameOffset - runwayHeight/2);
+        Line line = new Line (0, runwayNameOffset + runwayHeight/2 +20,  0, runwayLength - runwayNameOffset - runwayHeight/2 -20);
         line.setStroke(convertToJFXColour(Settings.CENTERLINE_COLOUR));
         line.setStrokeWidth(5);
         line.getStrokeDashArray().add(25.0);
@@ -427,8 +434,8 @@ public class View3D extends JFrame{
         stopwayBox.setMaterial(stopwayMaterial);
 
         stopwayBox.setTranslateX(runwayPosition.x);
-        stopwayBox.setTranslateZ(-runwayPosition.y + runwayWidth + stopwayDimension.width/2);
-        stopwayBox.setTranslateY(-helperHeight);
+        stopwayBox.setTranslateZ(-runwayPosition.y + runwayWidth + stopwayDimension.width/2 -2);
+        stopwayBox.setTranslateY(-runwayElevation - helperHeight/2);
 
         Rotate rStopway = new Rotate(controller.getBearing(runwayId), 0,0,-runwayWidth - stopwayDimension.width/2, Rotate.Y_AXIS);
         stopwayBox.getTransforms().add(rStopway);
@@ -444,25 +451,22 @@ public class View3D extends JFrame{
         Dimension clearwayDimension = controller.getClearwayDim(runwayId);
         Double runwayWidth = controller.getRunwayDim(runwayId).getWidth();
 
-        Box clearwayBox = new Box(clearwayDimension.height, helperHeight, clearwayDimension.width);
+        Box clearwayBox = new Box(clearwayDimension.height, helperHeight+1, clearwayDimension.width);
         PhongMaterial stopwayMaterial = new PhongMaterial(convertToJFXColour(CLEARWAY_FILL_COLOUR));
         clearwayBox.setMaterial(stopwayMaterial);
 
         clearwayBox.setTranslateX(runwayPosition.x);
         clearwayBox.setTranslateZ(-runwayPosition.y + runwayWidth + clearwayDimension.width/2);
-        clearwayBox.setTranslateY(-helperHeight);
+        clearwayBox.setTranslateY(-runwayElevation - helperHeight/2);
 
         Rotate rClearway = new Rotate(controller.getBearing(runwayId), 0,0,-runwayWidth - clearwayDimension.width/2, Rotate.Y_AXIS);
         clearwayBox.getTransforms().add(rClearway);
 
         root.getChildren().add(clearwayBox);
-
     }
-
 
     // display displaced threshold
     private void genDisplacedThreshold(Group root, String runwayId, Integer helperHeight){
-
         //do not draw displaced threshold if it is not present
         if(controller.getRunwayThreshold(runwayId) == 0){
             return;
@@ -473,18 +477,18 @@ public class View3D extends JFrame{
         Double runwayHeight = controller.getRunwayDim(runwayId).getHeight();
         Double runwayWidth = controller.getRunwayDim(runwayId).getWidth();
         
-        Box thresholdBox = new Box(runwayHeight, helperHeight, displacedThreshold);
-        PhongMaterial thresholdMaterial = new PhongMaterial(convertToJFXColour(Settings.THRESHOLD_INDICATOR_COLOUR));
+        Box thresholdBox = new Box(runwayHeight, 0.8, displacedThreshold);
+        Color thresholdColor = convertToJFXColour(THRESHOLD_INDICATOR_COLOUR);
+        PhongMaterial thresholdMaterial = new PhongMaterial(new Color(thresholdColor.getRed(), thresholdColor.getGreen(), thresholdColor.getBlue(), 0.65));
         thresholdBox.setMaterial(thresholdMaterial);
 
         // to avoid shading conflicts subtract one from the position on the z axis
         thresholdBox.setTranslateX(runwayPosition.x);
-        thresholdBox.setTranslateZ(-runwayPosition.y + runwayWidth - displacedThreshold/2 -1);
+        thresholdBox.setTranslateZ(-runwayPosition.y - runwayWidth - displacedThreshold/2 -1);
         thresholdBox.setTranslateY(-helperHeight);
 
         Rotate rThreshold = new Rotate(controller.getBearing(runwayId), 0,0, - runwayWidth + displacedThreshold/2 + 1, Rotate.Y_AXIS);
         thresholdBox.getTransforms().add(rThreshold);
-
 
         root.getChildren().add(thresholdBox);
 
