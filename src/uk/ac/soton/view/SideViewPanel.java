@@ -301,7 +301,7 @@ public class SideViewPanel extends InteractivePanel{
         drawParameterToTheLeft(g2, -100, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance + obstacleLength);
 
         Integer resa = controller.getRESADistance(selectedRunway);
-        drawParameterToTheLeft(g2, -300, new String("RESA: " + resa), resa, obstacleDistance + obstacleLength);
+        drawParameterToTheLeft(g2, -300, new String("RESA: " + resa), resa, obstacleDistance);
 
         Integer newStripEnd = controller.getStripEndSize(selectedRunway);
 
