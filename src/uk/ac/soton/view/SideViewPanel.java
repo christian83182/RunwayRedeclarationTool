@@ -271,11 +271,20 @@ public class SideViewPanel extends InteractivePanel{
         Integer blastingDistance = controller.getBlastingDistance();
         drawParameterToTheRight(g2, -400, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance + obstacleLength);
 
-        g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
-        Point startSlope = new Point(obstacleDistance, -controller.getPredefinedObstacleHeight(obstacle).intValue());
-        Point endSlope = new Point(obstacleDistance + obstacleLength + resa, 0);
-        g2.drawLine(startSlope.x, startSlope.y, endSlope.x, endSlope.y);
+        if(resa > alsDistance){
+            g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
+            Point startSlope = new Point(obstacleDistance, -controller.getPredefinedObstacleHeight(obstacle).intValue());
+            Point endSlope = new Point(obstacleDistance + resa, 0);
+            g2.drawLine(startSlope.x, startSlope.y, endSlope.x, endSlope.y);
 
+        }else{
+
+            g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
+            Point startSlope = new Point(obstacleDistance, -controller.getPredefinedObstacleHeight(obstacle).intValue());
+            Point endSlope = new Point(obstacleDistance + alsDistance, 0);
+            g2.drawLine(startSlope.x, startSlope.y, endSlope.x, endSlope.y);
+
+        }
     }
 
     //all parameters drawn to the left of the obstacle are drawn from a specified distance - the length of the parameter
@@ -314,10 +323,17 @@ public class SideViewPanel extends InteractivePanel{
         Integer blastingDistance = controller.getBlastingDistance();
         drawParameterToTheRight(g2, -400, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance - blastingDistance);
 
-        g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
-        Point startSlope = new Point(obstacleDistance + obstacleLength - alsDistance, 0);
-        Point endSlope = new Point (obstacleDistance + obstacleLength, -controller.getPredefinedObstacleHeight(obstacle).intValue());
-        g2.drawLine(startSlope.x, startSlope.y, endSlope.x, endSlope.y);
+        if(resa > alsDistance){
+            g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
+            Point startSlope = new Point(obstacleDistance + obstacleLength - resa, 0);
+            Point endSlope = new Point (obstacleDistance + obstacleLength, -controller.getPredefinedObstacleHeight(obstacle).intValue());
+            g2.drawLine(startSlope.x, startSlope.y, endSlope.x, endSlope.y);
+        }else{
+            g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
+            Point startSlope = new Point(obstacleDistance + obstacleLength - alsDistance, 0);
+            Point endSlope = new Point (obstacleDistance + obstacleLength, -controller.getPredefinedObstacleHeight(obstacle).intValue());
+            g2.drawLine(startSlope.x, startSlope.y, endSlope.x, endSlope.y);
+        }
 
     }
 }
