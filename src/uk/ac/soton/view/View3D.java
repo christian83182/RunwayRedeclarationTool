@@ -21,7 +21,6 @@ import java.util.ArrayList;
 
 import static uk.ac.soton.view.Settings.*;
 
-//todo fix the showing of the name where runways overlap
 
 public class View3D extends JFrame{
 
@@ -114,8 +113,10 @@ public class View3D extends JFrame{
         generateClearAndGraded(root3D, selectedRunway, clearAndGradedAreaElevation);
         generateRunway(root3D, selectedRunway, runwayElevation);
         generateParameters(root3D, selectedRunway);
+        genDisplacedThreshold(root3D,selectedRunway,runwayElevation);
         genRunwayName(root3D, selectedRunway, runwayElevation);
         genCenterline(root3D, selectedRunway, runwayElevation);
+        genLandingDirection(root3D, selectedRunway, runwayElevation);
         generateLighting(root3D);
         pointCameraAt(new Point3D(pos.x,0, -pos.y),root3D);
 
@@ -129,6 +130,7 @@ public class View3D extends JFrame{
 
         generateRunways(root3D);
         generateParameters(root3D, selectedRunway);
+        genLandingDirection(root3D, selectedRunway,runwayElevation);
 
         generateLighting(root3D);
         pointCameraAt(new Point3D(pos.x,0, -pos.y),root3D);
@@ -328,6 +330,40 @@ public class View3D extends JFrame{
 
     }
 
+    //display landing direction
+    private void genLandingDirection(Group root, String runwayId, Integer helperHeight){
+
+        Dimension runwayDim = controller.getRunwayDim(runwayId);
+
+        Point runwayPos = controller.getRunwayPos(runwayId);
+
+        javafx.scene.shape.Polygon arrow = new javafx.scene.shape.Polygon();
+        arrow.getPoints().addAll(new Double[]{
+                0.0, -12.0,
+                0.0,  12.0,
+                23.0, 0.0
+        });
+
+        arrow.setStroke(convertToJFXColour(Settings.CENTERLINE_COLOUR));
+        arrow.setFill(convertToJFXColour(Settings.CENTERLINE_COLOUR));
+
+        arrow.setTranslateX(runwayPos.x);
+        arrow.setTranslateZ(-runwayPos.y + runwayDim.width - 300);
+        arrow.setTranslateY(-helperHeight-2);
+
+        Rotate rotate = new Rotate(controller.getBearing(runwayId), 0, 0,-runwayDim.width + 300, Rotate.Y_AXIS);
+        arrow.getTransforms().add(rotate);
+
+        Rotate rotate1 = new Rotate(90, 0, 0, 0 ,Rotate.X_AXIS);
+        arrow.getTransforms().add(rotate1);
+
+        Rotate rotate2 = new Rotate(-90, 0, 0, 0 ,Rotate.Z_AXIS);
+        arrow.getTransforms().add(rotate2);
+
+        root.getChildren().add(arrow);
+
+    }
+
     //placing the obstacle on the runway
     private void genObstacle(Group root, String runwayId, Integer verticalOffset){
         String obstacleId = controller.getRunwayObstacle(runwayId);
@@ -397,7 +433,6 @@ public class View3D extends JFrame{
         Rotate rStopway = new Rotate(controller.getBearing(runwayId), 0,0,-runwayWidth - stopwayDimension.width/2, Rotate.Y_AXIS);
         stopwayBox.getTransforms().add(rStopway);
 
-
         root.getChildren().add(stopwayBox);
 
     }
@@ -419,7 +454,6 @@ public class View3D extends JFrame{
 
         Rotate rClearway = new Rotate(controller.getBearing(runwayId), 0,0,-runwayWidth - clearwayDimension.width/2, Rotate.Y_AXIS);
         clearwayBox.getTransforms().add(rClearway);
-
 
         root.getChildren().add(clearwayBox);
 
