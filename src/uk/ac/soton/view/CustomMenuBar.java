@@ -1,8 +1,12 @@
 package uk.ac.soton.view;
+import org.xml.sax.SAXException;
+//import uk.ac.soton.controller.ImporterException;
 import uk.ac.soton.controller.ViewController;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -55,6 +59,7 @@ public class CustomMenuBar extends JMenuBar {
                             "There was an issue importing that configuration: '" + e1.getMessage() + "'",
                             "Import Error" ,JOptionPane.ERROR_MESSAGE);
                     NotificationLogger.logger.addToLog("Configuration '"+ fileChooser.getSelectedFile().getName()+"' could not be imported");
+                    e1.printStackTrace();
                 }
                 appView.repaint();
             }
