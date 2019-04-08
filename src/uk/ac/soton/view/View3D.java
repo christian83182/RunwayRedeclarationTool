@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import static uk.ac.soton.view.Settings.*;
 
 //todo Add legend to 3D view.
-//todo Clearway/Stopway/displaced threshold should only be visible on selected runway, when a runway is selected.
 //todo Add a plane displaying als/tocs.
 //todo Give various elements: threshold/stopway/clearway borders so they look less flat.
 
