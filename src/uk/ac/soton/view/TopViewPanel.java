@@ -416,57 +416,70 @@ public class TopViewPanel extends InteractivePanel {
         g2.setTransform(old);
     }
 
-    public void paintObstacleParameters(String runwayId, String obstacleId, Graphics2D g2){
+    private void paintObstacleParameters(String runwayId, String obstacleId, Graphics2D g2){
+
+        //helperHeights for drawing obstacle parameters
+
+        Integer stripHeight = controller.getStripWidthFromCenterline(runwayId);
+
+        final Integer distanceFromAlsHelperHeight = -stripHeight/2 +10;
+        final Integer resaHelperHeight = -stripHeight/2 -50;
+        final Integer newStripendHelperHeight = -stripHeight/2 -50;
+        final Integer blastDistanceHelperHeight = -stripHeight/2 -100;
 
         //if the obstacle has triggered a redeclaration of the runway, draw the redeclared parameters
         if(controller.isRedeclared(runwayId)) {
-            Integer stripHeight = controller.getStripWidthFromCenterline(runwayId);
 
             //draw parameters to the right
             if(controller.getLogicalRunwayCloserToObstacle(runwayId).getName().equals(runwayId)) {
 
                 Integer resa = controller.getRESADistance(runwayId);
                 Integer resaOffset = controller.getDistanceFromThreshold(runwayId) + controller.getPredefinedObstacleLength(obstacleId).intValue();
-                InfoArrow resaLengthInfo = new InfoArrow(resaOffset, -stripHeight/2 -50, resa, "RESA: " + resa + "m", true);
+                InfoArrow resaLengthInfo = new InfoArrow(resaOffset, resaHelperHeight, resa, "RESA: " + resa + "m", true);
                 resaLengthInfo.drawInfoArrow(runwayId, g2);
 
                 Integer alsDistance = controller.getPredefinedObstacleHeight(obstacleId).intValue() * controller.getALS(runwayId);
                 Integer alsOffset = controller.getDistanceFromThreshold(runwayId);
-                InfoArrow alsLengthInfo = new InfoArrow(alsOffset, -stripHeight/2 + 10, alsDistance, "h*" + controller.getALS(runwayId) + "m", true);
+                InfoArrow alsLengthInfo = new InfoArrow(alsOffset, distanceFromAlsHelperHeight, alsDistance, "h*" + controller.getALS(runwayId) + "m", true);
                 alsLengthInfo.drawInfoArrow(runwayId, g2);
 
                 Integer newStripEnd = controller.getStripEndSize(runwayId);
                 InfoArrow newStripEndInfo;
 
                 if (resa > alsDistance) {
-                    newStripEndInfo = new InfoArrow(resaOffset + resa, -stripHeight/2 - 50, newStripEnd, newStripEnd + " m", true);
+                    newStripEndInfo = new InfoArrow(resaOffset + resa, newStripendHelperHeight, newStripEnd, newStripEnd + " m", true);
                 } else {
-                    newStripEndInfo = new InfoArrow(alsOffset + alsDistance, -stripHeight/2 - 50, newStripEnd, newStripEnd + " m", true);
+                    newStripEndInfo = new InfoArrow(alsOffset + alsDistance, newStripendHelperHeight, newStripEnd, newStripEnd + " m", true);
                 }
 
                 newStripEndInfo.drawInfoArrow(runwayId, g2);
+
+                Integer blastDist = controller.getBlastingDistance();
+                Integer blastDistOffset = controller.getDistanceFromThreshold(runwayId);
+                InfoArrow blastDistInfo = new InfoArrow(blastDistOffset, blastDistanceHelperHeight, blastDist,"Blast Dist: " + blastDist + "m", true);
+                blastDistInfo.drawInfoArrow(runwayId,g2);
 
             }else{
 
                 //draw parameters to the left
                 Integer resa = controller.getRESADistance(runwayId);
                 Integer resaOffset = controller.getDistanceFromThreshold(runwayId) + controller.getPredefinedObstacleLength(obstacleId).intValue();
-                InfoArrow resaLengthInfo = new InfoArrow(resaOffset - resa, -stripHeight/2 -50, resa, "RESA: " + resa + "m", true);
+                InfoArrow resaLengthInfo = new InfoArrow(resaOffset - resa, resaHelperHeight, resa, "RESA: " + resa + "m", true);
                 resaLengthInfo.drawInfoArrow(runwayId, g2);
 
                 Integer alsDistance = controller.getPredefinedObstacleHeight(obstacleId).intValue() * controller.getALS(runwayId);
                 Integer alsOffset = controller.getDistanceFromThreshold(runwayId);
                 Integer obstacleLength = controller.getPredefinedObstacleLength(controller.getRunwayObstacle(runwayId));
-                InfoArrow alsLengthInfo = new InfoArrow(alsOffset - alsDistance + obstacleLength, -stripHeight/2 + 10, alsDistance, "h*" + controller.getALS(runwayId) + "m", true);
+                InfoArrow alsLengthInfo = new InfoArrow(alsOffset - alsDistance + obstacleLength, distanceFromAlsHelperHeight, alsDistance, "h*" + controller.getALS(runwayId) + "m", true);
                 alsLengthInfo.drawInfoArrow(runwayId, g2);
 
                 Integer newStripEnd = controller.getStripEndSize(runwayId);
                 InfoArrow newStripEndInfo;
 
                 if (resa > alsDistance) {
-                    newStripEndInfo = new InfoArrow(resaOffset - resa - newStripEnd, -stripHeight/2 - 50, newStripEnd, newStripEnd + " m", true);
+                    newStripEndInfo = new InfoArrow(resaOffset - resa - newStripEnd, newStripendHelperHeight, newStripEnd, newStripEnd + " m", true);
                 } else {
-                    newStripEndInfo = new InfoArrow(alsOffset - alsDistance + obstacleLength - newStripEnd, -stripHeight/2 - 50, newStripEnd, newStripEnd + " m", true);
+                    newStripEndInfo = new InfoArrow(alsOffset - alsDistance + obstacleLength - newStripEnd, newStripendHelperHeight, newStripEnd, newStripEnd + " m", true);
                 }
 
                 newStripEndInfo.drawInfoArrow(runwayId, g2);
