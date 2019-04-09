@@ -14,6 +14,8 @@ public class SideViewPanel extends InteractivePanel{
     private ViewController controller;
     final Integer OBSTACLE_RESCALE_VALUE = 1;
 
+    //todo Blast Distance should not be displayed if the obstacle is at the end of the runway
+
     SideViewPanel(AppView appView){
         super(new Point(400,200), 1.0);
         this.appView = appView;
@@ -259,17 +261,17 @@ public class SideViewPanel extends InteractivePanel{
         drawParameterToTheRight(g2, -100, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance);
 
         Integer resa = controller.getRESADistance(selectedRunway);
-        drawParameterToTheRight(g2, -300, new String("RESA: " + resa), resa, obstacleDistance + obstacleLength);
+        drawParameterToTheRight(g2, -170, new String("RESA: " + resa), resa, obstacleDistance + obstacleLength);
 
         Integer newStripEnd = controller.getStripEndSize(selectedRunway);
         if(resa > alsDistance){
-            drawParameterToTheRight(g2, -300, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength + resa);
+            drawParameterToTheRight(g2, -170, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength + resa);
         }else{
-            drawParameterToTheRight(g2, -300, new String (newStripEnd + " m"), newStripEnd, obstacleDistance +  alsDistance);
+            drawParameterToTheRight(g2, -170, new String (newStripEnd + " m"), newStripEnd, obstacleDistance +  alsDistance);
         }
 
         Integer blastingDistance = controller.getBlastingDistance();
-        drawParameterToTheRight(g2, -400, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance + obstacleLength);
+        drawParameterToTheRight(g2, -240, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance);
 
         if(resa > alsDistance){
             g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
