@@ -141,6 +141,7 @@ public class Runway extends PositionalObject{
         this.obstacle = null;
         runways[0].revertParameters();
         runways[1].revertParameters();
+        redeclared = false;
 //        runways[0].setObjectDistances(null, null);
 //        runways[1].setObjectDistances(null, null);
         //this.resa = 240; // Resets the RESA in case it was temporarily redefined

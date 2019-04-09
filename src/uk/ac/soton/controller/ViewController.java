@@ -235,21 +235,21 @@ public interface ViewController {
      * @param obstacleId the ID of the obstacle.
      * @return the width of the obstacle.
      */
-    Double getPredefinedObstacleWidth(String obstacleId);
+    Integer getPredefinedObstacleWidth(String obstacleId);
 
     /**
      * Returns the height of a predefined obstacle given its ID.
      * @param obstacleId the ID of the obstacle.
      * @return the height of the obstacle.
      */
-    Double getPredefinedObstacleHeight(String obstacleId);
+    Integer getPredefinedObstacleHeight(String obstacleId);
 
     /**
      * Returns the width of a predefined obstacle given its ID.
      * @param obstacleId the ID of the obstacle.
      * @return the height of the obstacle.
      */
-    Double getPredefinedObstacleLength(String obstacleId);
+    Integer getPredefinedObstacleLength(String obstacleId);
 
     /**
      * Adds an obstacle to the list of predefined obstacles
@@ -258,7 +258,7 @@ public interface ViewController {
      * @param width the width of the new obstacle.
      * @param height the height of the new obstacle.
      */
-    void addObstacleToList(String id, Double length, Double width, Double height);
+    void addObstacleToList(String id, Integer length, Integer width, Integer height);
 
     /**
      * Deletes a specified object from the list of predefined obstacles.
@@ -322,7 +322,7 @@ public interface ViewController {
      * Imports an XML file describing a configuration of the airfield and sets it as the current model.
      * @param path The location of the XML file specified by the user.
      */
-    void importAirfieldConfiguration(String path) throws ImporterException, ParserConfigurationException, SAXException, IOException;
+    void importAirfieldConfiguration(String path) throws ParserConfigurationException, SAXException, IOException;
 
     /**
      * Getting the logical runway on which the obstacle (if present) is closer to its respective threshold.

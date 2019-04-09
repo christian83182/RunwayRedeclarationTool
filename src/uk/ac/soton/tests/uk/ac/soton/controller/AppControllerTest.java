@@ -1,4 +1,4 @@
-package uk.ac.soton.tests.uk.ac.soton.controller;
+package uk.ac.soton.controller;
 
 import org.junit.Test;
 import uk.ac.soton.common.Airfield;
@@ -159,7 +159,7 @@ public class AppControllerTest {
     @Test
     public void getTORAOffset() {
         AppController appController = getAppController();
-        Obstacle obstacle = new Obstacle(50,30,new Airfield.Dimensions(35.2,30.4,14.7));
+        Obstacle obstacle = new Obstacle(50,30,new Airfield.Dimensions(35,30,14));
         r1.placeObstacle(obstacle, "09L");
         r1.recalculateParameters();
 
@@ -176,7 +176,7 @@ public class AppControllerTest {
     @Test
     public void getTODAOffset() {
         AppController appController = getAppController();
-        Obstacle obstacle = new Obstacle(150,30, new Airfield.Dimensions(35.0,30.0,15.0));
+        Obstacle obstacle = new Obstacle(150,30, new Airfield.Dimensions(35,30,15));
         r1.placeObstacle(obstacle,"09L");
         r1.recalculateParameters();
 
@@ -194,7 +194,7 @@ public class AppControllerTest {
     @Test
     public void getLDAOffset() {
         AppController appController = getAppController();
-        Obstacle obstacle = new Obstacle(150,30, new Airfield.Dimensions(35.0,30.0,15.0));
+        Obstacle obstacle = new Obstacle(150,30, new Airfield.Dimensions(35,30,15));
         r1.placeObstacle(obstacle,"09L");
         r1.recalculateParameters();
 
@@ -228,8 +228,8 @@ public class AppControllerTest {
     @Test
     public void addObstacleToList() {
         AppController appController = getAppController();
-        appController.addObstacleToList("Airbus A220-100", 35.0,30.3,11.5);
-        Airfield.Dimensions dimensions = new Airfield.Dimensions(35.0,30.3,11.5);
+        appController.addObstacleToList("Airbus A220-100", 35,30,11);
+        Airfield.Dimensions dimensions = new Airfield.Dimensions(35,30,11);
 
         assertEquals(true,airfield.getPredefinedObstacles().containsKey("Airbus A220-100"));
         assertEquals(dimensions.getHeight(), airfield.getPredefinedObstacles().get("Airbus A220-100").getHeight());

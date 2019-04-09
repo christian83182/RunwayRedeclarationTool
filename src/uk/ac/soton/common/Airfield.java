@@ -20,110 +20,110 @@ public class Airfield {
     private Map<String,Dimensions> predefinedObstacles = new HashMap<String,Dimensions>(){
         {
             // Airbus 320 series
-            put("Airbus A318", new Dimensions(31.44,34.1,12.51));
-            put("Airbus A319", new Dimensions(33.84,34.1,11.76));
-            put("Airbus A320", new Dimensions(37.57,34.1,11.76));
-            put("Airbus A321", new Dimensions(44.51,34.1,11.76));
+            put("Airbus A318", new Dimensions(31,34,12));
+            put("Airbus A319", new Dimensions(33,34,11));
+            put("Airbus A320", new Dimensions(37,34,11));
+            put("Airbus A321", new Dimensions(44,34,11));
 
             // Airbus 330 series
-            put("Airbus A330-200ceo", new Dimensions(58.82,60.3,17.39));
-            put("Airbus A330-200F", new Dimensions(58.82,60.3,16.90));
-            put("Airbus A330-300ceo", new Dimensions(63.69,60.3,16.83));
+            put("Airbus A330-200ceo", new Dimensions(58,60,17));
+            put("Airbus A330-200F", new Dimensions(58,60,16));
+            put("Airbus A330-300ceo", new Dimensions(63,60,16));
 
             // Airbus 340 series
-            put("Airbus A340-200", new Dimensions(59.39,60.3,16.7));
-            put("Airbus A340-300", new Dimensions(63.6,60.3,16.85));
-            put("Airbus A340-500", new Dimensions(67.9,63.45,17.1));
-            put("Airbus A340-600", new Dimensions(75.3,63.45,17.3));
+            put("Airbus A340-200", new Dimensions(59,60,16));
+            put("Airbus A340-300", new Dimensions(63,60,16));
+            put("Airbus A340-500", new Dimensions(67,63,17));
+            put("Airbus A340-600", new Dimensions(75,63,17));
 
             // Airbus 350 series
-            put("Airbus A350-800", new Dimensions(60.54,64.75,17.1));
-            put("Airbus A350-900", new Dimensions(66.89,64.75,17.1));
-            put("Airbus A350-1000", new Dimensions(73.88,64.75,17.1));
+            put("Airbus A350-800", new Dimensions(60,64,17));
+            put("Airbus A350-900", new Dimensions(66,64,17));
+            put("Airbus A350-1000", new Dimensions(73,64,17));
 
             // Airbus 380 series
-            put("Airbus A380", new Dimensions(73.0,79.8,24.1));
+            put("Airbus A380", new Dimensions(73,79,24));
 
             // ATR
-            put("ATR-42", new Dimensions(22.67,24.57,7.59));
-            put("ATR-72", new Dimensions(27.17,27.05,7.65));
+            put("ATR-42", new Dimensions(22,24,7));
+            put("ATR-72", new Dimensions(27,27,7));
 
             // Boeing 717
-            put("Boeing 717", new Dimensions(37.8,28.47,8.92));
+            put("Boeing 717", new Dimensions(37,28,8));
 
             // Boeing 727
-            put("Boeing 727-100", new Dimensions(40.59,32.92,10.52));
-            put("Boeing 727-200", new Dimensions(46.69,32.92,10.52));
+            put("Boeing 727-100", new Dimensions(40,32,10));
+            put("Boeing 727-200", new Dimensions(46,32,10));
 
             // Boeing 737
-            put("Boeing 737-100", new Dimensions(28.65,28.35,11.23));
-            put("Boeing 737-200", new Dimensions(30.53,28.35,11.23));
-            put("Boeing 737-300", new Dimensions(33.40,28.88,11.13));
-            put("Boeing 737-400", new Dimensions(36.45,28.88,11.13));
-            put("Boeing 737-500", new Dimensions(31.01,28.88,11.13));
-            put("Boeing 737-600", new Dimensions(31.20,34.32,12.6));
-            put("Boeing 737-700", new Dimensions(33.6,34.32,12.6));
-            put("Boeing 737-800", new Dimensions(39.5,34.32,12.6));
-            put("Boeing 737-900", new Dimensions(42.1,34.32,12.6));
+            put("Boeing 737-100", new Dimensions(28,28,11));
+            put("Boeing 737-200", new Dimensions(30,28,11));
+            put("Boeing 737-300", new Dimensions(33,28,11));
+            put("Boeing 737-400", new Dimensions(36,28,11));
+            put("Boeing 737-500", new Dimensions(31,28, 11));
+            put("Boeing 737-600", new Dimensions(31,34,12));
+            put("Boeing 737-700", new Dimensions(33,34,12));
+            put("Boeing 737-800", new Dimensions(39,34,12));
+            put("Boeing 737-900", new Dimensions(42,34,12));
 
             // Boeing 747
-            put("Boeing 747-100", new Dimensions(70.6,59.6,19.3));
-            put("Boeing 747SP", new Dimensions(56.31,59.6,20.06));
-            put("Boeing 747-200", new Dimensions(70.6,59.6,19.3));
-            put("Boeing 747-300", new Dimensions(70.6,59.6,19.3));
-            put("Boeing 747-400", new Dimensions(70.6,64.4,19.4));
+            put("Boeing 747-100", new Dimensions(70,59,19));
+            put("Boeing 747SP", new Dimensions(56,59,20));
+            put("Boeing 747-200", new Dimensions(70,59,19));
+            put("Boeing 747-300", new Dimensions(70,59,19));
+            put("Boeing 747-400", new Dimensions(70,64,19));
 
             // Boeing 757
-            put("Boeing 757-200", new Dimensions(47.3,38.05,13.56));
-            put("Boeing 757-300", new Dimensions(54.47,38.05,13.56));
+            put("Boeing 757-200", new Dimensions(47,38,13));
+            put("Boeing 757-300", new Dimensions(54,38,13));
 
             // Boeing 767
-            put("Boeing 767-200", new Dimensions(47.51,47.57,15.85));
-            put("Boeing 767-300", new Dimensions(54.94,47.57,16.8));
-            put("Boeing 767-400", new Dimensions(61.37,51.92,16.8));
+            put("Boeing 767-200", new Dimensions(47,47,15));
+            put("Boeing 767-300", new Dimensions(54,47,16));
+            put("Boeing 767-400", new Dimensions(61,51,16));
 
             // Boeing 777
-            put("Boeing 777-200", new Dimensions(63.7,60.9,18.5));
-            put("Boeing 777-200LR", new Dimensions(63.7,64.8,18.6));
-            put("Boeing 777F", new Dimensions(63.7,64.8,18.6));
-            put("Boeing 777-300", new Dimensions(73.9,60.9,18.5));
-            put("Boeing 777-300ER", new Dimensions(73.9,64.8,18.5));
-            put("Boeing 777X-8", new Dimensions(69.8,71.8,19.5));
-            put("Boeing 777X-9", new Dimensions(76.7,71.8,19.7));
+            put("Boeing 777-200", new Dimensions(63,60,18));
+            put("Boeing 777-200LR", new Dimensions(63,64,18));
+            put("Boeing 777F", new Dimensions(63,64,18));
+            put("Boeing 777-300", new Dimensions(73,60,18));
+            put("Boeing 777-300ER", new Dimensions(73,64,18));
+            put("Boeing 777X-8", new Dimensions(69,71,19));
+            put("Boeing 777X-9", new Dimensions(76,71,19));
 
             // Boeing 787
-            put("Boeing 787-8", new Dimensions(56.7,60.1,16.9));
-            put("Boeing 787-9", new Dimensions(62.8,60.1,17.02));
-            put("Boeing 787-10", new Dimensions(68.3,60.1,17.02));
+            put("Boeing 787-8", new Dimensions(56,60,16));
+            put("Boeing 787-9", new Dimensions(62,60,17));
+            put("Boeing 787-10", new Dimensions(68,60,17));
 
             // Bombardier
-            put("Bombardier Dash 8-100", new Dimensions(22.25,25.89,7.49));
-            put("Bombardier Dash 8-200", new Dimensions(22.25,25.89,7.49));
-            put("Bombardier Dash 8-300", new Dimensions(25.68,27.43,7.49));
-            put("Bombardier Dash 8-400", new Dimensions(32.81,28.4,8.3));
+            put("Bombardier Dash 8-100", new Dimensions(22,25,7));
+            put("Bombardier Dash 8-200", new Dimensions(22,25,7));
+            put("Bombardier Dash 8-300", new Dimensions(25,27,7));
+            put("Bombardier Dash 8-400", new Dimensions(32,28,8));
 
             // Embraer E Jet
-            put("ERJ 170", new Dimensions(29.9,26.0,9.67));
-            put("ERJ 170-100", new Dimensions(29.9,26.0,9.67));
-            put("ERJ 170-200", new Dimensions(31.68,26.0,9.67));
-            put("ERJ 175", new Dimensions(31.68,26.0,9.67));
-            put("ERJ 190", new Dimensions(36.24,28.72,10.28));
-            put("ERJ 190-100", new Dimensions(36.24,28.72,10.28));
-            put("ERJ 190-200", new Dimensions(38.65,28.72,10.28));
-            put("ERJ 195", new Dimensions(38.65,28.72,10.28));
+            put("ERJ 170", new Dimensions(29,26,9));
+            put("ERJ 170-100", new Dimensions(29,26,9));
+            put("ERJ 170-200", new Dimensions(31,26,9));
+            put("ERJ 175", new Dimensions(31,26,9));
+            put("ERJ 190", new Dimensions(36,28,10));
+            put("ERJ 190-100", new Dimensions(36,28,10));
+            put("ERJ 190-200", new Dimensions(38,28,10));
+            put("ERJ 195", new Dimensions(38,28,10));
 
             // McDonnell Douglas
-            put("DC-10-10", new Dimensions(55.55,47.35,17.53));
-            put("DC-10-30", new Dimensions(55.35,50.39,17.55));
-            put("DC-10-40", new Dimensions(55.54,50.39,17.55));
+            put("DC-10-10", new Dimensions(55,47,17));
+            put("DC-10-30", new Dimensions(55,50,17));
+            put("DC-10-40", new Dimensions(55,50,17));
 
             // Misc
-            put("Comac C919", new Dimensions(38.9,35.8,11.95));
-            put("Concorde Plane", new Dimensions(61.66,25.6,12.2));
+            put("Comac C919", new Dimensions(38,35,11));
+            put("Concorde Plane", new Dimensions(61,25,12));
 
             // Ground support equipment
-            put("Dolly without cargo", new Dimensions(3.18,2.44,0.5));
-            put("Dolly with cargo", new Dimensions(3.18,2.44,2.5));
+            put("Dolly without cargo", new Dimensions(3,2,2));
+            put("Dolly with cargo", new Dimensions(3,2,2));
         }
     };
 
@@ -192,13 +192,13 @@ public class Airfield {
 
     public void setPredefinedObstacles(Map<String, Dimensions> predefinedObstacles) { this.predefinedObstacles = predefinedObstacles; }
 
-    public void defineNewObstacle(String type, Double length, Double width, Double height){
+    public void defineNewObstacle(String type, Integer length, Integer width, Integer height){
         predefinedObstacles.put(type, new Dimensions(length, width, height));
     }
 
     public void removePredefinedObstacle(String type){ predefinedObstacles.remove(type); }
 
-    public void redefineObstacle(String type, Double length, Double width, Double height){
+    public void redefineObstacle(String type, Integer length, Integer width, Integer height){
         Dimensions dimensions = predefinedObstacles.get(type);
         dimensions.setLength(length);
         dimensions.setWidth(width);
@@ -231,26 +231,26 @@ public class Airfield {
 
     public static class Dimensions {
 
-        private Double length = 0.0;
-        private Double width = 0.0;
-        private Double height = 0.0;
+        private Integer length = 0;
+        private Integer width = 0;
+        private Integer height = 0;
 
-        public Dimensions(Double length, Double width, Double height) {
+        public Dimensions(Integer length, Integer width, Integer height) {
             this.length = length;
             this.width = width;
             this.height = height;
         }
 
-        public Double getLength() { return length; }
+        public Integer getLength() { return length; }
 
-        public void setLength(Double length) { this.length = length; }
+        public void setLength(Integer length) { this.length = length; }
 
-        public Double getWidth() { return width; }
+        public Integer getWidth() { return width; }
 
-        public void setWidth(Double width) { this.width = width; }
+        public void setWidth(Integer width) { this.width = width; }
 
-        public Double getHeight() { return height; }
+        public Integer getHeight() { return height; }
 
-        public void setHeight(Double height) { this.height = height; }
+        public void setHeight(Integer height) { this.height = height; }
     }
 }

@@ -171,9 +171,9 @@ public class BrowseObstaclesWindow extends JFrame {
             confirmButton.addActionListener(e -> {
                 //Get the values from the relevant components.
                 String objectId = nameField.getText();
-                Double length = lengthModel.getNumber().doubleValue();
-                Double width = widthModel.getNumber().doubleValue();
-                Double height = heightModel.getNumber().doubleValue();
+                Integer length = lengthModel.getNumber().intValue();
+                Integer width = widthModel.getNumber().intValue();
+                Integer height = heightModel.getNumber().intValue();
 
                 boolean isValid = isUserInputValid(objectId, length, width, height);
                 boolean alreadyExists = controller.getPredefinedObstacleIds().contains(objectId);
@@ -219,9 +219,9 @@ public class BrowseObstaclesWindow extends JFrame {
             //Add an action listener to the button which carried out the procedure to finalize the object's edit.
             confirmButton.addActionListener(e -> {
                 String newObstacleId = nameField.getText();
-                Double length = lengthModel.getNumber().doubleValue();
-                Double width = widthModel.getNumber().doubleValue();
-                Double height = heightModel.getNumber().doubleValue();
+                Integer length = lengthModel.getNumber().intValue();
+                Integer width = widthModel.getNumber().intValue();
+                Integer height = heightModel.getNumber().intValue();
 
                 //If the details are valid, then delete the old values from the list and model, and add the new ones.
                 if(isUserInputValid(newObstacleId, length, width, height)) {
@@ -333,7 +333,7 @@ public class BrowseObstaclesWindow extends JFrame {
         }
 
         //Determines if the details entered are valid or not. Name must not be empty, and values between 0-999.
-        private boolean isUserInputValid(String name, Double length, Double width, Double height){
+        private boolean isUserInputValid(String name, Integer length, Integer width, Integer height){
             if(name.isEmpty()){
                 return false;
             } else if(length <= 0 || width <= 0 || height <= 0){

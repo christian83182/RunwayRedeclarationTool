@@ -163,7 +163,7 @@ public class MenuPanel extends JPanel {
         //Add the "show breakdown" option
         showBreakdownBox = new JCheckBox("Show Parameter Breakdown");
         showBreakdownBox.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
-        showBreakdownBox.setEnabled(false);
+        showBreakdownBox.setEnabled(true);
         showBreakdownBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 20; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;

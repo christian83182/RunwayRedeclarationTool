@@ -369,22 +369,22 @@ public class AppController implements ViewController {
     }
 
     @Override
-    public synchronized Double getPredefinedObstacleWidth(String obstacleId) {
+    public synchronized Integer getPredefinedObstacleWidth(String obstacleId) {
         return airfield.getPredefinedObstacles().get(obstacleId).getWidth();
     }
 
     @Override
-    public synchronized Double getPredefinedObstacleHeight(String obstacleId) {
+    public synchronized Integer getPredefinedObstacleHeight(String obstacleId) {
         return airfield.getPredefinedObstacles().get(obstacleId).getHeight();
     }
 
     @Override
-    public synchronized Double getPredefinedObstacleLength(String obstacleId) {
+    public synchronized Integer getPredefinedObstacleLength(String obstacleId) {
         return airfield.getPredefinedObstacles().get(obstacleId).getLength();
     }
 
     @Override
-    public synchronized void addObstacleToList(String id, Double length, Double width, Double height) {
+    public synchronized void addObstacleToList(String id, Integer length, Integer width, Integer height) {
         airfield.defineNewObstacle(id, length, width, height);
     }
 
@@ -455,9 +455,9 @@ public class AppController implements ViewController {
     }
 
     @Override
-    public synchronized void importAirfieldConfiguration(String path) throws ImporterException, ParserConfigurationException, SAXException, IOException {
-        XMLImporter importer = new XMLImporter();
-        this.airfield = importer.importAirfieldInfo(path);
+    public synchronized void importAirfieldConfiguration(String path) throws ParserConfigurationException, SAXException, IOException {
+        Importer importer = new Importer(this);
+        importer.importConfiguration(path);
     }
 
     @Override
@@ -576,13 +576,13 @@ public class AppController implements ViewController {
         airfield.addRunway(new Runway(id, xPos, yPos, length, width, stripWidth, stripEnd));
     }
 
-    public void addPredefinedObstacle(String type, Double length, Double width, Double height) {
+    public void addPredefinedObstacle(String type, Integer length, Integer width, Integer height) {
         airfield.defineNewObstacle(type, length, width, height);
     }
 
     public void removePredefinedObstacle(String type) { airfield.removePredefinedObstacle(type); }
 
-    public void editPredefinedObstacle(String type, Double newLength, Double newWidth, Double newHeight){
+    public void editPredefinedObstacle(String type, Integer newLength, Integer newWidth, Integer newHeight){
         airfield.redefineObstacle(type, newLength, newWidth, newHeight);
     }
 
