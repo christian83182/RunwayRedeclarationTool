@@ -140,7 +140,9 @@ public class Runway extends PositionalObject{
     public void clearObstacle(){
         this.obstacle = null;
         runways[0].revertParameters();
+        runways[0].setObstacleOffset(0);
         runways[1].revertParameters();
+        runways[1].setObstacleOffset(0);
         redeclared = false;
 //        runways[0].setObjectDistances(null, null);
 //        runways[1].setObjectDistances(null, null);
@@ -168,7 +170,7 @@ public class Runway extends PositionalObject{
         }
 
         current.setObjectDistances(obstacle.getStartDistance(), obstacle.getCentrelineDistance(), obstacle.getStartDistance());
-        sibling.setObjectDistances(getLength() - obstacle.getStartDistance() - obstacle.getLength().intValue(), -obstacle.getCentrelineDistance(), getLength() - obstacle.getStartDistance());
+        sibling.setObjectDistances(getLength() - obstacle.getStartDistance(), -obstacle.getCentrelineDistance(), getLength() - obstacle.getStartDistance());
     }
 
     public Obstacle getObstacle(){
