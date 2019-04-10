@@ -374,7 +374,7 @@ public class View3D extends JFrame{
         Integer obstacleWidth = controller.getPredefinedObstacleWidth(obstacleId).intValue();
         Integer obstacleLength = controller.getPredefinedObstacleLength(obstacleId).intValue();
         Integer distanceFromCenterline = controller.getDistanceFromCenterline(runwayId);
-        Integer distanceFromThreshold = controller.getDistanceFromThreshold(runwayId);
+        Integer distanceFromThreshold = controller.getDistanceFromThreshold(runwayId) + controller.getObstacleOffset(runwayId);
 
         Box obstacle = new Box(obstacleWidth, obstacleHeight, obstacleLength);
         PhongMaterial obstacleMaterial = new PhongMaterial(convertToJFXColour(OBSTACLE_FILL_COLOUR));

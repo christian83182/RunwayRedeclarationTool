@@ -162,7 +162,7 @@ public class SideViewPanel extends InteractivePanel{
 
         String selectedRunway = appView.getSelectedRunway();
         String obstacle = controller.getRunwayObstacle(selectedRunway);
-        Integer distanceFromEdge = controller.getDistanceFromThreshold(selectedRunway);
+        Integer distanceFromEdge = controller.getDistanceFromThreshold(selectedRunway) + controller.getObstacleOffset(selectedRunway);
         Integer obstacleLength = controller.getPredefinedObstacleLength(obstacle).intValue() * OBSTACLE_RESCALE_VALUE;
         Integer obstacleHeight = controller.getPredefinedObstacleHeight(obstacle).intValue() * OBSTACLE_RESCALE_VALUE;
 
@@ -260,7 +260,7 @@ public class SideViewPanel extends InteractivePanel{
     // the new strip end comes after the end of the resa or the end of the height*als distance, whichever is longer
     private void displayDistancesToTheRight(Graphics2D g2, String obstacle, String selectedRunway){
 
-        Integer obstacleDistance = controller.getDistanceFromThreshold(selectedRunway);
+        Integer obstacleDistance = controller.getDistanceFromThreshold(selectedRunway) + controller.getObstacleOffset(selectedRunway);
         Integer obstacleLength = controller.getPredefinedObstacleLength(obstacle).intValue();
 
         Integer alsDistance = controller.getPredefinedObstacleHeight(obstacle).intValue()* controller.getALS(selectedRunway);
@@ -311,7 +311,7 @@ public class SideViewPanel extends InteractivePanel{
     // the new strip end comes before the end of the resa or the end of the height*als distance, whichever is longer
     private void displayDistancesToTheLeft(Graphics2D g2, String obstacle, String selectedRunway){
 
-        Integer obstacleDistance = controller.getDistanceFromThreshold(selectedRunway);
+        Integer obstacleDistance = controller.getDistanceFromThreshold(selectedRunway) + controller.getObstacleOffset(selectedRunway);
         Integer obstacleLength = controller.getPredefinedObstacleLength(obstacle).intValue();
 
         Integer alsDistance = controller.getPredefinedObstacleHeight(obstacle).intValue()*controller.getALS(selectedRunway);

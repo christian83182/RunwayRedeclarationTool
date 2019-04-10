@@ -428,5 +428,12 @@ public interface ViewController {
      */
     void setBackgroundRotation(Double rotation);
 
+    /**
+     * Returns the offset at which the obstacle should be drawn on the specified logical runway.
+     * Return null if no obstacle is present on the logical runway.
+     * @param runwayId refers to the logical runway for which the offset it requested
+     */
+    Integer getObstacleOffset(String runwayId);
+
 }
 
