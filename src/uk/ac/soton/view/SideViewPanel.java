@@ -1,10 +1,8 @@
 package uk.ac.soton.view;
-import uk.ac.soton.common.Obstacle;
 import uk.ac.soton.controller.ViewController;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.util.Set;
 
 
 public class SideViewPanel extends InteractivePanel{
@@ -20,10 +18,8 @@ public class SideViewPanel extends InteractivePanel{
     final Integer newStripendHelperHeight = -170;
     final Integer blastDistanceHelperHeight = -240;
 
-    //todo Blast Distance should not be displayed if the obstacle is at the end of the runway
-
     SideViewPanel(AppView appView){
-        super(new Point(400,200), 1.0);
+        super(new Point(-300,50), 0.3);
         this.appView = appView;
         this.menuPanel = appView.getMenuPanel();
         this.controller = appView.getController();
@@ -238,9 +234,6 @@ public class SideViewPanel extends InteractivePanel{
                     displayDistancesToTheLeft(g2, obstacle, selectedRunway);
                 }
             }
-
-            //TODO: displaying height of the obstacle (problem: will be extremely small though, implement vertical arrow)
-
         }
     }
 
