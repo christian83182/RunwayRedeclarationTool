@@ -91,6 +91,8 @@ public class LogicalRunway{
     private Number getObjectDistanceFromStart = null;
     private Number objectDistanceFromCentreline = null;
 
+    private Integer obstacleOffset = 0;
+
 
     /**
      * Constructor for the logical runway associated with a physical one.
@@ -128,6 +130,14 @@ public class LogicalRunway{
         String ldaDef = "LDA = TORA - Displaced Threshold\n\n" + "LDA = " + tora.intValue() + " - " + threshold +
                 " = " + lda;
         this.lda = new Parameter(lda, ldaDef);
+    }
+
+    public Integer getObstacleOffset() {
+        return obstacleOffset;
+    }
+
+    public void setObstacleOffset(Integer obstacleOffset) {
+        this.obstacleOffset = obstacleOffset;
     }
 
     public void setObjectDistances(Integer distanceFromEdge, Integer distanceFromCentreline, Integer originalDistance){
