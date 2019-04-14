@@ -214,6 +214,9 @@ public class CustomMenuBar extends JMenuBar {
                             "Please enter a value between 300-500.",
                             "Input Error",
                             JOptionPane.ERROR_MESSAGE);
+                    NotificationLogger.logger.addToLog("Blast protection value input was not a valid input.");
+
+
 
                     input = JOptionPane.showInputDialog(
                             appView,
@@ -229,6 +232,7 @@ public class CustomMenuBar extends JMenuBar {
                 }
 
                 controller.setBlastingDistance(newValue);
+                NotificationLogger.logger.addToLog("Blast protection was set to: '" +controller.getBlastingDistance()+ "'");
                 break;
             }
             catch(NumberFormatException nfe){
