@@ -652,6 +652,8 @@ public class View3D extends JFrame{
         thresholdPointer.setArcHeight(5); thresholdPointer.setArcWidth(5);
         thresholdPointer.setFill(convertToJFXColour(Settings.SELECTED_RUNWAY_HIGHLIGHT));
 
+        globalRoot.getChildren().add(thresholdPointer);
+
         // Obstacle pointer
         if(controller.getRunwayObstacle(selectedRunway) != ""){
             Double obstacleDist = (controller.getDistanceFromThreshold(selectedRunway) + controller.getObstacleOffset(selectedRunway))*scalefactor;
@@ -664,7 +666,7 @@ public class View3D extends JFrame{
             globalRoot.getChildren().add(obstaclePointer);
         }
 
-        globalRoot.getChildren().addAll(thresholdPointer, slider);
+        globalRoot.getChildren().add(slider);
     }
 
     private Slider prepareSlider(Group root3D, String runwayId){
