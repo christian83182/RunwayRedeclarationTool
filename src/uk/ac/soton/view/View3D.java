@@ -57,7 +57,8 @@ public class View3D extends JFrame{
 
     //Initializes the Swing components.
     private void initSwing() {
-        this.setPreferredSize(new Dimension(1600,900));
+
+        this.setPreferredSize(new Dimension(appView.getWidth(), appView.getHeight()));
         this.setResizable(false);
 
         //Create a JFXPanel for the 3D content.
