@@ -160,9 +160,9 @@ public class BrowseObstaclesWindow extends JFrame {
         obstacleCustomizationWindow(String title){
             super(title);
             nameField = new JTextField();
-            lengthModel = new SpinnerNumberModel(0,0,999,0.1);
-            widthModel = new SpinnerNumberModel(0,0,999,0.1);
-            heightModel = new SpinnerNumberModel(0,0,999,0.1);
+            lengthModel = new SpinnerNumberModel(0,0,999,1);
+            widthModel = new SpinnerNumberModel(0,0,999,1);
+            heightModel = new SpinnerNumberModel(0,0,999,1);
             confirmButton = new JButton("Confirm");
         }
 
@@ -209,11 +209,11 @@ public class BrowseObstaclesWindow extends JFrame {
             //Change the value of the member variables so that their default values are the values of obstacle being edited.
             nameField = new JTextField(obstacleId);
             lengthModel = new SpinnerNumberModel(
-                    controller.getPredefinedObstacleLength(obstacleId).doubleValue(),0,999,0.1);
+                    controller.getPredefinedObstacleLength(obstacleId).intValue(),0,999,1);
             widthModel = new SpinnerNumberModel(
-                    controller.getPredefinedObstacleWidth(obstacleId).doubleValue(),0,999,0.1);
+                    controller.getPredefinedObstacleWidth(obstacleId).intValue(),0,999,1);
             heightModel = new SpinnerNumberModel(
-                    controller.getPredefinedObstacleHeight(obstacleId).doubleValue(),0,999,0.1);
+                    controller.getPredefinedObstacleHeight(obstacleId).intValue(),0,999,1);
             confirmButton = new JButton("Confirm");
 
             //Add an action listener to the button which carried out the procedure to finalize the object's edit.

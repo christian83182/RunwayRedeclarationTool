@@ -53,7 +53,7 @@ public class AppController implements ViewController {
         Runway r3 = new Runway("13/31",-800,-650,2400,80,400,60);
         LogicalRunway lr31 = new LogicalRunway("13",r3.getLength(),0,
                 new Dimension(350,220), new Dimension(60,r3.getWidth()));
-        LogicalRunway lr32 = new LogicalRunway("31",r3.getLength(),50,
+        LogicalRunway lr32 = new LogicalRunway("31",r3.getLength(),0,
                 new Dimension(350,220), new Dimension(60,r3.getWidth()));
         r3.setLogicalRunways(lr31, lr32);
 
@@ -403,6 +403,7 @@ public class AppController implements ViewController {
         Obstacle obstacle = new Obstacle(obstacleId, distanceFromEdge, distanceFromCenterline, airfield.getPredefinedObstacles().get(obstacleId));
         runway.placeObstacle(obstacle, runwayId);
         redeclareRunway(runwayId);
+        setObstacleOffsets(runwayId, obstacleId);
     }
 
     @Override
@@ -560,6 +561,32 @@ public class AppController implements ViewController {
         this.bgImageRotation = rotation;
     }
 
+    @Override
+    public Integer getObstacleOffset(String runwayId) {
+
+        if(getRunwayObstacle(runwayId).equals("")) {
+            return null;
+        }
+
+        return airfield.getRunway(runwayId).getLogicalRunway(runwayId).getObstacleOffset();
+    }
+
+    public void setObstacleOffsets(String runwayId, String obstacleId){
+        Runway runway = airfield.getRunway(runwayId);
+        Integer distFromDisplacedThresholdCurrent = getDistanceFromThreshold(runwayId) - getRunwayThreshold(runwayId);
+        Integer distFromDisplacedThresholdSibling = getDistanceFromThreshold(getSiblingLogicalRunway(runwayId)) - getRunwayThreshold(getSiblingLogicalRunway(runwayId));
+
+        if(distFromDisplacedThresholdCurrent > distFromDisplacedThresholdSibling){
+            runway.getLogicalRunway(runwayId).setObstacleOffset(-getPredefinedObstacleLength(obstacleId));
+            runway.getLogicalRunway(getSiblingLogicalRunway(runwayId)).setObstacleOffset(0);
+        }else if(distFromDisplacedThresholdCurrent < distFromDisplacedThresholdSibling){
+            runway.getLogicalRunway(runwayId).setObstacleOffset(0);
+            runway.getLogicalRunway(getSiblingLogicalRunway(runwayId)).setObstacleOffset(-getPredefinedObstacleLength(obstacleId));
+        }else{
+            runway.getLogicalRunway(runwayId).setObstacleOffset(-getPredefinedObstacleLength(obstacleId));
+            runway.getLogicalRunway(getSiblingLogicalRunway(runwayId)).setObstacleOffset(0);
+        }
+    }
 
 
     //  --------- Non-Interface Methods ----------
@@ -589,6 +616,7 @@ public class AppController implements ViewController {
     public void placeObstacle(String runwayId, String type, Integer centrelineDistance, Integer startDistance) {
         Obstacle obstacle = new Obstacle(startDistance, centrelineDistance, airfield.getPredefinedObstacles().get(type));
         Runway runway = airfield.getRunway(runwayId);
+        runway.placeObstacle(obstacle, runwayId);
         runway.placeObstacle(obstacle, runwayId);
     }
 
