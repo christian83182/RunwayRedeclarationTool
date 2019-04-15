@@ -61,6 +61,10 @@ public class AppView extends JFrame{
         setMenuPanelVisible(true);
         setSplitViewVisible(false);
 
+        //set the inital window size to fit the screen
+        Dimension windowSize = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setSize(windowSize.width, windowSize.height);
+
         //Pack the UI elements, make the window open in the center of the screen, and display the window.
         this.pack();
         this.setLocationRelativeTo(null);
