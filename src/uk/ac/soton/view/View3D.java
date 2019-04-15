@@ -22,7 +22,6 @@ import java.util.ArrayList;
 
 import static uk.ac.soton.view.Settings.*;
 
-//todo Add legend to 3D view.
 //todo Add a plane displaying als/tocs.
 //todo Give various elements: threshold/stopway/clearway borders so they look less flat.
 
@@ -96,10 +95,13 @@ public class View3D extends JFrame{
     private void createScene(Group globalRoot, Group root3D) {
         if(appView.getSelectedRunway().equals("")){
             createGeneralScene(root3D);
+            generateGeneralLegend(globalRoot);
         } else if(appView.getMenuPanel().isIsolateMode()){
             createIsolatedScene(globalRoot, root3D);
+            generateSelectedLegend(globalRoot);
         } else {
             createSelectedScene(globalRoot, root3D);
+            generateSelectedLegend(globalRoot);
         }
     }
 
@@ -626,6 +628,27 @@ public class View3D extends JFrame{
         root.getChildren().add(ambientLight);
     }
 
+    private void generateGeneralLegend(Group globalRoot){
+        Legend legend = new Legend("Legend");
+        legend.addToLegend("Clear & Graded Area", Settings.CLEAR_AND_GRADED_COLOUR);
+        legend.addToLegend("Runway Strip", Settings.RUNWAY_STRIP_COLOUR);
+        legend.addToLegend("Runway", Settings.RUNWAY_COLOUR);
+        legend.addToLegend("Obstacle", Settings.OBSTACLE_FILL_COLOUR);
+        legend.drawLegend(globalRoot, new Point(getWidth()-15,getHeight()-45));
+    }
+
+    private void generateSelectedLegend(Group globalRoot){
+        Legend legend = new Legend("Legend");
+        legend.addToLegend("Clear & Graded Area", Settings.CLEAR_AND_GRADED_COLOUR);
+        legend.addToLegend("Runway Strip", Settings.RUNWAY_STRIP_COLOUR);
+        legend.addToLegend("Runway", Settings.RUNWAY_COLOUR);
+        legend.addToLegend("Displaced Threshold", Settings.SELECTED_RUNWAY_HIGHLIGHT);
+        legend.addToLegend("Stopway", Settings.STOPWAY_STROKE_COLOUR);
+        legend.addToLegend("Clearway", Settings.CLEARWAY_STROKE_COLOUR);
+        legend.addToLegend("Obstacle", Settings.OBSTACLE_FILL_COLOUR);
+        legend.drawLegend(globalRoot, new Point(getWidth()-15,getHeight()-45));
+    }
+
     private void generateOverlay(Group globalRoot, Group root3D){
 
         String selectedRunway = appView.getSelectedRunway();
@@ -709,7 +732,7 @@ public class View3D extends JFrame{
     }
 
     // Converts a java AWT colour to a JavaFX colour.
-    private Color convertToJFXColour(java.awt.Color swingColour){
+    public static Color convertToJFXColour(java.awt.Color swingColour){
         double red = swingColour.getRed()/255.0;
         double green = swingColour.getGreen()/255.0;
         double blue = swingColour.getBlue()/255.0;
