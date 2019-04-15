@@ -1,0 +1,18 @@
+#camera-slider .thumb {
+
+    /* Camera icon made by Freepik from www.flaticon.com */
+    -fx-background-image: url("https://i.imgur.com/jGhg4ZK.png");
+    -fx-background-color: transparent;
+    -fx-padding: 12;
+    -fx-pref-height: 24;
+    -fx-pref-width: 24;
+
+    /* White glow around the camera */
+    -fx-effect: dropshadow(gaussian, #ffffff, 8.0, 0.3, 0, 0)
+}
+
+#camera-slider .track {
+
+    /* Runway colour */
+    -fx-background-color: #939393;
+}

@@ -219,7 +219,7 @@ public class Runway extends PositionalObject{
      */
     private void recalculateTowardsObstacle(LogicalRunway runway){
 
-        double slope = Math.ceil(obstacle.getHeight()) * als;
+        double slope = obstacle.getHeight().intValue() * als;
 
         if(slope > resa){
 
@@ -228,7 +228,7 @@ public class Runway extends PositionalObject{
                     - slope - stripEnd);
             runway.getTora().setBreakdown("TORA = Distance from Threshold + Displaced Threshold - Slope Calculation - Strip End\n\n" +
                     "TORA = " + runway.getObjectThresholdDistance().intValue() + " + " + runway.getThreshold().intValue() +
-                    " - \u2308" + obstacle.getHeight() + "\u2309 * " + als + " - " + stripEnd +
+                    " - " + obstacle.getHeight() + " * " + als + " - " + stripEnd +
                     " = " + runway.getTora().getRedeclaredValue().intValue());
         }
         else{
@@ -264,7 +264,7 @@ public class Runway extends PositionalObject{
      */
     private void recalculateAwayFromObstacle(LogicalRunway runway){
 
-        double slope = Math.ceil(obstacle.getHeight()) * als;
+        double slope = obstacle.getHeight().intValue() * als;
 
         if(resa + stripEnd > Airfield.getBlastProtection()){
 
@@ -310,7 +310,7 @@ public class Runway extends PositionalObject{
                         - slope - stripEnd);
                 runway.getLda().setBreakdown("LDA = Original LDA - Distance from Threshold - Slope Calculation - Strip End\n\n" +
                         "LDA = " + runway.getLda().getOriginalValue().intValue() + " - " + runway.getObjectThresholdDistance().intValue()
-                        + " - \u2308" + obstacle.getHeight() + "\u2309 * " + als + " - " + stripEnd +
+                        + " - " + obstacle.getHeight() + " * " + als + " - " + stripEnd +
                         " = " + runway.getLda().getRedeclaredValue().intValue());
 
             }

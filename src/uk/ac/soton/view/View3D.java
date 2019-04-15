@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import uk.ac.soton.controller.ViewController;
@@ -85,6 +86,8 @@ public class View3D extends JFrame{
 
         createScene(globalRoot, root3D);
         initCamera(scene3D, root3D);
+
+        scene.getStylesheets().add(getClass().getResource("sliderstyle.css").toExternalForm());
 
         fxPanel.setScene(scene);
     }
@@ -625,6 +628,8 @@ public class View3D extends JFrame{
 
     private void generateOverlay(Group globalRoot, Group root3D){
 
+        String selectedRunway = appView.getSelectedRunway();
+
         Double sliderLength = getWidth()*0.6;
         Double sliderStartX = getWidth()/2-sliderLength/2;
 
@@ -634,10 +639,32 @@ public class View3D extends JFrame{
         poly.setFill(convertToJFXColour(new java.awt.Color(72, 72, 72)));
         poly.setStroke(convertToJFXColour(new java.awt.Color(52, 52, 52)));
         poly.setStrokeWidth(3);
+
         globalRoot.getChildren().add(poly);
 
-        Slider slider = prepareSlider(root3D, appView.getSelectedRunway());
-        globalRoot.getChildren().add(slider);
+        Slider slider = prepareSlider(root3D, selectedRunway);
+
+        Double scalefactor = slider.getPrefWidth() / controller.getRunwayDim(selectedRunway).width;
+
+        // Displaced threshold pointer
+        Double threshold = controller.getRunwayThreshold(selectedRunway)*scalefactor;
+        Rectangle thresholdPointer = new Rectangle((int) slider.getLayoutX()+8, (int) slider.getLayoutY(), threshold.intValue(), (int) slider.getHeight()+5);
+        thresholdPointer.setArcHeight(5); thresholdPointer.setArcWidth(5);
+        thresholdPointer.setFill(convertToJFXColour(Settings.SELECTED_RUNWAY_HIGHLIGHT));
+
+        // Obstacle pointer
+        if(controller.getRunwayObstacle(selectedRunway) != ""){
+            Double obstacleDist = (controller.getDistanceFromThreshold(selectedRunway) + controller.getObstacleOffset(selectedRunway))*scalefactor;
+            Double obstacleWidth = controller.getPredefinedObstacleWidth(controller.getRunwayObstacle(selectedRunway))*scalefactor;
+            Rectangle obstaclePointer = new Rectangle((int) (slider.getLayoutX()+obstacleDist), (int) slider.getLayoutY(),
+                    obstacleWidth.intValue(), (int) slider.getHeight()+5);
+            obstaclePointer.setArcHeight(5); obstaclePointer.setArcWidth(5);
+            obstaclePointer.setFill(convertToJFXColour(Settings.OBSTACLE_FILL_COLOUR));
+
+            globalRoot.getChildren().add(obstaclePointer);
+        }
+
+        globalRoot.getChildren().addAll(thresholdPointer, slider);
     }
 
     private Slider prepareSlider(Group root3D, String runwayId){
@@ -651,6 +678,7 @@ public class View3D extends JFrame{
         slider.setPrefSize(getWidth()*0.6,1);
         slider.setLayoutX(getWidth()/2-slider.getPrefWidth()/2);
         slider.setLayoutY(getHeight()-70);
+        slider.setId("camera-slider");
 
         slider.valueProperty().addListener(e -> {
             Double xComp = Math.cos(Math.toRadians(bearing))* slider.getValue();
