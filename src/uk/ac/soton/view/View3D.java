@@ -87,7 +87,7 @@ public class View3D extends JFrame{
         createScene(globalRoot, root3D);
         initCamera(scene3D, root3D);
 
-        scene.getStylesheets().add(getClass().getResource("sliderstyle.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("customstyles.css").toExternalForm());
 
         fxPanel.setScene(scene);
     }
