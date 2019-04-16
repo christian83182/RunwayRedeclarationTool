@@ -393,19 +393,20 @@ public class View3D extends JFrame{
         obstacle.setDrawMode(DrawMode.FILL);
 
         // Obstacle box borders
-        Box obstacleStroke = new Box(obstacleWidth, obstacleHeight, obstacleLength);
+        /*Box obstacleStroke = new Box(obstacleWidth, obstacleHeight, obstacleLength);
         PhongMaterial obstacleStrokeMaterial = new PhongMaterial(convertToJFXColour(Settings.OBSTACLE_STROKE_COLOUR));
         obstacleStroke.setMaterial(obstacleStrokeMaterial);
         obstacleStroke.setTranslateX(runwayPos.x - distanceFromCenterline);
         obstacleStroke.setTranslateZ(-runwayPos.y + distanceFromThreshold + obstacleWidth/2);
         obstacleStroke.setTranslateY(-obstacleHeight/2-verticalOffset);
-        obstacleStroke.setDrawMode(DrawMode.LINE);
+        obstacleStroke.setDrawMode(DrawMode.LINE);*/
 
         Rotate rotate = new Rotate(controller.getBearing(runwayId), distanceFromCenterline, 0,-distanceFromThreshold - obstacleWidth/2, Rotate.Y_AXIS);
         obstacle.getTransforms().add(rotate);
-        obstacleStroke.getTransforms().add(rotate);
+        //obstacleStroke.getTransforms().add(rotate);
 
-        root.getChildren().addAll(obstacle, obstacleStroke);
+        //root.getChildren().addAll(obstacle, obstacleStroke);
+        root.getChildren().add(obstacle);
     }
 
     //draw centerline of the runway
@@ -456,19 +457,20 @@ public class View3D extends JFrame{
         stopwayBox.setDrawMode(DrawMode.FILL);
 
         // Stopway box borders
-        Box stopwayStroke = new Box(stopwayDimension.height , helperHeight, stopwayDimension.width-1);
+        /*Box stopwayStroke = new Box(stopwayDimension.height , helperHeight, stopwayDimension.width-1);
         PhongMaterial stopwayStrokeMaterial = new PhongMaterial(convertToJFXColour(Settings.STOPWAY_STROKE_COLOUR));
         stopwayStroke.setMaterial(stopwayStrokeMaterial);
         stopwayStroke.setTranslateX(runwayPosition.x);
         stopwayStroke.setTranslateZ(-runwayPosition.y + runwayWidth + stopwayDimension.width/2 -2);
         stopwayStroke.setTranslateY(-runwayElevation - helperHeight/2);
-        stopwayStroke.setDrawMode(DrawMode.LINE);
+        stopwayStroke.setDrawMode(DrawMode.LINE);*/
 
         Rotate rStopway = new Rotate(controller.getBearing(runwayId), 0,0,-runwayWidth - stopwayDimension.width/2, Rotate.Y_AXIS);
         stopwayBox.getTransforms().add(rStopway);
-        stopwayStroke.getTransforms().add(rStopway);
+        //stopwayStroke.getTransforms().add(rStopway);
 
-        root.getChildren().addAll(stopwayBox, stopwayStroke);
+        //root.getChildren().addAll(stopwayBox, stopwayStroke);
+        root.getChildren().add(stopwayBox);
 
     }
 
@@ -494,19 +496,20 @@ public class View3D extends JFrame{
         clearwayBox.setDrawMode(DrawMode.FILL);
 
         // Clearway box borders
-        Box clearwayStroke = new Box(clearwayDimension.height, helperHeight+1, clearwayDimension.width);
+        /*Box clearwayStroke = new Box(clearwayDimension.height, helperHeight+1, clearwayDimension.width);
         PhongMaterial clearwayStrokeMaterial = new PhongMaterial(convertToJFXColour(Settings.CLEARWAY_STROKE_COLOUR));
         clearwayStroke.setMaterial(clearwayStrokeMaterial);
         clearwayStroke.setTranslateX(runwayPosition.x);
         clearwayStroke.setTranslateZ(-runwayPosition.y + runwayWidth + clearwayDimension.width/2);
         clearwayStroke.setTranslateY(-runwayElevation - helperHeight/2);
-        clearwayStroke.setDrawMode(DrawMode.LINE);
+        clearwayStroke.setDrawMode(DrawMode.LINE);*/
 
         Rotate rClearway = new Rotate(controller.getBearing(runwayId), 0,0,-runwayWidth - clearwayDimension.width/2, Rotate.Y_AXIS);
         clearwayBox.getTransforms().add(rClearway);
-        clearwayStroke.getTransforms().add(rClearway);
+        //clearwayStroke.getTransforms().add(rClearway);
 
-        root.getChildren().addAll(clearwayBox, clearwayStroke);
+        //root.getChildren().addAll(clearwayBox, clearwayStroke);
+        root.getChildren().add(clearwayBox);
     }
 
     // display displaced threshold
@@ -534,7 +537,7 @@ public class View3D extends JFrame{
         thresholdBox.setDrawMode(DrawMode.FILL);
 
         // Threshold box borders
-        Box thresholdStroke = new Box(runwayHeight, 0.8, displacedThreshold);
+        /*Box thresholdStroke = new Box(runwayHeight, 0.8, displacedThreshold);
         Color thresholdStrokeColor = convertToJFXColour(Settings.SELECTED_RUNWAY_HIGHLIGHT);
         PhongMaterial thresholdStrokeMaterial = new PhongMaterial(new Color(thresholdStrokeColor.getRed(),
                 thresholdStrokeColor.getGreen(), thresholdStrokeColor.getBlue(), 1));
@@ -542,13 +545,14 @@ public class View3D extends JFrame{
         thresholdStroke.setTranslateX(runwayPosition.x);
         thresholdStroke.setTranslateZ(-runwayPosition.y + displacedThreshold/2);
         thresholdStroke.setTranslateY(-helperHeight);
-        thresholdStroke.setDrawMode(DrawMode.LINE);
+        thresholdStroke.setDrawMode(DrawMode.LINE);*/
 
         Rotate rThreshold = new Rotate(controller.getBearing(runwayId), 0,0,  -displacedThreshold/2, Rotate.Y_AXIS);
         thresholdBox.getTransforms().add(rThreshold);
-        thresholdStroke.getTransforms().add(rThreshold);
+        //thresholdStroke.getTransforms().add(rThreshold);
 
-        root.getChildren().addAll(thresholdBox, thresholdStroke);
+        //root.getChildren().addAll(thresholdBox, thresholdStroke);
+        root.getChildren().add(thresholdBox);
     }
 
     //Generates a group containing meshes which simulate an extruded clear and graded area for the given runwayId.
@@ -727,7 +731,7 @@ public class View3D extends JFrame{
 
         // Displaced threshold pointer
         Double threshold = controller.getRunwayThreshold(selectedRunway)*scalefactor;
-        Rectangle thresholdPointer = new Rectangle((int) slider.getLayoutX()+8, (int) slider.getLayoutY(), threshold.intValue(), (int) slider.getHeight()+5);
+        Rectangle thresholdPointer = new Rectangle((int) slider.getLayoutX()+9, (int) slider.getLayoutY(), threshold.intValue(), (int) slider.getHeight()+5);
         thresholdPointer.setArcHeight(5); thresholdPointer.setArcWidth(5);
         thresholdPointer.setFill(convertToJFXColour(Settings.SELECTED_RUNWAY_HIGHLIGHT));
 
