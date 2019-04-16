@@ -462,6 +462,12 @@ public class AppController implements ViewController {
     }
 
     @Override
+    public synchronized void saveRunwayParameters(String path) throws IOException {
+        Saver saver = new Saver(this, appView);
+        saver.saveState(path);
+    }
+
+    @Override
     public synchronized LogicalRunway getLogicalRunwayCloserToObstacle(String runwayId) {
         Runway runway = airfield.getRunway(runwayId);
         if (!getRunwayObstacle(runwayId).equals("")){
