@@ -235,6 +235,7 @@ public class SideViewPanel extends InteractivePanel{
                 }
             }
         }
+
     }
 
     //all parameters drawn to the left of the obstacle are drawn from a specified distance

@@ -18,7 +18,7 @@ public class AppController implements ViewController {
     private AppView appView;
 
     //The model which the controller would interact with
-    private Airfield airfield;
+    public Airfield airfield;
 
     private BufferedImage backgroundImage;
     private Point bgImageOffset;
@@ -459,6 +459,12 @@ public class AppController implements ViewController {
     public synchronized void importAirfieldConfiguration(String path) throws ParserConfigurationException, SAXException, IOException {
         Importer importer = new Importer(this);
         importer.importConfiguration(path);
+    }
+
+    @Override
+    public synchronized void saveRunwayParameters(String path) throws IOException {
+        Saver saver = new Saver(this, appView);
+        saver.saveState(path);
     }
 
     @Override

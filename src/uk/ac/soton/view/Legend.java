@@ -1,5 +1,11 @@
 package uk.ac.soton.view;
 
+import javafx.geometry.Bounds;
+import javafx.scene.Group;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+
 import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -78,6 +84,58 @@ public class Legend {
             g2.fillRect(pos.x+18, pos.y + offset + counter*heightAllowed + 2, heightAllowed-4, heightAllowed-4);
             g2.setColor(Color.WHITE);
             g2.drawString(key, pos.x + 18 + heightAllowed-4 +10 , pos.y + offset + counter*heightAllowed + (int)(fontSize*1.25));
+            counter++;
+        }
+    }
+
+    public void drawLegend(Group globalRoot, Point bottomLeft){
+
+        //Defines various variables used throughout the methods.
+        Integer fontSize = Settings.SIDE_MENU_DEFAULT_FONT.getSize();
+        Integer titleFontSize = (int)(fontSize*1.5);
+        Integer offset = titleFontSize + 20;
+        Integer heightAllowed = fontSize+10;
+        Integer width = 0;
+        Integer height = offset + heightAllowed*legendMap.size() +20;
+
+        //Determines the width of the panel based on the width of the text in it.
+        FontMetrics fontMetrics = Toolkit.getDefaultToolkit().getFontMetrics(Settings.SIDE_MENU_DEFAULT_FONT);
+        for(String key : legendMap.keySet()){
+            width = Math.max(width, fontMetrics.stringWidth(key));
+        }
+        width += 80;
+
+        //Draw the background.
+        Point pos = new Point(bottomLeft.x-width, bottomLeft.y-height);
+        Rectangle bg = new Rectangle(pos.x, pos.y, width, height);
+        bg.setFill(View3D.convertToJFXColour(new Color(45, 45, 45, 150)));
+        bg.setStroke(View3D.convertToJFXColour(new Color(39, 39, 39)));
+        bg.setStrokeWidth(5.0);
+
+        //Draw the title.
+        Text title = new Text(this.title);
+        title.setFill(javafx.scene.paint.Color.web("#ffffff"));
+        title.setFont(javafx.scene.text.Font.font("SansSerif", FontWeight.BOLD, titleFontSize));
+        Bounds bounds = title.getBoundsInLocal();
+        title.setTranslateX(pos.x + (width - bounds.getWidth())/2);
+        title.setTranslateY(pos.y + titleFontSize +10);
+
+        globalRoot.getChildren().addAll(bg, title);
+
+        //Draw the boxes and the associated text.
+        Integer counter = 0;
+        for(String key: legendMap.keySet()){
+
+            Text label = new Text(key);
+            label.setFill(javafx.scene.paint.Color.web("#ffffff"));
+            label.setFont(javafx.scene.text.Font.font("SansSerif", FontWeight.NORMAL, 14));
+            label.setTranslateX(pos.x + 18 + heightAllowed-4 +10);
+            label.setTranslateY(pos.y + offset + counter*heightAllowed + (int)(fontSize*1.25));
+
+            Rectangle box = new Rectangle(pos.x+18, pos.y + offset + counter*heightAllowed + 2, heightAllowed-4, heightAllowed-4);
+            box.setFill(View3D.convertToJFXColour(legendMap.get(key)));
+
+            globalRoot.getChildren().addAll(box, label);
             counter++;
         }
     }

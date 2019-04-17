@@ -86,6 +86,27 @@ public class CustomMenuBar extends JMenuBar {
             }
         });
 
+        //Adding the "save parameters button"
+        JMenuItem saveParameters = new JMenuItem("Save Parameters...");
+        saveParameters.setFont(Settings.MENU_BAR_DEFAULT_FONT);
+        fileMenu.add(saveParameters);
+        saveParameters.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            int returnVal = fileChooser.showSaveDialog(null);
+            if(returnVal == JFileChooser.APPROVE_OPTION){
+                try {
+                    controller.saveRunwayParameters(fileChooser.getSelectedFile().getAbsolutePath());
+                    NotificationLogger.logger.addToLog("The runway parameters were saved as '" + fileChooser.getSelectedFile().getName()+".txt'");
+                } catch (IOException e1) {
+                    JOptionPane.showMessageDialog(fileChooser,
+                            "There was an issue saving the parameters '" + e1.getMessage() + "'",
+                            "Export Error" ,JOptionPane.ERROR_MESSAGE);
+                    NotificationLogger.logger.addToLog("Parameters '"+ fileChooser.getSelectedFile().getName()+"' could not be exported");
+                }
+            }
+        });
+
         //Adding the "export top view button"
         fileMenu.addSeparator();
         JMenuItem exportTopViewImage = new JMenuItem("Export Top View...");
@@ -219,6 +240,9 @@ public class CustomMenuBar extends JMenuBar {
                             "Please enter a value between 300-500.",
                             "Input Error",
                             JOptionPane.ERROR_MESSAGE);
+                    NotificationLogger.logger.addToLog("Blast protection value input was not a valid input.");
+
+
 
                     input = JOptionPane.showInputDialog(
                             appView,
@@ -234,6 +258,7 @@ public class CustomMenuBar extends JMenuBar {
                 }
 
                 controller.setBlastingDistance(newValue);
+                NotificationLogger.logger.addToLog("Blast protection was set to: '" +controller.getBlastingDistance()+ "'");
                 break;
             }
             catch(NumberFormatException nfe){
