@@ -324,6 +324,9 @@ public interface ViewController {
      */
     void importAirfieldConfiguration(String path) throws ParserConfigurationException, SAXException, IOException;
 
+
+    void saveRunwayParameters(String path) throws IOException;
+
     /**
      * Getting the logical runway on which the obstacle (if present) is closer to its respective threshold.
      * Returns the same logical runway if that is the one on which the obstacle is closer to its threshold and
