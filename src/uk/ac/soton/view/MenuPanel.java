@@ -22,6 +22,9 @@ public class MenuPanel extends JPanel {
     private JCheckBox matchViewToSelection;
     private JButton placeObstacleButton;
     private JButton removeObstacleButton;
+    private JCheckBox runwayParametersSideView;
+    private JCheckBox showBreakdownSideView;
+    private JCheckBox relevantDistancesSideView;
     private JCheckBox showOverlayBoxSideView;
 
     MenuPanel(AppView appView){
@@ -161,7 +164,7 @@ public class MenuPanel extends JPanel {
         });
 
         //Add the "show breakdown" option
-        showBreakdownBox = new JCheckBox("Show Parameter Breakdown");
+        showBreakdownBox = new JCheckBox("Show Re-declaration Breakdown");
         showBreakdownBox.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         showBreakdownBox.setEnabled(true);
         showBreakdownBox.addActionListener(e -> appView.repaint());
@@ -170,7 +173,7 @@ public class MenuPanel extends JPanel {
         c.insets = new Insets(0,10,0,10);
         topViewPane.add(showBreakdownBox, c);
         showBreakdownBox.addActionListener(e -> {
-            NotificationLogger.logger.addToLog("'Show Parameter Breakdown' Toggled: '" +showBreakdownBox.isSelected()+ "'");
+            NotificationLogger.logger.addToLog("'Show Re-declaration Breakdown' Toggled: '" +showBreakdownBox.isSelected()+ "'");
         });
 
         //Add the "show other distances" option
@@ -213,14 +216,53 @@ public class MenuPanel extends JPanel {
 
         //  ---- Adding elements to the side view pane ----
 
+        //Add the "show runway parameters" option for the side view menu
+        runwayParametersSideView = new JCheckBox("Show Runway Parameters");
+        runwayParametersSideView.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
+        runwayParametersSideView.setSelected(true);
+        runwayParametersSideView.addActionListener(e -> appView.repaint());
+        c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 0; c.anchor = GridBagConstraints.LINE_START; c.weightx = 1;
+        c.insets = new Insets(10,10,0,10);
+        sideViewPane.add(runwayParametersSideView, c);
+        runwayParametersSideView.addActionListener(e -> {
+            NotificationLogger.logger.addToLog("Side View's 'Show Runway Parameters: '" +runwayParametersSideView.isSelected()+ "'");
+        });
+
+        //Add the "show runway parameters" option for the side view menu
+        showBreakdownSideView = new JCheckBox("Show Re-declaration Breakdown");
+        showBreakdownSideView.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
+        showBreakdownSideView.setSelected(true);
+        showBreakdownSideView.addActionListener(e -> appView.repaint());
+        c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 10; c.anchor = GridBagConstraints.LINE_START; c.weightx = 1;
+        c.insets = new Insets(0,10,0,10);
+        sideViewPane.add(showBreakdownSideView, c);
+        showBreakdownSideView.addActionListener(e -> {
+            NotificationLogger.logger.addToLog("Side View's 'Show Re-declaration Breakdown: '" +showBreakdownSideView.isSelected()+ "'");
+        });
+
+        //Add the "show relevant distances only" option for the side view menu
+        relevantDistancesSideView = new JCheckBox("Show Relevant Breakdown Only");
+        relevantDistancesSideView.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
+        relevantDistancesSideView.setSelected(false);
+        relevantDistancesSideView.addActionListener(e -> appView.repaint());
+        c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 20; c.anchor = GridBagConstraints.LINE_START; c.weightx = 1;
+        c.insets = new Insets(0,10,0,10);
+        sideViewPane.add(relevantDistancesSideView, c);
+        relevantDistancesSideView.addActionListener(e -> {
+            NotificationLogger.logger.addToLog("Side View's 'Show Relevant Breakdown Only: '" +relevantDistancesSideView.isSelected()+ "'");
+        });
+
         //Add the "show overlay" option for the side view menu
         showOverlayBoxSideView = new JCheckBox("Show Overlays");
         showOverlayBoxSideView.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         showOverlayBoxSideView.setSelected(true);
         showOverlayBoxSideView.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 0; c.anchor = GridBagConstraints.LINE_START; c.weightx = 1;
-        c.insets = new Insets(10,10,10,10);
+        c.gridx = 0; c.gridy = 30; c.anchor = GridBagConstraints.LINE_START; c.weightx = 1;
+        c.insets = new Insets(0,10,10,10);
         sideViewPane.add(showOverlayBoxSideView, c);
         showOverlayBoxSideView.addActionListener(e -> {
             NotificationLogger.logger.addToLog("Side View's 'Show Overlay' Toggled: '" +showOverlayBoxSideView.isSelected()+ "'");

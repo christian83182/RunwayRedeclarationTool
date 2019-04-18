@@ -245,9 +245,9 @@ public interface ViewController {
     Integer getPredefinedObstacleHeight(String obstacleId);
 
     /**
-     * Returns the width of a predefined obstacle given its ID.
+     * Returns the length of a predefined obstacle given its ID.
      * @param obstacleId the ID of the obstacle.
-     * @return the height of the obstacle.
+     * @return the length of the obstacle.
      */
     Integer getPredefinedObstacleLength(String obstacleId);
 

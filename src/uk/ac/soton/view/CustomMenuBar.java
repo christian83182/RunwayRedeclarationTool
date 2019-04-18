@@ -225,7 +225,7 @@ public class CustomMenuBar extends JMenuBar {
             try{
                 String input = JOptionPane.showInputDialog(
                         appView,
-                        "Enter Blast Protection value (300-500):",
+                        "Enter Blast Protection value:",
                         "Edit Blast Protection",
                         JOptionPane.PLAIN_MESSAGE
                 );
@@ -235,9 +235,9 @@ public class CustomMenuBar extends JMenuBar {
                 }
                 Integer newValue = Integer.parseInt(input);
 
-                while(newValue < 300 || newValue > 500){
+                while(newValue < 100 || newValue > 1000){
                     JOptionPane.showMessageDialog(appView,
-                            "Please enter a value between 300-500.",
+                            "Please enter a value between 100-1000.",
                             "Input Error",
                             JOptionPane.ERROR_MESSAGE);
                     NotificationLogger.logger.addToLog("Blast protection value input was not a valid input.");
@@ -246,7 +246,7 @@ public class CustomMenuBar extends JMenuBar {
 
                     input = JOptionPane.showInputDialog(
                             appView,
-                            "Enter Blast Protection value (300-500):",
+                            "Enter Blast Protection value:",
                             "Edit Blast Protection",
                             JOptionPane.PLAIN_MESSAGE
                     );
