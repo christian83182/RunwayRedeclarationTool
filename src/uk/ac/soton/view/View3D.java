@@ -401,12 +401,55 @@ public class View3D extends JFrame{
         obstacleStroke.setTranslateY(-obstacleHeight/2-verticalOffset);
         obstacleStroke.setDrawMode(DrawMode.LINE);*/
 
+        Box slopePlane = genSlope(root, runwayId, verticalOffset);
+
         Rotate rotate = new Rotate(controller.getBearing(runwayId), distanceFromCenterline, 0,-distanceFromThreshold - obstacleWidth/2, Rotate.Y_AXIS);
         obstacle.getTransforms().add(rotate);
         //obstacleStroke.getTransforms().add(rotate);
+        slopePlane.getTransforms().add(rotate);
 
         //root.getChildren().addAll(obstacle, obstacleStroke);
-        root.getChildren().add(obstacle);
+        root.getChildren().addAll(obstacle, slopePlane);
+    }
+
+    private Box genSlope(Group root, String runwayId, Integer verticalOffset){
+
+        String oId = controller.getRunwayObstacle(runwayId);
+        Integer oHeight = controller.getPredefinedObstacleHeight(oId).intValue();
+        Integer oWidth = controller.getPredefinedObstacleWidth(oId).intValue();
+        Integer oLength = controller.getPredefinedObstacleLength(oId).intValue();
+        Integer distCentre = controller.getDistanceFromCenterline(runwayId);
+        Integer distThreshold = controller.getDistanceFromThreshold(runwayId) + controller.getObstacleOffset(runwayId);
+        Point runwayPos = controller.getRunwayPos(runwayId);
+
+        Integer slopeCalc = oHeight*controller.getALS(runwayId);
+        Double slopeValue = Math.sqrt(oHeight*oHeight + slopeCalc*slopeCalc);
+        Double slopeAngle = 90 - Math.toDegrees(Math.atan(slopeCalc/oHeight));
+
+        Box slope = new Box(oWidth+2, 1, slopeValue);
+        PhongMaterial material = new PhongMaterial(Color.color(0,0,0,0.1));
+        slope.setMaterial(material);
+        slope.setTranslateZ(-runwayPos.y + distThreshold + oWidth/2);
+
+        // Slope to the right of the obstacle
+        if (controller.getLogicalRunwayCloserToObstacle(runwayId).getName().equals(runwayId)) {
+
+            slope.setTranslateX(runwayPos.x - distCentre + slopeValue/2 - oLength/2);
+            //slope.setTranslateY(-oHeight-verticalOffset+1);
+            // hacky fix attempt for the first ATR obstacle
+            slope.setTranslateY(-oHeight-verticalOffset-oHeight+1);
+            Rotate angle = new Rotate(slopeAngle,0,0,0, Rotate.Z_AXIS);
+            slope.getTransforms().add(angle);
+        }
+        else{
+
+            slope.setTranslateX(runwayPos.x - distCentre - slopeValue/2 + oLength/2);
+            slope.setTranslateY(-oHeight-verticalOffset+1);
+            Rotate angle = new Rotate(360-slopeAngle,0,0,0, Rotate.Z_AXIS);
+            slope.getTransforms().add(angle);
+        }
+
+        return slope;
     }
 
     //draw centerline of the runway
