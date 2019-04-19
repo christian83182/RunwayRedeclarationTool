@@ -25,6 +25,8 @@ public class SideViewPanel extends InteractivePanel{
         this.controller = appView.getController();
     }
 
+    //TODO implement showRelevantBreakdownOnly checkbox response
+
     @Override
     public void paintView(Graphics2D g2) {
         paintBackground(g2);
@@ -33,13 +35,18 @@ public class SideViewPanel extends InteractivePanel{
         if(!appView.getSelectedRunway().equals("")){
             paintRunway(g2);
 
-            paintParameters(g2);
+            if(menuPanel.isSideViewShowRunwayParametersEnabled()){
+                paintParameters(g2);
+            }
         }
 
         //if there is an obstacle on the runway, paint it
         if(!controller.getRunwayObstacle(appView.getSelectedRunway()).equals("")){
             paintObstacle(g2);
-            //paintParameters(g2);
+
+            if(menuPanel.isSideViewShowBreakdownEnabled()){
+                paintBreakdownParameters(g2);
+            }
         }
 
         //painting map
@@ -221,21 +228,22 @@ public class SideViewPanel extends InteractivePanel{
         Point endAsda = new Point (asda + asdaOffset, 0);
         DataArrow asdaArrow = new DataArrow(startAsda, endAsda, 400, asdaLabel);
         asdaArrow.drawHorizontalArrow(g2);
+    }
 
-        //if obstacle exists, display obstacle related distances
-        if(!obstacle.equals("")){
+    private void paintBreakdownParameters(Graphics2D g2){
 
-            //if the obstacle has triggered a redeclaration of the runway, draw the redeclared parameters
-            if(controller.isRedeclared(selectedRunway)) {
-                //invoke displaying distances relative to their direction in which they are drawn
-                if (controller.getLogicalRunwayCloserToObstacle(selectedRunway).getName().equals(selectedRunway)) {
-                    displayDistancesToTheRight(g2, obstacle, selectedRunway);
-                } else {
-                    displayDistancesToTheLeft(g2, obstacle, selectedRunway);
-                }
+        String selectedRunway = appView.getSelectedRunway();
+        String obstacle = controller.getRunwayObstacle(selectedRunway);
+
+        //if the obstacle has triggered a redeclaration of the runway, draw the redeclared parameters
+        if(controller.isRedeclared(selectedRunway)) {
+            //invoke displaying distances relative to their direction in which they are drawn
+            if (controller.getLogicalRunwayCloserToObstacle(selectedRunway).getName().equals(selectedRunway)) {
+                displayDistancesToTheRight(g2, obstacle, selectedRunway);
+            } else {
+                displayDistancesToTheLeft(g2, obstacle, selectedRunway);
             }
         }
-
     }
 
     //all parameters drawn to the left of the obstacle are drawn from a specified distance

@@ -354,6 +354,18 @@ public class MenuPanel extends JPanel {
 
     public boolean isShowOverlay(){ return showOverlayBox.isSelected(); }
 
+    public boolean isSideViewShowRunwayParametersEnabled(){
+        return runwayParametersSideView.isSelected();
+    }
+
+    public boolean isSideViewShowBreakdownEnabled() {
+        return showBreakdownSideView.isSelected();
+    }
+
+    public boolean isSideViewShowRelevantDistOnlyEnabled() {
+        return relevantDistancesSideView.isSelected();
+    }
+
     public boolean isSideViewShowOverlay() { return showOverlayBoxSideView.isSelected(); }
 
     public boolean isViewMatchedToSelection(){
