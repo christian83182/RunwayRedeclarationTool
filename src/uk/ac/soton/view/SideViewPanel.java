@@ -274,13 +274,15 @@ public class SideViewPanel extends InteractivePanel{
             if(alsDistance > resa && alsDistance > blastingDistance){
                 drawParameterToTheRight(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance);
                 drawParameterToTheRight(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance +  alsDistance);
+                drawParameterToTheRight(g2, blastDistanceHelperHeight, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance);
             }else if (resa > alsDistance && resa > blastingDistance){
                 drawParameterToTheRight(g2, resaHelperHeight, new String("RESA: " + resa), resa, obstacleDistance + obstacleLength);
                 drawParameterToTheRight(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength + resa);
+                drawParameterToTheRight(g2, blastDistanceHelperHeight, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance);
             }else if(resa == alsDistance && resa > blastingDistance){
                 drawParameterToTheRight(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance);
                 drawParameterToTheRight(g2, resaHelperHeight, new String("RESA: " + resa), resa, obstacleDistance + obstacleLength);
-
+                drawParameterToTheRight(g2, blastDistanceHelperHeight, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance);
             }
             else{
                 drawParameterToTheRight(g2, blastDistanceHelperHeight, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance);
