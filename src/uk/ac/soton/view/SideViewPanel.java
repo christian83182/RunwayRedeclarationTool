@@ -231,7 +231,7 @@ public class SideViewPanel extends InteractivePanel{
         }
 
         Integer lda = controller.getRunwayLDA(selectedRunway);
-        String ldaLabel = new String("LDA: " + lda);
+        String ldaLabel = new String("LDA: " + lda + "m");
         Point startLda = new Point(ldaOffset,0);
         Point endLda = new Point (lda+ldaOffset, 0);
         DataArrow ldaArrow = new DataArrow(startLda, endLda, 100, ldaLabel);
@@ -240,29 +240,29 @@ public class SideViewPanel extends InteractivePanel{
         //displaying tora
         Integer toraOffset = controller.getTORAOffset(selectedRunway);
         Integer tora = controller.getRunwayTORA(selectedRunway);
-        String toraLabel = new String("TORA: " + tora);
+        String toraLabel = new String("TORA: " + tora + "m");
         Point startTora = new Point(toraOffset,0);
         Point endTora = new Point (tora + toraOffset, 0);
         DataArrow toraArrow = new DataArrow(startTora, endTora, 200, toraLabel);
         toraArrow.drawHorizontalArrow(g2);
 
-        //displaying toda
-        Integer todaOffset = controller.getTODAOffset(selectedRunway);
-        Integer toda = controller.getRunwayTODA(selectedRunway);
-        String todaLabel = new String("TODA: " + toda);
-        Point startToda = new Point(todaOffset,0);
-        Point endToda = new Point (toda + todaOffset, 0);
-        DataArrow todaArrow = new DataArrow(startToda, endToda, 300, todaLabel);
-        todaArrow.drawHorizontalArrow(g2);
-
         //displaying asda
         Integer asdaOffset = controller.getASDAOffset(selectedRunway);
         Integer asda = controller.getRunwayASDA(selectedRunway);
-        String asdaLabel = new String("ASDA: " + asda);
+        String asdaLabel = new String("ASDA: " + asda + "m");
         Point startAsda = new Point(asdaOffset,0);
         Point endAsda = new Point (asda + asdaOffset, 0);
-        DataArrow asdaArrow = new DataArrow(startAsda, endAsda, 400, asdaLabel);
+        DataArrow asdaArrow = new DataArrow(startAsda, endAsda, 300, asdaLabel);
         asdaArrow.drawHorizontalArrow(g2);
+
+        //displaying toda
+        Integer todaOffset = controller.getTODAOffset(selectedRunway);
+        Integer toda = controller.getRunwayTODA(selectedRunway);
+        String todaLabel = new String("TODA: " + toda + "m");
+        Point startToda = new Point(todaOffset,0);
+        Point endToda = new Point (toda + todaOffset, 0);
+        DataArrow todaArrow = new DataArrow(startToda, endToda, 400, todaLabel);
+        todaArrow.drawHorizontalArrow(g2);
     }
 
     private void paintBreakdownParameters(Graphics2D g2){
@@ -310,32 +310,32 @@ public class SideViewPanel extends InteractivePanel{
 
             if(alsDistance > resa && alsDistance > blastingDistance){
                 drawParameterToTheRight(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance);
-                drawParameterToTheRight(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance +  alsDistance);
-                drawParameterToTheRight(g2, blastDistanceHelperHeight, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance);
+                drawParameterToTheRight(g2, newStripendHelperHeight, new String (newStripEnd + "m"), newStripEnd, obstacleDistance +  alsDistance);
+                drawParameterToTheRight(g2, blastDistanceHelperHeight, new String("Blast Dist: " + blastingDistance + "m"), blastingDistance, obstacleDistance);
             }else if (resa > alsDistance && resa > blastingDistance){
                 drawParameterToTheRight(g2, resaHelperHeight, new String("RESA: " + resa), resa, obstacleDistance + obstacleLength);
-                drawParameterToTheRight(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength + resa);
-                drawParameterToTheRight(g2, blastDistanceHelperHeight, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance);
+                drawParameterToTheRight(g2, newStripendHelperHeight, new String (newStripEnd + "m"), newStripEnd, obstacleDistance + obstacleLength + resa);
+                drawParameterToTheRight(g2, blastDistanceHelperHeight, new String("Blast Dist: " + blastingDistance + "m"), blastingDistance, obstacleDistance);
             }else if(resa == alsDistance && resa > blastingDistance){
                 drawParameterToTheRight(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance);
-                drawParameterToTheRight(g2, resaHelperHeight, new String("RESA: " + resa), resa, obstacleDistance + obstacleLength);
-                drawParameterToTheRight(g2, blastDistanceHelperHeight, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance);
+                drawParameterToTheRight(g2, resaHelperHeight, new String("RESA: " + resa + "m"), resa, obstacleDistance + obstacleLength);
+                drawParameterToTheRight(g2, blastDistanceHelperHeight, new String("Blast Dist: " + blastingDistance + "m"), blastingDistance, obstacleDistance);
             }
             else{
-                drawParameterToTheRight(g2, blastDistanceHelperHeight, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance);
+                drawParameterToTheRight(g2, blastDistanceHelperHeight, new String("Blast Dist: " + blastingDistance + "m"), blastingDistance, obstacleDistance);
             }
         }else{
 
             drawParameterToTheRight(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance);
-            drawParameterToTheRight(g2, resaHelperHeight, new String("RESA: " + resa), resa, obstacleDistance + obstacleLength);
+            drawParameterToTheRight(g2, resaHelperHeight, new String("RESA: " + resa + "m"), resa, obstacleDistance + obstacleLength);
 
             if(resa > alsDistance){
-                drawParameterToTheRight(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength + resa);
+                drawParameterToTheRight(g2, newStripendHelperHeight, new String (newStripEnd + "m"), newStripEnd, obstacleDistance + obstacleLength + resa);
             }else{
-                drawParameterToTheRight(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance +  alsDistance);
+                drawParameterToTheRight(g2, newStripendHelperHeight, new String (newStripEnd + "m"), newStripEnd, obstacleDistance +  alsDistance);
             }
 
-            drawParameterToTheRight(g2, blastDistanceHelperHeight, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance);
+            drawParameterToTheRight(g2, blastDistanceHelperHeight, new String("Blast Dist: " + blastingDistance + "m"), blastingDistance, obstacleDistance);
 
         }
 
