@@ -19,7 +19,7 @@ public class SideViewPanel extends InteractivePanel{
     final Integer blastDistanceHelperHeight = -240;
 
     SideViewPanel(AppView appView) {
-        super(new Point(-300, 50), 0.3);
+        super(new Point(-300, 150), 0.34);
         this.appView = appView;
         this.menuPanel = appView.getMenuPanel();
         this.controller = appView.getController();
@@ -35,6 +35,9 @@ public class SideViewPanel extends InteractivePanel{
 
             if(menuPanel.isSideViewShowRunwayParametersEnabled()){
                 paintParameters(g2);
+            }
+            if(menuPanel.isSideViewShowOtherEnabled()){
+                paintOtherDistances(g2);
             }
         }
 
@@ -172,6 +175,40 @@ public class SideViewPanel extends InteractivePanel{
         g2.setColor(Settings.OBSTACLE_STROKE_COLOUR);
         g2.setStroke(Settings.OBSTACLE_STROKE);
         g2.drawRect(distanceFromEdge, -obstacleHeight,obstacleLength, obstacleHeight);
+    }
+
+    // painting runway length, displaced threshold, clearway, stopway arrows
+    private void paintOtherDistances(Graphics2D g2){
+
+        String selectedRunway = appView.getSelectedRunway();
+
+        Integer length = controller.getRunwayDim(selectedRunway).width;
+        String lengthLabel = new String(length + "m");
+        Point startLength = new Point(0,0);
+        Point endLength = new Point(length,0);
+        DataArrow lengthArrow = new DataArrow(startLength, endLength, -380, lengthLabel);
+        lengthArrow.drawHorizontalArrow(g2);
+
+        Integer threshold = controller.getRunwayThreshold(selectedRunway);
+        String thresholdLabel = new String(threshold + "m");
+        Point startThreshold = new Point(0,0);
+        Point endThreshold = new Point (threshold, 0);
+        DataArrow thresholdArrow = new DataArrow(startThreshold, endThreshold, -310, thresholdLabel);
+        thresholdArrow.drawHorizontalArrow(g2);
+
+        Integer stopway = controller.getStopwayDim(selectedRunway).width;
+        String stopwayLabel = new String(stopway + "m");
+        Point startStopway = new Point(length,0);
+        Point endStopway = new Point(length+stopway,0);
+        DataArrow stopwayArrow = new DataArrow(startStopway, endStopway, -380, stopwayLabel);
+        stopwayArrow.drawHorizontalArrow(g2);
+
+        Integer clearway = controller.getClearwayDim(selectedRunway).width;
+        String clearwayLabel = new String(clearway + "m");
+        Point startClearway = new Point(length,0);
+        Point endClearway = new Point(length+clearway,0);
+        DataArrow clearwayArrow = new DataArrow(startClearway, endClearway, -310, clearwayLabel);
+        clearwayArrow.drawHorizontalArrow(g2);
     }
 
     //painting parameters
