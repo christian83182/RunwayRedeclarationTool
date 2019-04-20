@@ -18,14 +18,12 @@ public class SideViewPanel extends InteractivePanel{
     final Integer newStripendHelperHeight = -170;
     final Integer blastDistanceHelperHeight = -240;
 
-    SideViewPanel(AppView appView){
-        super(new Point(-300,50), 0.3);
+    SideViewPanel(AppView appView) {
+        super(new Point(-300, 50), 0.3);
         this.appView = appView;
         this.menuPanel = appView.getMenuPanel();
         this.controller = appView.getController();
     }
-
-    //TODO implement showRelevantBreakdownOnly checkbox response
 
     @Override
     public void paintView(Graphics2D g2) {
@@ -266,20 +264,41 @@ public class SideViewPanel extends InteractivePanel{
         Integer obstacleLength = controller.getPredefinedObstacleLength(obstacle).intValue();
 
         Integer alsDistance = controller.getPredefinedObstacleHeight(obstacle).intValue()* controller.getALS(selectedRunway);
-        drawParameterToTheRight(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance);
-
         Integer resa = controller.getRESADistance(selectedRunway);
-        drawParameterToTheRight(g2, resaHelperHeight, new String("RESA: " + resa), resa, obstacleDistance + obstacleLength);
-
-        Integer newStripEnd = controller.getStripEndSize(selectedRunway);
-        if(resa > alsDistance){
-            drawParameterToTheRight(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength + resa);
-        }else{
-            drawParameterToTheRight(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance +  alsDistance);
-        }
-
         Integer blastingDistance = controller.getBlastingDistance();
-        drawParameterToTheRight(g2, blastDistanceHelperHeight, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance);
+        Integer newStripEnd = controller.getStripEndSize(selectedRunway);
+
+
+        if(menuPanel.isSideViewShowRelevantDistOnlyEnabled()){
+
+            if(alsDistance > resa && alsDistance > blastingDistance){
+                drawParameterToTheRight(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance);
+                drawParameterToTheRight(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance +  alsDistance);
+            }else if (resa > alsDistance && resa > blastingDistance){
+                drawParameterToTheRight(g2, resaHelperHeight, new String("RESA: " + resa), resa, obstacleDistance + obstacleLength);
+                drawParameterToTheRight(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength + resa);
+            }else if(resa == alsDistance && resa > blastingDistance){
+                drawParameterToTheRight(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance);
+                drawParameterToTheRight(g2, resaHelperHeight, new String("RESA: " + resa), resa, obstacleDistance + obstacleLength);
+
+            }
+            else{
+                drawParameterToTheRight(g2, blastDistanceHelperHeight, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance);
+            }
+        }else{
+
+            drawParameterToTheRight(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance);
+            drawParameterToTheRight(g2, resaHelperHeight, new String("RESA: " + resa), resa, obstacleDistance + obstacleLength);
+
+            if(resa > alsDistance){
+                drawParameterToTheRight(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength + resa);
+            }else{
+                drawParameterToTheRight(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance +  alsDistance);
+            }
+
+            drawParameterToTheRight(g2, blastDistanceHelperHeight, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance);
+
+        }
 
         if(resa > alsDistance){
             g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
@@ -288,7 +307,6 @@ public class SideViewPanel extends InteractivePanel{
             g2.drawLine(startSlope.x, startSlope.y, endSlope.x, endSlope.y);
 
         }else{
-
             g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
             Point startSlope = new Point(obstacleDistance, -controller.getPredefinedObstacleHeight(obstacle).intValue());
             Point endSlope = new Point(obstacleDistance + alsDistance, 0);
@@ -317,18 +335,35 @@ public class SideViewPanel extends InteractivePanel{
         Integer obstacleLength = controller.getPredefinedObstacleLength(obstacle).intValue();
 
         Integer alsDistance = controller.getPredefinedObstacleHeight(obstacle).intValue()*controller.getALS(selectedRunway);
-        drawParameterToTheLeft(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance + obstacleLength);
-
         Integer resa = controller.getRESADistance(selectedRunway);
-        drawParameterToTheLeft(g2, resaHelperHeight, new String("RESA: " + resa), resa, obstacleDistance);
-
         Integer newStripEnd = controller.getStripEndSize(selectedRunway);
 
-        if(resa > alsDistance){
-            drawParameterToTheLeft(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength - resa);
+        if(menuPanel.isSideViewShowRelevantDistOnlyEnabled()){
+
+            if(alsDistance > resa){
+                drawParameterToTheLeft(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance + obstacleLength);
+                drawParameterToTheLeft(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength - alsDistance);
+            }else if (resa > alsDistance){
+                drawParameterToTheLeft(g2, resaHelperHeight, new String("RESA: " + resa), resa, obstacleDistance);
+                drawParameterToTheLeft(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength - resa);
+            }else if(resa == alsDistance){
+                drawParameterToTheLeft(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance + obstacleLength);
+                drawParameterToTheLeft(g2, resaHelperHeight, new String("RESA: " + resa), resa, obstacleDistance);
+                drawParameterToTheLeft(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength - alsDistance);
+            }
+
         }else{
-            drawParameterToTheLeft(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength - alsDistance);
+
+            drawParameterToTheLeft(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance + obstacleLength);
+            drawParameterToTheLeft(g2, resaHelperHeight, new String("RESA: " + resa), resa, obstacleDistance);
+
+            if(resa > alsDistance){
+                drawParameterToTheLeft(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength - resa);
+            }else{
+                drawParameterToTheLeft(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength - alsDistance);
+            }
         }
+
         if(resa > alsDistance){
             g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
             Point startSlope = new Point(obstacleDistance + obstacleLength - resa, 0);
