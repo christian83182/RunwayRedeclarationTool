@@ -380,25 +380,25 @@ public class SideViewPanel extends InteractivePanel{
 
             if(alsDistance > resa){
                 drawParameterToTheLeft(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance + obstacleLength);
-                drawParameterToTheLeft(g2, newStripendHelperHeight,newStripEnd + " m", newStripEnd, obstacleDistance + obstacleLength - alsDistance);
+                drawParameterToTheLeft(g2, newStripendHelperHeight,newStripEnd + "m", newStripEnd, obstacleDistance + obstacleLength - alsDistance);
             }else if (resa > alsDistance){
-                drawParameterToTheLeft(g2, resaHelperHeight,"RESA: " + resa, resa, obstacleDistance);
-                drawParameterToTheLeft(g2, newStripendHelperHeight,newStripEnd + " m", newStripEnd, obstacleDistance + obstacleLength - resa);
+                drawParameterToTheLeft(g2, resaHelperHeight,"RESA: " + resa + "m", resa, obstacleDistance);
+                drawParameterToTheLeft(g2, newStripendHelperHeight,newStripEnd + "m", newStripEnd, obstacleDistance + obstacleLength - resa);
             }else if(resa.equals(alsDistance)){
                 drawParameterToTheLeft(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance + obstacleLength);
-                drawParameterToTheLeft(g2, resaHelperHeight,"RESA: " + resa, resa, obstacleDistance);
-                drawParameterToTheLeft(g2, newStripendHelperHeight,newStripEnd + " m", newStripEnd, obstacleDistance + obstacleLength - alsDistance);
+                drawParameterToTheLeft(g2, resaHelperHeight,"RESA: " + resa + "m", resa, obstacleDistance);
+                drawParameterToTheLeft(g2, newStripendHelperHeight,newStripEnd + "m", newStripEnd, obstacleDistance + obstacleLength - alsDistance);
             }
 
         }else{
 
             drawParameterToTheLeft(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance + obstacleLength);
-            drawParameterToTheLeft(g2, resaHelperHeight,"RESA: " + resa, resa, obstacleDistance);
+            drawParameterToTheLeft(g2, resaHelperHeight,"RESA: " + resa + "m", resa, obstacleDistance);
 
             if(resa > alsDistance){
-                drawParameterToTheLeft(g2, newStripendHelperHeight,newStripEnd + " m", newStripEnd, obstacleDistance + obstacleLength - resa);
+                drawParameterToTheLeft(g2, newStripendHelperHeight,newStripEnd + "m", newStripEnd, obstacleDistance + obstacleLength - resa);
             }else{
-                drawParameterToTheLeft(g2, newStripendHelperHeight,newStripEnd + " m", newStripEnd, obstacleDistance + obstacleLength - alsDistance);
+                drawParameterToTheLeft(g2, newStripendHelperHeight,newStripEnd + "m", newStripEnd, obstacleDistance + obstacleLength - alsDistance);
             }
         }
 
