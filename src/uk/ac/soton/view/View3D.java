@@ -410,6 +410,7 @@ public class View3D extends JFrame{
 
         //root.getChildren().addAll(obstacle, obstacleStroke);
 //        root.getChildren().addAll(obstacle, slopePlane);
+        root.getChildren().add(obstacle);
     }
 
     private Box genSlope(Group root, String runwayId, Integer verticalOffset){
