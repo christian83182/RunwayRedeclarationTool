@@ -59,7 +59,6 @@ public class CustomMenuBar extends JMenuBar {
                             "There was an issue importing that configuration: '" + e1.getMessage() + "'",
                             "Import Error" ,JOptionPane.ERROR_MESSAGE);
                     NotificationLogger.logger.addToLog("Configuration '"+ fileChooser.getSelectedFile().getName()+"' could not be imported");
-                    e1.printStackTrace();
                 }
                 appView.repaint();
             }
