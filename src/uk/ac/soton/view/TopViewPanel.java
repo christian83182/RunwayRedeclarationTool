@@ -400,6 +400,13 @@ public class TopViewPanel extends InteractivePanel {
             Integer obstacleLength = controller.getPredefinedObstacleLength(obstacleName);
             Integer obstacleWidth = controller.getPredefinedObstacleWidth(obstacleName);
 
+            if(controller.getLogicalRunwayCloserToObstacle(id).getName().equals(id)){
+                edgeDistance = edgeDistance - obstacleLength;
+            }
+            else{
+                edgeDistance = edgeDistance + obstacleLength;
+            }
+
             //Draw the fill of the rectangle.
             g2.setColor(Settings.OBSTACLE_FILL_COLOUR);
             g2.fillRect(pos.x + edgeDistance,
@@ -416,6 +423,7 @@ public class TopViewPanel extends InteractivePanel {
         g2.setTransform(old);
     }
 
+    // TODO implement "relevant breakdown only" for top view as well
     private void paintObstacleParameters(String runwayId, String obstacleId, Graphics2D g2){
 
         Point runwayPos = controller.getRunwayPos(runwayId);
@@ -432,7 +440,7 @@ public class TopViewPanel extends InteractivePanel {
 
         final Integer distanceFromAlsHelperHeight = -stripHeight/2 +10;
         final Integer resaHelperHeight = -stripHeight/2 -50;
-        final Integer newStripendHelperHeight = -stripHeight/2 -50;
+        //final Integer newStripendHelperHeight = -stripHeight/2 -50;
         final Integer blastDistanceHelperHeight = -stripHeight/2 -100;
 
         //if the obstacle has triggered a redeclaration of the runway, draw the redeclared parameters
@@ -440,44 +448,44 @@ public class TopViewPanel extends InteractivePanel {
 
             Integer distanceFromEdge = controller.getDistanceFromThreshold(runwayId) + controller.getObstacleOffset(runwayId);
             Integer distanceFromCenterline = controller.getDistanceFromCenterline(runwayId);
+            Integer oLength = controller.getPredefinedObstacleLength(obstacleId);
 
             //helper distance to draw a helper length from the centerline
             Integer helperStartPoint = runwayDim.height/2;
 
+            Integer newStripEnd = controller.getStripEndSize(runwayId);
+            String newStripEndLabel = newStripEnd + " m";
+
             //draw parameters to the right
             if(controller.getLogicalRunwayCloserToObstacle(runwayId).getName().equals(runwayId)) {
 
+                // RESA + Strip End
                 Integer resa = controller.getRESADistance(runwayId);
-                Integer resaOffset = distanceFromEdge + controller.getPredefinedObstacleLength(obstacleId);
                 String resaLabel = "RESA: " + resa;
-                Point startResa = new Point(runwayPos.x + resaOffset, runwayPos.y + helperStartPoint - distanceFromCenterline);
-                Point endResa = new Point (runwayPos.x + resaOffset + resa, runwayPos.y + helperStartPoint);
+                Point startResa = new Point(runwayPos.x + distanceFromEdge, runwayPos.y + helperStartPoint - distanceFromCenterline);
+                Point endResa = new Point (runwayPos.x + distanceFromEdge + resa, runwayPos.y + helperStartPoint);
                 DataArrow resaArrow = new DataArrow(startResa, endResa, resaHelperHeight, resaLabel);
                 resaArrow.drawHorizontalArrow(g2);
 
+                Point startResaStripEnd = new Point(endResa.x, runwayPos.y + helperStartPoint - distanceFromCenterline);
+                Point endResaStripEnd = new Point (endResa.x +newStripEnd, runwayPos.y + helperStartPoint);
+                DataArrow resaStripEndArrow = new DataArrow(startResaStripEnd, endResaStripEnd, resaHelperHeight, newStripEndLabel);
+                resaStripEndArrow.drawHorizontalArrow(g2);
+
+                // Slope + Strip End
                 Integer alsDistance = controller.getPredefinedObstacleHeight(obstacleId) * controller.getALS(runwayId);
                 String alsLabel = "h*50";
-                Point startAls = new Point(runwayPos.x + distanceFromEdge, runwayPos.y + helperStartPoint - distanceFromCenterline);
+                Point startAls = new Point(runwayPos.x + distanceFromEdge - oLength, runwayPos.y + helperStartPoint - distanceFromCenterline);
                 Point endAls = new Point (runwayPos.x + distanceFromEdge + alsDistance, runwayPos.y + helperStartPoint);
                 DataArrow alsArrow = new DataArrow(startAls, endAls, distanceFromAlsHelperHeight, alsLabel);
                 alsArrow.drawHorizontalArrow(g2);
 
-                Integer newStripEnd = controller.getStripEndSize(runwayId);
-                String newStripEndLabel = newStripEnd + " m";
-                DataArrow newStripEndArrow;
+                Point startAlsStripEnd = new Point(endAls.x, runwayPos.y + helperStartPoint - distanceFromCenterline);
+                Point endAlsStripEnd = new Point (endAls.x + newStripEnd, runwayPos.y + helperStartPoint);
+                DataArrow alsStripEndArrow = new DataArrow(startAlsStripEnd, endAlsStripEnd, distanceFromAlsHelperHeight, newStripEndLabel);
+                alsStripEndArrow.drawHorizontalArrow(g2);
 
-                if (resa > alsDistance) {
-                    Point startStripEnd = new Point(endResa.x, runwayPos.y + helperStartPoint - distanceFromCenterline);
-                    Point endStripEnd = new Point (endResa.x +newStripEnd, runwayPos.y + helperStartPoint);
-                    newStripEndArrow = new DataArrow(startStripEnd, endStripEnd, -310, newStripEndLabel);
-                } else {
-                    Point startStripEnd = new Point(endAls.x, runwayPos.y + helperStartPoint - distanceFromCenterline);
-                    Point endStripEnd = new Point (endAls.x + newStripEnd, runwayPos.y + helperStartPoint);
-                    newStripEndArrow = new DataArrow(startStripEnd, endStripEnd, newStripendHelperHeight, newStripEndLabel);
-                }
-
-                newStripEndArrow.drawHorizontalArrow(g2);
-
+                // Blast Protection
                 Integer blastDist = controller.getBlastingDistance();
                 String blasDistLabel = "Blast Dist: " + blastDist;
                 Point startBlastDist = new Point(runwayPos.x + distanceFromEdge,runwayPos.y + helperStartPoint - distanceFromCenterline);
@@ -487,37 +495,30 @@ public class TopViewPanel extends InteractivePanel {
 
             }else{
 
-                //draw parameters to the left
+                // RESA + Strip End
                 Integer resa = controller.getRESADistance(runwayId);
                 String resaLabel = "RESA: " + resa;
-                Point startResa = new Point(runwayPos.x + distanceFromEdge - resa,runwayPos.y + helperStartPoint);
-                Point endResa = new Point (runwayPos.x + distanceFromEdge, runwayPos.y + helperStartPoint - distanceFromCenterline);
+                Point startResa = new Point(runwayPos.x + distanceFromEdge + oLength - resa,runwayPos.y + helperStartPoint);
+                Point endResa = new Point (runwayPos.x + distanceFromEdge + oLength, runwayPos.y + helperStartPoint - distanceFromCenterline);
                 DataArrow resaArrow = new DataArrow(startResa, endResa, resaHelperHeight, resaLabel);
                 resaArrow.drawHorizontalArrow(g2);
 
+                Point startResaStripEnd = new Point(startResa.x - newStripEnd,runwayPos.y + helperStartPoint);
+                Point endResaStripEnd = new Point (startResa.x, runwayPos.y + helperStartPoint);
+                DataArrow resaStripEndArrow = new DataArrow(startResaStripEnd, endResaStripEnd, resaHelperHeight, newStripEndLabel);
+                resaStripEndArrow.drawHorizontalArrow(g2);
+
                 Integer alsDistance = controller.getPredefinedObstacleHeight(obstacleId) * controller.getALS(runwayId);
-                Integer obstacleLength = controller.getPredefinedObstacleLength(obstacleId);
                 String alsLabel = "h*50";
-                Point startAls = new Point(runwayPos.x + distanceFromEdge - alsDistance + obstacleLength,runwayPos.y + helperStartPoint);
-                Point endAls = new Point (runwayPos.x + distanceFromEdge + obstacleLength, runwayPos.y + helperStartPoint - distanceFromCenterline);
+                Point startAls = new Point(runwayPos.x + distanceFromEdge - alsDistance + oLength,runwayPos.y + helperStartPoint);
+                Point endAls = new Point (runwayPos.x + distanceFromEdge + oLength + oLength, runwayPos.y + helperStartPoint - distanceFromCenterline);
                 DataArrow alsArrow = new DataArrow(startAls, endAls, distanceFromAlsHelperHeight, alsLabel);
                 alsArrow.drawHorizontalArrow(g2);
 
-                Integer newStripEnd = controller.getStripEndSize(runwayId);
-                String newStripEndLabel = newStripEnd + " m";
-                DataArrow newStripEndArrow;
-
-                if (resa > alsDistance) {
-                    Point startStripEnd = new Point(startResa.x - newStripEnd,runwayPos.y + helperStartPoint);
-                    Point endStripEnd = new Point (startResa.x, runwayPos.y + helperStartPoint);
-                    newStripEndArrow = new DataArrow(startStripEnd, endStripEnd, newStripendHelperHeight, newStripEndLabel);
-                } else {
-                    Point startStripEnd = new Point(startAls.x - newStripEnd,runwayPos.y + helperStartPoint);
-                    Point endStripEnd = new Point (startAls.x, runwayPos.y + helperStartPoint);
-                    newStripEndArrow = new DataArrow(startStripEnd, endStripEnd, newStripendHelperHeight, newStripEndLabel);
-                }
-
-                newStripEndArrow.drawHorizontalArrow(g2);
+                Point startAlsStripEnd = new Point(startAls.x - newStripEnd,runwayPos.y + helperStartPoint);
+                Point endAlsStripEnd = new Point (startAls.x, runwayPos.y + helperStartPoint);
+                DataArrow alsStripEndArrow = new DataArrow(startAlsStripEnd, endAlsStripEnd, distanceFromAlsHelperHeight, newStripEndLabel);
+                alsStripEndArrow.drawHorizontalArrow(g2);
             }
         }
     }
