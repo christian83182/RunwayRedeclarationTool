@@ -26,6 +26,7 @@ public class MenuPanel extends JPanel {
     private JCheckBox showBreakdownSideView;
     private JCheckBox relevantDistancesSideView;
     private JCheckBox showOverlayBoxSideView;
+    private JCheckBox showOtherSideView;
 
     MenuPanel(AppView appView){
         this.appView = appView;
@@ -226,7 +227,8 @@ public class MenuPanel extends JPanel {
         c.insets = new Insets(10,10,0,10);
         sideViewPane.add(runwayParametersSideView, c);
         runwayParametersSideView.addActionListener(e -> {
-            NotificationLogger.logger.addToLog("Side View's 'Show Runway Parameters: '" +runwayParametersSideView.isSelected()+ "'");
+            NotificationLogger.logger.addToLog("Side View's 'Show Runway Parameters' Toggled: '"
+                    +runwayParametersSideView.isSelected()+ "'");
         });
 
         //Add the "show runway parameters" option for the side view menu
@@ -239,7 +241,8 @@ public class MenuPanel extends JPanel {
         c.insets = new Insets(0,10,0,10);
         sideViewPane.add(showBreakdownSideView, c);
         showBreakdownSideView.addActionListener(e -> {
-            NotificationLogger.logger.addToLog("Side View's 'Show Re-declaration Breakdown: '" +showBreakdownSideView.isSelected()+ "'");
+            NotificationLogger.logger.addToLog("Side View's 'Show Re-declaration Breakdown' Toggled: '"
+                    +showBreakdownSideView.isSelected()+ "'");
         });
 
         //Add the "show relevant distances only" option for the side view menu
@@ -252,7 +255,22 @@ public class MenuPanel extends JPanel {
         c.insets = new Insets(0,10,0,10);
         sideViewPane.add(relevantDistancesSideView, c);
         relevantDistancesSideView.addActionListener(e -> {
-            NotificationLogger.logger.addToLog("Side View's 'Show Relevant Breakdown Only: '" +relevantDistancesSideView.isSelected()+ "'");
+            NotificationLogger.logger.addToLog("Side View's 'Show Relevant Breakdown Only' Toggled: '"
+                    +relevantDistancesSideView.isSelected()+ "'");
+        });
+
+        //Add the "show other distances" option for the side view menu
+        showOtherSideView = new JCheckBox("Show Other Distances");
+        showOtherSideView.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
+        showOtherSideView.setSelected(true);
+        showOtherSideView.addActionListener(e -> appView.repaint());
+        c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 30; c.anchor = GridBagConstraints.LINE_START; c.weightx = 1;
+        c.insets = new Insets(0,10,0,10);
+        sideViewPane.add(showOtherSideView, c);
+        showOtherSideView.addActionListener(e -> {
+            NotificationLogger.logger.addToLog("Side View's 'Show Other Distances' Toggled: '"
+                    +showOtherSideView.isSelected()+ "'");
         });
 
         //Add the "show overlay" option for the side view menu
@@ -261,7 +279,7 @@ public class MenuPanel extends JPanel {
         showOverlayBoxSideView.setSelected(true);
         showOverlayBoxSideView.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 30; c.anchor = GridBagConstraints.LINE_START; c.weightx = 1;
+        c.gridx = 0; c.gridy = 40; c.anchor = GridBagConstraints.LINE_START; c.weightx = 1;
         c.insets = new Insets(0,10,10,10);
         sideViewPane.add(showOverlayBoxSideView, c);
         showOverlayBoxSideView.addActionListener(e -> {
@@ -353,6 +371,22 @@ public class MenuPanel extends JPanel {
     }
 
     public boolean isShowOverlay(){ return showOverlayBox.isSelected(); }
+
+    public boolean isSideViewShowRunwayParametersEnabled(){
+        return runwayParametersSideView.isSelected();
+    }
+
+    public boolean isSideViewShowBreakdownEnabled() {
+        return showBreakdownSideView.isSelected();
+    }
+
+    public boolean isSideViewShowRelevantDistOnlyEnabled() {
+        return relevantDistancesSideView.isSelected();
+    }
+
+    public boolean isSideViewShowOtherEnabled(){
+        return showOtherSideView.isSelected();
+    }
 
     public boolean isSideViewShowOverlay() { return showOverlayBoxSideView.isSelected(); }
 

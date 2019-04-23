@@ -401,15 +401,15 @@ public class View3D extends JFrame{
         obstacleStroke.setTranslateY(-obstacleHeight/2-verticalOffset);
         obstacleStroke.setDrawMode(DrawMode.LINE);*/
 
-        Box slopePlane = genSlope(root, runwayId, verticalOffset);
+//        Box slopePlane = genSlope(root, runwayId, verticalOffset);
 
         Rotate rotate = new Rotate(controller.getBearing(runwayId), distanceFromCenterline, 0,-distanceFromThreshold - obstacleWidth/2, Rotate.Y_AXIS);
         obstacle.getTransforms().add(rotate);
         //obstacleStroke.getTransforms().add(rotate);
-        slopePlane.getTransforms().add(rotate);
+//        slopePlane.getTransforms().add(rotate);
 
         //root.getChildren().addAll(obstacle, obstacleStroke);
-        root.getChildren().addAll(obstacle, slopePlane);
+//        root.getChildren().addAll(obstacle, slopePlane);
     }
 
     private Box genSlope(Group root, String runwayId, Integer verticalOffset){

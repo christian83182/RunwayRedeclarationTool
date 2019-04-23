@@ -10,16 +10,15 @@ public class SideViewPanel extends InteractivePanel{
     private AppView appView;
     private MenuPanel menuPanel;
     private ViewController controller;
-    final Integer OBSTACLE_RESCALE_VALUE = 1;
 
     //helper heights for drawing the info arrows of the obstacle parameters
-    final Integer distanceFromAlsHelperHeight = -100;
-    final Integer resaHelperHeight = -170;
-    final Integer newStripendHelperHeight = -170;
-    final Integer blastDistanceHelperHeight = -240;
+    private final Integer distanceFromAlsHelperHeight = -100;
+    private final Integer resaHelperHeight = -170;
+    private final Integer newStripendHelperHeight = -170;
+    private final Integer blastDistanceHelperHeight = -240;
 
-    SideViewPanel(AppView appView){
-        super(new Point(-300,50), 0.3);
+    SideViewPanel(AppView appView) {
+        super(new Point(-300, 150), 0.34);
         this.appView = appView;
         this.menuPanel = appView.getMenuPanel();
         this.controller = appView.getController();
@@ -33,13 +32,21 @@ public class SideViewPanel extends InteractivePanel{
         if(!appView.getSelectedRunway().equals("")){
             paintRunway(g2);
 
-            paintParameters(g2);
+            if(menuPanel.isSideViewShowRunwayParametersEnabled()){
+                paintParameters(g2);
+            }
+            if(menuPanel.isSideViewShowOtherEnabled()){
+                paintOtherDistances(g2);
+            }
         }
 
         //if there is an obstacle on the runway, paint it
         if(!controller.getRunwayObstacle(appView.getSelectedRunway()).equals("")){
             paintObstacle(g2);
-            //paintParameters(g2);
+
+            if(menuPanel.isSideViewShowBreakdownEnabled()){
+                paintBreakdownParameters(g2);
+            }
         }
 
         //painting map
@@ -84,7 +91,7 @@ public class SideViewPanel extends InteractivePanel{
 
         g2.setPaint(Color.WHITE);
         if(runwayId.length() == 2){
-            g2.setFont(new Font("SansSerif", 0, 40));
+            g2.setFont(new Font("SansSerif", Font.PLAIN, 40));
             g2.drawString(runwayId, 20, 40);
         } else {
             g2.setFont(new Font("SansSerif", Font.BOLD, 25));
@@ -159,14 +166,48 @@ public class SideViewPanel extends InteractivePanel{
         String selectedRunway = appView.getSelectedRunway();
         String obstacle = controller.getRunwayObstacle(selectedRunway);
         Integer distanceFromEdge = controller.getDistanceFromThreshold(selectedRunway) + controller.getObstacleOffset(selectedRunway);
-        Integer obstacleLength = controller.getPredefinedObstacleLength(obstacle).intValue() * OBSTACLE_RESCALE_VALUE;
-        Integer obstacleHeight = controller.getPredefinedObstacleHeight(obstacle).intValue() * OBSTACLE_RESCALE_VALUE;
+        Integer obstacleLength = controller.getPredefinedObstacleLength(obstacle);
+        Integer obstacleHeight = controller.getPredefinedObstacleHeight(obstacle);
 
         g2.setColor(Settings.SIDEVIEW_OBSTACLE_FILL_COLOR);
         g2.fillRect(distanceFromEdge, -obstacleHeight, obstacleLength, obstacleHeight);
         g2.setColor(Settings.OBSTACLE_STROKE_COLOUR);
         g2.setStroke(Settings.OBSTACLE_STROKE);
         g2.drawRect(distanceFromEdge, -obstacleHeight,obstacleLength, obstacleHeight);
+    }
+
+    // painting runway length, displaced threshold, clearway, stopway arrows
+    private void paintOtherDistances(Graphics2D g2){
+
+        String selectedRunway = appView.getSelectedRunway();
+
+        Integer length = controller.getRunwayDim(selectedRunway).width;
+        String lengthLabel = length + "m";
+        Point startLength = new Point(0,0);
+        Point endLength = new Point(length,0);
+        DataArrow lengthArrow = new DataArrow(startLength, endLength, -380, lengthLabel);
+        lengthArrow.drawHorizontalArrow(g2);
+
+        Integer threshold = controller.getRunwayThreshold(selectedRunway);
+        String thresholdLabel = threshold + "m";
+        Point startThreshold = new Point(0,0);
+        Point endThreshold = new Point (threshold, 0);
+        DataArrow thresholdArrow = new DataArrow(startThreshold, endThreshold, -310, thresholdLabel);
+        thresholdArrow.drawHorizontalArrow(g2);
+
+        Integer stopway = controller.getStopwayDim(selectedRunway).width;
+        String stopwayLabel = stopway + "m";
+        Point startStopway = new Point(length,0);
+        Point endStopway = new Point(length+stopway,0);
+        DataArrow stopwayArrow = new DataArrow(startStopway, endStopway, -380, stopwayLabel);
+        stopwayArrow.drawHorizontalArrow(g2);
+
+        Integer clearway = controller.getClearwayDim(selectedRunway).width;
+        String clearwayLabel = clearway + "m";
+        Point startClearway = new Point(length,0);
+        Point endClearway = new Point(length+clearway,0);
+        DataArrow clearwayArrow = new DataArrow(startClearway, endClearway, -310, clearwayLabel);
+        clearwayArrow.drawHorizontalArrow(g2);
     }
 
     //painting parameters
@@ -189,7 +230,7 @@ public class SideViewPanel extends InteractivePanel{
         }
 
         Integer lda = controller.getRunwayLDA(selectedRunway);
-        String ldaLabel = new String("LDA: " + lda);
+        String ldaLabel = "LDA: " + lda + "m";
         Point startLda = new Point(ldaOffset,0);
         Point endLda = new Point (lda+ldaOffset, 0);
         DataArrow ldaArrow = new DataArrow(startLda, endLda, 100, ldaLabel);
@@ -198,44 +239,45 @@ public class SideViewPanel extends InteractivePanel{
         //displaying tora
         Integer toraOffset = controller.getTORAOffset(selectedRunway);
         Integer tora = controller.getRunwayTORA(selectedRunway);
-        String toraLabel = new String("TORA: " + tora);
+        String toraLabel = "TORA: " + tora + "m";
         Point startTora = new Point(toraOffset,0);
         Point endTora = new Point (tora + toraOffset, 0);
         DataArrow toraArrow = new DataArrow(startTora, endTora, 200, toraLabel);
         toraArrow.drawHorizontalArrow(g2);
 
-        //displaying toda
-        Integer todaOffset = controller.getTODAOffset(selectedRunway);
-        Integer toda = controller.getRunwayTODA(selectedRunway);
-        String todaLabel = new String("TODA: " + toda);
-        Point startToda = new Point(todaOffset,0);
-        Point endToda = new Point (toda + todaOffset, 0);
-        DataArrow todaArrow = new DataArrow(startToda, endToda, 300, todaLabel);
-        todaArrow.drawHorizontalArrow(g2);
-
         //displaying asda
         Integer asdaOffset = controller.getASDAOffset(selectedRunway);
         Integer asda = controller.getRunwayASDA(selectedRunway);
-        String asdaLabel = new String("ASDA: " + asda);
+        String asdaLabel = "ASDA: " + asda + "m";
         Point startAsda = new Point(asdaOffset,0);
         Point endAsda = new Point (asda + asdaOffset, 0);
-        DataArrow asdaArrow = new DataArrow(startAsda, endAsda, 400, asdaLabel);
+        DataArrow asdaArrow = new DataArrow(startAsda, endAsda, 300, asdaLabel);
         asdaArrow.drawHorizontalArrow(g2);
 
-        //if obstacle exists, display obstacle related distances
-        if(!obstacle.equals("")){
+        //displaying toda
+        Integer todaOffset = controller.getTODAOffset(selectedRunway);
+        Integer toda = controller.getRunwayTODA(selectedRunway);
+        String todaLabel ="TODA: " + toda + "m";
+        Point startToda = new Point(todaOffset,0);
+        Point endToda = new Point (toda + todaOffset, 0);
+        DataArrow todaArrow = new DataArrow(startToda, endToda, 400, todaLabel);
+        todaArrow.drawHorizontalArrow(g2);
+    }
 
-            //if the obstacle has triggered a redeclaration of the runway, draw the redeclared parameters
-            if(controller.isRedeclared(selectedRunway)) {
-                //invoke displaying distances relative to their direction in which they are drawn
-                if (controller.getLogicalRunwayCloserToObstacle(selectedRunway).getName().equals(selectedRunway)) {
-                    displayDistancesToTheRight(g2, obstacle, selectedRunway);
-                } else {
-                    displayDistancesToTheLeft(g2, obstacle, selectedRunway);
-                }
+    private void paintBreakdownParameters(Graphics2D g2){
+
+        String selectedRunway = appView.getSelectedRunway();
+        String obstacle = controller.getRunwayObstacle(selectedRunway);
+
+        //if the obstacle has triggered a redeclaration of the runway, draw the redeclared parameters
+        if(controller.isRedeclared(selectedRunway)) {
+            //invoke displaying distances relative to their direction in which they are drawn
+            if (controller.getLogicalRunwayCloserToObstacle(selectedRunway).getName().equals(selectedRunway)) {
+                displayDistancesToTheRight(g2, obstacle, selectedRunway);
+            } else {
+                displayDistancesToTheLeft(g2, obstacle, selectedRunway);
             }
         }
-
     }
 
     //all parameters drawn to the left of the obstacle are drawn from a specified distance
@@ -255,34 +297,56 @@ public class SideViewPanel extends InteractivePanel{
     private void displayDistancesToTheRight(Graphics2D g2, String obstacle, String selectedRunway){
 
         Integer obstacleDistance = controller.getDistanceFromThreshold(selectedRunway) + controller.getObstacleOffset(selectedRunway);
-        Integer obstacleLength = controller.getPredefinedObstacleLength(obstacle).intValue();
+        Integer obstacleLength = controller.getPredefinedObstacleLength(obstacle);
 
-        Integer alsDistance = controller.getPredefinedObstacleHeight(obstacle).intValue()* controller.getALS(selectedRunway);
-        drawParameterToTheRight(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance);
-
+        Integer alsDistance = controller.getPredefinedObstacleHeight(obstacle)* controller.getALS(selectedRunway);
         Integer resa = controller.getRESADistance(selectedRunway);
-        drawParameterToTheRight(g2, resaHelperHeight, new String("RESA: " + resa), resa, obstacleDistance + obstacleLength);
-
-        Integer newStripEnd = controller.getStripEndSize(selectedRunway);
-        if(resa > alsDistance){
-            drawParameterToTheRight(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength + resa);
-        }else{
-            drawParameterToTheRight(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance +  alsDistance);
-        }
-
         Integer blastingDistance = controller.getBlastingDistance();
-        drawParameterToTheRight(g2, blastDistanceHelperHeight, new String("BLASTING DIST: " + blastingDistance), blastingDistance, obstacleDistance);
+        Integer newStripEnd = controller.getStripEndSize(selectedRunway);
+
+
+        if(menuPanel.isSideViewShowRelevantDistOnlyEnabled()){
+
+            if(alsDistance > resa && alsDistance > blastingDistance){
+                drawParameterToTheRight(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance);
+                drawParameterToTheRight(g2, newStripendHelperHeight, newStripEnd + "m", newStripEnd, obstacleDistance +  alsDistance);
+                drawParameterToTheRight(g2, blastDistanceHelperHeight, "Blast Dist: " + blastingDistance + "m", blastingDistance, obstacleDistance);
+            }else if (resa > alsDistance && resa > blastingDistance){
+                drawParameterToTheRight(g2, resaHelperHeight, "RESA: " + resa, resa, obstacleDistance + obstacleLength);
+                drawParameterToTheRight(g2, newStripendHelperHeight, newStripEnd + "m", newStripEnd, obstacleDistance + obstacleLength + resa);
+                drawParameterToTheRight(g2, blastDistanceHelperHeight, "Blast Dist: " + blastingDistance + "m", blastingDistance, obstacleDistance);
+            }else if(resa.equals(alsDistance) && resa > blastingDistance){
+                drawParameterToTheRight(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance);
+                drawParameterToTheRight(g2, resaHelperHeight, "RESA: " + resa + "m", resa, obstacleDistance + obstacleLength);
+                drawParameterToTheRight(g2, blastDistanceHelperHeight, "Blast Dist: " + blastingDistance + "m", blastingDistance, obstacleDistance);
+            }
+            else{
+                drawParameterToTheRight(g2, blastDistanceHelperHeight, "Blast Dist: " + blastingDistance + "m", blastingDistance, obstacleDistance);
+            }
+        }else{
+
+            drawParameterToTheRight(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance);
+            drawParameterToTheRight(g2, resaHelperHeight, "RESA: " + resa + "m", resa, obstacleDistance + obstacleLength);
+
+            if(resa > alsDistance){
+                drawParameterToTheRight(g2, newStripendHelperHeight, newStripEnd + "m", newStripEnd, obstacleDistance + obstacleLength + resa);
+            }else{
+                drawParameterToTheRight(g2, newStripendHelperHeight, newStripEnd + "m", newStripEnd, obstacleDistance +  alsDistance);
+            }
+
+            drawParameterToTheRight(g2, blastDistanceHelperHeight, "Blast Dist: " + blastingDistance + "m", blastingDistance, obstacleDistance);
+
+        }
 
         if(resa > alsDistance){
             g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
-            Point startSlope = new Point(obstacleDistance, -controller.getPredefinedObstacleHeight(obstacle).intValue());
+            Point startSlope = new Point(obstacleDistance, -controller.getPredefinedObstacleHeight(obstacle));
             Point endSlope = new Point(obstacleDistance + resa, 0);
             g2.drawLine(startSlope.x, startSlope.y, endSlope.x, endSlope.y);
 
         }else{
-
             g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
-            Point startSlope = new Point(obstacleDistance, -controller.getPredefinedObstacleHeight(obstacle).intValue());
+            Point startSlope = new Point(obstacleDistance, -controller.getPredefinedObstacleHeight(obstacle));
             Point endSlope = new Point(obstacleDistance + alsDistance, 0);
             g2.drawLine(startSlope.x, startSlope.y, endSlope.x, endSlope.y);
 
@@ -306,30 +370,47 @@ public class SideViewPanel extends InteractivePanel{
     private void displayDistancesToTheLeft(Graphics2D g2, String obstacle, String selectedRunway){
 
         Integer obstacleDistance = controller.getDistanceFromThreshold(selectedRunway) + controller.getObstacleOffset(selectedRunway);
-        Integer obstacleLength = controller.getPredefinedObstacleLength(obstacle).intValue();
+        Integer obstacleLength = controller.getPredefinedObstacleLength(obstacle);
 
-        Integer alsDistance = controller.getPredefinedObstacleHeight(obstacle).intValue()*controller.getALS(selectedRunway);
-        drawParameterToTheLeft(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance + obstacleLength);
-
+        Integer alsDistance = controller.getPredefinedObstacleHeight(obstacle)*controller.getALS(selectedRunway);
         Integer resa = controller.getRESADistance(selectedRunway);
-        drawParameterToTheLeft(g2, resaHelperHeight, new String("RESA: " + resa), resa, obstacleDistance);
-
         Integer newStripEnd = controller.getStripEndSize(selectedRunway);
 
-        if(resa > alsDistance){
-            drawParameterToTheLeft(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength - resa);
+        if(menuPanel.isSideViewShowRelevantDistOnlyEnabled()){
+
+            if(alsDistance > resa){
+                drawParameterToTheLeft(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance + obstacleLength);
+                drawParameterToTheLeft(g2, newStripendHelperHeight,newStripEnd + " m", newStripEnd, obstacleDistance + obstacleLength - alsDistance);
+            }else if (resa > alsDistance){
+                drawParameterToTheLeft(g2, resaHelperHeight,"RESA: " + resa, resa, obstacleDistance);
+                drawParameterToTheLeft(g2, newStripendHelperHeight,newStripEnd + " m", newStripEnd, obstacleDistance + obstacleLength - resa);
+            }else if(resa.equals(alsDistance)){
+                drawParameterToTheLeft(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance + obstacleLength);
+                drawParameterToTheLeft(g2, resaHelperHeight,"RESA: " + resa, resa, obstacleDistance);
+                drawParameterToTheLeft(g2, newStripendHelperHeight,newStripEnd + " m", newStripEnd, obstacleDistance + obstacleLength - alsDistance);
+            }
+
         }else{
-            drawParameterToTheLeft(g2, newStripendHelperHeight, new String (newStripEnd + " m"), newStripEnd, obstacleDistance + obstacleLength - alsDistance);
+
+            drawParameterToTheLeft(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway), alsDistance, obstacleDistance + obstacleLength);
+            drawParameterToTheLeft(g2, resaHelperHeight,"RESA: " + resa, resa, obstacleDistance);
+
+            if(resa > alsDistance){
+                drawParameterToTheLeft(g2, newStripendHelperHeight,newStripEnd + " m", newStripEnd, obstacleDistance + obstacleLength - resa);
+            }else{
+                drawParameterToTheLeft(g2, newStripendHelperHeight,newStripEnd + " m", newStripEnd, obstacleDistance + obstacleLength - alsDistance);
+            }
         }
+
         if(resa > alsDistance){
             g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
             Point startSlope = new Point(obstacleDistance + obstacleLength - resa, 0);
-            Point endSlope = new Point (obstacleDistance + obstacleLength, -controller.getPredefinedObstacleHeight(obstacle).intValue());
+            Point endSlope = new Point (obstacleDistance + obstacleLength, -controller.getPredefinedObstacleHeight(obstacle));
             g2.drawLine(startSlope.x, startSlope.y, endSlope.x, endSlope.y);
         }else{
             g2.setPaint(Settings.STOPWAY_FILL_COLOUR);
             Point startSlope = new Point(obstacleDistance + obstacleLength - alsDistance, 0);
-            Point endSlope = new Point (obstacleDistance + obstacleLength, -controller.getPredefinedObstacleHeight(obstacle).intValue());
+            Point endSlope = new Point (obstacleDistance + obstacleLength, -controller.getPredefinedObstacleHeight(obstacle));
             g2.drawLine(startSlope.x, startSlope.y, endSlope.x, endSlope.y);
         }
 
