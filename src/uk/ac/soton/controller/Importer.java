@@ -33,7 +33,7 @@ public class Importer {
         this.controller.setAirfield(airfield);
     }
 
-    public void importConfiguration(String absolutePath) throws ParserConfigurationException, IOException, SAXException{
+    public void importConfiguration(String absolutePath) throws ParserConfigurationException, IOException, SAXException, ImporterExceptions {
         //Parse and normalize the file at the given path into a Document object.
         File targetFile = new File(absolutePath);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -58,7 +58,7 @@ public class Importer {
     }
 
     //Imports the name, min angle of decent, and blast distance policy given the root node airfieldElement.
-    private void importAirfieldProperties(Element airfieldElement){
+    private void importAirfieldProperties(Element airfieldElement) throws ImporterExceptions {
         //Retrieve the RunwayName child from the airfieldElement node.
         Node airfieldNameNode = airfieldElement.getElementsByTagName("AirfieldName").item(0);
         String airfieldName = airfieldNameNode.getTextContent();
@@ -67,12 +67,17 @@ public class Importer {
         //Retrieve the MinAngleOfDecent from the airfieldElement node.
         Node minAngleOfDecentNode = airfieldElement.getElementsByTagName("MinimumAngleOfDecent").item(0);
         Integer minAngleOfDecent = Integer.parseInt(minAngleOfDecentNode.getTextContent());
-        Airfield.setMinAngleOfDecent(minAngleOfDecent);
+        if(minAngleOfDecent<0){
+            throw new ImporterExceptions("Minimum Angle of Descent is negative");
+        } else { Airfield.setMinAngleOfDecent(minAngleOfDecent); }
 
         //Retrieve the BlastDistancePolicy from the airfieldElement node.
         Node blastDistanceNode = airfieldElement.getElementsByTagName("BlastDistancePolicy").item(0);
         Integer blastDistance = Integer.parseInt(blastDistanceNode.getTextContent());
-        Airfield.setBlastProtection(blastDistance);
+        if(blastDistance<0){
+            throw new ImporterExceptions("Blast Distance is negative");
+        } else { Airfield.setBlastProtection(blastDistance); }
+
     }
 
     //Imports the x & y offset, scale and rotation for a background image given the root node airfieldElement.
@@ -106,7 +111,7 @@ public class Importer {
     }
 
     //Imports the properties of all the defined obstacles given the root node airfieldElement.
-    private void importObstacleProperties(Element airfieldElement){
+    private void importObstacleProperties(Element airfieldElement) throws ImporterExceptions{
         //Remove all entries from the list of predefined obstacles in the current airfield.
         airfield.getPredefinedObstacles().clear();
 
@@ -126,14 +131,23 @@ public class Importer {
             //Retrieve the obstacle length from the currentObstacle node.
             Node obstacleLengthNode = currentObstacle.getElementsByTagName("ObstacleLength").item(0);
             Integer obstacleLength = Integer.parseInt(obstacleLengthNode.getTextContent());
+            if(obstacleLength <0){
+                throw new ImporterExceptions("Obstacle " + obstacleId + "'s length is negative");
+            }
 
             //Retrieve the obstacle width from the currentObstacle node.
             Node obstacleWidthNode = currentObstacle.getElementsByTagName("ObstacleWidth").item(0);
             Integer obstacleWidth = Integer.parseInt(obstacleWidthNode.getTextContent());
+            if(obstacleWidth <0){
+                throw new ImporterExceptions("Obstacle " + obstacleId + "'s width is negative");
+            }
 
             //Retrieve the obstacle height from the currentObstacle node.
             Node obstacleHeightNode = currentObstacle.getElementsByTagName("ObstacleHeight").item(0);
             Integer obstacleHeight = Integer.parseInt(obstacleHeightNode.getTextContent());
+            if(obstacleHeight <0){
+                throw new ImporterExceptions("Obstacle " + obstacleId + "'s height is negative");
+            }
 
             //Defined a new obstacle in airfield using the data extracted from the currentObstacle node.
             airfield.defineNewObstacle(obstacleId, obstacleLength, obstacleWidth, obstacleHeight);
@@ -141,7 +155,7 @@ public class Importer {
     }
 
     //Imports the properties of all defined runways given the root node airfieldElement.
-    private void importRunwayProperties(Element airfieldElement){
+    private void importRunwayProperties(Element airfieldElement) throws ImporterExceptions{
         //Retrieve the physicalRunwaysElement node from the root airfieldElement node.
         Element physicalRunwaysElement = (Element) airfieldElement.getElementsByTagName("PhysicalRunways").item(0);
         NodeList runwayList = physicalRunwaysElement.getElementsByTagName("Runway");
@@ -170,22 +184,37 @@ public class Importer {
             //Retrieve the length from the currentRunway node.
             Node lengthNode = currentRunway.getElementsByTagName("Length").item(0);
             Integer length = Integer.parseInt(lengthNode.getTextContent());
+            if(length<0){
+                throw new ImporterExceptions("Runway " + firstLogicalRunwayName +"/"+secondLogicalRunwayName+"'s length is negative");
+            }
 
             //Retrieve the width from the currentRunway node.
             Node widthNode = currentRunway.getElementsByTagName("Width").item(0);
             Integer width = Integer.parseInt(widthNode.getTextContent());
+            if(width<0){
+                throw new ImporterExceptions("Runway " + firstLogicalRunwayName +"/"+secondLogicalRunwayName+"'s width is negative");
+            }
 
             //Retrieve the stripEndSize from the currentRunway node.
             Node stripEndNode = currentRunway.getElementsByTagName("StripEndLength").item(0);
             Integer stripEndSize = Integer.parseInt(stripEndNode.getTextContent());
+            if(stripEndSize<0){
+                throw new ImporterExceptions("Runway " + firstLogicalRunwayName +"/"+secondLogicalRunwayName+"'s strip end is negative");
+            }
 
             //Retrieve the stripWidth from the currentRunway node.
             Node stripWidthNode = currentRunway.getElementsByTagName("stripWidthElement").item(0);
             Integer stripWidth = Integer.parseInt(stripWidthNode.getTextContent());
+            if(stripWidth<0){
+                throw new ImporterExceptions("Runway " + firstLogicalRunwayName +"/"+secondLogicalRunwayName+"'s strip width is negative");
+            }
 
             //Retrieve the resaSize from the currentRunway node.
             Node resaSizeNode = currentRunway.getElementsByTagName("RESALength").item(0);
             Integer resaSize = Integer.parseInt(resaSizeNode.getTextContent());
+            if(width<0){
+                throw new ImporterExceptions("Runway " + firstLogicalRunwayName +"/"+secondLogicalRunwayName+"'s RESA size is negative");
+            }
 
             //Construct a new Runway object using the data extracted from currentObject.
             String runwayName = firstLogicalRunwayName + "/" + secondLogicalRunwayName;
@@ -202,7 +231,7 @@ public class Importer {
 
     //Imports the properties of both logical runways given an Element runwayElement corresponding to a physical runway.
     //The imported logical runways are imported into the given physicalRunway.
-    private void importLogicalRunway(Element runwayElement, Runway physicalRunway){
+    private void importLogicalRunway(Element runwayElement, Runway physicalRunway) throws ImporterExceptions {
         //Extract the firstLogicalRunwayElement and secondLogicalRunwayElement nodes from the runwayElement node.
         Element firstLogicalRunwayElement = (Element)runwayElement.getElementsByTagName("FirstLogicalRunway").item(0);
         Element secondLogicalRunwayElement = (Element)runwayElement.getElementsByTagName("SecondLogicalRunway").item(0);
@@ -213,6 +242,9 @@ public class Importer {
         //Extract the threshold for the second logical runway.
         Node secondThresholdNode = secondLogicalRunwayElement.getElementsByTagName("DisplacedThreshold").item(0);
         Integer secondThreshold = Integer.parseInt(secondThresholdNode.getTextContent());
+        if(firstThreshold <0 || secondThreshold<0){
+            throw new ImporterExceptions("Negative Displaced Threshold");
+        }
 
         //Extract the stopway length for the first logical runway.
         Node firstStopwayLengthNode = firstLogicalRunwayElement.getElementsByTagName("StopwayLength").item(0);
@@ -220,6 +252,9 @@ public class Importer {
         //Extract the stopway length for the second logical runway.
         Node secondStopwayLengthNode = secondLogicalRunwayElement.getElementsByTagName("StopwayLength").item(0);
         Integer secondStopwayLength = Integer.parseInt(secondStopwayLengthNode.getTextContent());
+        if(firstStopwayLength <0 || secondStopwayLength<0){
+            throw new ImporterExceptions("Negative Stopway Length");
+        }
 
         //Extract the stopway width for the first logical runway.
         Node firstStopwayWidthNode = firstLogicalRunwayElement.getElementsByTagName("StopwayWidth").item(0);
@@ -227,6 +262,9 @@ public class Importer {
         //Extract the stopway width for the second logical runway.
         Node secondStopwayWidthNode = secondLogicalRunwayElement.getElementsByTagName("StopwayWidth").item(0);
         Integer secondtStopwayWidth = Integer.parseInt(secondStopwayWidthNode.getTextContent());
+        if(firstStopwayWidth <0 || secondtStopwayWidth<0){
+            throw new ImporterExceptions("Negative Stopway Width");
+        }
 
         //Extract the clearway length for the first logical runway.
         Node firstClearwayLengthNode = firstLogicalRunwayElement.getElementsByTagName("ClearwayLength").item(0);
@@ -234,6 +272,9 @@ public class Importer {
         //Extract the clearway length for the second logical runway.
         Node secondClearwayLengthNode = secondLogicalRunwayElement.getElementsByTagName("ClearwayLength").item(0);
         Integer secondClearwayLength = Integer.parseInt(secondClearwayLengthNode.getTextContent());
+        if(firstClearwayLength <0 || secondClearwayLength<0){
+            throw new ImporterExceptions("Negative Clearway Length");
+        }
 
         //Extract the clearway width for the first logical runway.
         Node firstClearwayWidthNode = firstLogicalRunwayElement.getElementsByTagName("ClearwayWidth").item(0);
@@ -241,6 +282,9 @@ public class Importer {
         //Extract the clearway width for the second logical runway.
         Node secondClearwayWidthNode = secondLogicalRunwayElement.getElementsByTagName("ClearwayWidth").item(0);
         Integer secondClearwayWidth = Integer.parseInt(secondClearwayWidthNode.getTextContent());
+        if(firstClearwayWidth <0 || secondClearwayWidth<0){
+            throw new ImporterExceptions("Negative Clearway Width");
+        }
 
         //Use the retrieved data to construct the first logical runway.
         String firstName = physicalRunway.getId().split("/")[0];
@@ -259,7 +303,7 @@ public class Importer {
     }
 
     //Imports an obstacle onto a runway if the relevant tags indicate so in teh runwayElement node.
-    private void importRunwayObstacle(Element runwayElement, String firstLogicalRunwayName){
+    private void importRunwayObstacle(Element runwayElement, String firstLogicalRunwayName) throws ImporterExceptions {
         //Check to see if there is a tag implying there's an obstacle on the runway.
         NodeList runwayObstacleNodeList = runwayElement.getElementsByTagName("RunwayObstacle");
         //If the size of the NodeList is not greater than 0 then there's no obstacle on the runway.
@@ -275,12 +319,18 @@ public class Importer {
             Node distanceFromStartNode = runwayObstacleElement.getElementsByTagName("DistanceFromRunwayStart").item(0);
             Integer distanceFromStart = Integer.parseInt(distanceFromStartNode.getTextContent());
 
+
             //Extract the distance from the centerline to the obstacle on the runway.
             Node distanceFromCenterlineNode = runwayObstacleElement.getElementsByTagName("DistanceFromRunwayCenterline").item(0);
             Integer distanceFromCenterline = Integer.parseInt(distanceFromCenterlineNode.getTextContent());
 
+            if(distanceFromStart<0){
+                throw new ImporterExceptions("Obstacle Distance From Runway Start is negative");
+            } else if(distanceFromCenterline<0){
+                throw new ImporterExceptions("Obstacle Distance From Centre Line is negative");
+            } else {
             //Use the controller's addObstacleToRunway method to place an obstacle on the runway.
-            controller.addObstacleToRunway(firstLogicalRunwayName,obstacleId, distanceFromCenterline, distanceFromStart);
+            controller.addObstacleToRunway(firstLogicalRunwayName,obstacleId, distanceFromCenterline, distanceFromStart);}
         }
     }
 }

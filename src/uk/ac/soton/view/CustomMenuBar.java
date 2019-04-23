@@ -1,8 +1,12 @@
 package uk.ac.soton.view;
+import org.xml.sax.SAXException;
+//import uk.ac.soton.controller.ImporterException;
 import uk.ac.soton.controller.ViewController;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
