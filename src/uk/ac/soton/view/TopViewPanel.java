@@ -544,7 +544,7 @@ public class TopViewPanel extends InteractivePanel {
                 Point startAlsStripEnd = new Point(startAls.x - newStripEnd,runwayPos.y + helperStartPoint);
                 Point endAlsStripEnd = new Point (startAls.x, runwayPos.y + helperStartPoint);
 
-                if(menuPanel.isShowRelevantDistOnlyEnabled() && resa > alsDistance){
+                if(menuPanel.isShowRelevantDistOnlyEnabled() && alsDistance <= resa){
 
                     // RESA + Strip End
                     DataArrow resaArrow = new DataArrow(startResa, endResa, resaHelperHeight, resaLabel);
