@@ -94,10 +94,8 @@ public class MenuPanel extends JPanel {
         generalPane.add(selectedRunwayLabel, c);
 
         //Add the JComboBox to select a runway.
-        List<String> menuItems = new ArrayList<>();
-        menuItems.add("None");
-        menuItems.addAll(controller.getRunways());
-        runwayMenu = new JComboBox(menuItems.toArray());
+        runwayMenu = new JComboBox();
+        populateRunwayComboBox();
         runwayMenu.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         c = new GridBagConstraints();
         c.gridx = 2; c.gridy = 10; c.fill = GridBagConstraints.HORIZONTAL;
@@ -365,7 +363,6 @@ public class MenuPanel extends JPanel {
         show3DViewButton.addActionListener(e -> {
             SwingUtilities.invokeLater(() -> new View3D(appView));
         });
-
     }
 
     public boolean isIsolateMode(){
@@ -418,5 +415,16 @@ public class MenuPanel extends JPanel {
 
     public void setRemoveButtonEnabled(boolean isEnabled){
         this.removeObstacleButton.setEnabled(isEnabled);
+    }
+
+    public void populateRunwayComboBox(){
+        MutableComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        model.addElement("None");
+        for(String runway: controller.getRunways()){
+            model.addElement(runway);
+        }
+        runwayMenu.setModel(model);
+        this.updateUI();
+        this.repaint();
     }
 }

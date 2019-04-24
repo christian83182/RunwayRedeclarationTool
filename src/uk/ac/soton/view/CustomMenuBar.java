@@ -49,6 +49,7 @@ public class CustomMenuBar extends JMenuBar {
             if(returnVal == JFileChooser.APPROVE_OPTION){
                 try {
                     controller.importAirfieldConfiguration(fileChooser.getSelectedFile().getAbsolutePath());
+                    appView.getMenuPanel().populateRunwayComboBox();
                     NotificationLogger.logger.addToLog("Configuration '"+ fileChooser.getSelectedFile().getName()+"' was imported");
                 } catch (Exception e1) {
                     JOptionPane.showMessageDialog(fileChooser,
