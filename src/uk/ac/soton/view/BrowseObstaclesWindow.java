@@ -5,7 +5,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class BrowseObstaclesWindow extends JFrame {
+
+public class BrowseObstaclesWindow extends JDialog { //Extends JDialog instead of JFrame so that modality can be used.
 
     //An instance of the controller used to link the view to the model.
     private ViewController controller;
@@ -15,7 +16,6 @@ public class BrowseObstaclesWindow extends JFrame {
     private JList<String> obstacleList;
 
     BrowseObstaclesWindow(ViewController controller){
-        super("Edit Predefined Obstacles");
         this.controller = controller;
 
         //Populate the objectModel with the object given by the controller.
@@ -30,6 +30,8 @@ public class BrowseObstaclesWindow extends JFrame {
 
     //Called at the end of the constructor. Separates value initialization from UI construction.
     public void init(){
+        this.setTitle("Edit Predefined Obstacles");
+        this.setModal(true); //Prevents the window from loosing focus before it is closed.
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setPreferredSize(new Dimension(500,500));
         this.setResizable(false);
@@ -147,7 +149,7 @@ public class BrowseObstaclesWindow extends JFrame {
     }
 
     //An inner class used to open a simple dialogue to edit/add an object.
-    private class obstacleCustomizationWindow extends JFrame{
+    private class obstacleCustomizationWindow extends JDialog{
 
         //These are member variables because they can change based on if the object is being created or edited.
         JTextField nameField;
@@ -158,7 +160,8 @@ public class BrowseObstaclesWindow extends JFrame {
 
         //Instantiate the window.
         obstacleCustomizationWindow(String title){
-            super(title);
+            this.setTitle(title);
+            this.setModal(true);
             nameField = new JTextField();
             lengthModel = new SpinnerNumberModel(0,0,999,1);
             widthModel = new SpinnerNumberModel(0,0,999,1);

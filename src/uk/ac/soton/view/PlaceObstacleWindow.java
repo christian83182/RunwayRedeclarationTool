@@ -8,7 +8,7 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlaceObstacleWindow extends JFrame {
+public class PlaceObstacleWindow extends JDialog {
 
     //An instance of the controller used to modify the model.
     private ViewController controller;
@@ -16,13 +16,14 @@ public class PlaceObstacleWindow extends JFrame {
     private AppView appView;
 
     PlaceObstacleWindow(ViewController controller, AppView appView){
-        super("Place Obstacle");
         this.controller = controller;
         this.appView = appView;
         init();
     }
 
     private void init(){
+        this.setTitle("Place Obstacle");
+        this.setModal(true);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setPreferredSize(new Dimension(400,230));
         this.setResizable(false);

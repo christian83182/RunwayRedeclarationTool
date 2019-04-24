@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Hashtable;
 
-public class BackgroundConfigWindow extends JFrame{
+public class BackgroundConfigWindow extends JDialog{
 
     //An instance of the appView class used by the application.
     AppView appView;
@@ -24,7 +24,6 @@ public class BackgroundConfigWindow extends JFrame{
     Double xOffset, yOffset, scale, rotation;
 
     BackgroundConfigWindow(AppView appView){
-        super("Configure Background Image");
         this.appView = appView;
         this.controller = appView.getController();
 
@@ -47,6 +46,8 @@ public class BackgroundConfigWindow extends JFrame{
 
     //Swing initialization code.
     private void init(){
+        this.setTitle("Configure Background Image");
+        this.setModal(true);
         this.setPreferredSize(new Dimension(1600,900));
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 

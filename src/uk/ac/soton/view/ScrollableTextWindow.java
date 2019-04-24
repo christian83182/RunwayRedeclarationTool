@@ -3,7 +3,7 @@ package uk.ac.soton.view;
 import javax.swing.*;
 import java.awt.*;
 
-public class ScrollableTextWindow extends JFrame {
+public class ScrollableTextWindow extends JDialog {
 
     /**
      * A basic, reusable class designed to display some text in a scrollable window with a close button.
@@ -11,11 +11,12 @@ public class ScrollableTextWindow extends JFrame {
      * @param size The preferred size of the window.
      */
     ScrollableTextWindow(String title, Dimension size, String windowContent) {
-        super(title);
-        init(windowContent, size);
+        init(title, windowContent, size);
     }
 
-    private void init(String windowContent, Dimension size){
+    private void init(String title, String windowContent, Dimension size){
+        this.setTitle(title);
+        this.setModal(false);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setPreferredSize(size);
         this.setLayout(new GridBagLayout());
