@@ -37,13 +37,13 @@ public class TopViewPanel extends InteractivePanel {
         boolean isIsolated = menuPanel.isIsolateMode();
         boolean isRunwaySelected = !(appView.getSelectedRunway() == "");
 
-        //Draw the background.
-        paintBackground(g2,Settings.AIRFIELD_COLOUR);
-
         //Rotate the view to match the rotation of the selected runway.
         if(menuPanel.isViewMatchedToSelection()){
             g2.rotate(Math.toRadians(-getRotationOfSelectedRunway()+90));
         }
+
+        //Draw the background.
+        paintBackground(g2,Settings.AIRFIELD_COLOUR);
 
         //Only draw all runways if isolate mode isn't on, or if it is on but no runway is selected
         if(!isIsolated || (isIsolated && !isRunwaySelected)){
@@ -71,16 +71,8 @@ public class TopViewPanel extends InteractivePanel {
     //Paints the background a certain colour.
     private void paintBackground(Graphics2D g2, Color color){
         g2.setColor(color);
-        Point topLeft = new Point(0,0);
-        Point bottomRight = new Point(getWidth(), getHeight());
 
-        try {
-            g2.getTransform().inverseTransform(topLeft, topLeft);
-            g2.getTransform().inverseTransform(bottomRight, bottomRight);
-            g2.fillRect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
-        } catch (NoninvertibleTransformException e) {
-            e.printStackTrace();
-        }
+        g2.fillRect(Integer.MIN_VALUE/2, Integer.MIN_VALUE/2, Integer.MAX_VALUE, Integer.MAX_VALUE);
 
         if(controller.getBackgroundImage()!=null){
             BufferedImage img = controller.getBackgroundImage();

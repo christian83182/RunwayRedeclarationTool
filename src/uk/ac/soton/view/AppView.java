@@ -7,7 +7,8 @@ import java.awt.*;
 //todo Refactor arrows in TopView to use DataArrow instead of InfoArrow (if there's time)
 //todo Create demo configurations for use with the program, including background image.
 //todo Clean up how arrows are displayed in both views. Arrows should move depending on what other arrows are displayed.
-//todo Make background image rotate correctly with the rest of the view.
+//todo Remove debug configuration from application. The application should start with no configuration loaded.
+//todo Change sliders for spinners in the BackgroundConfigWindow class.
 
 public class AppView extends JFrame{
 
