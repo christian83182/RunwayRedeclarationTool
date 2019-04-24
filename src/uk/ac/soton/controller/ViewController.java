@@ -322,7 +322,7 @@ public interface ViewController {
      * Imports an XML file describing a configuration of the airfield and sets it as the current model.
      * @param path The location of the XML file specified by the user.
      */
-    void importAirfieldConfiguration(String path) throws ParserConfigurationException, SAXException, IOException, ImporterExceptions;
+    void importAirfieldConfiguration(String path) throws Exception;
 
 
     void saveRunwayParameters(String path) throws IOException;

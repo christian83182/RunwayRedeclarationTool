@@ -19,10 +19,10 @@ import uk.ac.soton.controller.ViewController;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import static uk.ac.soton.view.Settings.*;
-
-//todo Add a plane displaying als/tocs.
 
 public class View3D extends JFrame{
 
@@ -108,6 +108,9 @@ public class View3D extends JFrame{
     //Populates the root3D scene and manipulates the camera such that the camera orbits about the origin, with all runways visible.
     private void createGeneralScene(Group root3D){
         generateRunways(root3D);
+        for(String runwayId: controller.getRunways()){
+            genRunwayName(root3D, runwayId, runwayElevation);
+        }
         generateLighting(root3D);
         pointCameraAt(new Point3D(0,0,0),root3D);
     }
@@ -136,6 +139,13 @@ public class View3D extends JFrame{
     private void createSelectedScene(Group globalRoot, Group root3D){
         String selectedRunway = appView.getSelectedRunway();
         Point pos = controller.getRunwayPos(selectedRunway);
+
+        //Draw the runway name for all runways including the selected runway, but not the sibling runway.
+        for(String runwayId: controller.getRunways()){
+            if(!runwayId.equals(controller.getSiblingLogicalRunway(selectedRunway))){
+                genRunwayName(root3D, runwayId, runwayElevation);
+            }
+        }
 
         generateRunways(root3D);
         genDisplacedThreshold(root3D, selectedRunway, runwayElevation);
@@ -227,10 +237,6 @@ public class View3D extends JFrame{
                 //Add the runway to the list of generated runways.
                 generatedRunways.add(currentRunwayBearing);
             }
-        }
-        //Use a second loop to iterate over all logical runways and render anything which should be displayed for both.
-        for(String runwayId: controller.getRunways()){
-            genRunwayName(root, runwayId, runwayElevation);
         }
     }
 
@@ -335,7 +341,6 @@ public class View3D extends JFrame{
             root.getChildren().add(newRunwayId);
             root.getChildren().add(letter);
         }
-
     }
 
     //display landing direction
@@ -754,8 +759,10 @@ public class View3D extends JFrame{
     }
 
     private void generateOverlay(Group globalRoot, Group root3D){
-
         String selectedRunway = appView.getSelectedRunway();
+        Dimension runwayDim = controller.getRunwayDim(selectedRunway);
+        Dimension clearwayDim = controller.getClearwayDim(selectedRunway);
+        Dimension stopwayDim = controller.getStopwayDim(selectedRunway);
 
         Double sliderLength = getWidth()*0.6;
         Double sliderStartX = getWidth()/2-sliderLength/2;
@@ -766,25 +773,37 @@ public class View3D extends JFrame{
         poly.setFill(convertToJFXColour(new java.awt.Color(72, 72, 72)));
         poly.setStroke(convertToJFXColour(new java.awt.Color(52, 52, 52)));
         poly.setStrokeWidth(3);
-
         globalRoot.getChildren().add(poly);
 
         Slider slider = prepareSlider(root3D, selectedRunway);
-
-        Double scalefactor = slider.getPrefWidth() / controller.getRunwayDim(selectedRunway).width;
+        Double scaleFactor = slider.getPrefWidth() / (runwayDim.width + Math.max(clearwayDim.width,stopwayDim.width));
+        Double runwayLength = runwayDim.width*scaleFactor;
 
         // Displaced threshold pointer
-        Double threshold = controller.getRunwayThreshold(selectedRunway)*scalefactor;
+        Double threshold = controller.getRunwayThreshold(selectedRunway)*scaleFactor;
         Rectangle thresholdPointer = new Rectangle((int) slider.getLayoutX()+9, (int) slider.getLayoutY(), threshold.intValue(), (int) slider.getHeight()+5);
         thresholdPointer.setArcHeight(5); thresholdPointer.setArcWidth(5);
         thresholdPointer.setFill(convertToJFXColour(Settings.SELECTED_RUNWAY_HIGHLIGHT));
-
         globalRoot.getChildren().add(thresholdPointer);
+
+        // Stopway pointer
+        Double stopwayLength = stopwayDim.width*scaleFactor;
+        Rectangle stopwayPointer = new Rectangle(slider.getLayoutX()+runwayLength-9, slider.getLayoutY(), stopwayLength, slider.getHeight()+5);
+        stopwayPointer.setArcHeight(5); stopwayPointer.setArcWidth(5);
+        stopwayPointer.setFill(convertToJFXColour(STOPWAY_STROKE_COLOUR));
+        globalRoot.getChildren().add(stopwayPointer);
+
+        // Clearway pointer
+        Double clearwayLength = clearwayDim.width*scaleFactor;
+        Rectangle clearwayPointer = new Rectangle(slider.getLayoutX()+runwayLength+stopwayLength-9, slider.getLayoutY(), clearwayLength - stopwayLength, slider.getHeight()+5);
+        clearwayPointer.setArcHeight(5); clearwayPointer.setArcWidth(5);
+        clearwayPointer.setFill(convertToJFXColour(CLEARWAY_STROKE_COLOUR));
+        globalRoot.getChildren().add(clearwayPointer);
 
         // Obstacle pointer
         if(controller.getRunwayObstacle(selectedRunway) != ""){
-            Double obstacleDist = (controller.getDistanceFromThreshold(selectedRunway) + controller.getObstacleOffset(selectedRunway))*scalefactor;
-            Double obstacleWidth = controller.getPredefinedObstacleWidth(controller.getRunwayObstacle(selectedRunway))*scalefactor;
+            Double obstacleDist = (controller.getDistanceFromThreshold(selectedRunway) + controller.getObstacleOffset(selectedRunway))*scaleFactor;
+            Double obstacleWidth = controller.getPredefinedObstacleWidth(controller.getRunwayObstacle(selectedRunway))*scaleFactor;
             Rectangle obstaclePointer = new Rectangle((int) (slider.getLayoutX()+obstacleDist), (int) slider.getLayoutY(),
                     obstacleWidth.intValue(), (int) slider.getHeight()+5);
             obstaclePointer.setArcHeight(5); obstaclePointer.setArcWidth(5);
@@ -799,11 +818,13 @@ public class View3D extends JFrame{
     private Slider prepareSlider(Group root3D, String runwayId){
         Point pos = controller.getRunwayPos(runwayId);
         Dimension dim = controller.getRunwayDim(runwayId);
+        Dimension clearwayDim = controller.getClearwayDim(runwayId);
+        Dimension stopwayDim = controller.getStopwayDim(runwayId);
         Integer bearing = controller.getBearing(runwayId)-90;
 
         Slider slider = new Slider();
         slider.setMin(5);
-        slider.setMax(dim.width-5);
+        slider.setMax(dim.width + Math.max(clearwayDim.width,stopwayDim.width) - 5);
         slider.setPrefSize(getWidth()*0.6,1);
         slider.setLayoutX(getWidth()/2-slider.getPrefWidth()/2);
         slider.setLayoutY(getHeight()-70);

@@ -4,6 +4,12 @@ import uk.ac.soton.controller.ViewController;
 import javax.swing.*;
 import java.awt.*;
 
+//todo Refactor arrows in TopView to use DataArrow instead of InfoArrow
+//todo Make a new window for configuring the airfield (if there's time).
+//todo Create demo configurations for use with the program, including background image.
+//todo Make program prompt the user for a bg image when importing the configuration with a bg image.
+//todo Clean up how arrows are displayed in both views. Arrows should move depending on what other arrows are displayed.
+
 public class AppView extends JFrame{
 
     //An instance of the front end controller used to store the data displayed.

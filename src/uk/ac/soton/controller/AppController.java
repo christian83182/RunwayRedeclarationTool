@@ -456,7 +456,7 @@ public class AppController implements ViewController {
     }
 
     @Override
-    public synchronized void importAirfieldConfiguration(String path) throws ParserConfigurationException, SAXException, IOException, ImporterExceptions {
+    public synchronized void importAirfieldConfiguration(String path) throws Exception {
         Importer importer = new Importer(this);
         importer.importConfiguration(path);
     }
