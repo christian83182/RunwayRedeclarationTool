@@ -333,6 +333,7 @@ public class BackgroundConfigWindow extends JFrame{
             controller.setBackgroundImageScale(scale);
             controller.setBackgroundRotation(rotation);
             appView.repaint();
+            NotificationLogger.logger.addToLog("Background Image configuration changed. ");
             this.dispose();
         });
 

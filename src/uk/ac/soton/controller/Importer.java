@@ -9,6 +9,9 @@ import uk.ac.soton.common.Airfield;
 import uk.ac.soton.common.LogicalRunway;
 import uk.ac.soton.common.Runway;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -84,29 +87,56 @@ public class Importer {
     private void importBackgroundImageProperties(Element airfieldElement){
         NodeList bgImageNodeList = airfieldElement.getElementsByTagName("BackgroundImage");
         if(bgImageNodeList.getLength()>0){
-            //Retrieve the BackgroundImage node from the airfieldElement node.
-            Element bgImageElement = (Element)bgImageNodeList.item(0);
+            String[] options = new String[] {"Import Settings", "Discard"};
+            int response = JOptionPane.showOptionDialog(null, "This file contains configuration settings for a background image." +
+                    "\nWould you like to import these settings and select an image, or discard these settings?", "Background Image Configuration Found",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,null,options,options[0]);
 
-            //Retrieve the xOffset node from the BackgroundImage node.
-            Node xOffsetNode = bgImageElement.getElementsByTagName("X_Offset").item(0);
-            Double xOffset = Double.parseDouble(xOffsetNode.getTextContent());
+            if(response == JOptionPane.YES_OPTION){
+                //Retrieve the BackgroundImage node from the airfieldElement node.
+                Element bgImageElement = (Element)bgImageNodeList.item(0);
 
-            //Retrieve the yOffset node from the BackgroundImage node.
-            Node yOffsetNode = bgImageElement.getElementsByTagName("Y_Offset").item(0);
-            Double yOffset = Double.parseDouble(yOffsetNode.getTextContent());
+                //Retrieve the xOffset node from the BackgroundImage node.
+                Node xOffsetNode = bgImageElement.getElementsByTagName("X_Offset").item(0);
+                Double xOffset = Double.parseDouble(xOffsetNode.getTextContent());
 
-            //Set the controller's bgImage offset value.
-            controller.setBackgroundImageOffset(new Point(xOffset.intValue(), yOffset.intValue()));
+                //Retrieve the yOffset node from the BackgroundImage node.
+                Node yOffsetNode = bgImageElement.getElementsByTagName("Y_Offset").item(0);
+                Double yOffset = Double.parseDouble(yOffsetNode.getTextContent());
 
-            //Retrieve the scale node from the BackgroundImage node.
-            Node scaleNode = bgImageElement.getElementsByTagName("Scale").item(0);
-            Double scale = Double.parseDouble(scaleNode.getTextContent());
-            controller.setBackgroundImageScale(scale);
+                //Set the controller's bgImage offset value.
+                controller.setBackgroundImageOffset(new Point(xOffset.intValue(), yOffset.intValue()));
 
-            //Retrieve the rotation node from the BackgroundImage node.
-            Node rotationNode = bgImageElement.getElementsByTagName("Rotation").item(0);
-            Double rotation = Double.parseDouble(rotationNode.getTextContent());
-            controller.setBackgroundRotation(rotation);
+                //Retrieve the scale node from the BackgroundImage node.
+                Node scaleNode = bgImageElement.getElementsByTagName("Scale").item(0);
+                Double scale = Double.parseDouble(scaleNode.getTextContent());
+                controller.setBackgroundImageScale(scale);
+
+                //Retrieve the rotation node from the BackgroundImage node.
+                Node rotationNode = bgImageElement.getElementsByTagName("Rotation").item(0);
+                Double rotation = Double.parseDouble(rotationNode.getTextContent());
+                controller.setBackgroundRotation(rotation);
+
+                //Create a file chooser, add a filter so only images can be selected.
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files","jpeg","png");
+                fileChooser.setFileFilter(filter);
+
+                //If the user chooses a file, then load that file, and enable all the sliders.
+                int returnVal = fileChooser.showOpenDialog(null);
+                if(returnVal == JFileChooser.APPROVE_OPTION){
+                    try {
+                        File imgFile = fileChooser.getSelectedFile();
+                        controller.setBackgroundImage(ImageIO.read(imgFile));
+                    } catch (Exception err) {
+                        //Output an error message in the event that an exception was thrown.
+                        JOptionPane.showMessageDialog(fileChooser,
+                                "There was an issue importing that image: '" +
+                                        err.getMessage() + "'", "IO Error" ,JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
         }
     }
 
