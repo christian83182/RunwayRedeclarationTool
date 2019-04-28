@@ -75,6 +75,8 @@ public class AppView extends JFrame{
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+
+        menuBar.importConfiguration();
     }
 
     //Will either hide or display the split view.

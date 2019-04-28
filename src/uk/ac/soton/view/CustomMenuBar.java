@@ -3,6 +3,7 @@ import uk.ac.soton.controller.ViewController;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -42,24 +43,7 @@ public class CustomMenuBar extends JMenuBar {
         JMenuItem importConfiguration = new JMenuItem("Import Configuration...");
         importConfiguration.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         fileMenu.add(importConfiguration);
-        importConfiguration.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            int returnVal = fileChooser.showOpenDialog(null);
-            if(returnVal == JFileChooser.APPROVE_OPTION){
-                try {
-                    controller.importAirfieldConfiguration(fileChooser.getSelectedFile().getAbsolutePath());
-                    appView.getMenuPanel().populateRunwayComboBox();
-                    NotificationLogger.logger.addToLog("Configuration '"+ fileChooser.getSelectedFile().getName()+"' was imported");
-                } catch (Exception e1) {
-                    JOptionPane.showMessageDialog(fileChooser,
-                            "There was an issue importing that configuration: '" + e1.getMessage() + "'",
-                            "Import Error" ,JOptionPane.ERROR_MESSAGE);
-                    NotificationLogger.logger.addToLog("Configuration '"+ fileChooser.getSelectedFile().getName()+"' could not be imported");
-                }
-                appView.repaint();
-            }
-        });
+        importConfiguration.addActionListener(e -> importConfiguration());
 
         //Adding the "export configuration" option to the file menu.
         JMenuItem exportConfiguration = new JMenuItem("Export Configuration...");
@@ -68,6 +52,10 @@ public class CustomMenuBar extends JMenuBar {
         exportConfiguration.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            FileNameExtensionFilter xmlFilter = new FileNameExtensionFilter(
+                    "XML (*.xml)", "xml");
+            fileChooser.setFileFilter(xmlFilter);
+            fileChooser.setDialogTitle("Save XML Configuration");
             int returnVal = fileChooser.showSaveDialog(null);
             if(returnVal == JFileChooser.APPROVE_OPTION){
                 try {
@@ -89,6 +77,9 @@ public class CustomMenuBar extends JMenuBar {
         saveParameters.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            FileNameExtensionFilter txtFilter = new FileNameExtensionFilter(
+                    "Text Documents (*.txt)", "txt");
+            fileChooser.setFileFilter(txtFilter);
             int returnVal = fileChooser.showSaveDialog(null);
             if(returnVal == JFileChooser.APPROVE_OPTION){
                 try {
@@ -199,9 +190,43 @@ public class CustomMenuBar extends JMenuBar {
         });
     }
 
+    void importConfiguration(){
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        FileNameExtensionFilter xmlFilter = new FileNameExtensionFilter(
+                "XML (*.xml)", "xml");
+        fileChooser.setFileFilter(xmlFilter);
+        fileChooser.setDialogTitle("Open XML Configuration");
+        int returnVal = fileChooser.showOpenDialog(null);
+        if(returnVal == JFileChooser.APPROVE_OPTION){
+            try {
+                controller.importAirfieldConfiguration(fileChooser.getSelectedFile().getAbsolutePath());
+                appView.getMenuPanel().populateRunwayComboBox();
+                NotificationLogger.logger.addToLog("Configuration '"+ fileChooser.getSelectedFile().getName()+"' was imported");
+            } catch (Exception e1) {
+                JOptionPane.showMessageDialog(fileChooser,
+                        "There was an issue importing that configuration: '" + e1.getMessage() + "'",
+                        "Import Error" ,JOptionPane.ERROR_MESSAGE);
+                NotificationLogger.logger.addToLog("Configuration '"+ fileChooser.getSelectedFile().getName()+"' could not be imported");
+            }
+            appView.repaint();
+        }
+    }
+
+    // TODO different image export formats
     private void saveImage(BufferedImage image){
         //Create a new JFileChooser
         JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter jpegFilter = new FileNameExtensionFilter(
+                "JPEG (*.jpg;*.jpeg;*.jpe;*.jfif)", "jpg", "jpeg", "jpe", "jfif");
+        fileChooser.addChoosableFileFilter(jpegFilter);
+        FileNameExtensionFilter gifFilter = new FileNameExtensionFilter(
+                "GIF (*.gif)", "gif");
+        fileChooser.addChoosableFileFilter(gifFilter);
+        FileNameExtensionFilter pngFilter = new FileNameExtensionFilter(
+                "PNG (*.png)", "png");
+        fileChooser.addChoosableFileFilter(pngFilter);
+        fileChooser.setDialogTitle("Save Image");
         //Open a save dialogue create a file from the selected file.
         if(fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
             File file = new File(fileChooser.getSelectedFile().getAbsolutePath()+".png");
