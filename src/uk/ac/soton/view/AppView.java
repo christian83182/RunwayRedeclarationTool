@@ -67,7 +67,7 @@ public class AppView extends JFrame{
         setMenuPanelVisible(true);
         setSplitViewVisible(false);
 
-        //set the inital window size to fit the screen
+        //set the initial window size to fit the screen
         Dimension windowSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setSize(windowSize.width, windowSize.height);
 
@@ -78,6 +78,8 @@ public class AppView extends JFrame{
 
         menuBar.importConfiguration();
     }
+
+
 
     //Will either hide or display the split view.
     public void setSplitViewVisible(boolean isVisible){

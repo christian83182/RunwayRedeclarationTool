@@ -620,23 +620,11 @@ public class TopViewPanel extends InteractivePanel {
         clearwayWidthInfo.globalXOffset = runwayDim.width + clearwayDim.width;
         clearwayWidthInfo.drawInfoArrow(id, g2);
 
-        //Draw the stopway length.
-        InfoArrow stopwayLengthInfo = new InfoArrow(runwayDim.width, -stripHeight-160,
-                stopwayDim.width, stopwayDim.width +"m", true);
-        stopwayLengthInfo.drawInfoArrow(id, g2);
-
         //Draw the stopway width
         InfoArrow stopwayWidthInfo = new InfoArrow(-(stopwayDim.height - runwayDim.height)/2, 50,
                 stopwayDim.height, stopwayDim.height + "m", false);
         stopwayWidthInfo.globalXOffset = runwayDim.width + stopwayDim.width;
         stopwayWidthInfo.drawInfoArrow(id, g2);
-
-        //Draw the displaced threshold length if it exists.
-        if(controller.getRunwayThreshold(id) > 0){
-            InfoArrow thresholdLength = new InfoArrow(0, -stripHeight-40,
-                    controller.getRunwayThreshold(id), controller.getRunwayThreshold(id) + "m", true);
-            thresholdLength.drawInfoArrow(id, g2);
-        }
 
         //Draw runway width
         InfoArrow runwayWidthInfo = new InfoArrow(0, -stripEndSize-30,
@@ -650,11 +638,18 @@ public class TopViewPanel extends InteractivePanel {
         runwayStripWidthInfo.drawInfoArrow(id, g2);
 
         Integer runwayLengthHelperHeight = -stripHeight - 130;
+        Integer thresholdHelperHeight = -stripHeight - 230;
+        Integer stopwayLengthHelperHeight = -stripHeight-240;
+
         if(controller.isRedeclared(id) && menuPanel.isShowBreakDownEnabled()){
             if(menuPanel.isShowRelevantDistOnlyEnabled()){
                 runwayLengthHelperHeight = -stripHeight - 140;
+                thresholdHelperHeight = -stripHeight - 140;
+                stopwayLengthHelperHeight = -stripHeight - 140;
             }else{
                 runwayLengthHelperHeight = -stripHeight - 240;
+                thresholdHelperHeight = -stripHeight - 340;
+                stopwayLengthHelperHeight = -stripHeight - 340;
             }
         }
 
@@ -662,6 +657,18 @@ public class TopViewPanel extends InteractivePanel {
         InfoArrow runwayStripLengthInfo = new InfoArrow(-stripEndSize, runwayLengthHelperHeight,
                 stripEndSize*2 + runwayDim.width, (stripEndSize*2 + runwayDim.width) + "m", true);
         runwayStripLengthInfo.drawInfoArrow(id, g2);
+
+        //Draw the stopway length.
+        InfoArrow stopwayLengthInfo = new InfoArrow(runwayDim.width, stopwayLengthHelperHeight,
+                stopwayDim.width, stopwayDim.width +"m", true);
+        stopwayLengthInfo.drawInfoArrow(id, g2);
+
+        //Draw the displaced threshold length if it exists.
+        if(controller.getRunwayThreshold(id) > 0){
+            InfoArrow thresholdLength = new InfoArrow(0, thresholdHelperHeight,
+                    controller.getRunwayThreshold(id), controller.getRunwayThreshold(id) + "m", true);
+            thresholdLength.drawInfoArrow(id, g2);
+        }
     }
 
     //Paints an outline of the clearway for a specified runway.
@@ -770,7 +777,7 @@ public class TopViewPanel extends InteractivePanel {
 
         if(menuPanel.isShowOtherEnabled()) {
             //Account for the text displaying the stopway length
-            fullRunwayHeight += 250;
+            fullRunwayHeight += 350;
         }
 
         if (menuPanel.isShowRunwayParametersEnabled()){
@@ -810,7 +817,7 @@ public class TopViewPanel extends InteractivePanel {
         //If ShowOtherEnabled is true then account for the extra space used.
         if(menuPanel.isShowOtherEnabled()){
             //Account for the text displaying the strip width
-            boundingBoxPos.translate(-300,0);
+            boundingBoxPos.translate(-300,-50);
 
             if(menuPanel.isShowBreakDownEnabled()){
                 if(menuPanel.isShowRelevantDistOnlyEnabled()){
