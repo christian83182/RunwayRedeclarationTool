@@ -43,39 +43,8 @@ public class AppController implements ViewController {
                 new Dimension(350,220), new Dimension(60,r1.getWidth()));
         r1.setLogicalRunways(lr11,lr12);
 
-        Runway r2 = new Runway("09R/27L",-600,450,1800,80,400,60);
-        LogicalRunway lr21 = new LogicalRunway("09R",r2.getLength(),250,
-                new Dimension(0,0), new Dimension(60,r2.getWidth()));
-        LogicalRunway lr22 = new LogicalRunway("27L",r2.getLength(),250,
-                new Dimension(0,0), new Dimension(60,r2.getWidth()));
-        r2.setLogicalRunways(lr21,lr22);
-
-        Runway r3 = new Runway("13/31",-800,-650,2400,80,400,60);
-        LogicalRunway lr31 = new LogicalRunway("13",r3.getLength(),0,
-                new Dimension(350,220), new Dimension(60,r3.getWidth()));
-        LogicalRunway lr32 = new LogicalRunway("31",r3.getLength(),0,
-                new Dimension(350,220), new Dimension(60,r3.getWidth()));
-        r3.setLogicalRunways(lr31, lr32);
-
-        Runway r4 = new Runway("00/18",-1200,-900,1800,80,400,60);
-        LogicalRunway lr41 = new LogicalRunway("00",r4.getLength(),0,
-                new Dimension(350,220), new Dimension(60,r4.getWidth()));
-        LogicalRunway lr42 = new LogicalRunway("18",r4.getLength(),50,
-                new Dimension(350,220), new Dimension(60,r4.getWidth()));
-        r4.setLogicalRunways(lr41, lr42);
-
-        Runway r5 = new Runway("04/22",-550,-730,1400,80,400,60);
-        LogicalRunway lr51 = new LogicalRunway("04",r5.getLength(),0,
-                new Dimension(350,220), new Dimension(60,r5.getWidth()));
-        LogicalRunway lr52 = new LogicalRunway("22",r5.getLength(),50,
-                new Dimension(350,220), new Dimension(60,r5.getWidth()));
-        r5.setLogicalRunways(lr51, lr52);
 
         airfield.addRunway(r1);
-        airfield.addRunway(r2);
-        airfield.addRunway(r3);
-        airfield.addRunway(r4);
-        airfield.addRunway(r5);
     }
 
     public synchronized Airfield getAirfield() {

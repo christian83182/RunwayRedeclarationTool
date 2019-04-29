@@ -888,6 +888,9 @@ public class TopViewPanel extends InteractivePanel {
 
     //Pans and Zooms the view such that all runways fit within the view.
     public void fitViewToAllRunways(){
+        if(controller.getRunways().size() == 0){
+            return;
+        }
         Integer maxX = 0, maxY = 0, minX = 0, minY= 0;
 
         for (String id : controller.getRunways()){
