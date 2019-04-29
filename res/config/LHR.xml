@@ -51,7 +51,7 @@
                 <StopwayLength>0</StopwayLength>
                 <StopwayWidth>0</StopwayWidth>
                 <ClearwayLength>78</ClearwayLength>
-                <ClearwayWidth>100</ClearwayWidth>
+                <ClearwayWidth>150</ClearwayWidth>
             </SecondLogicalRunway>
         </Runway>
     </PhysicalRunways>
