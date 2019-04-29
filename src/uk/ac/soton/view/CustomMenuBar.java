@@ -42,26 +42,7 @@ public class CustomMenuBar extends JMenuBar {
         JMenuItem importConfiguration = new JMenuItem("Import Configuration...");
         importConfiguration.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         fileMenu.add(importConfiguration);
-        importConfiguration.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            int returnVal = fileChooser.showOpenDialog(null);
-            if(returnVal == JFileChooser.APPROVE_OPTION){
-                try {
-                    controller.importAirfieldConfiguration(fileChooser.getSelectedFile().getAbsolutePath());
-                    appView.getMenuPanel().populateRunwayComboBox();
-                    NotificationLogger.logger.addToLog("Configuration '"+ fileChooser.getSelectedFile().getName()+"' was imported");
-                    appView.setSelectedRunway("");
-                    appView.getTopView().fitViewToAllRunways();
-                } catch (Exception e1) {
-                    JOptionPane.showMessageDialog(fileChooser,
-                            "There was an issue importing that configuration: '" + e1.getMessage() + "'",
-                            "Import Error" ,JOptionPane.ERROR_MESSAGE);
-                    NotificationLogger.logger.addToLog("Configuration '"+ fileChooser.getSelectedFile().getName()+"' could not be imported");
-                }
-                appView.repaint();
-            }
-        });
+        importConfiguration.addActionListener(e -> importConfiguration());
 
         //Adding the "export configuration" option to the file menu.
         JMenuItem exportConfiguration = new JMenuItem("Export Configuration...");
@@ -202,6 +183,27 @@ public class CustomMenuBar extends JMenuBar {
                     "existing configuration.";
             new ScrollableTextWindow("Application Help", new Dimension(400,600), helpMessage);
         });
+    }
+
+    public void importConfiguration(){
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int returnVal = fileChooser.showOpenDialog(null);
+        if(returnVal == JFileChooser.APPROVE_OPTION){
+            try {
+                controller.importAirfieldConfiguration(fileChooser.getSelectedFile().getAbsolutePath());
+                appView.getMenuPanel().populateRunwayComboBox();
+                NotificationLogger.logger.addToLog("Configuration '"+ fileChooser.getSelectedFile().getName()+"' was imported");
+                appView.setSelectedRunway("");
+                appView.getTopView().fitViewToAllRunways();
+            } catch (Exception e1) {
+                JOptionPane.showMessageDialog(fileChooser,
+                        "There was an issue importing that configuration: '" + e1.getMessage() + "'",
+                        "Import Error" ,JOptionPane.ERROR_MESSAGE);
+                NotificationLogger.logger.addToLog("Configuration '"+ fileChooser.getSelectedFile().getName()+"' could not be imported");
+            }
+            appView.repaint();
+        }
     }
 
     private void saveImage(BufferedImage image){
