@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Airfield>
+    <AirfieldName>Bristol Airport</AirfieldName>
+    <MinimumAngleOfDecent>50</MinimumAngleOfDecent>
+    <BlastDistancePolicy>300</BlastDistancePolicy>
+    <PhysicalRunways>
+        <Runway>
+            <FirstLogicalRunwayName>09</FirstLogicalRunwayName>
+            <SecondLogicalRunwayName>27</SecondLogicalRunwayName>
+            <XPosition>-1500</XPosition>
+            <YPosition>-800</YPosition>
+            <Length>2011</Length>
+            <Width>80</Width>
+            <StripEndLength>60</StripEndLength>
+            <RunwayStripWidth>400</RunwayStripWidth>
+            <RESALength>240</RESALength>
+            <FirstLogicalRunway>
+                <DisplacedThreshold>0</DisplacedThreshold>
+                <StopwayLength>0</StopwayLength>
+                <StopwayWidth>0</StopwayWidth>
+                <ClearwayLength>0</ClearwayLength>
+                <ClearwayWidth>0</ClearwayWidth>
+            </FirstLogicalRunway>
+            <SecondLogicalRunway>
+                <DisplacedThreshold>135</DisplacedThreshold>
+                <StopwayLength>0</StopwayLength>
+                <StopwayWidth>0</StopwayWidth>
+                <ClearwayLength>0</ClearwayLength>
+                <ClearwayWidth>0</ClearwayWidth>
+            </SecondLogicalRunway>
+        </Runway>
+    </PhysicalRunways>
+    <DefinedObstacles>
+        <Obstacle>
+            <ObstacleName>ATR-42</ObstacleName>
+            <ObstacleLength>22</ObstacleLength>
+            <ObstacleWidth>24</ObstacleWidth>
+            <ObstacleHeight>7</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>ATR-72</ObstacleName>
+            <ObstacleLength>27</ObstacleLength>
+            <ObstacleWidth>27</ObstacleWidth>
+            <ObstacleHeight>7</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Airbus A318</ObstacleName>
+            <ObstacleLength>31</ObstacleLength>
+            <ObstacleWidth>34</ObstacleWidth>
+            <ObstacleHeight>12</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Airbus A319</ObstacleName>
+            <ObstacleLength>33</ObstacleLength>
+            <ObstacleWidth>34</ObstacleWidth>
+            <ObstacleHeight>11</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Airbus A320</ObstacleName>
+            <ObstacleLength>37</ObstacleLength>
+            <ObstacleWidth>34</ObstacleWidth>
+            <ObstacleHeight>11</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Airbus A321</ObstacleName>
+            <ObstacleLength>44</ObstacleLength>
+            <ObstacleWidth>34</ObstacleWidth>
+            <ObstacleHeight>11</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Airbus A330-200F</ObstacleName>
+            <ObstacleLength>58</ObstacleLength>
+            <ObstacleWidth>60</ObstacleWidth>
+            <ObstacleHeight>16</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Airbus A330-200ceo</ObstacleName>
+            <ObstacleLength>58</ObstacleLength>
+            <ObstacleWidth>60</ObstacleWidth>
+            <ObstacleHeight>17</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Airbus A330-300ceo</ObstacleName>
+            <ObstacleLength>63</ObstacleLength>
+            <ObstacleWidth>60</ObstacleWidth>
+            <ObstacleHeight>16</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Airbus A340-200</ObstacleName>
+            <ObstacleLength>59</ObstacleLength>
+            <ObstacleWidth>60</ObstacleWidth>
+            <ObstacleHeight>16</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Airbus A340-300</ObstacleName>
+            <ObstacleLength>63</ObstacleLength>
+            <ObstacleWidth>60</ObstacleWidth>
+            <ObstacleHeight>16</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Airbus A340-500</ObstacleName>
+            <ObstacleLength>67</ObstacleLength>
+            <ObstacleWidth>63</ObstacleWidth>
+            <ObstacleHeight>17</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Airbus A340-600</ObstacleName>
+            <ObstacleLength>75</ObstacleLength>
+            <ObstacleWidth>63</ObstacleWidth>
+            <ObstacleHeight>17</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Airbus A350-1000</ObstacleName>
+            <ObstacleLength>73</ObstacleLength>
+            <ObstacleWidth>64</ObstacleWidth>
+            <ObstacleHeight>17</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Airbus A350-800</ObstacleName>
+            <ObstacleLength>60</ObstacleLength>
+            <ObstacleWidth>64</ObstacleWidth>
+            <ObstacleHeight>17</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Airbus A350-900</ObstacleName>
+            <ObstacleLength>66</ObstacleLength>
+            <ObstacleWidth>64</ObstacleWidth>
+            <ObstacleHeight>17</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Airbus A380</ObstacleName>
+            <ObstacleLength>73</ObstacleLength>
+            <ObstacleWidth>79</ObstacleWidth>
+            <ObstacleHeight>24</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 717</ObstacleName>
+            <ObstacleLength>37</ObstacleLength>
+            <ObstacleWidth>28</ObstacleWidth>
+            <ObstacleHeight>8</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 727-100</ObstacleName>
+            <ObstacleLength>40</ObstacleLength>
+            <ObstacleWidth>32</ObstacleWidth>
+            <ObstacleHeight>10</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 727-200</ObstacleName>
+            <ObstacleLength>46</ObstacleLength>
+            <ObstacleWidth>32</ObstacleWidth>
+            <ObstacleHeight>10</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 737-100</ObstacleName>
+            <ObstacleLength>28</ObstacleLength>
+            <ObstacleWidth>28</ObstacleWidth>
+            <ObstacleHeight>11</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 737-200</ObstacleName>
+            <ObstacleLength>30</ObstacleLength>
+            <ObstacleWidth>28</ObstacleWidth>
+            <ObstacleHeight>11</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 737-300</ObstacleName>
+            <ObstacleLength>33</ObstacleLength>
+            <ObstacleWidth>28</ObstacleWidth>
+            <ObstacleHeight>11</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 737-400</ObstacleName>
+            <ObstacleLength>36</ObstacleLength>
+            <ObstacleWidth>28</ObstacleWidth>
+            <ObstacleHeight>11</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 737-500</ObstacleName>
+            <ObstacleLength>31</ObstacleLength>
+            <ObstacleWidth>28</ObstacleWidth>
+            <ObstacleHeight>11</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 737-600</ObstacleName>
+            <ObstacleLength>31</ObstacleLength>
+            <ObstacleWidth>34</ObstacleWidth>
+            <ObstacleHeight>12</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 737-700</ObstacleName>
+            <ObstacleLength>33</ObstacleLength>
+            <ObstacleWidth>34</ObstacleWidth>
+            <ObstacleHeight>12</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 737-800</ObstacleName>
+            <ObstacleLength>39</ObstacleLength>
+            <ObstacleWidth>34</ObstacleWidth>
+            <ObstacleHeight>12</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 737-900</ObstacleName>
+            <ObstacleLength>42</ObstacleLength>
+            <ObstacleWidth>34</ObstacleWidth>
+            <ObstacleHeight>12</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 747-100</ObstacleName>
+            <ObstacleLength>70</ObstacleLength>
+            <ObstacleWidth>59</ObstacleWidth>
+            <ObstacleHeight>19</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 747-200</ObstacleName>
+            <ObstacleLength>70</ObstacleLength>
+            <ObstacleWidth>59</ObstacleWidth>
+            <ObstacleHeight>19</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 747-300</ObstacleName>
+            <ObstacleLength>70</ObstacleLength>
+            <ObstacleWidth>59</ObstacleWidth>
+            <ObstacleHeight>19</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 747-400</ObstacleName>
+            <ObstacleLength>70</ObstacleLength>
+            <ObstacleWidth>64</ObstacleWidth>
+            <ObstacleHeight>19</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 747SP</ObstacleName>
+            <ObstacleLength>56</ObstacleLength>
+            <ObstacleWidth>59</ObstacleWidth>
+            <ObstacleHeight>20</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 757-200</ObstacleName>
+            <ObstacleLength>47</ObstacleLength>
+            <ObstacleWidth>38</ObstacleWidth>
+            <ObstacleHeight>13</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 757-300</ObstacleName>
+            <ObstacleLength>54</ObstacleLength>
+            <ObstacleWidth>38</ObstacleWidth>
+            <ObstacleHeight>13</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 767-200</ObstacleName>
+            <ObstacleLength>47</ObstacleLength>
+            <ObstacleWidth>47</ObstacleWidth>
+            <ObstacleHeight>15</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 767-300</ObstacleName>
+            <ObstacleLength>54</ObstacleLength>
+            <ObstacleWidth>47</ObstacleWidth>
+            <ObstacleHeight>16</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 767-400</ObstacleName>
+            <ObstacleLength>61</ObstacleLength>
+            <ObstacleWidth>51</ObstacleWidth>
+            <ObstacleHeight>16</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 777-200</ObstacleName>
+            <ObstacleLength>63</ObstacleLength>
+            <ObstacleWidth>60</ObstacleWidth>
+            <ObstacleHeight>18</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 777-200LR</ObstacleName>
+            <ObstacleLength>63</ObstacleLength>
+            <ObstacleWidth>64</ObstacleWidth>
+            <ObstacleHeight>18</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 777-300</ObstacleName>
+            <ObstacleLength>73</ObstacleLength>
+            <ObstacleWidth>60</ObstacleWidth>
+            <ObstacleHeight>18</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 777-300ER</ObstacleName>
+            <ObstacleLength>73</ObstacleLength>
+            <ObstacleWidth>64</ObstacleWidth>
+            <ObstacleHeight>18</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 777F</ObstacleName>
+            <ObstacleLength>63</ObstacleLength>
+            <ObstacleWidth>64</ObstacleWidth>
+            <ObstacleHeight>18</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 777X-8</ObstacleName>
+            <ObstacleLength>69</ObstacleLength>
+            <ObstacleWidth>71</ObstacleWidth>
+            <ObstacleHeight>19</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 777X-9</ObstacleName>
+            <ObstacleLength>76</ObstacleLength>
+            <ObstacleWidth>71</ObstacleWidth>
+            <ObstacleHeight>19</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 787-10</ObstacleName>
+            <ObstacleLength>68</ObstacleLength>
+            <ObstacleWidth>60</ObstacleWidth>
+            <ObstacleHeight>17</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 787-8</ObstacleName>
+            <ObstacleLength>56</ObstacleLength>
+            <ObstacleWidth>60</ObstacleWidth>
+            <ObstacleHeight>16</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Boeing 787-9</ObstacleName>
+            <ObstacleLength>62</ObstacleLength>
+            <ObstacleWidth>60</ObstacleWidth>
+            <ObstacleHeight>17</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Bombardier Dash 8-100</ObstacleName>
+            <ObstacleLength>22</ObstacleLength>
+            <ObstacleWidth>25</ObstacleWidth>
+            <ObstacleHeight>7</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Bombardier Dash 8-200</ObstacleName>
+            <ObstacleLength>22</ObstacleLength>
+            <ObstacleWidth>25</ObstacleWidth>
+            <ObstacleHeight>7</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Bombardier Dash 8-300</ObstacleName>
+            <ObstacleLength>25</ObstacleLength>
+            <ObstacleWidth>27</ObstacleWidth>
+            <ObstacleHeight>7</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Bombardier Dash 8-400</ObstacleName>
+            <ObstacleLength>32</ObstacleLength>
+            <ObstacleWidth>28</ObstacleWidth>
+            <ObstacleHeight>8</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Comac C919</ObstacleName>
+            <ObstacleLength>38</ObstacleLength>
+            <ObstacleWidth>35</ObstacleWidth>
+            <ObstacleHeight>11</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Concorde Plane</ObstacleName>
+            <ObstacleLength>61</ObstacleLength>
+            <ObstacleWidth>25</ObstacleWidth>
+            <ObstacleHeight>12</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>DC-10-10</ObstacleName>
+            <ObstacleLength>55</ObstacleLength>
+            <ObstacleWidth>47</ObstacleWidth>
+            <ObstacleHeight>17</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>DC-10-30</ObstacleName>
+            <ObstacleLength>55</ObstacleLength>
+            <ObstacleWidth>50</ObstacleWidth>
+            <ObstacleHeight>17</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>DC-10-40</ObstacleName>
+            <ObstacleLength>55</ObstacleLength>
+            <ObstacleWidth>50</ObstacleWidth>
+            <ObstacleHeight>17</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Dolly with cargo</ObstacleName>
+            <ObstacleLength>3</ObstacleLength>
+            <ObstacleWidth>2</ObstacleWidth>
+            <ObstacleHeight>2</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>Dolly without cargo</ObstacleName>
+            <ObstacleLength>3</ObstacleLength>
+            <ObstacleWidth>2</ObstacleWidth>
+            <ObstacleHeight>2</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>ERJ 170</ObstacleName>
+            <ObstacleLength>29</ObstacleLength>
+            <ObstacleWidth>26</ObstacleWidth>
+            <ObstacleHeight>9</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>ERJ 170-100</ObstacleName>
+            <ObstacleLength>29</ObstacleLength>
+            <ObstacleWidth>26</ObstacleWidth>
+            <ObstacleHeight>9</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>ERJ 170-200</ObstacleName>
+            <ObstacleLength>31</ObstacleLength>
+            <ObstacleWidth>26</ObstacleWidth>
+            <ObstacleHeight>9</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>ERJ 175</ObstacleName>
+            <ObstacleLength>31</ObstacleLength>
+            <ObstacleWidth>26</ObstacleWidth>
+            <ObstacleHeight>9</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>ERJ 190</ObstacleName>
+            <ObstacleLength>36</ObstacleLength>
+            <ObstacleWidth>28</ObstacleWidth>
+            <ObstacleHeight>10</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>ERJ 190-100</ObstacleName>
+            <ObstacleLength>36</ObstacleLength>
+            <ObstacleWidth>28</ObstacleWidth>
+            <ObstacleHeight>10</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>ERJ 190-200</ObstacleName>
+            <ObstacleLength>38</ObstacleLength>
+            <ObstacleWidth>28</ObstacleWidth>
+            <ObstacleHeight>10</ObstacleHeight>
+        </Obstacle>
+        <Obstacle>
+            <ObstacleName>ERJ 195</ObstacleName>
+            <ObstacleLength>38</ObstacleLength>
+            <ObstacleWidth>28</ObstacleWidth>
+            <ObstacleHeight>10</ObstacleHeight>
+        </Obstacle>
+    </DefinedObstacles>
+</Airfield>

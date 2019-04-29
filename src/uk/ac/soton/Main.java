@@ -13,7 +13,7 @@ public class Main {
         AppView appView = new AppView("Runway Re-declaration Tool");
         AppController appController = new AppController(appView);
 
-        appController.testRunways();
+        //appController.testRunways();
 
         appView.setController(appController);
         appView.init();
