@@ -11,9 +11,6 @@ public class Runway extends PositionalObject{
 
     // Runway end safety area
     private Integer resa = 240;
-    // Approach landing surface
-    private Integer als = 50;
-
     private Integer stripEnd = 60;
     private Integer stripWidth = 0;
     private Obstacle obstacle = null;
@@ -69,10 +66,6 @@ public class Runway extends PositionalObject{
     public String getStatus() { return status; }
 
     public void setStatus(String status) { this.status = status; }
-
-    public Integer getAls() { return als; }
-
-    public void setAls(Integer als) { this.als = als; }
 
     public Integer getResa() {
         return resa;
@@ -219,7 +212,7 @@ public class Runway extends PositionalObject{
      */
     private void recalculateTowardsObstacle(LogicalRunway runway){
 
-        double slope = obstacle.getHeight().intValue() * als;
+        double slope = obstacle.getHeight().intValue() * Airfield.getMinAngleOfDecent();
 
         if(slope > resa){
 
@@ -228,7 +221,7 @@ public class Runway extends PositionalObject{
                     - slope - stripEnd);
             runway.getTora().setBreakdown("TORA = Distance from Threshold + Displaced Threshold - Slope Calculation - Strip End\n\n" +
                     "TORA = " + runway.getObjectThresholdDistance().intValue() + " + " + runway.getThreshold().intValue() +
-                    " - " + obstacle.getHeight() + " * " + als + " - " + stripEnd +
+                    " - " + obstacle.getHeight() + " * " + Airfield.getMinAngleOfDecent() + " - " + stripEnd +
                     " = " + runway.getTora().getRedeclaredValue().intValue());
         }
         else{
@@ -264,7 +257,7 @@ public class Runway extends PositionalObject{
      */
     private void recalculateAwayFromObstacle(LogicalRunway runway){
 
-        double slope = obstacle.getHeight().intValue() * als;
+        double slope = obstacle.getHeight().intValue() * Airfield.getMinAngleOfDecent();
 
         if(resa + stripEnd > Airfield.getBlastProtection()){
 
@@ -310,7 +303,7 @@ public class Runway extends PositionalObject{
                         - slope - stripEnd);
                 runway.getLda().setBreakdown("LDA = Original LDA - Distance from Threshold - Slope Calculation - Strip End\n\n" +
                         "LDA = " + runway.getLda().getOriginalValue().intValue() + " - " + runway.getObjectThresholdDistance().intValue()
-                        + " - " + obstacle.getHeight() + " * " + als + " - " + stripEnd +
+                        + " - " + obstacle.getHeight() + " * " + Airfield.getMinAngleOfDecent() + " - " + stripEnd +
                         " = " + runway.getLda().getRedeclaredValue().intValue());
 
             }

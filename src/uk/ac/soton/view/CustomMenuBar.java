@@ -130,7 +130,10 @@ public class CustomMenuBar extends JMenuBar {
         JMenuItem editBlastMenu = new JMenuItem("Edit Blast Protection...");
         editBlastMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         editMenu.add(editBlastMenu);
-        editBlastMenu.addActionListener(e -> blastValueInputLoop());
+        editBlastMenu.addActionListener(e -> {
+            blastValueInputLoop();
+            appView.repaint();
+        });
 
         //Adding the "edit obstacles" option to the edit menu.
         JMenuItem editObstaclesMenu = new JMenuItem("Edit Predefined Obstacles...");
@@ -192,7 +195,7 @@ public class CustomMenuBar extends JMenuBar {
         });
     }
 
-    void importConfiguration(){
+    public void importConfiguration(){
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         FileNameExtensionFilter xmlFilter = new FileNameExtensionFilter(
@@ -206,6 +209,8 @@ public class CustomMenuBar extends JMenuBar {
                 controller.importAirfieldConfiguration(fileChooser.getSelectedFile().getAbsolutePath());
                 appView.getMenuPanel().populateRunwayComboBox();
                 NotificationLogger.logger.addToLog("Configuration '"+ fileChooser.getSelectedFile().getName()+"' was imported");
+                appView.setSelectedRunway("");
+                appView.getTopView().fitViewToAllRunways();
             } catch (Exception e1) {
                 JOptionPane.showMessageDialog(fileChooser,
                         "There was an issue importing that configuration: '" + e1.getMessage() + "'",
@@ -250,7 +255,7 @@ public class CustomMenuBar extends JMenuBar {
             try{
                 String input = JOptionPane.showInputDialog(
                         appView,
-                        "Enter Blast Protection value:",
+                        "Enter Blast Protection value (100m-1000m):",
                         "Edit Blast Protection",
                         JOptionPane.PLAIN_MESSAGE
                 );

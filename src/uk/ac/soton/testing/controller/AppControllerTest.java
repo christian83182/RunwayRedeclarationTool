@@ -1,4 +1,4 @@
-package uk.ac.soton.controller;
+package uk.ac.soton.testing.controller;
 
 import org.junit.Test;
 import uk.ac.soton.common.Airfield;

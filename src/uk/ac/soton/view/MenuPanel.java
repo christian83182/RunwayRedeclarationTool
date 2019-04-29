@@ -173,7 +173,7 @@ public class MenuPanel extends JPanel {
         //Add the "show breakdown" option
         showBreakdownBox = new JCheckBox("Show Re-declaration Breakdown");
         showBreakdownBox.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
-        showBreakdownBox.setEnabled(true);
+        showBreakdownBox.setSelected(true);
         showBreakdownBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 20; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
@@ -186,7 +186,6 @@ public class MenuPanel extends JPanel {
         //Add the "show relevant breakdown only" option
         showRelevantDistancesBox = new JCheckBox("Show Relevant Breakdown Only");
         showRelevantDistancesBox.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
-        showRelevantDistancesBox.setEnabled(true);
         showRelevantDistancesBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 30; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
@@ -267,7 +266,7 @@ public class MenuPanel extends JPanel {
         //Add the "show relevant breakdown only" option for the side view menu
         relevantDistancesSideView = new JCheckBox("Show Relevant Breakdown Only");
         relevantDistancesSideView.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
-        relevantDistancesSideView.setSelected(true);
+        relevantDistancesSideView.setSelected(false);
         relevantDistancesSideView.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 20; c.anchor = GridBagConstraints.LINE_START; c.weightx = 1;
