@@ -66,6 +66,7 @@ public class TopViewPanel extends InteractivePanel {
             paintCompass(getRotationOfSelectedRunway(), g2);
             paintLegend(g2);
             paintScale(g2);
+            paintAirportName(g2);
         }
     }
 
@@ -109,6 +110,29 @@ public class TopViewPanel extends InteractivePanel {
         legend.addToLegend("Clearway", Settings.CLEARWAY_STROKE_COLOUR);
         legend.addToLegend("Obstacle", Settings.OBSTACLE_FILL_COLOUR);
         legend.drawLegend(g2, new Point(getWidth()-10,getHeight()-10));
+    }
+
+    //Draws the airport name
+    private void paintAirportName(Graphics2D g2){
+
+        String name = controller.getAirfieldName();
+
+        Integer fontSize = (int) (Settings.SIDE_MENU_DEFAULT_FONT.getSize()*1.5);
+        Integer height = fontSize + 20;
+
+        g2.setFont(new Font("SansSerif", Font.BOLD, fontSize));
+        FontMetrics fontMetrics = g2.getFontMetrics();
+        int width = fontMetrics.stringWidth(name) + 40;
+
+        Point pos = new Point(20, 20);
+        g2.setColor(new Color(45, 45, 45, 150));
+        g2.fillRect(pos.x, pos.y, width, height);
+        g2.setColor(new Color(39, 39, 39));
+        g2.setStroke(new BasicStroke(5));
+        g2.drawRect(pos.x, pos.y, width, height);
+
+        g2.setColor(Color.WHITE);
+        g2.drawString(name, pos.x + (width - fontMetrics.stringWidth(name))/2, pos.y + fontSize + 8);
     }
 
     //Draws a compass in the top left corner of the screen

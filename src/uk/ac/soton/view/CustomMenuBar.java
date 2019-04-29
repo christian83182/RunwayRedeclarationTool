@@ -3,6 +3,7 @@ import uk.ac.soton.controller.ViewController;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -51,6 +52,11 @@ public class CustomMenuBar extends JMenuBar {
         exportConfiguration.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            FileNameExtensionFilter xmlFilter = new FileNameExtensionFilter(
+                    "XML (*.xml)", "xml");
+            fileChooser.setFileFilter(xmlFilter);
+            fileChooser.setDialogTitle("Save XML Configuration");
+            fileChooser.setFont(Settings.MENU_BAR_DEFAULT_FONT);
             int returnVal = fileChooser.showSaveDialog(null);
             if(returnVal == JFileChooser.APPROVE_OPTION){
                 try {
@@ -72,6 +78,10 @@ public class CustomMenuBar extends JMenuBar {
         saveParameters.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            FileNameExtensionFilter txtFilter = new FileNameExtensionFilter(
+                    "Text Documents (*.txt)", "txt");
+            fileChooser.setFileFilter(txtFilter);
+            fileChooser.setFont(Settings.MENU_BAR_DEFAULT_FONT);
             int returnVal = fileChooser.showSaveDialog(null);
             if(returnVal == JFileChooser.APPROVE_OPTION){
                 try {
@@ -188,6 +198,11 @@ public class CustomMenuBar extends JMenuBar {
     public void importConfiguration(){
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        FileNameExtensionFilter xmlFilter = new FileNameExtensionFilter(
+                "XML (*.xml)", "xml");
+        fileChooser.setFileFilter(xmlFilter);
+        fileChooser.setDialogTitle("Open XML Configuration");
+        fileChooser.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         int returnVal = fileChooser.showOpenDialog(null);
         if(returnVal == JFileChooser.APPROVE_OPTION){
             try {
@@ -206,9 +221,21 @@ public class CustomMenuBar extends JMenuBar {
         }
     }
 
+    // TODO different image export formats
     private void saveImage(BufferedImage image){
         //Create a new JFileChooser
         JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter jpegFilter = new FileNameExtensionFilter(
+                "JPEG (*.jpg;*.jpeg;*.jpe;*.jfif)", "jpg", "jpeg", "jpe", "jfif");
+        fileChooser.addChoosableFileFilter(jpegFilter);
+        FileNameExtensionFilter gifFilter = new FileNameExtensionFilter(
+                "GIF (*.gif)", "gif");
+        fileChooser.addChoosableFileFilter(gifFilter);
+        FileNameExtensionFilter pngFilter = new FileNameExtensionFilter(
+                "PNG (*.png)", "png");
+        fileChooser.addChoosableFileFilter(pngFilter);
+        fileChooser.setDialogTitle("Save Image");
+        fileChooser.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         //Open a save dialogue create a file from the selected file.
         if(fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
             File file = new File(fileChooser.getSelectedFile().getAbsolutePath()+".png");

@@ -479,7 +479,7 @@ public class AppController implements ViewController {
 
     @Override
     public synchronized String getAirfieldName() {
-        return "Heathrow";
+        return airfield.getName();
     }
 
     @Override
