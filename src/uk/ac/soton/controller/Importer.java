@@ -233,7 +233,7 @@ public class Importer {
             }
 
             //Retrieve the stripWidth from the currentRunway node.
-            Node stripWidthNode = currentRunway.getElementsByTagName("stripWidthElement").item(0);
+            Node stripWidthNode = currentRunway.getElementsByTagName("RunwayStripWidth").item(0);
             Integer stripWidth = Integer.parseInt(stripWidthNode.getTextContent());
             if(stripWidth<0){
                 throw new Exception("Runway " + firstLogicalRunwayName +"/"+secondLogicalRunwayName+"'s strip width is negative");

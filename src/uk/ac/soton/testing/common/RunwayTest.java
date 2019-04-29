@@ -1,4 +1,4 @@
-package uk.ac.soton.common;
+package uk.ac.soton.testing.common;
 
 import org.junit.Test;
 import uk.ac.soton.common.*;
@@ -54,13 +54,6 @@ public class RunwayTest {
         assertEquals("Runway currently used for take-off", runway.getStatus());
         runway.setStatus("Runway currently used for landing");
         assertEquals("Runway currently used for landing", runway.getStatus());
-    }
-
-    @Test
-    public void setAls() throws Exception {
-        Runway runway = new Runway();
-        runway.setAls(50);
-        assertEquals((Integer)50, runway.getAls());
     }
 
     @Test
@@ -235,7 +228,7 @@ public class RunwayTest {
         runway.recalculateParameters();
 
         // Configuration check: Slope Calculation > RESA
-        assertEquals(true, runway.getObstacle().getHeight() * runway.getAls() > runway.getResa());
+        assertEquals(true, runway.getObstacle().getHeight() * Airfield.getMinAngleOfDecent() > runway.getResa());
 
         // Take Off Towards, Landing Towards
         assertEquals(2170, runway.getLogicalRunway("09").getTora().getRedeclaredValue().intValue());
@@ -254,7 +247,7 @@ public class RunwayTest {
         runway.recalculateParameters();
 
         // Configuration check: Slope Calculation <= RESA
-        assertEquals(true, runway.getObstacle().getHeight() * runway.getAls() <= runway.getResa());
+        assertEquals(true, runway.getObstacle().getHeight() * Airfield.getMinAngleOfDecent() <= runway.getResa());
 
         // Take Off Towards, Landing Towards
         assertEquals(2680, runway.getLogicalRunway("09").getTora().getRedeclaredValue().intValue());
@@ -273,10 +266,10 @@ public class RunwayTest {
         runway.recalculateParameters();
 
         // Configuration check: Slope Calculation > RESA
-        assertEquals(true, runway.getObstacle().getHeight() * runway.getAls() > runway.getResa());
+        assertEquals(true, runway.getObstacle().getHeight() * Airfield.getMinAngleOfDecent() > runway.getResa());
 
         // Configuration check: Slope + Strip End > Blast Protection
-        assertEquals(true,runway.getObstacle().getHeight() * runway.getAls() + runway.getStripEnd() > Airfield.getBlastProtection());
+        assertEquals(true,runway.getObstacle().getHeight() * Airfield.getMinAngleOfDecent() + runway.getStripEnd() > Airfield.getBlastProtection());
 
         // Take Off Away, Landing Over
         assertEquals(2680, runway.getLogicalRunway("27").getTora().getRedeclaredValue().intValue());
@@ -296,7 +289,7 @@ public class RunwayTest {
         runway.recalculateParameters();
 
         // Configuration check: Slope Calculation <= RESA
-        assertEquals(true, runway.getObstacle().getHeight() * runway.getAls() <= runway.getResa());
+        assertEquals(true, runway.getObstacle().getHeight() * Airfield.getMinAngleOfDecent() <= runway.getResa());
 
         // Configuration check: RESA + Strip End > Blast Protection
         assertEquals(true,runway.getResa() + runway.getStripEnd() > Airfield.getBlastProtection());
@@ -324,7 +317,7 @@ public class RunwayTest {
         runway.recalculateParameters();
 
         // Configuration check: Slope + Strip End <= Blast Protection && RESA + Strip End <= Blast Protection
-        assertEquals(true, runway.getObstacle().getHeight() * runway.getAls() <= Airfield.getBlastProtection() &&
+        assertEquals(true, runway.getObstacle().getHeight() * Airfield.getMinAngleOfDecent() <= Airfield.getBlastProtection() &&
                 runway.getResa() + runway.getStripEnd() <= Airfield.getBlastProtection());
 
         // Take Off Away, Landing Over

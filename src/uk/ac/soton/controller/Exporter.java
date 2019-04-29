@@ -200,7 +200,7 @@ public class Exporter {
                 stripEndElement.appendChild(document.createTextNode(currentRunway.getStripEnd().toString()));
 
                 //Create and add a stripWidthElement to runwayElement
-                Element stripWidthElement = document.createElement("stripWidthElement");
+                Element stripWidthElement = document.createElement("RunwayStripWidth");
                 runwayElement.appendChild(stripWidthElement);
                 stripWidthElement.appendChild(document.createTextNode(currentRunway.getStripWidth().toString()));
 

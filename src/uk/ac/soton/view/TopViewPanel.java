@@ -1,6 +1,7 @@
 package uk.ac.soton.view;
 
 import javafx.scene.transform.Affine;
+import uk.ac.soton.common.Airfield;
 import uk.ac.soton.controller.ViewController;
 
 import java.awt.*;
@@ -361,12 +362,10 @@ public class TopViewPanel extends InteractivePanel {
             }
             if(menuPanel.isShowRunwayParametersEnabled()){
                 paintRunwayParameters(selectedRunway, g2);
-                if(menuPanel.isShowBreakDownEnabled()) paintBreakdownLengths(selectedRunway, g2);
-            }
-
-            if(menuPanel.isShowBreakDownEnabled()){
-                if(!controller.getRunwayObstacle(selectedRunway).equals("") && controller.isRedeclared(selectedRunway)){
-                    paintObstacleParameters(selectedRunway, controller.getRunwayObstacle(selectedRunway), g2);
+                if(menuPanel.isShowBreakDownEnabled()){
+                    if(!controller.getRunwayObstacle(selectedRunway).equals("") && controller.isRedeclared(selectedRunway)){
+                        paintObstacleParameters(selectedRunway, controller.getRunwayObstacle(selectedRunway), g2);
+                    }
                 }
             }
         }
@@ -416,7 +415,6 @@ public class TopViewPanel extends InteractivePanel {
     }
 
     private void paintObstacleParameters(String runwayId, String obstacleId, Graphics2D g2){
-
         Point runwayPos = controller.getRunwayPos(runwayId);
         Dimension runwayDim = controller.getRunwayDim(runwayId);
 
@@ -429,10 +427,9 @@ public class TopViewPanel extends InteractivePanel {
         //helperHeights for drawing obstacle parameters
         Integer stripHeight = controller.getStripWidthFromCenterline(runwayId);
 
-        final Integer distanceFromAlsHelperHeight = -stripHeight/2 +10;
-        final Integer resaHelperHeight = -stripHeight/2 -50;
-        //final Integer newStripendHelperHeight = -stripHeight/2 -50;
-        final Integer blastDistanceHelperHeight = -stripHeight/2 -100;
+        Integer distanceFromAlsHelperHeight = -stripHeight -140;
+        Integer resaHelperHeight = -stripHeight -40;
+        Integer blastDistanceHelperHeight = stripHeight + 50;
 
         //if the obstacle has triggered a redeclaration of the runway, draw the redeclared parameters
         if(controller.isRedeclared(runwayId)) {
@@ -446,11 +443,11 @@ public class TopViewPanel extends InteractivePanel {
 
             // Breakdown parameter lengths and labels
             Integer resa = controller.getRESADistance(runwayId);
-            String resaLabel = "RESA: " + resa;
+            String resaLabel = "RESA: " + resa +"m";
             Integer alsDistance = controller.getPredefinedObstacleHeight(obstacleId) * controller.getALS(runwayId);
-            String alsLabel = "h*50";
+            String alsLabel = "ALS/TOCS: " + (controller.getPredefinedObstacleHeight(obstacleId)* Airfield.getMinAngleOfDecent()) +"m";
             Integer blastDist = controller.getBlastingDistance();
-            String blasDistLabel = "Blast Dist: " + blastDist;
+            String blasDistLabel = "Blast Dist: " + blastDist+"m";
             Integer newStripEnd = controller.getStripEndSize(runwayId);
             String newStripEndLabel = newStripEnd + " m";
 
@@ -486,6 +483,7 @@ public class TopViewPanel extends InteractivePanel {
 
                         if(alsDistance > resa){
                             // Slope + Strip End for LDA
+                            distanceFromAlsHelperHeight = -stripHeight -40;
                             DataArrow alsArrow = new DataArrow(startAls, endAls, distanceFromAlsHelperHeight, alsLabel);
                             alsArrow.drawHorizontalArrow(g2);
                             DataArrow alsStripEndArrow = new DataArrow(startAlsStripEnd, endAlsStripEnd, distanceFromAlsHelperHeight, newStripEndLabel);
@@ -499,6 +497,7 @@ public class TopViewPanel extends InteractivePanel {
                         blastDistArrow.drawHorizontalArrow(g2);
 
                         // Slope + Strip End for LDA
+                        distanceFromAlsHelperHeight = -stripHeight -40;
                         DataArrow alsArrow = new DataArrow(startAls, endAls, distanceFromAlsHelperHeight, alsLabel);
                         alsArrow.drawHorizontalArrow(g2);
                         DataArrow alsStripEndArrow = new DataArrow(startAlsStripEnd, endAlsStripEnd, distanceFromAlsHelperHeight, newStripEndLabel);
@@ -602,11 +601,6 @@ public class TopViewPanel extends InteractivePanel {
         ldaLengthInfo.drawInfoArrow(id, g2);
     }
 
-    //Prints the breakdown for the runway parameters given some runway.
-    private void paintBreakdownLengths(String id, Graphics2D g2){
-        //soon to come.
-    }
-
     //Draws the length of various runway components for some specified runway.
     private void paintOtherLengths(String id, Graphics2D g2){
         Dimension clearwayDim = controller.getClearwayDim(id);
@@ -655,8 +649,17 @@ public class TopViewPanel extends InteractivePanel {
         runwayStripWidthInfo.globalXOffset = -stripEndSize;
         runwayStripWidthInfo.drawInfoArrow(id, g2);
 
+        Integer runwayLengthHelperHeight = -stripHeight - 130;
+        if(controller.isRedeclared(id) && menuPanel.isShowBreakDownEnabled()){
+            if(menuPanel.isShowRelevantDistOnlyEnabled()){
+                runwayLengthHelperHeight = -stripHeight - 140;
+            }else{
+                runwayLengthHelperHeight = -stripHeight - 240;
+            }
+        }
+
         //Draw runwayStrip length.
-        InfoArrow runwayStripLengthInfo = new InfoArrow(-stripEndSize, -stripHeight - 130,
+        InfoArrow runwayStripLengthInfo = new InfoArrow(-stripEndSize, runwayLengthHelperHeight,
                 stripEndSize*2 + runwayDim.width, (stripEndSize*2 + runwayDim.width) + "m", true);
         runwayStripLengthInfo.drawInfoArrow(id, g2);
     }
@@ -769,9 +772,18 @@ public class TopViewPanel extends InteractivePanel {
             //Account for the text displaying the stopway length
             fullRunwayHeight += 250;
         }
+
         if (menuPanel.isShowRunwayParametersEnabled()){
             //Account for all the text displaying the runway parameters.
             fullRunwayHeight += 450;
+        }
+
+        if(menuPanel.isShowBreakDownEnabled()){
+            if(menuPanel.isShowRelevantDistOnlyEnabled()){
+                fullRunwayHeight += 100;
+            } else {
+                fullRunwayHeight += 200;
+            }
         }
 
         return fullRunwayHeight;
@@ -792,16 +804,25 @@ public class TopViewPanel extends InteractivePanel {
 
         //Add some padding around the bounding box
         fullRunwayLength+= 100;
-        fullRunwayHeight+= 100;
+        fullRunwayHeight+= 200;
         boundingBoxPos.translate(-50,-50);
 
         //If ShowOtherEnabled is true then account for the extra space used.
         if(menuPanel.isShowOtherEnabled()){
             //Account for the text displaying the strip width
             boundingBoxPos.translate(-300,0);
-            //Account for the text displaying the stopway length
-            boundingBoxPos.translate(0,-250);
+
+            if(menuPanel.isShowBreakDownEnabled()){
+                if(menuPanel.isShowRelevantDistOnlyEnabled()){
+                    boundingBoxPos.translate(0,-300);
+                } else {
+                    boundingBoxPos.translate(0,-400);
+                }
+            }else{
+                boundingBoxPos.translate(0,-250);
+            }
         }
+
 
         //Create a polygon bounding the runway.
         Polygon p = new Polygon(new int[] {boundingBoxPos.x, boundingBoxPos.x, boundingBoxPos.x + fullRunwayLength, boundingBoxPos.x + fullRunwayLength},
@@ -828,7 +849,7 @@ public class TopViewPanel extends InteractivePanel {
             setPan(new Point(-centerPoint.x + getWidth()/2, -centerPoint.y + getHeight()/2));
             setZoom(Math.min((double)getHeight() / (double)getFullRunwayHeight(id),
                     (double)getWidth() / (double)getFullRunwayLength(id)));
-        //If not then just pan, dont zoom.
+            //If not then just pan, dont zoom.
         } else {
             setPan(new Point(-centerPoint.x + getWidth()/2, -centerPoint.y + getHeight()/2));
         }

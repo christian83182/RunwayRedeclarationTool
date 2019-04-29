@@ -503,7 +503,7 @@ public class AppController implements ViewController {
 
     @Override
     public synchronized Integer getALS(String runwayId) {
-        return airfield.getRunway(runwayId).getAls();
+        return Airfield.getMinAngleOfDecent();
     }
 
     @Override
@@ -629,10 +629,6 @@ public class AppController implements ViewController {
     public void setResa(Runway runway, Integer resa) { runway.setResa(resa);}
 
     public Integer getResa(Runway runway) { return runway.getResa(); }
-
-    public void setAls(Runway runway, Integer als) { runway.setAls(als); }
-
-    public void getAls(Runway runway) { runway.getAls(); }
 
     public Boolean isActive(Runway runway) { return runway.isActive(); }
 
