@@ -76,7 +76,7 @@ public class AppView extends JFrame{
         this.setLocationRelativeTo(null);
         this.setVisible(true);
 
-        //menuBar.importConfiguration();
+        menuBar.importConfiguration();
     }
 
 

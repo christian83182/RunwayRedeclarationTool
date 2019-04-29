@@ -46,9 +46,6 @@ public class TopViewPanel extends InteractivePanel {
         //Draw the background.
         paintBackground(g2,Settings.AIRFIELD_COLOUR);
 
-        //Draw airport name.
-        //paintAirportName(g2);
-
         //Only draw all runways if isolate mode isn't on, or if it is on but no runway is selected
         if(!isIsolated || (isIsolated && !isRunwaySelected)){
             paintStrips(g2);
@@ -69,6 +66,7 @@ public class TopViewPanel extends InteractivePanel {
             paintCompass(getRotationOfSelectedRunway(), g2);
             paintLegend(g2);
             paintScale(g2);
+            paintAirportName(g2);
         }
     }
 
@@ -114,31 +112,28 @@ public class TopViewPanel extends InteractivePanel {
         legend.drawLegend(g2, new Point(getWidth()-10,getHeight()-10));
     }
 
-    /*private void paintAirportName(Graphics2D g2){
+    //Draws the airport name
+    private void paintAirportName(Graphics2D g2){
 
         String name = controller.getAirfieldName();
 
         Integer fontSize = (int) (Settings.SIDE_MENU_DEFAULT_FONT.getSize()*1.5);
         Integer height = fontSize + 20;
 
-        g2.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
+        g2.setFont(new Font("SansSerif", Font.BOLD, fontSize));
         FontMetrics fontMetrics = g2.getFontMetrics();
-        int width = fontMetrics.stringWidth(name) + 80;
+        int width = fontMetrics.stringWidth(name) + 40;
 
-        //Draw the background.
-        Point pos = new Point(getWidth()-20, getWidth()-20);
+        Point pos = new Point(20, 20);
         g2.setColor(new Color(45, 45, 45, 150));
         g2.fillRect(pos.x, pos.y, width, height);
         g2.setColor(new Color(39, 39, 39));
         g2.setStroke(new BasicStroke(5));
         g2.drawRect(pos.x, pos.y, width, height);
 
-        //Draw the name
         g2.setColor(Color.WHITE);
-        g2.setFont(new Font("SansSerif", Font.BOLD, fontSize));
-        fontMetrics = g2.getFontMetrics();
-        g2.drawString(name, pos.x + (width - fontMetrics.stringWidth(name))/2, pos.y + fontSize +10);
-    }*/
+        g2.drawString(name, pos.x + (width - fontMetrics.stringWidth(name))/2, pos.y + fontSize + 8);
+    }
 
     //Draws a compass in the top left corner of the screen
     private void paintCompass(Integer rotation, Graphics2D g2){
