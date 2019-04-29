@@ -1,4 +1,5 @@
 package uk.ac.soton.view;
+import uk.ac.soton.common.Airfield;
 import uk.ac.soton.controller.ViewController;
 
 import javax.imageio.ImageIO;
@@ -135,6 +136,15 @@ public class CustomMenuBar extends JMenuBar {
             appView.repaint();
         });
 
+        //Adding the Edit Min Angle of Decent option to the edit menu.
+        JMenuItem editMinAngleOfDecent = new JMenuItem("Edit Minimum Angle of Decent...");
+        editMinAngleOfDecent.setFont(Settings.MENU_BAR_DEFAULT_FONT);
+        editMenu.add(editMinAngleOfDecent);
+        editMinAngleOfDecent.addActionListener(e -> {
+            minAngleOfDecentInputLoop();
+            appView.repaint();
+        });
+
         //Adding the "edit obstacles" option to the edit menu.
         JMenuItem editObstaclesMenu = new JMenuItem("Edit Predefined Obstacles...");
         editObstaclesMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
@@ -146,6 +156,12 @@ public class CustomMenuBar extends JMenuBar {
         configureBgMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         editMenu.add(configureBgMenu);
         configureBgMenu.addActionListener(e -> new BackgroundConfigWindow(appView));
+
+        //Adding the Configure Background Image option
+        JMenuItem configureAirfield = new JMenuItem("Configure Airfield...");
+        configureAirfield.setFont(Settings.MENU_BAR_DEFAULT_FONT);
+        editMenu.add(configureAirfield);
+        configureAirfield.addActionListener(e -> new AirfieldConfigWindow(appView));
 
         //Adding the "Set Default Colour Theme" option to the settings menu.
         JMenuItem setDefaultTheme = new JMenuItem("Set Default Colour Theme");
@@ -272,8 +288,6 @@ public class CustomMenuBar extends JMenuBar {
                             JOptionPane.ERROR_MESSAGE);
                     NotificationLogger.logger.addToLog("Blast protection value input was not a valid input.");
 
-
-
                     input = JOptionPane.showInputDialog(
                             appView,
                             "Enter Blast Protection value:",
@@ -297,6 +311,37 @@ public class CustomMenuBar extends JMenuBar {
                         "Non-digit characters recognised, please enter a valid number.",
                         "Input Error",
                         JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void minAngleOfDecentInputLoop(){
+        while(true){
+            try{
+                String input = JOptionPane.showInputDialog(appView, "Enter Minimum Angle of Decent (1m-500m):", "Edit Minimum Angle of Decent", JOptionPane.PLAIN_MESSAGE);
+
+                if(input == null){
+                    return;
+                }
+                Integer newValue = Integer.parseInt(input);
+
+                while(newValue < 1 || newValue > 500){
+                    JOptionPane.showMessageDialog(appView, "Please enter a value between 1-500.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                    NotificationLogger.logger.addToLog("Minimum Angle of Decent could not be changed - invalid input.");
+                    input = JOptionPane.showInputDialog(appView, "Enter Minimum Angle of Decent (1m-500m):", "Edit Minimum Angle of Decent", JOptionPane.PLAIN_MESSAGE);
+
+                    if(input == null){
+                        return;
+                    }
+                    newValue = Integer.parseInt(input);
+                }
+
+                Airfield.setMinAngleOfDecent(newValue);
+                NotificationLogger.logger.addToLog("Minimum Angle of Decent was set to: '" +newValue+ "'");
+                break;
+            }
+            catch(NumberFormatException nfe){
+                JOptionPane.showMessageDialog(appView, "Non-digit characters recognised, please enter a valid number.", "Input Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }

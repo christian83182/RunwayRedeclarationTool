@@ -94,6 +94,7 @@ public class MenuPanel extends JPanel {
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 10; c.gridwidth = 2;
         c.insets = new Insets(10,10,0,0);
+        c.anchor = GridBagConstraints.LINE_START;
         generalPane.add(selectedRunwayLabel, c);
 
         //Add the JComboBox to select a runway.
@@ -102,7 +103,8 @@ public class MenuPanel extends JPanel {
         runwayMenu.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         c = new GridBagConstraints();
         c.gridx = 2; c.gridy = 10; c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(0,10,0,10);
+        c.insets = new Insets(10,10,0,10);
+        c.anchor = GridBagConstraints.LINE_START;
         generalPane.add(runwayMenu, c);
 
         //Create buttons to place and remove obstacles.
