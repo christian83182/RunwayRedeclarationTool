@@ -1,4 +1,5 @@
 package uk.ac.soton.view;
+import uk.ac.soton.common.Airfield;
 import uk.ac.soton.controller.ViewController;
 
 import java.awt.*;
@@ -12,10 +13,9 @@ public class SideViewPanel extends InteractivePanel{
     private ViewController controller;
 
     //helper heights for drawing the info arrows of the obstacle parameters
-    private final Integer distanceFromAlsHelperHeight = -100;
-    private final Integer resaHelperHeight = -170;
-    //private final Integer newStripendHelperHeight = -170;
-    private final Integer blastDistanceHelperHeight = -240;
+    private Integer distanceFromAlsHelperHeight = -140;
+    private Integer resaHelperHeight = -40;
+    private Integer blastDistanceHelperHeight = 200;
 
     SideViewPanel(AppView appView) {
         super(new Point(-300, 150), 0.34);
@@ -185,35 +185,43 @@ public class SideViewPanel extends InteractivePanel{
 
     // painting runway length, displaced threshold, clearway, stopway arrows
     private void paintOtherDistances(Graphics2D g2){
-
         String selectedRunway = appView.getSelectedRunway();
+        Integer lengthHelperHeight = -40;
+        Integer displacedThresholdHelperHeight = -140;
+        Integer stopwayLengthHelperHeight = -140;
+
+        if(menuPanel.isSideViewShowBreakdownEnabled() && controller.isRedeclared(selectedRunway)){
+            lengthHelperHeight = -240;
+            displacedThresholdHelperHeight = -340;
+            stopwayLengthHelperHeight = -340;
+        }
 
         Integer length = controller.getRunwayDim(selectedRunway).width;
         String lengthLabel = length + "m";
         Point startLength = new Point(0,0);
         Point endLength = new Point(length,0);
-        DataArrow lengthArrow = new DataArrow(startLength, endLength, -380, lengthLabel);
+        DataArrow lengthArrow = new DataArrow(startLength, endLength, lengthHelperHeight, lengthLabel);
         lengthArrow.drawHorizontalArrow(g2);
 
         Integer threshold = controller.getRunwayThreshold(selectedRunway);
         String thresholdLabel = threshold + "m";
         Point startThreshold = new Point(0,0);
         Point endThreshold = new Point (threshold, 0);
-        DataArrow thresholdArrow = new DataArrow(startThreshold, endThreshold, -310, thresholdLabel);
+        DataArrow thresholdArrow = new DataArrow(startThreshold, endThreshold, displacedThresholdHelperHeight, thresholdLabel);
         thresholdArrow.drawHorizontalArrow(g2);
 
         Integer stopway = controller.getStopwayDim(selectedRunway).width;
         String stopwayLabel = stopway + "m";
         Point startStopway = new Point(length,0);
         Point endStopway = new Point(length+stopway,0);
-        DataArrow stopwayArrow = new DataArrow(startStopway, endStopway, -380, stopwayLabel);
+        DataArrow stopwayArrow = new DataArrow(startStopway, endStopway, stopwayLengthHelperHeight, stopwayLabel);
         stopwayArrow.drawHorizontalArrow(g2);
 
         Integer clearway = controller.getClearwayDim(selectedRunway).width;
         String clearwayLabel = clearway + "m";
         Point startClearway = new Point(length,0);
         Point endClearway = new Point(length+clearway,0);
-        DataArrow clearwayArrow = new DataArrow(startClearway, endClearway, -310, clearwayLabel);
+        DataArrow clearwayArrow = new DataArrow(startClearway, endClearway, -40, clearwayLabel);
         clearwayArrow.drawHorizontalArrow(g2);
     }
 
@@ -297,6 +305,16 @@ public class SideViewPanel extends InteractivePanel{
         distanceArrow.drawHorizontalArrow(g2);
     }
 
+    //all parameters drawn to the left of the obstacle are drawn from a specified distance - the length of the parameter
+    //and the line of the parameter ends at the specified distance
+    private void drawParameterToTheLeft(Graphics2D g2, Integer helperLength, String label, Integer distanceLength, Integer endPointX){
+
+        Point startDistance = new Point(endPointX - distanceLength, 0);
+        Point endDistance = new Point(endPointX, 0);
+        DataArrow distanceArrow = new DataArrow(startDistance, endDistance, helperLength, label);
+        distanceArrow.drawHorizontalArrow(g2);
+    }
+
     // displaying distances to the right of the obstacle
     // height*als: start point is obstacle distance from start of runway and it goes on for h*als
     // RESA is drawn to the right of the obstacle
@@ -321,13 +339,13 @@ public class SideViewPanel extends InteractivePanel{
             }
             else if(resa + newStripEnd > blastingDistance){
                 // RESA + Strip End for TORA etc
-                drawParameterToTheRight(g2, resaHelperHeight, "RESA: " + resa,
+                drawParameterToTheRight(g2, -40, "RESA: " + resa,
                         resa, obstacleDistance);
-                drawParameterToTheRight(g2, resaHelperHeight, newStripEnd + "m", newStripEnd, obstacleDistance + resa);
+                drawParameterToTheRight(g2, -40, newStripEnd + "m", newStripEnd, obstacleDistance + resa);
 
                 if(alsDistance > resa){
                     // Slope + Strip End for LDA
-                    drawParameterToTheRight(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway),
+                    drawParameterToTheRight(g2, distanceFromAlsHelperHeight, "ALS/TOCS: " + (controller.getPredefinedObstacleHeight(obstacle)* Airfield.getMinAngleOfDecent()) +"m",
                             alsDistance + obstacleLength, obstacleDistance - obstacleLength);
                     drawParameterToTheRight(g2, distanceFromAlsHelperHeight, newStripEnd + "m", newStripEnd, obstacleDistance +  alsDistance);
                 }
@@ -339,13 +357,13 @@ public class SideViewPanel extends InteractivePanel{
                         blastingDistance, obstacleDistance);
 
                 // Slope + Strip End for LDA
-                drawParameterToTheRight(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway),
+                drawParameterToTheRight(g2, -40, "ALS/TOCS: " + (controller.getPredefinedObstacleHeight(obstacle)* Airfield.getMinAngleOfDecent()) +"m",
                         alsDistance + obstacleLength, obstacleDistance - obstacleLength);
-                drawParameterToTheRight(g2, distanceFromAlsHelperHeight, newStripEnd + "m", newStripEnd, obstacleDistance +  alsDistance);
+                drawParameterToTheRight(g2, -40, newStripEnd + "m", newStripEnd, obstacleDistance +  alsDistance);
             }
         }else{
             // Slope + Strip End
-            drawParameterToTheRight(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway),
+            drawParameterToTheRight(g2, distanceFromAlsHelperHeight, "ALS/TOCS: " + (controller.getPredefinedObstacleHeight(obstacle)* Airfield.getMinAngleOfDecent()) +"m",
                     alsDistance + obstacleLength, obstacleDistance - obstacleLength);
             drawParameterToTheRight(g2, distanceFromAlsHelperHeight, newStripEnd + "m", newStripEnd, obstacleDistance +  alsDistance);
 
@@ -373,16 +391,6 @@ public class SideViewPanel extends InteractivePanel{
         }
     }
 
-    //all parameters drawn to the left of the obstacle are drawn from a specified distance - the length of the parameter
-    //and the line of the parameter ends at the specified distance
-    private void drawParameterToTheLeft(Graphics2D g2, Integer helperLength, String label, Integer distanceLength, Integer endPointX){
-
-        Point startDistance = new Point(endPointX - distanceLength, 0);
-        Point endDistance = new Point(endPointX, 0);
-        DataArrow distanceArrow = new DataArrow(startDistance, endDistance, helperLength, label);
-        distanceArrow.drawHorizontalArrow(g2);
-    }
-
     // displaying distances to the right of the obstacle
     // height*als: start point is obstacle distance from start of runway and it goes on for h*als
     // RESA is drawn to the left of the obstacle
@@ -401,7 +409,7 @@ public class SideViewPanel extends InteractivePanel{
             // If Slope > RESA then both are used for calculations, else only RESA
             if(alsDistance > resa){
                 // Slope + Strip End for TORA etc
-                drawParameterToTheLeft(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway),
+                drawParameterToTheLeft(g2, distanceFromAlsHelperHeight, "ALS/TOCS: " + (controller.getPredefinedObstacleHeight(obstacle)* Airfield.getMinAngleOfDecent()) +"m",
                         alsDistance + obstacleLength, obstacleDistance + obstacleLength + obstacleLength);
                 drawParameterToTheLeft(g2, distanceFromAlsHelperHeight,newStripEnd + "m", newStripEnd, obstacleDistance + obstacleLength - alsDistance);
 
@@ -419,7 +427,7 @@ public class SideViewPanel extends InteractivePanel{
         }
         else{
             // Slope + Strip End
-            drawParameterToTheLeft(g2, distanceFromAlsHelperHeight, "h*" + controller.getALS(selectedRunway),
+            drawParameterToTheLeft(g2, distanceFromAlsHelperHeight, "ALS/TOCS: " + (controller.getPredefinedObstacleHeight(obstacle)* Airfield.getMinAngleOfDecent()) +"m",
                     alsDistance + obstacleLength, obstacleDistance + obstacleLength + obstacleLength);
             drawParameterToTheLeft(g2, distanceFromAlsHelperHeight,newStripEnd + "m", newStripEnd, obstacleDistance + obstacleLength - alsDistance);
 

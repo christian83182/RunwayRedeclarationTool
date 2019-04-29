@@ -449,7 +449,7 @@ public class TopViewPanel extends InteractivePanel {
             Integer blastDist = controller.getBlastingDistance();
             String blasDistLabel = "Blast Dist: " + blastDist+"m";
             Integer newStripEnd = controller.getStripEndSize(runwayId);
-            String newStripEndLabel = newStripEnd + " m";
+            String newStripEndLabel = newStripEnd + "m";
 
             // Draw parameters to the right
             if(controller.getLogicalRunwayCloserToObstacle(runwayId).getName().equals(runwayId)) {

@@ -259,7 +259,7 @@ public class MenuPanel extends JPanel {
         //Add the "show relevant breakdown only" option for the side view menu
         relevantDistancesSideView = new JCheckBox("Show Relevant Breakdown Only");
         relevantDistancesSideView.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
-        relevantDistancesSideView.setSelected(true);
+        relevantDistancesSideView.setSelected(false);
         relevantDistancesSideView.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 20; c.anchor = GridBagConstraints.LINE_START; c.weightx = 1;
