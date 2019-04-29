@@ -4,6 +4,7 @@ import uk.ac.soton.common.Airfield;
 import uk.ac.soton.common.LogicalRunway;
 import uk.ac.soton.view.AppView;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -19,7 +20,8 @@ public class Saver {
     }
 
     public void saveState(String filename) throws IOException {
-        PrintWriter writer = new PrintWriter(filename + ".txt", "UTF-8");
+        File file = new File(filename);
+        PrintWriter writer = new PrintWriter(file, "UTF-8");
         if(appView.getSelectedRunway().equals("")){
             for(LogicalRunway runway : airfield.getAllLogicalRunways()){
                 writer.println("Runway " + runway.getName() + "\n" +

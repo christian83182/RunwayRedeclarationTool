@@ -464,7 +464,11 @@ public class AppController implements ViewController {
     @Override
     public synchronized void saveRunwayParameters(String path) throws IOException {
         Saver saver = new Saver(this, appView);
-        saver.saveState(path);
+        if(path.toLowerCase().endsWith(".txt")){
+            saver.saveState(path);
+        }else {
+            saver.saveState(path + ".txt");
+        }
     }
 
     @Override
