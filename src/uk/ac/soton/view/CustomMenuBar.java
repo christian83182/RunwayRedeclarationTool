@@ -56,6 +56,7 @@ public class CustomMenuBar extends JMenuBar {
                     "XML (*.xml)", "xml");
             fileChooser.setFileFilter(xmlFilter);
             fileChooser.setDialogTitle("Save XML Configuration");
+            fileChooser.setFont(Settings.MENU_BAR_DEFAULT_FONT);
             int returnVal = fileChooser.showSaveDialog(null);
             if(returnVal == JFileChooser.APPROVE_OPTION){
                 try {
@@ -80,6 +81,7 @@ public class CustomMenuBar extends JMenuBar {
             FileNameExtensionFilter txtFilter = new FileNameExtensionFilter(
                     "Text Documents (*.txt)", "txt");
             fileChooser.setFileFilter(txtFilter);
+            fileChooser.setFont(Settings.MENU_BAR_DEFAULT_FONT);
             int returnVal = fileChooser.showSaveDialog(null);
             if(returnVal == JFileChooser.APPROVE_OPTION){
                 try {
@@ -197,6 +199,7 @@ public class CustomMenuBar extends JMenuBar {
                 "XML (*.xml)", "xml");
         fileChooser.setFileFilter(xmlFilter);
         fileChooser.setDialogTitle("Open XML Configuration");
+        fileChooser.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         int returnVal = fileChooser.showOpenDialog(null);
         if(returnVal == JFileChooser.APPROVE_OPTION){
             try {
@@ -227,6 +230,7 @@ public class CustomMenuBar extends JMenuBar {
                 "PNG (*.png)", "png");
         fileChooser.addChoosableFileFilter(pngFilter);
         fileChooser.setDialogTitle("Save Image");
+        fileChooser.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         //Open a save dialogue create a file from the selected file.
         if(fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
             File file = new File(fileChooser.getSelectedFile().getAbsolutePath()+".png");

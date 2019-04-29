@@ -42,6 +42,7 @@ public class MenuPanel extends JPanel {
         TitledBorder generalBorder = BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(Color.GRAY,1),"General",0,2,
                 Settings.MENU_BAR_DEFAULT_FONT,Color.WHITE);
+        generalBorder.setTitleFont(new Font("SansSerif", Font.BOLD, 18));
         generalPane.setBorder(generalBorder);
         generalPane.setLayout(new GridBagLayout());
 
@@ -49,6 +50,7 @@ public class MenuPanel extends JPanel {
         TitledBorder topViewBorder = BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(Color.GRAY,1),"Top View",0,2,
                 Settings.MENU_BAR_DEFAULT_FONT,Color.WHITE);
+        topViewBorder.setTitleFont(new Font("SansSerif", Font.BOLD, 18));
         topViewPane.setBorder(topViewBorder);
         topViewPane.setLayout(new GridBagLayout());
 
@@ -56,6 +58,7 @@ public class MenuPanel extends JPanel {
         TitledBorder sideViewBorder = BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(Color.GRAY,1),"Side View",0,2,
                 Settings.MENU_BAR_DEFAULT_FONT,Color.WHITE);
+        sideViewBorder.setTitleFont(new Font("SansSerif", Font.BOLD, 18));
         sideViewPane.setBorder(sideViewBorder);
         sideViewPane.setLayout(new GridBagLayout());
 
@@ -104,8 +107,10 @@ public class MenuPanel extends JPanel {
 
         //Create buttons to place and remove obstacles.
         placeObstacleButton = new JButton("Add Obstacle...");
+        placeObstacleButton.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         placeObstacleButton.setEnabled(false);
         removeObstacleButton = new JButton("Remove");
+        removeObstacleButton.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         removeObstacleButton.setEnabled(false);
 
         //Create a JPanel with a grid layout manager to make both buttons the same size.
@@ -121,6 +126,7 @@ public class MenuPanel extends JPanel {
 
         //Create a button to display the parameter breakdown.
         JButton showCalculationButton = new JButton("Show Calculations");
+        showCalculationButton.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         showCalculationButton.setEnabled(false);
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 30;
@@ -130,6 +136,7 @@ public class MenuPanel extends JPanel {
 
         //Create a button to show the 3D view.
         JButton show3DViewButton = new JButton("Show 3D view");
+        show3DViewButton.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 40;
         c.gridwidth = 3; c.fill = GridBagConstraints.HORIZONTAL;

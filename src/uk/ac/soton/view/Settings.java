@@ -49,8 +49,8 @@ public class Settings{
 
     static Color RUNWAY_NAME_COLOUR = new Color(255,255,255);
 
-    static Font SIDE_MENU_DEFAULT_FONT = new Font("SansSerif", Font.PLAIN, 14);
-    static Font MENU_BAR_DEFAULT_FONT = new Font("SansSerif", Font.PLAIN, 14);
+    static Font SIDE_MENU_DEFAULT_FONT = new Font("SansSerif", Font.PLAIN, 15);
+    static Font MENU_BAR_DEFAULT_FONT = new Font("SansSerif", Font.PLAIN, 15);
 
     static Color SIDEVIEW_SKY_COLOUR_BOTTOM;
     static Color SIDEVIEW_SKY_COLOUR_TOP;

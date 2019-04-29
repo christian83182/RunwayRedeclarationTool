@@ -45,6 +45,9 @@ public class TopViewPanel extends InteractivePanel {
         //Draw the background.
         paintBackground(g2,Settings.AIRFIELD_COLOUR);
 
+        //Draw airport name.
+        //paintAirportName(g2);
+
         //Only draw all runways if isolate mode isn't on, or if it is on but no runway is selected
         if(!isIsolated || (isIsolated && !isRunwaySelected)){
             paintStrips(g2);
@@ -109,6 +112,32 @@ public class TopViewPanel extends InteractivePanel {
         legend.addToLegend("Obstacle", Settings.OBSTACLE_FILL_COLOUR);
         legend.drawLegend(g2, new Point(getWidth()-10,getHeight()-10));
     }
+
+    /*private void paintAirportName(Graphics2D g2){
+
+        String name = controller.getAirfieldName();
+
+        Integer fontSize = (int) (Settings.SIDE_MENU_DEFAULT_FONT.getSize()*1.5);
+        Integer height = fontSize + 20;
+
+        g2.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
+        FontMetrics fontMetrics = g2.getFontMetrics();
+        int width = fontMetrics.stringWidth(name) + 80;
+
+        //Draw the background.
+        Point pos = new Point(getWidth()-20, getWidth()-20);
+        g2.setColor(new Color(45, 45, 45, 150));
+        g2.fillRect(pos.x, pos.y, width, height);
+        g2.setColor(new Color(39, 39, 39));
+        g2.setStroke(new BasicStroke(5));
+        g2.drawRect(pos.x, pos.y, width, height);
+
+        //Draw the name
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("SansSerif", Font.BOLD, fontSize));
+        fontMetrics = g2.getFontMetrics();
+        g2.drawString(name, pos.x + (width - fontMetrics.stringWidth(name))/2, pos.y + fontSize +10);
+    }*/
 
     //Draws a compass in the top left corner of the screen
     private void paintCompass(Integer rotation, Graphics2D g2){
