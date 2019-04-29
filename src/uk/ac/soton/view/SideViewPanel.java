@@ -137,27 +137,33 @@ public class SideViewPanel extends InteractivePanel{
 
         // Painting displaced threshold
         Integer threshold = controller.getRunwayThreshold(selectedRunway);
-        g2.setColor(Settings.THRESHOLD_INDICATOR_COLOUR);
-        g2.fillRect(0, 0, threshold, 50);
-        g2.setColor(Settings.SELECTED_RUNWAY_HIGHLIGHT);
-        g2.setStroke(new BasicStroke(2));
-        g2.drawRect(0, 0, threshold, 50);
+        if(threshold != 0){
+            g2.setColor(Settings.THRESHOLD_INDICATOR_COLOUR);
+            g2.fillRect(0, 0, threshold, 50);
+            g2.setColor(Settings.SELECTED_RUNWAY_HIGHLIGHT);
+            g2.setStroke(new BasicStroke(2));
+            g2.drawRect(0, 0, threshold, 50);
+        }
 
         // Painting clearway
         Dimension clearway = controller.getClearwayDim(selectedRunway);
-        g2.setColor(Settings.CLEARWAY_FILL_COLOUR);
-        g2.fillRect(runwayDim.width, 0, clearway.width, 50);
-        g2.setColor(Settings.CLEARWAY_STROKE_COLOUR);
-        g2.setStroke(Settings.CLEARWAY_STROKE);
-        g2.drawRect(runwayDim.width, 0, clearway.width, 50);
+        if(clearway.width != 0){
+            g2.setColor(Settings.CLEARWAY_FILL_COLOUR);
+            g2.fillRect(runwayDim.width, 0, clearway.width, 50);
+            g2.setColor(Settings.CLEARWAY_STROKE_COLOUR);
+            g2.setStroke(Settings.CLEARWAY_STROKE);
+            g2.drawRect(runwayDim.width, 0, clearway.width, 50);
+        }
 
         // Painting stopway
         Dimension stopway = controller.getStopwayDim(selectedRunway);
-        g2.setColor(Settings.STOPWAY_FILL_COLOUR);
-        g2.fillRect(runwayDim.width, 0, stopway.width, 50);
-        g2.setColor(Settings.STOPWAY_STROKE_COLOUR);
-        g2.setStroke(Settings.STOPWAY_STROKE);
-        g2.drawRect(runwayDim.width, 0, stopway.width, 50);
+        if(stopway.width != 0){
+            g2.setColor(Settings.STOPWAY_FILL_COLOUR);
+            g2.fillRect(runwayDim.width, 0, stopway.width, 50);
+            g2.setColor(Settings.STOPWAY_STROKE_COLOUR);
+            g2.setStroke(Settings.STOPWAY_STROKE);
+            g2.drawRect(runwayDim.width, 0, stopway.width, 50);
+        }
     }
 
     //painting the obstacle
