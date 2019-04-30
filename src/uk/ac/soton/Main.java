@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import uk.ac.soton.controller.AppController;
 import uk.ac.soton.view.AppView;
 
-
 public class Main {
 
     public static void main(String[] args) {
@@ -12,8 +11,6 @@ public class Main {
 
         AppView appView = new AppView("Runway Re-declaration Tool");
         AppController appController = new AppController(appView);
-
-        //appController.testRunways();
 
         appView.setController(appController);
         appView.init();
