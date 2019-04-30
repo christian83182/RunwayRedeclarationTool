@@ -5,12 +5,12 @@ import uk.ac.soton.controller.ViewController;
 import javax.swing.*;
 import java.awt.*;
 
-public class AirfieldConfigWindow extends JDialog {
+public class RunwayConfigWindow extends JDialog {
 
     AppView appView;
     ViewController controller;
 
-    AirfieldConfigWindow(AppView appView){
+    RunwayConfigWindow(AppView appView){
         this.appView = appView;
         this.controller = appView.getController();
         init();
