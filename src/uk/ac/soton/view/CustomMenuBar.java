@@ -127,6 +127,38 @@ public class CustomMenuBar extends JMenuBar {
             }
         });
 
+        //Adding the Configure Airfield option
+        JMenuItem configureAirfield = new JMenuItem("Configure Airfield...");
+        configureAirfield.setFont(Settings.MENU_BAR_DEFAULT_FONT);
+        editMenu.add(configureAirfield);
+        configureAirfield.addActionListener(e -> new AirfieldConfigWindow(appView));
+
+        //Adding the Configure Background Image option
+        JMenuItem configureBgMenu = new JMenuItem("Configure Background Image...");
+        configureBgMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
+        editMenu.add(configureBgMenu);
+        configureBgMenu.addActionListener(e -> new BackgroundConfigWindow(appView));
+
+        //Adding the "edit obstacles" option to the edit menu.
+        JMenuItem editObstaclesMenu = new JMenuItem("Configure Predefined Obstacles...");
+        editObstaclesMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
+        editMenu.add(editObstaclesMenu);
+        editObstaclesMenu.addActionListener(e -> new BrowseObstaclesWindow(controller));
+
+        editMenu.addSeparator();
+
+        //Adding the Edit Airfield name option to the edit menu.
+        JMenuItem editAirfieldName = new JMenuItem("Edit Airfield Name...");
+        editAirfieldName.setFont(Settings.MENU_BAR_DEFAULT_FONT);
+        editMenu.add(editAirfieldName);
+        editAirfieldName.addActionListener(e -> {
+            String input = JOptionPane.showInputDialog(appView, "Enter a new Airfield name:", "Edit Airfield Name", JOptionPane.PLAIN_MESSAGE);
+            if(input != null){
+                controller.getAirfield().setName(input);
+            }
+            appView.repaint();
+        });
+
         //Adding the Edit Blast Protection option to the edit menu.
         JMenuItem editBlastMenu = new JMenuItem("Edit Blast Protection...");
         editBlastMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
@@ -144,24 +176,6 @@ public class CustomMenuBar extends JMenuBar {
             minAngleOfDecentInputLoop();
             appView.repaint();
         });
-
-        //Adding the "edit obstacles" option to the edit menu.
-        JMenuItem editObstaclesMenu = new JMenuItem("Edit Predefined Obstacles...");
-        editObstaclesMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
-        editMenu.add(editObstaclesMenu);
-        editObstaclesMenu.addActionListener(e -> new BrowseObstaclesWindow(controller));
-
-        //Adding the Configure Background Image option
-        JMenuItem configureBgMenu = new JMenuItem("Configure Background Image...");
-        configureBgMenu.setFont(Settings.MENU_BAR_DEFAULT_FONT);
-        editMenu.add(configureBgMenu);
-        configureBgMenu.addActionListener(e -> new BackgroundConfigWindow(appView));
-
-        //Adding the Configure Background Image option
-        JMenuItem configureAirfield = new JMenuItem("Configure Airfield...");
-        configureAirfield.setFont(Settings.MENU_BAR_DEFAULT_FONT);
-        editMenu.add(configureAirfield);
-        configureAirfield.addActionListener(e -> new AirfieldConfigWindow(appView));
 
         //Adding the "Set Default Colour Theme" option to the settings menu.
         JMenuItem setDefaultTheme = new JMenuItem("Set Default Colour Theme");

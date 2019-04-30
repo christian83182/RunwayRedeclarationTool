@@ -444,6 +444,11 @@ public class AppController implements ViewController {
     }
 
     @Override
+    public void setAirfieldName(String newName) {
+        this.setAirfieldName(newName);
+    }
+
+    @Override
     public synchronized String getSiblingLogicalRunway(String runwayId) {
         Runway runway = airfield.getRunway(runwayId);
         if(runway.getLogicalRunways()[0].getName().equals(runwayId)){

@@ -343,6 +343,11 @@ public interface ViewController {
     String getAirfieldName();
 
     /**
+     * @param newName The new name for the airfield.
+     */
+    void setAirfieldName(String newName);
+
+    /**
      * Gets the sibling logical runway based on the id of the current logical runway.
      * @param runwayId The logicalRunway on which the obstacle is present.
      * @return The name which should be the sibling logical runway.
@@ -448,6 +453,8 @@ public interface ViewController {
      * @param newAirfield The new instance of Airfield which should be used by the controller.
      */
     void setAirfield(Airfield newAirfield);
+
+
 
 }
 

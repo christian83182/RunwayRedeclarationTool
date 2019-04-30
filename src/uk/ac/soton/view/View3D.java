@@ -41,7 +41,6 @@ public class View3D extends JFrame{
     private final Integer clearAndGradedAreaElevation = 12;
     private final Integer stopwayElevation = 30;
     private final Integer clearwayElevation = 20;
-
     private final Integer verticalOffset = 18;
 
     View3D(AppView appView){
@@ -58,7 +57,7 @@ public class View3D extends JFrame{
     //Initializes the Swing components.
     private void initSwing() {
 
-        this.setPreferredSize(new Dimension(appView.getWidth(), appView.getHeight()));
+        this.setPreferredSize(new Dimension(appView.getWidth()-100, appView.getHeight()-100));
         this.setResizable(false);
 
         //Create a JFXPanel for the 3D content.
@@ -351,11 +350,7 @@ public class View3D extends JFrame{
         Point runwayPos = controller.getRunwayPos(runwayId);
 
         javafx.scene.shape.Polygon arrow = new javafx.scene.shape.Polygon();
-        arrow.getPoints().addAll(new Double[]{
-                0.0, -12.0,
-                0.0,  12.0,
-                23.0, 0.0
-        });
+        arrow.getPoints().addAll(0.0, -12.0, 0.0, 12.0, 23.0, 0.0);
 
         arrow.setStroke(convertToJFXColour(Settings.CENTERLINE_COLOUR));
         arrow.setFill(convertToJFXColour(Settings.CENTERLINE_COLOUR));
@@ -380,9 +375,9 @@ public class View3D extends JFrame{
     //placing the obstacle on the runway
     private void genObstacle(Group root, String runwayId, Integer verticalOffset){
         String obstacleId = controller.getRunwayObstacle(runwayId);
-        Integer obstacleHeight = controller.getPredefinedObstacleHeight(obstacleId).intValue();
-        Integer obstacleWidth = controller.getPredefinedObstacleWidth(obstacleId).intValue();
-        Integer obstacleLength = controller.getPredefinedObstacleLength(obstacleId).intValue();
+        Integer obstacleHeight = controller.getPredefinedObstacleHeight(obstacleId);
+        Integer obstacleWidth = controller.getPredefinedObstacleWidth(obstacleId);
+        Integer obstacleLength = controller.getPredefinedObstacleLength(obstacleId);
         Integer distanceFromCenterline = controller.getDistanceFromCenterline(runwayId);
         Integer distanceFromThreshold = controller.getDistanceFromThreshold(runwayId) + controller.getObstacleOffset(runwayId);
 
