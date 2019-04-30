@@ -165,21 +165,13 @@ public class AirfieldConfigWindow extends JDialog {
         c.insets = new Insets(0,10,0,10);
         selectorPanel.add(runwaySelector,c);
 
-        JButton addButton = new JButton("New Runway");
-        addButton.setEnabled(false);
         JButton deleteButton = new JButton("Delete Runway");
         deleteButton.setEnabled(false);
-        addButton.setToolTipText("Creating new runways is not supported. Please create a custom XML file for greater control over the Airfield's settings.");
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(1,2));
-        buttonPanel.add(addButton);
-        buttonPanel.add(deleteButton);
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 10; c.gridwidth = 2;
         c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0,10,10,10);
-        selectorPanel.add(buttonPanel,c);
+        selectorPanel.add(deleteButton,c);
 
         runwaySelector.addActionListener(e ->{
             String selectedRunway = runwaySelector.getSelectedItem().toString();

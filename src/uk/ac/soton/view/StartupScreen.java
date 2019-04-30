@@ -126,6 +126,8 @@ public class StartupScreen extends JFrame {
                 }catch (Exception e1){
                     e1.printStackTrace();
                 }
+                appView.getMenuPanel().populateRunwayComboBox();
+                appView.setSelectedRunway("");
                 appView.getTopView().fitViewToAllRunways();
             }
         });
