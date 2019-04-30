@@ -198,17 +198,15 @@ public class CustomMenuBar extends JMenuBar {
         openHelp.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         helpMenu.add(openHelp);
         openHelp.addActionListener(e -> {
-            String helpMessage = "This is a generic help menu.\nEventually it will contain detailed" +
-                    " documentation on the functions of the program.\n This may also not exist, and " +
-                    "just open a text file or PDF instead, as formatting a text string like this can become " +
-                    "cumbersome.\n\nFor now:\n1) Use the drop down menu in the left tool bar to select a runway. " +
-                    "\n2) Selecting a runway will highlight it in the view and display various of its attributes " +
-                    "including TORA, TODA, ASDA, LDA, width, length, clearway, stopway, strip, etc.\n3) Options exist in" +
-                    " the left panel to enable or disable most of the information displayed.\n4) Select File>Export Configuration" +
-                    " to export the current airfield's configuration. Similarly, use File>Import Configuration to import an " +
-                    "existing configuration.";
-            new ScrollableTextWindow("Application Help", new Dimension(400,600), helpMessage);
+            JDialog dialogBox = new javax.swing.JDialog(null, "User Manual", JDialog.ModalityType.DOCUMENT_MODAL);
+            try {
+                java.awt.Desktop.getDesktop().open(new java.io.File("res/files/userManual.pdf"));
+                dialogBox.toBack();
+            } catch (IOException e1) {
+                throw new RuntimeException(e1);
+            }
         });
+
     }
 
     public void importConfiguration(){
