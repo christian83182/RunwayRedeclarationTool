@@ -74,7 +74,7 @@ class ViewCalculationsWindow extends JFrame{
         breakdown.setEditable(false);
 
         JTable table;
-        String[] headings = new String[]{"Original", "Re-declared"};
+        String[] headings = new String[]{"Original", "Redeclared"};
 
         if(redeclared == null){
             table = new JTable(new Object[][]{{original, "-"}}, headings);

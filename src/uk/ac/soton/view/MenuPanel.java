@@ -173,7 +173,7 @@ public class MenuPanel extends JPanel {
         });
 
         //Add the "show breakdown" option
-        showBreakdownBox = new JCheckBox("Show Re-declaration Breakdown");
+        showBreakdownBox = new JCheckBox("Show Redeclaration Breakdown");
         showBreakdownBox.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         showBreakdownBox.setSelected(true);
         showBreakdownBox.addActionListener(e -> appView.repaint());
@@ -182,7 +182,7 @@ public class MenuPanel extends JPanel {
         c.insets = new Insets(0,10,0,10);
         topViewPane.add(showBreakdownBox, c);
         showBreakdownBox.addActionListener(e -> {
-            NotificationLogger.logger.addToLog("'Show Re-declaration Breakdown' Toggled: '" +showBreakdownBox.isSelected()+ "'");
+            NotificationLogger.logger.addToLog("'Show Redeclaration Breakdown' Toggled: '" +showBreakdownBox.isSelected()+ "'");
         });
 
         //Add the "show relevant breakdown only" option
@@ -252,7 +252,7 @@ public class MenuPanel extends JPanel {
         });
 
         //Add the "show runway parameters" option for the side view menu
-        showBreakdownSideView = new JCheckBox("Show Re-declaration Breakdown");
+        showBreakdownSideView = new JCheckBox("Show Redeclaration Breakdown");
         showBreakdownSideView.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         showBreakdownSideView.setSelected(true);
         showBreakdownSideView.addActionListener(e -> appView.repaint());
@@ -261,7 +261,7 @@ public class MenuPanel extends JPanel {
         c.insets = new Insets(0,10,0,10);
         sideViewPane.add(showBreakdownSideView, c);
         showBreakdownSideView.addActionListener(e -> {
-            NotificationLogger.logger.addToLog("Side View's 'Show Re-declaration Breakdown' Toggled: '"
+            NotificationLogger.logger.addToLog("Side View's 'Show Redeclaration Breakdown' Toggled: '"
                     +showBreakdownSideView.isSelected()+ "'");
         });
 
