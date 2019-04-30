@@ -33,6 +33,9 @@ public class AppView extends JFrame{
         this.setLayout(new BorderLayout());
         setLookAndFeel();
 
+        ImageIcon icon = new ImageIcon("src/uk/ac/soton/resources/images/Applicationicon.png");
+        this.setIconImage(icon.getImage());
+
         //Create all the main UI elements
         menuBar = new CustomMenuBar(controller,this);
         menuPanel = new MenuPanel(this);

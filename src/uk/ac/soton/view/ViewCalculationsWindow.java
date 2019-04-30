@@ -21,11 +21,13 @@ class ViewCalculationsWindow extends JFrame{
     }
 
     private void init(){
-
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setPreferredSize(new Dimension(400,185));
         this.setResizable(false);
         this.setLayout(new GridLayout(1,1));
+
+        ImageIcon icon = new ImageIcon("src/uk/ac/soton/resources/images/Applicationicon.png");
+        this.setIconImage(icon.getImage());
 
         String selectedRunway = appView.getSelectedRunway();
 

@@ -38,6 +38,9 @@ public class AirfieldConfigWindow extends JDialog {
         this.setPreferredSize(new Dimension(1600,900));
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
+        ImageIcon icon = new ImageIcon("src/uk/ac/soton/resources/images/Applicationicon.png");
+        this.setIconImage(icon.getImage());
+
         JSplitPane root = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         this.setContentPane(root);
         root.setRightComponent(prepareMenu());
