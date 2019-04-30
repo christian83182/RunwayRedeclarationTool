@@ -4,7 +4,12 @@ import uk.ac.soton.controller.ViewController;
 import javax.swing.*;
 import java.awt.*;
 
-//todo Change sliders for spinners in the BackgroundConfigWindow class.
+//todo Create splash screen for application start up.
+//todo Add icon in resources to all the windows.
+//todo Create a 'Runway Configuration Window' to edit runway settings.
+//todo Load all the pre-made runway setups to a demo-mode.
+//todo Add the user guide to the help section of the program.
+//todo Make 3D view smaller.
 
 public class AppView extends JFrame{
 
@@ -71,8 +76,6 @@ public class AppView extends JFrame{
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
-
-        //menuBar.importConfiguration();
     }
 
 

@@ -161,7 +161,7 @@ public class CustomMenuBar extends JMenuBar {
         JMenuItem configureAirfield = new JMenuItem("Configure Airfield...");
         configureAirfield.setFont(Settings.MENU_BAR_DEFAULT_FONT);
         editMenu.add(configureAirfield);
-        configureAirfield.addActionListener(e -> new RunwayConfigWindow(appView));
+        configureAirfield.addActionListener(e -> new AirfieldConfigWindow(appView));
 
         //Adding the "Set Default Colour Theme" option to the settings menu.
         JMenuItem setDefaultTheme = new JMenuItem("Set Default Colour Theme");
