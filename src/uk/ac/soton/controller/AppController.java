@@ -1,6 +1,5 @@
 package uk.ac.soton.controller;
 
-import org.xml.sax.SAXException;
 import uk.ac.soton.common.*;
 import uk.ac.soton.view.AppView;
 
@@ -34,23 +33,12 @@ public class AppController implements ViewController {
         this.bgImageRotation = 0.0;
     }
 
-    public void testRunways(){
-
-        Runway r1 = new Runway("09L/27R",-1000,-200,1800,80,400,60);
-        LogicalRunway lr11 = new LogicalRunway("09L",r1.getLength(),100,
-                new Dimension(350,220), new Dimension(60,r1.getWidth()));
-        LogicalRunway lr12 = new LogicalRunway("27R",r1.getLength(),100,
-                new Dimension(350,220), new Dimension(60,r1.getWidth()));
-        r1.setLogicalRunways(lr11,lr12);
-
-
-        airfield.addRunway(r1);
-    }
-
+    @Override
     public synchronized Airfield getAirfield() {
         return airfield;
     }
 
+    @Override
     public synchronized void setAirfield(Airfield airfield) {
         this.airfield = airfield;
     }

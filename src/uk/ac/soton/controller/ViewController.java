@@ -1,6 +1,7 @@
 package uk.ac.soton.controller;
 
 import org.xml.sax.SAXException;
+import uk.ac.soton.common.Airfield;
 import uk.ac.soton.common.LogicalRunway;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -437,6 +438,16 @@ public interface ViewController {
      * @param runwayId refers to the logical runway for which the offset it requested
      */
     Integer getObstacleOffset(String runwayId);
+
+    /**
+     * @return The instance of Airfield in use by the controller.
+     */
+    Airfield getAirfield();
+
+    /**
+     * @param newAirfield The new instance of Airfield which should be used by the controller.
+     */
+    void setAirfield(Airfield newAirfield);
 
 }
 
