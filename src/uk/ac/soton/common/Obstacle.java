@@ -1,7 +1,9 @@
 package uk.ac.soton.common;
 
+import java.io.Serializable;
+
 //A child of the PositionalObject class which describes a 3D Box representing an obstacle on the runway.
-public class Obstacle extends PositionalObject {
+public class Obstacle extends PositionalObject implements Serializable {
 
     private Integer height = 0;
     private Integer length = 0;

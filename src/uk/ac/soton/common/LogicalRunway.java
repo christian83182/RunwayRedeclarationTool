@@ -1,13 +1,14 @@
 package uk.ac.soton.common;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class LogicalRunway{
+public class LogicalRunway implements Serializable {
 
     /**
      * A parameter of a logical runway that can change due to re-declaration.
      */
-    public class Parameter{
+    public class Parameter implements Serializable{
 
         private Number original = null;
         private Number redeclared = null;

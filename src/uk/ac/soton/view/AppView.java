@@ -4,11 +4,12 @@ import uk.ac.soton.controller.ViewController;
 import javax.swing.*;
 import java.awt.*;
 
-//todo Refactor arrows in TopView to use DataArrow instead of InfoArrow (if there's time)
-//todo Create demo configurations for use with the program, including background image.
-//todo Clean up how arrows are displayed in both views. Arrows should move depending on what other arrows are displayed.
-//todo Remove debug configuration from application. The application should start with no configuration loaded.
-//todo Change sliders for spinners in the BackgroundConfigWindow class.
+//todo Create splash screen for application start up.
+//todo Add icon in resources to all the windows.
+//todo Create a 'Runway Configuration Window' to edit runway settings.
+//todo Load all the pre-made runway setups to a demo-mode.
+//todo Add the user guide to the help section of the program.
+//todo Make 3D view smaller.
 
 public class AppView extends JFrame{
 
@@ -75,8 +76,6 @@ public class AppView extends JFrame{
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
-
-        //menuBar.importConfiguration();
     }
 
 

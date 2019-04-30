@@ -1,8 +1,9 @@
 package uk.ac.soton.common;
 
+import java.io.*;
 import java.util.*;
 
-public class Airfield {
+public class Airfield implements Serializable, Cloneable {
 
     private ArrayList<Runway> runways = new ArrayList<>();
     private String airfieldName;
@@ -229,7 +230,24 @@ public class Airfield {
         Airfield.minAngleOfDecent = newMinAngle;
     }
 
-    public static class Dimensions {
+    /* Overriding the inherited clone class to implement a custom version which returns a deep copy of the object. This is achieved by serializing the
+       object into memory, and then deserializing it, resulting in a new object with no mutual references with the original object.*/
+    @Override
+    protected Object clone() {
+        try{
+            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+            ObjectOutputStream objectOutput = new ObjectOutputStream(byteOutput);
+            objectOutput.writeObject(this);
+            ByteArrayInputStream byteInput = new ByteArrayInputStream(byteOutput.toByteArray());
+            ObjectInputStream objectInput = new ObjectInputStream(byteInput);
+            return objectInput.readObject();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static class Dimensions implements Serializable{
 
         private Integer length = 0;
         private Integer width = 0;

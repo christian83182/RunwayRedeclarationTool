@@ -1,7 +1,9 @@
 package uk.ac.soton.common;
 
+import java.io.Serializable;
+
 //An abstract class which describes any object with a 2D position and an ID.
-public abstract class PositionalObject {
+public abstract class PositionalObject implements Serializable {
 
     private Integer xPos;
     private Integer yPos;

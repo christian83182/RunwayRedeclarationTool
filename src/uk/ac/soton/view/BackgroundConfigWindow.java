@@ -1,5 +1,6 @@
 package uk.ac.soton.view;
 
+import javafx.scene.control.Spinner;
 import uk.ac.soton.controller.ViewController;
 
 import javax.imageio.ImageIO;
@@ -144,7 +145,7 @@ public class BackgroundConfigWindow extends JDialog{
         buttonPanel.add(changeImageButton);
         buttonPanel.add(clearImageButton);
 
-        //Ad the buttonPanel to the imagePanel.
+        //Add the buttonPanel to the imagePanel.
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 20; c.gridwidth = 2;
         c.fill = GridBagConstraints.HORIZONTAL; c.weightx = 1;
@@ -160,18 +161,15 @@ public class BackgroundConfigWindow extends JDialog{
         c.insets = new Insets(10,10,0,10);
         configPanel.add(xOffsetLabel,c);
 
-        //Create a slider to control the xOffset
-        JSlider xOffsetSlider = new JSlider(JSlider.HORIZONTAL,-2000,2000,0);
-        xOffsetSlider.setMajorTickSpacing(1000);
-        xOffsetSlider.setMinorTickSpacing(500);
-        xOffsetSlider.setPaintTicks(true);
-        xOffsetSlider.setPaintLabels(true);
-        xOffsetSlider.setEnabled(false);
+        //Create a spinner to control the xOffset
+        SpinnerNumberModel xOffsetModel = new SpinnerNumberModel(0,-10000,10000,1);
+        JSpinner xOffsetSpinner = new JSpinner(xOffsetModel);
+        xOffsetSpinner.setEnabled(false);
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 20; c.weightx = 1;
         c.fill = GridBagConstraints.HORIZONTAL; c.anchor = GridBagConstraints.CENTER;
         c.insets = new Insets(0,10,20,10);
-        configPanel.add(xOffsetSlider,c);
+        configPanel.add(xOffsetSpinner,c);
 
         //Create a label displaying "Vertical Offset";
         JLabel yOffsetLabel = new JLabel("Vertical Offset");
@@ -182,18 +180,15 @@ public class BackgroundConfigWindow extends JDialog{
         c.insets = new Insets(10,10,0,10);
         configPanel.add(yOffsetLabel,c);
 
-        //Create a slider to control the yOffset
-        JSlider yOffsetSlider = new JSlider(JSlider.HORIZONTAL,-2000,2000,0);
-        yOffsetSlider.setMajorTickSpacing(1000);
-        yOffsetSlider.setMinorTickSpacing(500);
-        yOffsetSlider.setPaintTicks(true);
-        yOffsetSlider.setPaintLabels(true);
-        yOffsetSlider.setEnabled(false);
+        //Create a spinner to control the yOffset
+        SpinnerNumberModel yOffsetModel = new SpinnerNumberModel(0,-10000,10000,1);
+        JSpinner yOffsetSpinner = new JSpinner(yOffsetModel);
+        yOffsetSpinner.setEnabled(false);
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 40; c.weightx = 1;
         c.fill = GridBagConstraints.HORIZONTAL; c.anchor = GridBagConstraints.CENTER;
         c.insets = new Insets(0,10,20,10);
-        configPanel.add(yOffsetSlider,c);
+        configPanel.add(yOffsetSpinner,c);
 
         //Create a label displaying "Scale";
         JLabel scaleLabel = new JLabel("Scale");
@@ -205,22 +200,14 @@ public class BackgroundConfigWindow extends JDialog{
         configPanel.add(scaleLabel,c);
 
         //Create a slider to control the scale. Custom labels are used because sliders don't support doubles.
-        JSlider scaleSlider = new JSlider(JSlider.HORIZONTAL,0,200,100);
-        Hashtable labelTable = new Hashtable();
-        labelTable.put( 0, new JLabel("0.0")); labelTable.put( 50, new JLabel("0.5"));
-        labelTable.put( 100, new JLabel("1.0")); labelTable.put( 150, new JLabel("1.5"));
-        labelTable.put( 200, new JLabel("2.0"));
-        scaleSlider.setLabelTable(labelTable);
-        scaleSlider.setMajorTickSpacing(50);
-        scaleSlider.setMinorTickSpacing(10);
-        scaleSlider.setPaintTicks(true);
-        scaleSlider.setPaintLabels(true);
-        scaleSlider.setEnabled(false);
+        SpinnerNumberModel scaleModel = new SpinnerNumberModel(1,0.1,5,0.1);
+        JSpinner scaleSpinner = new JSpinner(scaleModel);
+        scaleSpinner.setEnabled(false);
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 60; c.weightx = 1;
         c.fill = GridBagConstraints.HORIZONTAL; c.anchor = GridBagConstraints.CENTER;
         c.insets = new Insets(0,10,20,10);
-        configPanel.add(scaleSlider,c);
+        configPanel.add(scaleSpinner,c);
 
         //Create a label displaying "Rotation";
         JLabel rotationLabel = new JLabel("Rotation");
@@ -232,27 +219,24 @@ public class BackgroundConfigWindow extends JDialog{
         configPanel.add(rotationLabel,c);
 
         //Create a slider to control the rotation
-        JSlider rotationSlider = new JSlider(JSlider.HORIZONTAL,-180,180,0);
-        rotationSlider.setMajorTickSpacing(90);
-        rotationSlider.setMinorTickSpacing(45);
-        rotationSlider.setPaintTicks(true);
-        rotationSlider.setPaintLabels(true);
-        rotationSlider.setEnabled(false);
+        SpinnerNumberModel rotationModel = new SpinnerNumberModel(0,0,360,1);
+        JSpinner rotationSpinner = new JSpinner(rotationModel);
+        rotationSpinner.setEnabled(false);
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 80; c.weightx = 1;
         c.fill = GridBagConstraints.HORIZONTAL; c.anchor = GridBagConstraints.CENTER;
         c.insets = new Insets(0,10,20,10);
-        configPanel.add(rotationSlider,c);
+        configPanel.add(rotationSpinner,c);
 
         //If the application already has an image loaded, change a few labels and enable the sliders to reflect this.
         if(bgImage != null){
             changeImageButton.setText("Change Image");
             imageNameLabel.setText("Imported from Application");
             clearImageButton.setEnabled(true);
-            xOffsetSlider.setEnabled(true);
-            yOffsetSlider.setEnabled(true);
-            scaleSlider.setEnabled(true);
-            rotationSlider.setEnabled(true);
+            xOffsetSpinner.setEnabled(true);
+            yOffsetSpinner.setEnabled(true);
+            scaleSpinner.setEnabled(true);
+            rotationSpinner.setEnabled(true);
         }
 
         //Add an action listener to the changeImage button.
@@ -272,10 +256,10 @@ public class BackgroundConfigWindow extends JDialog{
                     imageNameLabel.setText(imgFile.getName());
                     clearImageButton.setEnabled(true);
                     clearImageButton.setEnabled(true);
-                    xOffsetSlider.setEnabled(true);
-                    yOffsetSlider.setEnabled(true);
-                    scaleSlider.setEnabled(true);
-                    rotationSlider.setEnabled(true);
+                    xOffsetSpinner.setEnabled(true);
+                    yOffsetSpinner.setEnabled(true);
+                    scaleSpinner.setEnabled(true);
+                    rotationSpinner.setEnabled(true);
                     this.repaint();
                 } catch (Exception err) {
                     //Output an error message in the event that an exception was thrown.
@@ -292,35 +276,35 @@ public class BackgroundConfigWindow extends JDialog{
             imageNameLabel.setText("No Image Selected");
             changeImageButton.setText("Add Background Image");
             clearImageButton.setEnabled(false);
-            xOffsetSlider.setEnabled(false);
-            yOffsetSlider.setEnabled(false);
-            scaleSlider.setEnabled(false);
-            rotationSlider.setEnabled(false);
+            xOffsetSpinner.setEnabled(false);
+            yOffsetSpinner.setEnabled(false);
+            scaleSpinner.setEnabled(false);
+            rotationSpinner.setEnabled(false);
             this.repaint();
             this.revalidate();
         });
 
         //Add a change listener to update the xOffset value when this slider changes.
-        xOffsetSlider.addChangeListener(e -> {
-            xOffset = (double) xOffsetSlider.getValue();
+        xOffsetSpinner.addChangeListener(e -> {
+            xOffset = xOffsetModel.getNumber().doubleValue();
             this.repaint();
         });
 
         //Add a change listener to update the yxOffset value when this slider changes.
-        yOffsetSlider.addChangeListener(e -> {
-            yOffset = (double) -yOffsetSlider.getValue();
+        yOffsetSpinner.addChangeListener(e -> {
+            yOffset = -yOffsetModel.getNumber().doubleValue();
             this.repaint();
         });
 
         //Add a change listener to update the scale value when this slider changes.
-        scaleSlider.addChangeListener(e -> {
-            scale = (double) scaleSlider.getValue()/100;
+        scaleSpinner.addChangeListener(e -> {
+            scale = scaleModel.getNumber().doubleValue();
             this.repaint();
         });
 
         //Add a change listener to update the rotation value when this slider changes.
-        rotationSlider.addChangeListener(e -> {
-            rotation = (double) rotationSlider.getValue();
+        rotationSpinner.addChangeListener(e -> {
+            rotation = rotationModel.getNumber().doubleValue();
             this.repaint();
         });
 

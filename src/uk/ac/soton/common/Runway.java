@@ -1,7 +1,9 @@
 package uk.ac.soton.common;
 
+import java.io.Serializable;
+
 // A child of the PositionalObject class which represents an instance of a Runway with a certain length, width, and id.
-public class Runway extends PositionalObject{
+public class Runway extends PositionalObject implements Serializable {
 
     private Integer length = 0;
     private Integer width = 0;
