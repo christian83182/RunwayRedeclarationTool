@@ -45,7 +45,7 @@ public class StartupScreen extends JFrame {
         iconLabel.setIcon(new ImageIcon(icon.getImage().getScaledInstance(200,200,Image.SCALE_SMOOTH)));
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 0;
-        c.insets = new Insets(0,0,25,0);
+        c.insets = new Insets(50,0,25,0);
         root.add(iconLabel,c);
 
         JLabel titleLabel = new JLabel("Runway Redeclaration Tool");
@@ -67,8 +67,8 @@ public class StartupScreen extends JFrame {
         root.add(subtitleLabel2,c);
 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(4,1));
-        buttonPanel.setPreferredSize(new Dimension(300,150));
+        buttonPanel.setLayout(new GridLayout(5,1));
+        buttonPanel.setPreferredSize(new Dimension(300,180));
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 4;
         c.insets = new Insets(50,0,50,0);
@@ -82,6 +82,8 @@ public class StartupScreen extends JFrame {
         buttonPanel.add(demoButton);
         JButton helpButton = new JButton("Help");
         buttonPanel.add(helpButton);
+        JButton exitButton = new JButton("Exit Application");
+        buttonPanel.add(exitButton);
 
         newButton.addActionListener(e -> {
             AppView appView = new AppView("Runway Redeclaration Tool");
@@ -109,6 +111,7 @@ public class StartupScreen extends JFrame {
                 AppController appController = new AppController(appView);
                 appView.setController(appController);
                 appView.init();
+                this.dispose();
                 try{
                     if(response.equals("Bristol Airport")){
                         InputStream in = getClass().getResourceAsStream("/uk/ac/soton/resources/config/BRS.xml");
@@ -128,6 +131,8 @@ public class StartupScreen extends JFrame {
         });
 
         helpButton.addActionListener(e -> openHelp());
+
+        exitButton.addActionListener( e -> System.exit(0));
 
         return root;
     }
