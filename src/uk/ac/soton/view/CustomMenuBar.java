@@ -290,7 +290,7 @@ public class CustomMenuBar extends JMenuBar {
 
                     input = JOptionPane.showInputDialog(
                             appView,
-                            "Enter Blast Protection value:",
+                            "Enter Blast Protection value (100m-1000m):",
                             "Edit Blast Protection",
                             JOptionPane.PLAIN_MESSAGE
                     );

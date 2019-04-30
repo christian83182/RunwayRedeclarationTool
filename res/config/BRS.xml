@@ -10,23 +10,23 @@
             <XPosition>-1500</XPosition>
             <YPosition>-800</YPosition>
             <Length>2011</Length>
-            <Width>80</Width>
+            <Width>45</Width>
             <StripEndLength>60</StripEndLength>
-            <RunwayStripWidth>400</RunwayStripWidth>
+            <RunwayStripWidth>300</RunwayStripWidth>
             <RESALength>240</RESALength>
             <FirstLogicalRunway>
                 <DisplacedThreshold>0</DisplacedThreshold>
                 <StopwayLength>0</StopwayLength>
                 <StopwayWidth>0</StopwayWidth>
-                <ClearwayLength>0</ClearwayLength>
-                <ClearwayWidth>0</ClearwayWidth>
+                <ClearwayLength>60</ClearwayLength>
+                <ClearwayWidth>45</ClearwayWidth>
             </FirstLogicalRunway>
             <SecondLogicalRunway>
                 <DisplacedThreshold>135</DisplacedThreshold>
                 <StopwayLength>0</StopwayLength>
                 <StopwayWidth>0</StopwayWidth>
-                <ClearwayLength>0</ClearwayLength>
-                <ClearwayWidth>0</ClearwayWidth>
+                <ClearwayLength>1005</ClearwayLength>
+                <ClearwayWidth>45</ClearwayWidth>
             </SecondLogicalRunway>
         </Runway>
     </PhysicalRunways>
