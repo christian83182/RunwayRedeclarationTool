@@ -36,9 +36,13 @@ public class Importer {
         this.controller.setAirfield(airfield);
     }
 
-    public void importConfiguration(String absolutePath) throws Exception {
+    public void importConfiguration(String path) throws Exception {
+        File targetFile = new File(path);
+        importConfiguration(targetFile);
+    }
+
+    public void importConfiguration(File targetFile) throws Exception {
         //Parse and normalize the file at the given path into a Document object.
-        File targetFile = new File(absolutePath);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         Document document = dBuilder.parse(targetFile);

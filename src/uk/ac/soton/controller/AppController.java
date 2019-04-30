@@ -7,6 +7,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -416,6 +417,12 @@ public class AppController implements ViewController {
     public synchronized void importAirfieldConfiguration(String path) throws Exception {
         Importer importer = new Importer(this);
         importer.importConfiguration(path);
+    }
+
+    @Override
+    public synchronized void importAirfieldConfiguration(File file) throws Exception {
+        Importer importer = new Importer(this);
+        importer.importConfiguration(file);
     }
 
     @Override

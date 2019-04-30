@@ -8,6 +8,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
@@ -325,6 +326,8 @@ public interface ViewController {
      */
     void importAirfieldConfiguration(String path) throws Exception;
 
+
+    void importAirfieldConfiguration(File file) throws Exception;
 
     void saveRunwayParameters(String path) throws IOException;
 

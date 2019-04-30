@@ -100,6 +100,33 @@ public class StartupScreen extends JFrame {
             this.dispose();
         });
 
+        demoButton.addActionListener(e -> {
+            String[] demos = new String[] {"Bristol Airport","London Gatwick", "London Heathrow"};
+            String response = (String)JOptionPane.showInputDialog(null, "Choose a demo to load:\n",
+                    "Load Demo Configuration", JOptionPane.PLAIN_MESSAGE,null, demos, "ham");
+            if(response != null){
+                AppView appView = new AppView("Runway Redeclaration Tool");
+                AppController appController = new AppController(appView);
+                appView.setController(appController);
+                appView.init();
+                try{
+                    if(response.equals("Bristol Airport")){
+                        InputStream in = getClass().getResourceAsStream("/uk/ac/soton/resources/config/BRS.xml");
+                        appController.importAirfieldConfiguration(convertInputStreamToFile(in));
+                    } else if(response.equals("London Gatwick")){
+                        InputStream in = getClass().getResourceAsStream("/uk/ac/soton/resources/config/LGW.xml");
+                        appController.importAirfieldConfiguration(convertInputStreamToFile(in));
+                    } else if(response.equals("London Heathrow")) {
+                        InputStream in = getClass().getResourceAsStream("/uk/ac/soton/resources/config/LHR.xml");
+                        appController.importAirfieldConfiguration(convertInputStreamToFile(in));
+                    }
+                }catch (Exception e1){
+                    e1.printStackTrace();
+                }
+                appView.getTopView().fitViewToAllRunways();
+            }
+        });
+
         helpButton.addActionListener(e -> openHelp());
 
         return root;
@@ -109,16 +136,24 @@ public class StartupScreen extends JFrame {
         JDialog dialogBox = new javax.swing.JDialog(null, "User Manual", JDialog.ModalityType.DOCUMENT_MODAL);
         try {
             InputStream in = StartupScreen.class.getResourceAsStream("/uk/ac/soton/resources/files/userManual.pdf");
-            File outputFile = new File("UserGuide.pdf");
+            java.awt.Desktop.getDesktop().open(convertInputStreamToFile(in));
+            dialogBox.toBack();
+        } catch (IOException e1) {
+            throw new RuntimeException(e1);
+        }
+    }
+
+    public static File convertInputStreamToFile(InputStream in){
+        try {
+            File outputFile = new File("unpacked.pdf");
             FileOutputStream out = new FileOutputStream(outputFile);
             while(in.available() >0){
                 out.write(in.read());
             }
             out.close();
-            java.awt.Desktop.getDesktop().open(outputFile);
-            dialogBox.toBack();
+            return outputFile;
         } catch (IOException e1) {
-            throw new RuntimeException(e1);
+            return null;
         }
     }
 
