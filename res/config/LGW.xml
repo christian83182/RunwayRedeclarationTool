@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Airfield>
-    <AirfieldName>London Heathrow Airport</AirfieldName>
+    <AirfieldName>London Gatwick Airport</AirfieldName>
     <MinimumAngleOfDecent>50</MinimumAngleOfDecent>
     <BlastDistancePolicy>300</BlastDistancePolicy>
     <PhysicalRunways>
         <Runway>
-            <FirstLogicalRunwayName>09R</FirstLogicalRunwayName>
-            <SecondLogicalRunwayName>27L</SecondLogicalRunwayName>
-            <XPosition>-1800</XPosition>
-            <YPosition>200</YPosition>
-            <Length>3660</Length>
-            <Width>50</Width>
+            <FirstLogicalRunwayName>08L</FirstLogicalRunwayName>
+            <SecondLogicalRunwayName>26R</SecondLogicalRunwayName>
+            <XPosition>-1835</XPosition>
+            <YPosition>-100</YPosition>
+            <Length>2565</Length>
+            <Width>45</Width>
             <StripEndLength>60</StripEndLength>
             <RunwayStripWidth>300</RunwayStripWidth>
             <RESALength>240</RESALength>
             <FirstLogicalRunway>
-                <DisplacedThreshold>307</DisplacedThreshold>
+                <DisplacedThreshold>427</DisplacedThreshold>
                 <StopwayLength>0</StopwayLength>
                 <StopwayWidth>0</StopwayWidth>
-                <ClearwayLength>0</ClearwayLength>
-                <ClearwayWidth>0</ClearwayWidth>
+                <ClearwayLength>475</ClearwayLength>
+                <ClearwayWidth>45</ClearwayWidth>
             </FirstLogicalRunway>
             <SecondLogicalRunway>
-                <DisplacedThreshold>0</DisplacedThreshold>
+                <DisplacedThreshold>417</DisplacedThreshold>
                 <StopwayLength>0</StopwayLength>
                 <StopwayWidth>0</StopwayWidth>
-                <ClearwayLength>0</ClearwayLength>
-                <ClearwayWidth>0</ClearwayWidth>
+                <ClearwayLength>138</ClearwayLength>
+                <ClearwayWidth>45</ClearwayWidth>
             </SecondLogicalRunway>
         </Runway>
         <Runway>
-            <FirstLogicalRunwayName>09L</FirstLogicalRunwayName>
-            <SecondLogicalRunwayName>27R</SecondLogicalRunwayName>
-            <XPosition>-1900</XPosition>
-            <YPosition>-1000</YPosition>
-            <Length>3902</Length>
-            <Width>50</Width>
+            <FirstLogicalRunwayName>08R</FirstLogicalRunwayName>
+            <SecondLogicalRunwayName>26L</SecondLogicalRunwayName>
+            <XPosition>-1800</XPosition>
+            <YPosition>100</YPosition>
+            <Length>3255</Length>
+            <Width>45</Width>
             <StripEndLength>60</StripEndLength>
             <RunwayStripWidth>300</RunwayStripWidth>
             <RESALength>240</RESALength>
             <FirstLogicalRunway>
-                <DisplacedThreshold>306</DisplacedThreshold>
-                <StopwayLength>0</StopwayLength>
-                <StopwayWidth>0</StopwayWidth>
-                <ClearwayLength>0</ClearwayLength>
-                <ClearwayWidth>0</ClearwayWidth>
+                <DisplacedThreshold>393</DisplacedThreshold>
+                <StopwayLength>74</StopwayLength>
+                <StopwayWidth>45</StopwayWidth>
+                <ClearwayLength>152</ClearwayLength>
+                <ClearwayWidth>45</ClearwayWidth>
             </FirstLogicalRunway>
             <SecondLogicalRunway>
-                <DisplacedThreshold>0</DisplacedThreshold>
-                <StopwayLength>0</StopwayLength>
-                <StopwayWidth>0</StopwayWidth>
-                <ClearwayLength>78</ClearwayLength>
-                <ClearwayWidth>50</ClearwayWidth>
+                <DisplacedThreshold>424</DisplacedThreshold>
+                <StopwayLength>61</StopwayLength>
+                <StopwayWidth>45</StopwayWidth>
+                <ClearwayLength>144</ClearwayLength>
+                <ClearwayWidth>45</ClearwayWidth>
             </SecondLogicalRunway>
         </Runway>
     </PhysicalRunways>
