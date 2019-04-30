@@ -214,7 +214,7 @@ public class CustomMenuBar extends JMenuBar {
         openHelp.addActionListener(e -> {
             JDialog dialogBox = new javax.swing.JDialog(null, "User Manual", JDialog.ModalityType.DOCUMENT_MODAL);
             try {
-                java.awt.Desktop.getDesktop().open(new java.io.File("res/files/userManual.pdf"));
+                java.awt.Desktop.getDesktop().open(new java.io.File("resources/files/userManual.pdf"));
                 dialogBox.toBack();
             } catch (IOException e1) {
                 throw new RuntimeException(e1);
