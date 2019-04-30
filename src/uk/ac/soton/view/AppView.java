@@ -5,7 +5,6 @@ import javax.swing.*;
 import java.awt.*;
 
 //todo Create splash screen for application start up.
-//todo Add icon in resources to all the windows.
 //todo Load all the pre-made runway setups to a demo-mode.
 
 public class AppView extends JFrame{
@@ -31,9 +30,8 @@ public class AppView extends JFrame{
     public void init(){
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
-        setLookAndFeel();
 
-        ImageIcon icon = new ImageIcon("src/uk/ac/soton/resources/images/Applicationicon.png");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/uk/ac/soton/resources/images/Applicationicon.png"));
         this.setIconImage(icon.getImage());
 
         //Create all the main UI elements
@@ -135,35 +133,6 @@ public class AppView extends JFrame{
             this.selectedRunway = selectedRunway;
         }
         repaint();
-    }
-
-    //Set's the Look and Feel of the application to a custom theme.
-    private void setLookAndFeel(){
-        UIManager.put("control", new Color(55, 55, 55)); // Primary
-        UIManager.put("nimbusBase", new Color(42, 42, 42)); // The colour of selectors
-        UIManager.put("nimbusBlueGrey", new Color(52, 52, 52)); // The colour of buttons
-        UIManager.put("text",new Color(255,255,255)); //Sets Default text colour to white
-        UIManager.put("ScrollPane.background", Color.DARK_GRAY); //Background for the ScrollPane (affects JFileChooser)
-        UIManager.put("List.background", Color.DARK_GRAY); //Background for the ScrollPane (affects JFileChooser)
-        UIManager.put("TextField.background", Color.DARK_GRAY); //Background for the TextField (affects JFileChooser)
-        UIManager.put("Menu[Enabled].textForeground",new Color(255, 255, 255));
-        UIManager.put("nimbusFocus",new Color(0, 104, 208));
-        UIManager.put("nimbusLightBackground",new Color(74, 74, 74));
-        UIManager.put("nimbusSelectionBackground",new Color(0, 104, 208));
-        UIManager.put("List.background",new Color(80, 80, 80));
-        UIManager.put("List[Selected].textForeground",new Color(250, 251, 255));
-        UIManager.put("Slider.tickColor",new Color(250, 251, 255));
-
-        try {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Nimbus not available, using default 'Metal'");
-        }
     }
 
     //Sets the instance of ViewController used by the view.

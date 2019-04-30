@@ -30,7 +30,7 @@ public class PlaceObstacleWindow extends JDialog {
         this.setLayout(new GridBagLayout());
         GridBagConstraints c;
 
-        ImageIcon icon = new ImageIcon("src/uk/ac/soton/resources/images/Applicationicon.png");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/uk/ac/soton/resources/images/Applicationicon.png"));
         this.setIconImage(icon.getImage());
 
         //Add a new JLabel for the obstacle drop down menu.

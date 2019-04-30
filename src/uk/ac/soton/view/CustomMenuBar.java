@@ -7,8 +7,10 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class CustomMenuBar extends JMenuBar {
 
@@ -214,7 +216,14 @@ public class CustomMenuBar extends JMenuBar {
         openHelp.addActionListener(e -> {
             JDialog dialogBox = new javax.swing.JDialog(null, "User Manual", JDialog.ModalityType.DOCUMENT_MODAL);
             try {
-                java.awt.Desktop.getDesktop().open(new java.io.File("src/uk/ac/soton/resources/files/userManual.pdf"));
+                InputStream in = this.getClass().getResourceAsStream("/uk/ac/soton/resources/files/userManual.pdf");
+                File outputFile = new File("UserGuide.pdf");
+                FileOutputStream out = new FileOutputStream(outputFile);
+                while(in.available() >0){
+                    out.write(in.read());
+                }
+                out.close();
+                java.awt.Desktop.getDesktop().open(outputFile);
                 dialogBox.toBack();
             } catch (IOException e1) {
                 throw new RuntimeException(e1);

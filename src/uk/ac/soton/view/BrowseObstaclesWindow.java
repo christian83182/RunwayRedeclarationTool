@@ -38,7 +38,7 @@ public class BrowseObstaclesWindow extends JDialog { //Extends JDialog instead o
         this.setLayout(new GridBagLayout());
         GridBagConstraints c;
 
-        ImageIcon icon = new ImageIcon("src/uk/ac/soton/resources/images/Applicationicon.png");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/uk/ac/soton/resources/images/Applicationicon.png"));
         this.setIconImage(icon.getImage());
 
         //Create a new JList and place it in a ScrollPane so it can be scrollable.

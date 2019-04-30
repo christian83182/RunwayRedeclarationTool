@@ -21,7 +21,7 @@ public class ScrollableTextWindow extends JDialog {
         this.setPreferredSize(size);
         this.setLayout(new GridBagLayout());
 
-        ImageIcon icon = new ImageIcon("src/uk/ac/soton/resources/images/Applicationicon.png");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/uk/ac/soton/resources/images/Applicationicon.png"));
         this.setIconImage(icon.getImage());
 
         //Create a text area with the content given in the constructor.

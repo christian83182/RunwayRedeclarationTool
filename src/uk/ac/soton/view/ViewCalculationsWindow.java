@@ -26,7 +26,7 @@ class ViewCalculationsWindow extends JFrame{
         this.setResizable(false);
         this.setLayout(new GridLayout(1,1));
 
-        ImageIcon icon = new ImageIcon("src/uk/ac/soton/resources/images/Applicationicon.png");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/uk/ac/soton/resources/images/Applicationicon.png"));
         this.setIconImage(icon.getImage());
 
         String selectedRunway = appView.getSelectedRunway();

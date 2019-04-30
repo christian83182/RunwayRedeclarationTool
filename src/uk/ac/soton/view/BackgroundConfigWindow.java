@@ -52,7 +52,7 @@ public class BackgroundConfigWindow extends JDialog{
         this.setPreferredSize(new Dimension(1600,900));
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-        ImageIcon icon = new ImageIcon("src/uk/ac/soton/resources/images/Applicationicon.png");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/uk/ac/soton/resources/images/Applicationicon.png"));
         this.setIconImage(icon.getImage());
 
         this.setLayout(new BorderLayout());

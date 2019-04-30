@@ -59,7 +59,7 @@ public class View3D extends JFrame{
         this.setPreferredSize(new Dimension(appView.getWidth()-100, appView.getHeight()-100));
         this.setResizable(false);
 
-        ImageIcon icon = new ImageIcon("src/uk/ac/soton/resources/images/Applicationicon.png");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/uk/ac/soton/resources/images/Applicationicon.png"));
         this.setIconImage(icon.getImage());
 
         //Create a JFXPanel for the 3D content.
