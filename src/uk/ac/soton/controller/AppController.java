@@ -34,6 +34,17 @@ public class AppController implements ViewController {
         this.bgImageRotation = 0.0;
     }
 
+    public void loadDefaultAirfield(){
+        Runway r1 = new Runway("09/27",-1000,0,2000,80,400,60);
+        LogicalRunway lr11 = new LogicalRunway("09",r1.getLength(),100,
+                new Dimension(350,220), new Dimension(60,r1.getWidth()));
+        LogicalRunway lr12 = new LogicalRunway("27",r1.getLength(),200,
+                new Dimension(350,220), new Dimension(60,r1.getWidth()));
+        r1.setLogicalRunways(lr11,lr12);
+
+        airfield.addRunway(r1);
+    }
+
     @Override
     public synchronized Airfield getAirfield() {
         return airfield;

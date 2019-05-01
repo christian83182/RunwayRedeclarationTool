@@ -4,8 +4,7 @@ import uk.ac.soton.controller.ViewController;
 import javax.swing.*;
 import java.awt.*;
 
-//todo Create splash screen for application start up.
-//todo Load all the pre-made runway setups to a demo-mode.
+//todo Add an option to hide the background image.
 
 public class AppView extends JFrame{
 

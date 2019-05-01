@@ -89,6 +89,7 @@ public class StartupScreen extends JFrame {
             AppView appView = new AppView("Runway Redeclaration Tool");
             AppController appController = new AppController(appView);
             appView.setController(appController);
+            appController.loadDefaultAirfield();
             appView.init();
             this.dispose();
         });
