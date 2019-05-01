@@ -76,7 +76,7 @@ public class TopViewPanel extends InteractivePanel {
 
         g2.fillRect(Integer.MIN_VALUE/2, Integer.MIN_VALUE/2, Integer.MAX_VALUE, Integer.MAX_VALUE);
 
-        if(controller.getBackgroundImage()!=null){
+        if(controller.getBackgroundImage()!=null && menuPanel.isShowBgImage()){
             BufferedImage img = controller.getBackgroundImage();
             Point offset = controller.getBackgroundImageOffset();
             Double scale = controller.getBackgroundImageScale();

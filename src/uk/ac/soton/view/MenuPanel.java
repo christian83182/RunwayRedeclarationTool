@@ -21,6 +21,7 @@ public class MenuPanel extends JPanel {
     private JCheckBox showOtherBox;
     private JCheckBox showOverlayBox;
     private JCheckBox matchViewToSelection;
+    private JCheckBox showBgImageBox;
     private JButton placeObstacleButton;
     private JButton removeObstacleButton;
     private JCheckBox runwayParametersSideView;
@@ -147,25 +148,13 @@ public class MenuPanel extends JPanel {
 
         //  ---- Adding elements to the top view pane ----
 
-        //Add the "isolate selected runway" option
-        isolateModeBox = new JCheckBox("Isolate Selected Runway");
-        isolateModeBox.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
-        isolateModeBox.addActionListener(e -> appView.repaint());
-        c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 0; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(5,10,0,10);
-        topViewPane.add(isolateModeBox, c);
-        isolateModeBox.addActionListener(e -> {
-            NotificationLogger.logger.addToLog("'Isolate Selected Runway' Toggled: '" +isolateModeBox.isSelected()+ "'");
-        });
-
         //Add the "show runway parameters" option
         showRunwayParametersBox = new JCheckBox("Show Runway Parameters");
         showRunwayParametersBox.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         showRunwayParametersBox.setSelected(true);
         showRunwayParametersBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 10; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0; c.gridy = 0; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0,10,0,10);
         topViewPane.add(showRunwayParametersBox, c);
         showRunwayParametersBox.addActionListener(e -> {
@@ -178,7 +167,7 @@ public class MenuPanel extends JPanel {
         showBreakdownBox.setSelected(true);
         showBreakdownBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 20; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0; c.gridy = 10; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0,10,0,10);
         topViewPane.add(showBreakdownBox, c);
         showBreakdownBox.addActionListener(e -> {
@@ -190,7 +179,7 @@ public class MenuPanel extends JPanel {
         showRelevantDistancesBox.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         showRelevantDistancesBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 30; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0; c.gridy = 20; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0,10,0,10);
         topViewPane.add(showRelevantDistancesBox, c);
         showRelevantDistancesBox.addActionListener(e -> {
@@ -203,11 +192,23 @@ public class MenuPanel extends JPanel {
         showOtherBox.setSelected(true);
         showOtherBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 40; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(0,10,0,10);
+        c.gridx = 0; c.gridy = 30; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(0,10,10,10);
         topViewPane.add(showOtherBox, c);
         showOtherBox.addActionListener(e -> {
             NotificationLogger.logger.addToLog("'Show Other Distances' Toggled: '" +showOtherBox.isSelected()+ "'");
+        });
+
+        //Add the "isolate selected runway" option
+        isolateModeBox = new JCheckBox("Isolate Selected Runway");
+        isolateModeBox.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
+        isolateModeBox.addActionListener(e -> appView.repaint());
+        c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 40; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(0,10,0,10);
+        topViewPane.add(isolateModeBox, c);
+        isolateModeBox.addActionListener(e -> {
+            NotificationLogger.logger.addToLog("'Isolate Selected Runway' Toggled: '" +isolateModeBox.isSelected()+ "'");
         });
 
         //Add the "show overlay" option
@@ -216,11 +217,24 @@ public class MenuPanel extends JPanel {
         showOverlayBox.setSelected(true);
         showOverlayBox.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 50; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0; c.gridy = 60; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0,10,0,10);
         topViewPane.add(showOverlayBox, c);
         showOverlayBox.addActionListener(e -> {
             NotificationLogger.logger.addToLog("Top View's 'Show Overlay' Toggled: '" +showOverlayBox.isSelected()+ "'");
+        });
+
+        //Add the "show bg image" option
+        showBgImageBox = new JCheckBox("Show Background Image");
+        showBgImageBox.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
+        showBgImageBox.setSelected(true);
+        showBgImageBox.addActionListener(e -> appView.repaint());
+        c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 70; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(0,10,0,10);
+        topViewPane.add(showBgImageBox, c);
+        showOverlayBox.addActionListener(e -> {
+            NotificationLogger.logger.addToLog("Top View's 'Show Background Image' Toggled: '" +showOverlayBox.isSelected()+ "'");
         });
 
         //Add the "auto rotate runway" option
@@ -228,7 +242,7 @@ public class MenuPanel extends JPanel {
         matchViewToSelection.setFont(Settings.SIDE_MENU_DEFAULT_FONT);
         matchViewToSelection.setSelected(true);
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 60; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0; c.gridy = 80; c.weightx = 1; c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0,10,10,10);
         topViewPane.add(matchViewToSelection, c);
         matchViewToSelection.addActionListener(e -> {
@@ -286,7 +300,7 @@ public class MenuPanel extends JPanel {
         showOtherSideView.addActionListener(e -> appView.repaint());
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 30; c.anchor = GridBagConstraints.LINE_START; c.weightx = 1;
-        c.insets = new Insets(0,10,0,10);
+        c.insets = new Insets(0,10,10,10);
         sideViewPane.add(showOtherSideView, c);
         showOtherSideView.addActionListener(e -> {
             NotificationLogger.logger.addToLog("Side View's 'Show Other Distances' Toggled: '"
@@ -375,6 +389,10 @@ public class MenuPanel extends JPanel {
 
     public boolean isIsolateMode(){
         return isolateModeBox.isSelected();
+    }
+
+    public boolean isShowBgImage(){
+        return showBgImageBox.isSelected();
     }
 
     public boolean isShowRunwayParametersEnabled(){
