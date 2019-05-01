@@ -73,19 +73,37 @@ public class StartupScreen extends JFrame {
         c.insets = new Insets(50,0,0,0);
         root.add(buttonPanel,c);
 
-        JLabel versionLabel = new JLabel("Current Version: " + Settings.VERSION_NUMBER);
+        JLabel spacer = new JLabel("");
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 101; c.weightx = 1; c.weighty = 1;
+        c.gridx = 0; c.gridy = 5; c.weightx = 1; c.weighty = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.LAST_LINE_START;
-        c.insets = new Insets(5,5,5,5);
+        c.insets = new Insets(5,5,0,5);
+        root.add(spacer,c);
+
+        JLabel versionLabel = new JLabel("Current Version: " + Settings.VERSION_NUMBER);
+        versionLabel.setForeground(Color.LIGHT_GRAY);
+        c = new GridBagConstraints();
+        c.gridx = 0; c.gridy = 6; c.weightx = 1;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.anchor = GridBagConstraints.LAST_LINE_START;
+        c.insets = new Insets(0,5,5,5);
         root.add(versionLabel,c);
 
-        JLabel creditsLabel = new JLabel("Signe Rebassoo, Ioana Moisoiu, Christian Folkesson, Costi MC, Cem Gokhan");
+        JLabel githubLabel = new JLabel("github.com/christian83182/RunwayRedeclarationTool");
+        githubLabel.setForeground(Color.GRAY);
         c = new GridBagConstraints();
-        c.gridx = 1; c.gridy = 101; c.weighty = 1;
+        c.gridx = 1; c.gridy = 5; c.weighty = 1;
         c.anchor = GridBagConstraints.LAST_LINE_END;
-        c.insets = new Insets(5,5,5,5);
+        c.insets = new Insets(0,5,0,5);
+        root.add(githubLabel,c);
+
+        JLabel creditsLabel = new JLabel("Signe Rebassoo, Ioana Moisoiu, Christian Folkesson, Costi MC, Cem Gokhan");
+        creditsLabel.setForeground(Color.LIGHT_GRAY);
+        c = new GridBagConstraints();
+        c.gridx = 1; c.gridy = 6;
+        c.anchor = GridBagConstraints.LAST_LINE_END;
+        c.insets = new Insets(0,5,5,5);
         root.add(creditsLabel,c);
 
         JButton newButton = new JButton("New Airfield");
