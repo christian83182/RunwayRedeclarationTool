@@ -19,7 +19,7 @@ public class StartupScreen extends JFrame {
     private void init(){
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
-        this.setPreferredSize(new Dimension(700,700));
+        this.setPreferredSize(new Dimension(700,750));
 
         ImageIcon icon = new ImageIcon(getClass().getResource("/uk/ac/soton/resources/images/Applicationicon.png"));
         this.setIconImage(icon.getImage());
@@ -43,42 +43,50 @@ public class StartupScreen extends JFrame {
         ImageIcon icon = new ImageIcon(getClass().getResource("/uk/ac/soton/resources/images/Applicationicon.png"));
         iconLabel.setIcon(new ImageIcon(icon.getImage().getScaledInstance(200,200,Image.SCALE_SMOOTH)));
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 0;
+        c.gridx = 0; c.gridy = 0; c.gridwidth = 2;
         c.insets = new Insets(50,0,25,0);
         root.add(iconLabel,c);
 
         JLabel titleLabel = new JLabel("Runway Redeclaration Tool");
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 32));
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 1;
+        c.gridx = 0; c.gridy = 1; c.gridwidth = 2;
         root.add(titleLabel,c);
 
         JLabel subtitleLabel1 = new JLabel("Software Engineering Group Project");
         subtitleLabel1.setFont(new Font("SansSerif", Font.PLAIN, 18));
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 2;
+        c.gridx = 0; c.gridy = 2; c.gridwidth = 2;
         root.add(subtitleLabel1,c);
 
         JLabel subtitleLabel2 = new JLabel("Southampton University 2019");
         subtitleLabel2.setFont(new Font("SansSerif", Font.PLAIN, 18));
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 3;
+        c.gridx = 0; c.gridy = 3; c.gridwidth = 2;
         root.add(subtitleLabel2,c);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(5,1));
         buttonPanel.setPreferredSize(new Dimension(300,180));
         c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 4;
+        c.gridx = 0; c.gridy = 4; c.gridwidth = 2;
         c.insets = new Insets(50,0,0,0);
         root.add(buttonPanel,c);
 
         JLabel versionLabel = new JLabel("Current Version: " + Settings.VERSION_NUMBER);
+        c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 101; c.weightx = 1; c.weighty = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.LAST_LINE_START;
         c.insets = new Insets(5,5,5,5);
         root.add(versionLabel,c);
+
+        JLabel creditsLabel = new JLabel("Signe Rebassoo, Ioana Moisoiu, Christian Folkesson, Costi MC, Cem Gokhan");
+        c = new GridBagConstraints();
+        c.gridx = 1; c.gridy = 101; c.weighty = 1;
+        c.anchor = GridBagConstraints.LAST_LINE_END;
+        c.insets = new Insets(5,5,5,5);
+        root.add(creditsLabel,c);
 
         JButton newButton = new JButton("New Airfield");
         buttonPanel.add(newButton);
