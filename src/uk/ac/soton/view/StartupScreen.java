@@ -98,6 +98,8 @@ public class StartupScreen extends JFrame {
             appController.loadDefaultAirfield();
             appView.init();
             this.dispose();
+            NotificationLogger.logger.addToLog("Creating new Airfield.");
+            NotificationLogger.logger.addToLog("Default Airfield configuration loaded.");
         });
 
         loadButton.addActionListener(e -> {
@@ -107,6 +109,7 @@ public class StartupScreen extends JFrame {
             appView.init();
             appView.getAppMenuBar().importConfiguration();
             this.dispose();
+            NotificationLogger.logger.addToLog("Configuration loaded from external source.");
         });
 
         demoButton.addActionListener(e -> {
@@ -123,12 +126,15 @@ public class StartupScreen extends JFrame {
                     if(response.equals("Bristol Airport")){
                         InputStream in = getClass().getResourceAsStream("/uk/ac/soton/resources/config/BRS.xml");
                         appController.importAirfieldConfiguration(convertInputStreamToFile(in));
+                        NotificationLogger.logger.addToLog("'Bristol Airport' Demo Configuration loaded.");
                     } else if(response.equals("London Gatwick")){
                         InputStream in = getClass().getResourceAsStream("/uk/ac/soton/resources/config/LGW.xml");
                         appController.importAirfieldConfiguration(convertInputStreamToFile(in));
+                        NotificationLogger.logger.addToLog("'London Gatwick' Demo Configuration loaded.");
                     } else if(response.equals("London Heathrow")) {
                         InputStream in = getClass().getResourceAsStream("/uk/ac/soton/resources/config/LHR.xml");
                         appController.importAirfieldConfiguration(convertInputStreamToFile(in));
+                        NotificationLogger.logger.addToLog("'London Heathrow' Demo Configuration loaded.");
                     }
                 }catch (Exception e1){
                     e1.printStackTrace();

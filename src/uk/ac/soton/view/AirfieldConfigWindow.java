@@ -123,11 +123,12 @@ public class AirfieldConfigWindow extends JDialog {
             appView.getMenuPanel().populateRunwayComboBox();
             appView.repaint();
             this.dispose();
+            NotificationLogger.logger.addToLog("Changes made to Airfield have been discarded.");
         });
 
         confirmButton.addActionListener(e ->{
             outerController.setAirfield(innerController.getAirfield());
-            NotificationLogger.logger.addToLog("Airfield has been updated...");
+            NotificationLogger.logger.addToLog("Airfield has been updated.");
             appView.getMenuPanel().populateRunwayComboBox();
             appView.repaint();
             this.dispose();
