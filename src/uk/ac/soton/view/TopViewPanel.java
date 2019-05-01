@@ -74,7 +74,7 @@ public class TopViewPanel extends InteractivePanel {
     private void paintBackground(Graphics2D g2, Color color){
         g2.setColor(color);
 
-        g2.fillRect(Integer.MIN_VALUE/2, Integer.MIN_VALUE/2, Integer.MAX_VALUE, Integer.MAX_VALUE);
+        g2.fillRect(-1000000, -1000000, 2000000, 2000000);
 
         if(controller.getBackgroundImage()!=null && menuPanel.isShowBgImage()){
             BufferedImage img = controller.getBackgroundImage();
