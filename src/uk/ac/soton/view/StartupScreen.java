@@ -4,7 +4,6 @@ import uk.ac.soton.controller.AppController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -71,8 +70,15 @@ public class StartupScreen extends JFrame {
         buttonPanel.setPreferredSize(new Dimension(300,180));
         c = new GridBagConstraints();
         c.gridx = 0; c.gridy = 4;
-        c.insets = new Insets(50,0,50,0);
+        c.insets = new Insets(50,0,0,0);
         root.add(buttonPanel,c);
+
+        JLabel versionLabel = new JLabel("Current Version: " + Settings.VERSION_NUMBER);
+        c.gridx = 0; c.gridy = 101; c.weightx = 1; c.weighty = 1;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.anchor = GridBagConstraints.LAST_LINE_START;
+        c.insets = new Insets(5,5,5,5);
+        root.add(versionLabel,c);
 
         JButton newButton = new JButton("New Airfield");
         buttonPanel.add(newButton);

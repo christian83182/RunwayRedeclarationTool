@@ -4,6 +4,8 @@ import java.awt.*;
 
 public class Settings{
 
+    static String VERSION_NUMBER = "1.0.0";
+
     static Dimension TOP_DOWN_DEFAULT_SIZE = new Dimension(1600,900);
     static Point TOP_DOWN_DEFAULT_PAN = new Point(0, 0);
     static Double TOP_DOWN_DEFAULT_ZOOM = 1.0;
