@@ -667,7 +667,7 @@ public class TopViewPanel extends InteractivePanel {
 
         if(controller.isRedeclared(id) && menuPanel.isShowBreakDownEnabled()){
             if(menuPanel.isShowRelevantDistOnlyEnabled()){
-                runwayLengthHelperHeight = -stripHeight - 140;
+                runwayLengthHelperHeight = -stripHeight - 240;
                 thresholdHelperHeight = -stripHeight - 140;
                 stopwayLengthHelperHeight = -stripHeight - 140;
             }else{
